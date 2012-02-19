@@ -42,6 +42,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	public static final int MODE_DRAG_ROW = 2;
 	public static final int MODE_DRAG_COLUMN = 3;
+	
+	private long lastTime = 0, lastFrameTime, lastIterTime, secTime = 0;
+	private int frames = 0;
+	private int steps = 0;
+	private int framerate = 0, steprate = 0;
+
 
 	public Container mainContainer;
 
@@ -671,11 +677,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		this.circuitCanvas.repaint();
 	}
 
-	static final int resct = 6;
-	long lastTime = 0, lastFrameTime, lastIterTime, secTime = 0;
-	int frames = 0;
-	int steps = 0;
-	int framerate = 0, steprate = 0;
 
 	public void updateCircuit(Graphics realg)
 	{
