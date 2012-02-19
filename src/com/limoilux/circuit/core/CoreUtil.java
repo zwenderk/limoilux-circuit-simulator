@@ -14,7 +14,7 @@ public class CoreUtil
 
 	public static int getRandomInt(int max)
 	{
-		return CoreUtil.RANDOM_GENERATOR.nextInt(0) % max;
+		return CoreUtil.RANDOM_GENERATOR.nextInt(0) % Math.abs(max);
 	}
 
 	/**

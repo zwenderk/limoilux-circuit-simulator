@@ -42,12 +42,10 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	public static final int MODE_DRAG_ROW = 2;
 	public static final int MODE_DRAG_COLUMN = 3;
-	
+
 	private long lastTime = 0, lastFrameTime, lastIterTime, secTime = 0;
 	private int frames = 0;
 	private int steps = 0;
-	private int framerate = 0, steprate = 0;
-
 
 	public Container mainContainer;
 
@@ -667,7 +665,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			this.destroyFrame();
 			return true;
 		}
-		
+
 		return super.handleEvent(ev);
 	}
 
@@ -676,7 +674,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	{
 		this.circuitCanvas.repaint();
 	}
-
 
 	public void updateCircuit(Graphics realg)
 	{
@@ -738,8 +735,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 			if (sysTime - secTime >= 1000)
 			{
-				framerate = frames;
-				steprate = steps;
 				frames = 0;
 				steps = 0;
 				secTime = sysTime;
@@ -845,22 +840,35 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 			int x = 0;
 			if (ct != 0)
-				x = scopes[ct - 1].rightEdge() + 20;
-			x = max(x, winSize.width * 2 / 3);
+			{
+				x = this.scopes[ct - 1].rightEdge() + 20;
+			}
+
+			x = max(x, this.winSize.width * 2 / 3);
 
 			// count lines of data
 			for (i = 0; info[i] != null; i++)
-				;
+			{
+
+			}
+
 			if (badnodes > 0)
+			{
 				info[i++] = badnodes + ((badnodes == 1) ? " bad connection" : " bad connections");
+			}
 
 			// find where to show data; below circuit, not too high unless we
 			// need it
-			int ybase = winSize.height - 15 * i - 5;
-			ybase = min(ybase, circuitArea.height);
-			ybase = max(ybase, circuitBottom);
+			int ybase = this.winSize.height - 15 * i - 5;
+			ybase = Math.min(ybase, this.circuitArea.height);
+			ybase = Math.max(ybase, this.circuitBottom);
+			
+			
 			for (i = 0; info[i] != null; i++)
+			{
 				g.drawString(info[i], x, ybase + 15 * (i + 1));
+			}
+
 		}
 		if (selectedArea != null)
 		{
@@ -908,18 +916,27 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		for (i = 0; i < scopeCount; i++)
 		{
 			if (locateElm(scopes[i].elm) < 0)
-				scopes[i].setElm(null);
-			if (scopes[i].elm == null)
+			{
+				this.scopes[i].setElm(null);
+			}
+				
+			if (this.scopes[i].elm == null)
 			{
 				int j;
 				for (j = i; j != scopeCount; j++)
-					scopes[j] = scopes[j + 1];
+				{
+					this.scopes[j] = this.scopes[j + 1];
+				}
+					
 				scopeCount--;
 				i--;
 				continue;
 			}
 			if (scopes[i].position > pos + 1)
-				scopes[i].position = pos + 1;
+			{
+				this.scopes[i].position = pos + 1;
+			}
+				
 			pos = scopes[i].position;
 		}
 		while (scopeCount > 0 && scopes[scopeCount - 1].elm == null)
@@ -1051,7 +1068,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		analyzeFlag = true;
 		circuitCanvas.repaint();
 	}
-
 
 	public CircuitNode getCircuitNode(int n)
 	{
