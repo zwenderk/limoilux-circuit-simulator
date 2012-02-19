@@ -45,6 +45,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		this.applet = a;
 
 		this.useFrame = false;
+		
+		this.init();
 	}
 
 	public String getAppletInfo()
@@ -176,7 +178,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	String startCircuitText = null;
 	String baseURL = "http://www.falstad.com/circuit/";
 
-	public void init()
+	private void init()
 	{
 		String euroResistor = null;
 		String useFrameStr = null;
