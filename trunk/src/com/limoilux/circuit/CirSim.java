@@ -1080,10 +1080,10 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
-	void needAnalyze()
+	public void needAnalyze()
 	{
-		analyzeFlag = true;
-		circuitCanvas.repaint();
+		this.analyzeFlag = true;
+		this.circuitCanvas.repaint();
 	}
 
 	public CircuitNode getCircuitNode(int n)
@@ -1772,13 +1772,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		stampMatrix(n2, vn, -1);
 	}
 
-	void updateVoltageSource(int n1, int n2, int vs, double v)
+	public void updateVoltageSource(int n1, int n2, int vs, double v)
 	{
 		int vn = nodeList.size() + vs;
 		stampRightSide(vn, v);
 	}
 
-	void stampResistor(int n1, int n2, double r)
+	public void stampResistor(int n1, int n2, double r)
 	{
 		double r0 = 1 / r;
 		if (Double.isNaN(r0) || Double.isInfinite(r0))
@@ -1793,7 +1793,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		stampMatrix(n2, n1, -r0);
 	}
 
-	void stampConductance(int n1, int n2, double r0)
+	public void stampConductance(int n1, int n2, double r0)
 	{
 		stampMatrix(n1, n1, r0);
 		stampMatrix(n2, n2, r0);
@@ -1802,7 +1802,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	}
 
 	// current from cn1 to cn2 is equal to voltage from vn1 to 2, divided by g
-	void stampVCCurrentSource(int cn1, int cn2, int vn1, int vn2, double g)
+	public void stampVCCurrentSource(int cn1, int cn2, int vn1, int vn2, double g)
 	{
 		stampMatrix(cn1, vn1, g);
 		stampMatrix(cn2, vn2, g);
@@ -1810,24 +1810,24 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		stampMatrix(cn2, vn1, -g);
 	}
 
-	void stampCurrentSource(int n1, int n2, double i)
+	public void stampCurrentSource(int n1, int n2, double i)
 	{
-		stampRightSide(n1, -i);
-		stampRightSide(n2, i);
+		this.stampRightSide(n1, -i);
+		this.stampRightSide(n2, i);
 	}
 
 	// stamp a current source from n1 to n2 depending on current through vs
-	void stampCCCS(int n1, int n2, int vs, double gain)
+	public void stampCCCS(int n1, int n2, int vs, double gain)
 	{
 		int vn = nodeList.size() + vs;
-		stampMatrix(n1, vn, gain);
-		stampMatrix(n2, vn, -gain);
+		this.stampMatrix(n1, vn, gain);
+		this.stampMatrix(n2, vn, -gain);
 	}
 
 	// stamp value x in row i, column j, meaning that a voltage change
 	// of dv in node j will increase the current into node i by x dv.
 	// (Unless i or j is a voltage source node.)
-	void stampMatrix(int i, int j, double x)
+	public void stampMatrix(int i, int j, double x)
 	{
 		if (i > 0 && j > 0)
 		{
@@ -1856,7 +1856,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	// stamp value x on the right side of row i, representing an
 	// independent current source flowing into node i
-	void stampRightSide(int i, double x)
+	public void stampRightSide(int i, double x)
 	{
 		if (i > 0)
 		{
@@ -1872,7 +1872,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	}
 
 	// indicate that the value on the right side of row i changes in doStep()
-	void stampRightSide(int i)
+	public void stampRightSide(int i)
 	{
 		// System.out.println("rschanges true " + (i-1));
 		if (i > 0)
@@ -1880,13 +1880,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	}
 
 	// indicate that the values on the left side of row i change in doStep()
-	void stampNonLinear(int i)
+	public void stampNonLinear(int i)
 	{
 		if (i > 0)
 			circuitRowInfo[i - 1].lsChanges = true;
 	}
 
-	double getIterCount()
+	private double getIterCount()
 	{
 		if (speedBar.getValue() == 0)
 			return 0;
@@ -1894,7 +1894,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return .1 * Math.exp((speedBar.getValue() - 61) / 24.);
 	}
 
-	void runCircuit()
+	private void runCircuit()
 	{
 		if (circuitMatrix == null || elmList.size() == 0)
 		{
@@ -3235,7 +3235,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		enableUndoRedo();
 	}
 
-	void doRedo()
+	private void doRedo()
 	{
 		if (redoStack.size() == 0)
 			return;
@@ -3245,13 +3245,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		enableUndoRedo();
 	}
 
-	void enableUndoRedo()
+	private void enableUndoRedo()
 	{
 		redoItem.setEnabled(redoStack.size() > 0);
 		undoItem.setEnabled(undoStack.size() > 0);
 	}
 
-	void setMenuSelection()
+	private void setMenuSelection()
 	{
 		if (menuElm != null)
 		{
@@ -3262,7 +3262,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
-	void doCut()
+	private void doCut()
 	{
 		int i;
 		pushUndo();
@@ -3282,7 +3282,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		needAnalyze();
 	}
 
-	void doDelete()
+	private void doDelete()
 	{
 		int i;
 		pushUndo();
@@ -3299,7 +3299,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		needAnalyze();
 	}
 
-	void doCopy()
+	private void doCopy()
 	{
 		int i;
 		clipboard = "";
@@ -3313,12 +3313,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		enablePaste();
 	}
 
-	void enablePaste()
+	private void enablePaste()
 	{
 		pasteItem.setEnabled(clipboard.length() > 0);
 	}
 
-	void doPaste()
+	private void doPaste()
 	{
 		pushUndo();
 		clearSelection();
@@ -3369,7 +3369,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		needAnalyze();
 	}
 
-	void clearSelection()
+	private void clearSelection()
 	{
 		int i;
 		for (i = 0; i != elmList.size(); i++)
@@ -3379,10 +3379,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
-	void doSelectAll()
+	private void doSelectAll()
 	{
-		int i;
-		for (i = 0; i != elmList.size(); i++)
+		for (int i = 0; i != this.elmList.size(); i++)
 		{
 			CircuitElm ce = getElm(i);
 			ce.setSelected(true);
@@ -3424,13 +3423,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	}
 
 	@Deprecated
-	boolean lu_factor(double a[][], int n, int ipvt[])
+	private boolean lu_factor(double a[][], int n, int ipvt[])
 	{
 		return CoreUtil.luFactor(a, n, ipvt);
 	}
 
 	@Deprecated
-	static void lu_solve(double a[][], int n, int ipvt[], double b[])
+	private static void lu_solve(double a[][], int n, int ipvt[], double b[])
 	{
 		CoreUtil.luSolve(a, n, ipvt, b);
 
