@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.*;
 import java.awt.image.*;
 import java.awt.event.*;
@@ -6,7 +8,7 @@ import java.util.StringTokenizer;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-class Scope
+public class Scope
 {
 	final int FLAG_YELM = 32;
 	static final int VAL_POWER = 1;
@@ -33,7 +35,7 @@ class Scope
 	float dpixels[];
 	CirSim sim;
 
-	Scope(CirSim s)
+	public Scope(CirSim s)
 	{
 		rect = new Rectangle();
 		reset();
