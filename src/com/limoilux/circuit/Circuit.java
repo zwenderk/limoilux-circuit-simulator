@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 // Circuit.java (c) 2005,2008 by Paul Falstad, www.falstad.com
 
 import java.awt.*;
@@ -8,21 +10,20 @@ import java.awt.event.*;
 public class Circuit extends Applet implements ComponentListener
 {
 	static CirSim ogf;
+	boolean started = false;
 
 	void destroyFrame()
 	{
-		if (ogf != null)
-			ogf.dispose();
-		ogf = null;
-		repaint();
+		if (Circuit.ogf != null)
+			Circuit.ogf.dispose();
+		Circuit.ogf = null;
+		this.repaint();
 	}
-
-	boolean started = false;
 
 	@Override
 	public void init()
 	{
-		addComponentListener(this);
+		this.addComponentListener(this);
 	}
 
 	public static void main(String args[])
@@ -35,29 +36,37 @@ public class Circuit extends Applet implements ComponentListener
 	{
 		if (ogf == null)
 		{
-			started = true;
-			ogf = new CirSim(this);
-			ogf.init();
-			repaint();
+			this.started = true;
+			Circuit.ogf = new CirSim(this);
+			Circuit.ogf.init();
+			this.repaint();
 		}
 	}
 
 	public void toggleSwitch(int x)
 	{
-		ogf.toggleSwitch(x);
+		Circuit.ogf.toggleSwitch(x);
 	}
 
 	@Override
 	public void paint(Graphics g)
 	{
-		String s = "Applet is open in a separate window.";
-		if (!started)
-			s = "Applet is starting.";
+		String message = "Applet is open in a separate window.";
+		
+		if (!this.started)
+		{
+			message = "Applet is starting.";
+		}
 		else if (ogf == null)
-			s = "Applet is finished.";
-		else if (ogf.useFrame)
-			ogf.triggerShow();
-		g.drawString(s, 10, 30);
+		{
+			message = "Applet is finished.";
+		}
+		else if (Circuit.ogf.useFrame)
+		{
+			Circuit.ogf.triggerShow();
+		}
+
+		g.drawString(message, 10, 30);
 	}
 
 	@Override
@@ -79,16 +88,19 @@ public class Circuit extends Applet implements ComponentListener
 	@Override
 	public void componentResized(ComponentEvent e)
 	{
-		if (ogf != null)
-			ogf.componentResized(e);
+		if (Circuit.ogf != null)
+			Circuit.ogf.componentResized(e);
 	}
 
 	@Override
 	public void destroy()
 	{
-		if (ogf != null)
-			ogf.dispose();
-		ogf = null;
-		repaint();
+		if (Circuit.ogf != null)
+		{
+			Circuit.ogf.dispose();
+		}
+
+		Circuit.ogf = null;
+		this.repaint();
 	}
-};
+}
