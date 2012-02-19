@@ -1924,150 +1924,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	{
 		return Math.max(a, b);
 	}
-
-	private void editFuncPoint(int x, int y)
-	{
-		// XXX
-		this.circuitCanvas.repaint(this.pause);
-	}
-
-	@Override
-	public void componentHidden(ComponentEvent e)
-	{
-	}
-
-	@Override
-	public void componentMoved(ComponentEvent e)
-	{
-	}
-
-	@Override
-	public void componentShown(ComponentEvent e)
-	{
-		this.circuitCanvas.repaint();
-	}
-
-	@Override
-	public void componentResized(ComponentEvent e)
-	{
-		this.handleResize();
-		this.circuitCanvas.repaint(100);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e)
-	{
-		String ac = e.getActionCommand();
-		if (e.getSource() == resetButton)
-		{
-			int i;
-
-			// on IE, drawImage() stops working inexplicably every once in
-			// a while. Recreating it fixes the problem, so we do that here.
-			dbimage = mainContainer.createImage(winSize.width, winSize.height);
-
-			for (i = 0; i != elmList.size(); i++)
-				getElm(i).reset();
-			for (i = 0; i != scopeCount; i++)
-				scopes[i].resetGraph();
-			analyzeFlag = true;
-			t = 0;
-			stoppedCheck.setState(false);
-			circuitCanvas.repaint();
-		}
-		if (e.getSource() == dumpMatrixButton)
-			dumpMatrix = true;
-		if (e.getSource() == exportItem)
-			doImport(false, false);
-		if (e.getSource() == optionsItem)
-			doEdit(new EditOptions(this));
-		if (e.getSource() == importItem)
-			doImport(true, false);
-		if (e.getSource() == exportLinkItem)
-			doImport(false, true);
-		if (e.getSource() == undoItem)
-			doUndo();
-		if (e.getSource() == redoItem)
-			doRedo();
-		if (ac.compareTo("Cut") == 0)
-		{
-			if (e.getSource() != elmCutMenuItem)
-				menuElm = null;
-			doCut();
-		}
-		if (ac.compareTo("Copy") == 0)
-		{
-			if (e.getSource() != elmCopyMenuItem)
-				menuElm = null;
-			doCopy();
-		}
-		if (ac.compareTo("Paste") == 0)
-			doPaste();
-		if (e.getSource() == selectAllItem)
-			doSelectAll();
-		if (e.getSource() == exitItem)
-		{
-			destroyFrame();
-			return;
-		}
-		if (ac.compareTo("stackAll") == 0)
-			stackAll();
-		if (ac.compareTo("unstackAll") == 0)
-			unstackAll();
-		if (e.getSource() == elmEditMenuItem)
-			doEdit(menuElm);
-		if (ac.compareTo("Delete") == 0)
-		{
-			if (e.getSource() != elmDeleteMenuItem)
-				menuElm = null;
-			doDelete();
-		}
-		if (e.getSource() == elmScopeMenuItem && menuElm != null)
-		{
-			int i;
-			for (i = 0; i != scopeCount; i++)
-				if (scopes[i].elm == null)
-					break;
-			if (i == scopeCount)
-			{
-				if (scopeCount == scopes.length)
-					return;
-				scopeCount++;
-				scopes[i] = new Scope(this);
-				scopes[i].position = i;
-				handleResize();
-			}
-			scopes[i].setElm(menuElm);
-		}
-		if (menuScope != -1)
-		{
-			if (ac.compareTo("remove") == 0)
-				scopes[menuScope].setElm(null);
-			if (ac.compareTo("speed2") == 0)
-				scopes[menuScope].speedUp();
-			if (ac.compareTo("speed1/2") == 0)
-				scopes[menuScope].slowDown();
-			if (ac.compareTo("scale") == 0)
-				scopes[menuScope].adjustScale(.5);
-			if (ac.compareTo("maxscale") == 0)
-				scopes[menuScope].adjustScale(1e-50);
-			if (ac.compareTo("stack") == 0)
-				stackScope(menuScope);
-			if (ac.compareTo("unstack") == 0)
-				unstackScope(menuScope);
-			if (ac.compareTo("selecty") == 0)
-				scopes[menuScope].selectY();
-			if (ac.compareTo("reset") == 0)
-				scopes[menuScope].resetGraph();
-			circuitCanvas.repaint();
-		}
-		if (ac.indexOf("setup ") == 0)
-		{
-			pushUndo();
-			readSetupFile(ac.substring(6), ((MenuItem) e.getSource()).getLabel());
-		}
-	}
-
+	
 	private void stackScope(int s)
 	{
 		if (s == 0)
@@ -2169,12 +2026,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		if (hintType != -1)
 			dump += "h " + hintType + " " + hintItem1 + " " + hintItem2 + "\n";
 		return dump;
-	}
-
-	@Override
-	public void adjustmentValueChanged(AdjustmentEvent e)
-	{
-		System.out.print(((Scrollbar) e.getSource()).getValue() + "\n");
 	}
 
 	private ByteArrayOutputStream readUrlData(URL url) throws java.io.IOException
@@ -2764,64 +2615,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		enableUndoRedo();
 	}
 
-	@Override
-	public void itemStateChanged(ItemEvent e)
-	{
-		circuitCanvas.repaint(pause);
-		Object mi = e.getItemSelectable();
-		if (mi == stoppedCheck)
-			return;
-		if (mi == smallGridCheckItem)
-			setGrid();
-		if (mi == powerCheckItem)
-		{
-			if (powerCheckItem.getState())
-				voltsCheckItem.setState(false);
-			else
-				voltsCheckItem.setState(true);
-		}
-		if (mi == voltsCheckItem && voltsCheckItem.getState())
-			powerCheckItem.setState(false);
-		enableItems();
-		if (menuScope != -1)
-		{
-			Scope sc = scopes[menuScope];
-			sc.handleMenu(e, mi);
-		}
-		if (mi instanceof CheckboxMenuItem)
-		{
-			MenuItem mmi = (MenuItem) mi;
-			mouseMode = MODE_ADD_ELM;
-			String s = mmi.getActionCommand();
-			if (s.length() > 0)
-				mouseModeStr = s;
-			if (s.compareTo("DragAll") == 0)
-				mouseMode = MODE_DRAG_ALL;
-			else if (s.compareTo("DragRow") == 0)
-				mouseMode = MODE_DRAG_ROW;
-			else if (s.compareTo("DragColumn") == 0)
-				mouseMode = MODE_DRAG_COLUMN;
-			else if (s.compareTo("DragSelected") == 0)
-				mouseMode = MODE_DRAG_SELECTED;
-			else if (s.compareTo("DragPost") == 0)
-				mouseMode = MODE_DRAG_POST;
-			else if (s.compareTo("Select") == 0)
-				mouseMode = MODE_SELECT;
-			else if (s.length() > 0)
-			{
-				try
-				{
-					addingClass = Class.forName("com.limoilux.circuit." + s);
-				}
-				catch (Exception ee)
-				{
-					ee.printStackTrace();
-				}
-			}
-			tempMouseMode = mouseMode;
-		}
-	}
-
 	private void setGrid()
 	{
 		if (this.smallGridCheckItem.getState())
@@ -3040,6 +2833,207 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			CircuitElm ce = getElm(i);
 			ce.setSelected(true);
 		}
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent e)
+	{
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent e)
+	{
+	}
+
+	@Override
+	public void componentShown(ComponentEvent e)
+	{
+		this.circuitCanvas.repaint();
+	}
+
+	@Override
+	public void componentResized(ComponentEvent e)
+	{
+		this.handleResize();
+		this.circuitCanvas.repaint(100);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		String ac = e.getActionCommand();
+		if (e.getSource() == resetButton)
+		{
+			int i;
+	
+			// on IE, drawImage() stops working inexplicably every once in
+			// a while. Recreating it fixes the problem, so we do that here.
+			dbimage = mainContainer.createImage(winSize.width, winSize.height);
+	
+			for (i = 0; i != elmList.size(); i++)
+				getElm(i).reset();
+			for (i = 0; i != scopeCount; i++)
+				scopes[i].resetGraph();
+			analyzeFlag = true;
+			t = 0;
+			stoppedCheck.setState(false);
+			circuitCanvas.repaint();
+		}
+		if (e.getSource() == dumpMatrixButton)
+			dumpMatrix = true;
+		if (e.getSource() == exportItem)
+			doImport(false, false);
+		if (e.getSource() == optionsItem)
+			doEdit(new EditOptions(this));
+		if (e.getSource() == importItem)
+			doImport(true, false);
+		if (e.getSource() == exportLinkItem)
+			doImport(false, true);
+		if (e.getSource() == undoItem)
+			doUndo();
+		if (e.getSource() == redoItem)
+			doRedo();
+		if (ac.compareTo("Cut") == 0)
+		{
+			if (e.getSource() != elmCutMenuItem)
+				menuElm = null;
+			doCut();
+		}
+		if (ac.compareTo("Copy") == 0)
+		{
+			if (e.getSource() != elmCopyMenuItem)
+				menuElm = null;
+			doCopy();
+		}
+		if (ac.compareTo("Paste") == 0)
+			doPaste();
+		if (e.getSource() == selectAllItem)
+			doSelectAll();
+		if (e.getSource() == exitItem)
+		{
+			destroyFrame();
+			return;
+		}
+		if (ac.compareTo("stackAll") == 0)
+			stackAll();
+		if (ac.compareTo("unstackAll") == 0)
+			unstackAll();
+		if (e.getSource() == elmEditMenuItem)
+			doEdit(menuElm);
+		if (ac.compareTo("Delete") == 0)
+		{
+			if (e.getSource() != elmDeleteMenuItem)
+				menuElm = null;
+			doDelete();
+		}
+		if (e.getSource() == elmScopeMenuItem && menuElm != null)
+		{
+			int i;
+			for (i = 0; i != scopeCount; i++)
+				if (scopes[i].elm == null)
+					break;
+			if (i == scopeCount)
+			{
+				if (scopeCount == scopes.length)
+					return;
+				scopeCount++;
+				scopes[i] = new Scope(this);
+				scopes[i].position = i;
+				handleResize();
+			}
+			scopes[i].setElm(menuElm);
+		}
+		if (menuScope != -1)
+		{
+			if (ac.compareTo("remove") == 0)
+				scopes[menuScope].setElm(null);
+			if (ac.compareTo("speed2") == 0)
+				scopes[menuScope].speedUp();
+			if (ac.compareTo("speed1/2") == 0)
+				scopes[menuScope].slowDown();
+			if (ac.compareTo("scale") == 0)
+				scopes[menuScope].adjustScale(.5);
+			if (ac.compareTo("maxscale") == 0)
+				scopes[menuScope].adjustScale(1e-50);
+			if (ac.compareTo("stack") == 0)
+				stackScope(menuScope);
+			if (ac.compareTo("unstack") == 0)
+				unstackScope(menuScope);
+			if (ac.compareTo("selecty") == 0)
+				scopes[menuScope].selectY();
+			if (ac.compareTo("reset") == 0)
+				scopes[menuScope].resetGraph();
+			circuitCanvas.repaint();
+		}
+		if (ac.indexOf("setup ") == 0)
+		{
+			pushUndo();
+			readSetupFile(ac.substring(6), ((MenuItem) e.getSource()).getLabel());
+		}
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e)
+	{
+		circuitCanvas.repaint(pause);
+		Object mi = e.getItemSelectable();
+		if (mi == stoppedCheck)
+			return;
+		if (mi == smallGridCheckItem)
+			setGrid();
+		if (mi == powerCheckItem)
+		{
+			if (powerCheckItem.getState())
+				voltsCheckItem.setState(false);
+			else
+				voltsCheckItem.setState(true);
+		}
+		if (mi == voltsCheckItem && voltsCheckItem.getState())
+			powerCheckItem.setState(false);
+		enableItems();
+		if (menuScope != -1)
+		{
+			Scope sc = scopes[menuScope];
+			sc.handleMenu(e, mi);
+		}
+		if (mi instanceof CheckboxMenuItem)
+		{
+			MenuItem mmi = (MenuItem) mi;
+			mouseMode = MODE_ADD_ELM;
+			String s = mmi.getActionCommand();
+			if (s.length() > 0)
+				mouseModeStr = s;
+			if (s.compareTo("DragAll") == 0)
+				mouseMode = MODE_DRAG_ALL;
+			else if (s.compareTo("DragRow") == 0)
+				mouseMode = MODE_DRAG_ROW;
+			else if (s.compareTo("DragColumn") == 0)
+				mouseMode = MODE_DRAG_COLUMN;
+			else if (s.compareTo("DragSelected") == 0)
+				mouseMode = MODE_DRAG_SELECTED;
+			else if (s.compareTo("DragPost") == 0)
+				mouseMode = MODE_DRAG_POST;
+			else if (s.compareTo("Select") == 0)
+				mouseMode = MODE_SELECT;
+			else if (s.length() > 0)
+			{
+				try
+				{
+					addingClass = Class.forName("com.limoilux.circuit." + s);
+				}
+				catch (Exception ee)
+				{
+					ee.printStackTrace();
+				}
+			}
+			tempMouseMode = mouseMode;
+		}
+	}
+
+	@Override
+	public void adjustmentValueChanged(AdjustmentEvent e)
+	{
+		System.out.print(((Scrollbar) e.getSource()).getValue() + "\n");
 	}
 
 	@Override
