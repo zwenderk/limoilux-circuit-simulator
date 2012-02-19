@@ -75,20 +75,35 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	int scopeColCount[];
 
 	Class<?> dumpTypes[];
+	
 
-	public CirSim()
-	{
-		super("Circuit Simulator v1.5n");
+	int dragX, dragY, initDragX, initDragY;
+	int selectedSource;
+	Rectangle selectedArea;
+	int gridSize, gridMask, gridRound;
+	boolean dragging;
+	boolean analyzeFlag;
+	boolean dumpMatrix;
+	boolean useBufferedImage;
+	boolean isMac;
+	String ctrlMetaKey;
+	double t;
+	int pause = 10;
+	int scopeSelected = -1;
+	int menuScope = -1;
+	int hintType = -1, hintItem1, hintItem2;
+	String stopMessage;
+	double timeStep;
 
-		this.useFrame = false;
 
-		this.init();
-	}
 
-	public String getAppletInfo()
-	{
-		return "Circuit by Paul Falstad";
-	}
+	String clipboard;
+	Rectangle circuitArea;
+	int circuitBottom;
+	Vector<String> undoStack, redoStack;
+
+
+
 
 	private Label titleLabel;
 	private Button resetButton;
@@ -141,37 +156,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	int tempMouseMode = MODE_SELECT;
 	String mouseModeStr = "Select";
 
-	int dragX, dragY, initDragX, initDragY;
-	int selectedSource;
-	Rectangle selectedArea;
-	int gridSize, gridMask, gridRound;
-	boolean dragging;
-	boolean analyzeFlag;
-	boolean dumpMatrix;
-	boolean useBufferedImage;
-	boolean isMac;
-	String ctrlMetaKey;
-	double t;
-	int pause = 10;
-	int scopeSelected = -1;
-	int menuScope = -1;
-	int hintType = -1, hintItem1, hintItem2;
-	String stopMessage;
-	double timeStep;
-
-
-
-	String clipboard;
-	Rectangle circuitArea;
-	int circuitBottom;
-	Vector<String> undoStack, redoStack;
-
-	int getrand(int x)
+	public CirSim()
 	{
-		int q = random.nextInt();
-		if (q < 0)
-			q = -q;
-		return q % x;
+		super("Circuit Simulator v1.5n");
+
+		this.useFrame = false;
+
+		this.init();
 	}
 
 	private void init()
@@ -522,6 +513,15 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		main.add(m);
 		return m;
 	}
+	
+	int getrand(int x)
+	{
+		int q = random.nextInt();
+		if (q < 0)
+			q = -q;
+		return q % x;
+	}
+
 
 	MenuItem getMenuItem(String s)
 	{
@@ -593,6 +593,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			return;
 		}
 		dumpTypes[t] = dclass;
+	}
+	
+
+	public String getAppletInfo()
+	{
+		return "Circuit by Paul Falstad";
 	}
 
 	void handleResize()
