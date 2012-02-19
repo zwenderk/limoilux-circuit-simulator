@@ -4,13 +4,6 @@ import java.awt.event.*;
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
 
-interface Editable
-{
-	EditInfo getEditInfo(int n);
-
-	void setEditValue(int n, EditInfo ei);
-}
-
 class EditDialog extends Dialog implements AdjustmentListener, ActionListener, ItemListener
 {
 	Editable elm;
