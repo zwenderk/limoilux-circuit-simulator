@@ -20,6 +20,8 @@ import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
 
+import com.limoilux.circuit.core.CoreUtil;
+
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener,
 		MouseMotionListener, MouseListener, ItemListener, KeyListener
 {
@@ -3527,9 +3529,10 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
+	@Deprecated
 	public static int getRandom(int max)
 	{
-		return CirSim.RANDOM_GENERATOR.nextInt(0) % max;
+		return CoreUtil.getRandomInt(max);
 	}
 
 	public static void main(String args[])
