@@ -23,23 +23,58 @@ import java.net.URLEncoder;
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener,
 		MouseMotionListener, MouseListener, ItemListener, KeyListener
 {
-
 	public static final int SOURCE_RADIUS = 7;
 	public static final double FREQ_MULTIPLIER = 3.14159265 * 8;
+	static final double pi = 3.14159265358979323846;
+	static final int MODE_ADD_ELM = 0;
+	static final int MODE_DRAG_ALL = 1;
+	static final int MODE_DRAG_ROW = 2;
+	static final int MODE_DRAG_COLUMN = 3;
+	static final int MODE_DRAG_SELECTED = 4;
+	static final int MODE_DRAG_POST = 5;
+	static final int MODE_SELECT = 6;
+	static final int infoWidth = 120;
+	static final int HINT_LC = 1;
+	static final int HINT_RC = 2;
+	static final int HINT_3DB_C = 3;
+	static final int HINT_TWINT = 4;
+	static final int HINT_3DB_L = 5;
 
-	static Container main;
+	public static Container main;
+	static String muString = "u";
+	static String ohmString = "ohm";
+	static EditDialog editDialog;
+	static ImportDialog impDialog;
 
 	private String baseURL = "http://www.falstad.com/circuit/";
-
-	Thread engine = null;
-	String startCircuit = null;
-	String startLabel = null;
-	String startCircuitText = null;
-	Dimension winSize;
-	Image dbimage;
-
+	private String startCircuit = null;
+	private String startLabel = null;
+	private String startCircuitText = null;
+	private Image dbimage;
 	private Random random;
+	
 	public CircuitCanvas circuitCanvas;
+	public Dimension winSize;
+	Vector<CircuitElm> elmList;
+	Vector<?> setupList;
+	CircuitElm dragElm, menuElm, mouseElm, stopElm;
+	int mousePost = -1;
+	CircuitElm plotXElm, plotYElm;
+	int draggingPost;
+	SwitchElm heldSwitchElm;
+	double circuitMatrix[][], circuitRightSide[], origRightSide[], origMatrix[][];
+	RowInfo circuitRowInfo[];
+	int circuitPermute[];
+	boolean circuitNonLinear;
+	int voltageSourceCount;
+	int circuitMatrixSize, circuitMatrixFullSize;
+	boolean circuitNeedsMap;
+	public boolean useFrame;
+	int scopeCount;
+	Scope scopes[];
+	int scopeColCount[];
+
+	Class<?> dumpTypes[];
 
 	public CirSim()
 	{
@@ -55,13 +90,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return "Circuit by Paul Falstad";
 	}
 
-	Label titleLabel;
-	Button resetButton;
-	Button dumpMatrixButton;
-	MenuItem exportItem, exportLinkItem, importItem, exitItem, undoItem, redoItem, cutItem, copyItem, pasteItem,
+	private Label titleLabel;
+	private Button resetButton;
+	private Button dumpMatrixButton;
+	private MenuItem exportItem, exportLinkItem, importItem, exitItem, undoItem, redoItem, cutItem, copyItem, pasteItem,
 			selectAllItem, optionsItem;
-	Menu optionsMenu;
-	Checkbox stoppedCheck;
+	private Menu optionsMenu;
+	public Checkbox stoppedCheck;
 	CheckboxMenuItem dotsCheckItem;
 	CheckboxMenuItem voltsCheckItem;
 	CheckboxMenuItem powerCheckItem;
@@ -105,15 +140,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	int mouseMode = MODE_SELECT;
 	int tempMouseMode = MODE_SELECT;
 	String mouseModeStr = "Select";
-	static final double pi = 3.14159265358979323846;
-	static final int MODE_ADD_ELM = 0;
-	static final int MODE_DRAG_ALL = 1;
-	static final int MODE_DRAG_ROW = 2;
-	static final int MODE_DRAG_COLUMN = 3;
-	static final int MODE_DRAG_SELECTED = 4;
-	static final int MODE_DRAG_POST = 5;
-	static final int MODE_SELECT = 6;
-	static final int infoWidth = 120;
+
 	int dragX, dragY, initDragX, initDragY;
 	int selectedSource;
 	Rectangle selectedArea;
@@ -131,34 +158,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	int hintType = -1, hintItem1, hintItem2;
 	String stopMessage;
 	double timeStep;
-	static final int HINT_LC = 1;
-	static final int HINT_RC = 2;
-	static final int HINT_3DB_C = 3;
-	static final int HINT_TWINT = 4;
-	static final int HINT_3DB_L = 5;
-	Vector<CircuitElm> elmList;
-	Vector<?> setupList;
-	CircuitElm dragElm, menuElm, mouseElm, stopElm;
-	int mousePost = -1;
-	CircuitElm plotXElm, plotYElm;
-	int draggingPost;
-	SwitchElm heldSwitchElm;
-	double circuitMatrix[][], circuitRightSide[], origRightSide[], origMatrix[][];
-	RowInfo circuitRowInfo[];
-	int circuitPermute[];
-	boolean circuitNonLinear;
-	int voltageSourceCount;
-	int circuitMatrixSize, circuitMatrixFullSize;
-	boolean circuitNeedsMap;
-	public boolean useFrame;
-	int scopeCount;
-	Scope scopes[];
-	int scopeColCount[];
-	static EditDialog editDialog;
-	static ImportDialog impDialog;
-	Class<?> dumpTypes[];
-	static String muString = "u";
-	static String ohmString = "ohm";
+
+
+
 	String clipboard;
 	Rectangle circuitArea;
 	int circuitBottom;
