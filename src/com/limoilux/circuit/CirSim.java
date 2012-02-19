@@ -2825,12 +2825,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			circuitCanvas.repaint();
 	}
 
-	@Deprecated
-	private int distanceSq(int x1, int y1, int x2, int y2)
-	{
-		return CoreUtil.distanceSq(x1, y1, x2, y2);
-	}
-
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
@@ -3103,9 +3097,18 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	private void setGrid()
 	{
-		gridSize = (smallGridCheckItem.getState()) ? 8 : 16;
-		gridMask = ~(gridSize - 1);
-		gridRound = gridSize / 2 - 1;
+		if (this.smallGridCheckItem.getState())
+		{
+			this.gridSize = 8;
+		}
+		else
+		{
+			this.gridSize = 16;
+		}
+		
+		//  le "~" est un "not" bitwise.
+		this.gridMask = ~(this.gridSize - 1);
+		this.gridRound = this.gridSize / 2 - 1;
 	}
 
 	private void pushUndo()
@@ -3121,9 +3124,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private void doUndo()
 	{
 		if (undoStack.size() == 0)
+		{
 			return;
-		redoStack.add(dumpCircuit());
-		String s = (String) (undoStack.remove(undoStack.size() - 1));
+		}
+		
+		this.redoStack.add(this.dumpCircuit());
+		String s = (String) (this.undoStack.remove(this.undoStack.size() - 1));
 		readSetup(s);
 		enableUndoRedo();
 	}
@@ -3131,17 +3137,22 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private void doRedo()
 	{
 		if (redoStack.size() == 0)
+		{
 			return;
-		undoStack.add(dumpCircuit());
+		}
+
+		this.undoStack.add(dumpCircuit());
+
 		String s = (String) (redoStack.remove(redoStack.size() - 1));
-		readSetup(s);
-		enableUndoRedo();
+
+		this.readSetup(s);
+		this.enableUndoRedo();
 	}
 
 	private void enableUndoRedo()
 	{
-		redoItem.setEnabled(redoStack.size() > 0);
-		undoItem.setEnabled(undoStack.size() > 0);
+		this.redoItem.setEnabled(this.redoStack.size() > 0);
+		this.undoItem.setEnabled(this.undoStack.size() > 0);
 	}
 
 	private void setMenuSelection()
@@ -3152,7 +3163,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			{
 				return;
 			}
-				
+
 			this.clearSelection();
 			this.menuElm.setSelected(true);
 		}
@@ -3163,7 +3174,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		this.pushUndo();
 		this.setMenuSelection();
 		this.clipboard = "";
-		
+
 		for (int i = this.elmList.size() - 1; i >= 0; i--)
 		{
 			CircuitElm ce = getElm(i);
@@ -3182,7 +3193,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	{
 		this.pushUndo();
 		this.setMenuSelection();
-		
+
 		for (int i = this.elmList.size() - 1; i >= 0; i--)
 		{
 			CircuitElm ce = getElm(i);
@@ -3192,7 +3203,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				this.elmList.removeElementAt(i);
 			}
 		}
-		
+
 		this.needAnalyze();
 	}
 
@@ -3207,9 +3218,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			{
 				this.clipboard += ce.dump() + "\n";
 			}
-			
+
 		}
-		
+
 		this.enablePaste();
 	}
 
@@ -3471,6 +3482,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			// System.out.println(n1 + " failed");
 			return false;
 		}
+	}
+
+	@Deprecated
+	private static int distanceSq(int x1, int y1, int x2, int y2)
+	{
+		return CoreUtil.distanceSq(x1, y1, x2, y2);
 	}
 
 	@Deprecated
