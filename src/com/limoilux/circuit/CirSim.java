@@ -862,8 +862,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			int ybase = this.winSize.height - 15 * i - 5;
 			ybase = Math.min(ybase, this.circuitArea.height);
 			ybase = Math.max(ybase, this.circuitBottom);
-			
-			
+
 			for (i = 0; info[i] != null; i++)
 			{
 				g.drawString(info[i], x, ybase + 15 * (i + 1));
@@ -919,7 +918,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			{
 				this.scopes[i].setElm(null);
 			}
-				
+
 			if (this.scopes[i].elm == null)
 			{
 				int j;
@@ -927,8 +926,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				{
 					this.scopes[j] = this.scopes[j + 1];
 				}
-					
-				scopeCount--;
+
+				this.scopeCount--;
 				i--;
 				continue;
 			}
@@ -936,32 +935,46 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			{
 				this.scopes[i].position = pos + 1;
 			}
-				
+
 			pos = scopes[i].position;
 		}
-		while (scopeCount > 0 && scopes[scopeCount - 1].elm == null)
-			scopeCount--;
+		while (this.scopeCount > 0 && this.scopes[this.scopeCount - 1].elm == null)
+		{
+			this.scopeCount--;
+		}
+
 		int h = winSize.height - circuitArea.height;
 		pos = 0;
 		for (i = 0; i != scopeCount; i++)
+		{
 			scopeColCount[i] = 0;
+		}
+
 		for (i = 0; i != scopeCount; i++)
 		{
 			pos = max(scopes[i].position, pos);
 			scopeColCount[scopes[i].position]++;
 		}
+
 		int colct = pos + 1;
 		int iw = infoWidth;
 		if (colct <= 2)
-			iw = iw * 3 / 2;
+		{
+			iw *= 3 / 2;
+		}
+
 		int w = (winSize.width - iw) / colct;
 		int marg = 10;
 		if (w < marg * 2)
+		{
 			w = marg * 2;
+		}
+
 		pos = -1;
 		int colh = 0;
 		int row = 0;
 		int speed = 0;
+
 		for (i = 0; i != scopeCount; i++)
 		{
 			Scope s = scopes[i];
@@ -977,10 +990,14 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				s.speed = speed;
 				s.resetGraph();
 			}
+
 			Rectangle r = new Rectangle(pos * w, winSize.height - h + colh * row, w - marg, colh);
 			row++;
 			if (!r.equals(s.rect))
+			{
 				s.setRect(r);
+			}
+
 		}
 	}
 
