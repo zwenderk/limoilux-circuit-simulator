@@ -212,12 +212,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		mainContainer.add(circuitCanvas);
 
 		mainMenu = new PopupMenu();
-		MenuBar mb = null;
+		MenuBar menubar = null;
 
-		mb = new MenuBar();
+		menubar = new MenuBar();
 		Menu m = new Menu("File");
 
-		mb.add(m);
+		menubar.add(m);
 
 		m.add(importItem = getMenuItem("Import"));
 		m.add(exportItem = getMenuItem("Export"));
@@ -241,18 +241,18 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		m.add(selectAllItem = getMenuItem("Select All"));
 		selectAllItem.setShortcut(new MenuShortcut(KeyEvent.VK_A));
 
-		mb.add(m);
+		menubar.add(m);
 
 		m = new Menu("Scope");
 
-		mb.add(m);
+		menubar.add(m);
 
 		m.add(getMenuItem("Stack All", "stackAll"));
 		m.add(getMenuItem("Unstack All", "unstackAll"));
 
 		optionsMenu = m = new Menu("Options");
 
-		mb.add(m);
+		menubar.add(m);
 
 		m.add(dotsCheckItem = getCheckItem("Show Current"));
 		dotsCheckItem.setState(true);
@@ -273,7 +273,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 		Menu circuitsMenu = new Menu("Circuits");
 
-		mb.add(circuitsMenu);
+		menubar.add(circuitsMenu);
 
 		mainMenu.add(getClassCheckItem("Add Wire", "WireElm"));
 		mainMenu.add(getClassCheckItem("Add Resistor", "ResistorElm"));
@@ -442,7 +442,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 		getSetupList(circuitsMenu, false);
 
-		setMenuBar(mb);
+		setMenuBar(menubar);
 
 		if (startCircuitText != null)
 		{
@@ -1998,20 +1998,22 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		// iter);
 	}
 
-	int min(int a, int b)
+	@Deprecated
+	private static int min(int a, int b)
 	{
-		return (a < b) ? a : b;
+		return Math.min(a, b);
 	}
 
-	int max(int a, int b)
+	@Deprecated
+	private static int max(int a, int b)
 	{
-		return (a > b) ? a : b;
+		return Math.max(a, b);
 	}
 
 	void editFuncPoint(int x, int y)
 	{
 		// XXX
-		circuitCanvas.repaint(pause);
+		this.circuitCanvas.repaint(this.pause);
 	}
 
 	@Override
@@ -2027,14 +2029,14 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	@Override
 	public void componentShown(ComponentEvent e)
 	{
-		circuitCanvas.repaint();
+		this.circuitCanvas.repaint();
 	}
 
 	@Override
 	public void componentResized(ComponentEvent e)
 	{
-		handleResize();
-		circuitCanvas.repaint(100);
+		this.handleResize();
+		this.circuitCanvas.repaint(100);
 	}
 
 	@Override
