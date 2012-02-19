@@ -25,7 +25,8 @@ import com.limoilux.circuit.core.CoreUtil;
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener,
 		MouseMotionListener, MouseListener, ItemListener, KeyListener
 {
-	private static final double pi = 3.14159265358979323846;
+	@Deprecated
+	private static final double PI = 3.14159265358979323846;
 	private static final int MODE_ADD_ELM = 0;
 	private static final int MODE_DRAG_ALL = 1;
 
@@ -38,8 +39,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private static final int HINT_3DB_C = 3;
 	private static final int HINT_TWINT = 4;
 	private static final int HINT_3DB_L = 5;
-
-	private static final Random RANDOM_GENERATOR = new Random();
 
 	public static final int MODE_DRAG_ROW = 2;
 	public static final int MODE_DRAG_COLUMN = 3;
@@ -977,7 +976,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				return null;
 			InductorElm ie = (InductorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
-			return "res.f = " + CircuitElm.getUnitText(1 / (2 * pi * Math.sqrt(ie.inductance * ce.capacitance)), "Hz");
+			return "res.f = " + CircuitElm.getUnitText(1 / (2 * PI * Math.sqrt(ie.inductance * ce.capacitance)), "Hz");
 		}
 		if (hintType == HINT_RC)
 		{
@@ -997,7 +996,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				return null;
 			ResistorElm re = (ResistorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
-			return "f.3db = " + CircuitElm.getUnitText(1 / (2 * pi * re.resistance * ce.capacitance), "Hz");
+			return "f.3db = " + CircuitElm.getUnitText(1 / (2 * PI * re.resistance * ce.capacitance), "Hz");
 		}
 		if (hintType == HINT_3DB_L)
 		{
@@ -1007,7 +1006,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				return null;
 			ResistorElm re = (ResistorElm) c1;
 			InductorElm ie = (InductorElm) c2;
-			return "f.3db = " + CircuitElm.getUnitText(re.resistance / (2 * pi * ie.inductance), "Hz");
+			return "f.3db = " + CircuitElm.getUnitText(re.resistance / (2 * PI * ie.inductance), "Hz");
 		}
 		if (hintType == HINT_TWINT)
 		{
@@ -1017,7 +1016,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				return null;
 			ResistorElm re = (ResistorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
-			return "fc = " + CircuitElm.getUnitText(1 / (2 * pi * re.resistance * ce.capacitance), "Hz");
+			return "fc = " + CircuitElm.getUnitText(1 / (2 * PI * re.resistance * ce.capacitance), "Hz");
 		}
 		return null;
 	}
