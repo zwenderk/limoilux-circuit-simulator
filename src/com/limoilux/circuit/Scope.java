@@ -712,7 +712,7 @@ class Scope
 			imageSource = new MemoryImageSource(w, h, pixels, 0, w);
 			imageSource.setAnimated(true);
 			imageSource.setFullBufferUpdates(true);
-			image = sim.cv.createImage(imageSource);
+			image = sim.circuitCanvas.createImage(imageSource);
 		}
 		dpixels = new float[w * h];
 		draw_ox = draw_oy = -1;

@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 // CirSim.java (c) 2010 by Paul Falstad
 
 // For information about the theory behind this, see Electronic Circuit & System Simulation Methods by Pillage
@@ -20,9 +22,9 @@ import java.net.URLEncoder;
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener,
 		MouseMotionListener, MouseListener, ItemListener, KeyListener
 {
-	public static final int sourceRadius = 7;
-	public static final double freqMult = 3.14159265 * 8;
-	
+	public static final int SOURCE_RADIUS = 7;
+	public static final double FREQ_MULTIPLIER = 3.14159265 * 8;
+
 	static Container main;
 
 	Thread engine = null;
@@ -31,8 +33,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	Image dbimage;
 
 	Random random;
-	
-	
+	CircuitCanvas circuitCanvas;
+	Circuit applet;
+
 	CirSim(Circuit a)
 	{
 		super("Circuit Simulator v1.5n");
@@ -44,7 +47,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	{
 		return "Circuit by Paul Falstad";
 	}
-
 
 	Label titleLabel;
 	Button resetButton;
@@ -163,10 +165,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return q % x;
 	}
 
-	CircuitCanvas cv;
-	Circuit applet;
 
-	
 
 	String startCircuit = null;
 	String startLabel = null;
@@ -254,12 +253,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		dumpTypes[(int) 'B'] = Scope.class;
 
 		main.setLayout(new CircuitLayout());
-		cv = new CircuitCanvas(this);
-		cv.addComponentListener(this);
-		cv.addMouseMotionListener(this);
-		cv.addMouseListener(this);
-		cv.addKeyListener(this);
-		main.add(cv);
+		circuitCanvas = new CircuitCanvas(this);
+		circuitCanvas.addComponentListener(this);
+		circuitCanvas.addMouseMotionListener(this);
+		circuitCanvas.addMouseListener(this);
+		circuitCanvas.addKeyListener(this);
+		main.add(circuitCanvas);
 
 		mainMenu = new PopupMenu();
 		MenuBar mb = null;
@@ -368,7 +367,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		inputMenu.add(getClassCheckItem("Add Current Source", "CurrentElm"));
 		inputMenu.add(getClassCheckItem("Add LED", "LEDElm"));
 		inputMenu.add(getClassCheckItem("Add Lamp (beta)", "LampElm"));
-		
+
 		String path = "com.limoilux.circuit";
 
 		Menu activeMenu = new Menu("Active Components");
@@ -378,13 +377,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		activeMenu.add(getClassCheckItem("Add Transistor (bipolar, NPN)", "NTransistorElm"));
 		activeMenu.add(getClassCheckItem("Add Transistor (bipolar, PNP)", "PTransistorElm"));
 		activeMenu.add(getClassCheckItem("Add Op Amp (- on top)", "OpAmpElm"));
-		activeMenu.add(getClassCheckItem("Add Op Amp (+ on top)",  "OpAmpSwapElm"));
-		activeMenu.add(getClassCheckItem("Add MOSFET (n-channel)",  "NMosfetElm"));
-		activeMenu.add(getClassCheckItem("Add MOSFET (p-channel)",  "PMosfetElm"));
-		activeMenu.add(getClassCheckItem("Add JFET (n-channel)",  "NJfetElm"));
-		activeMenu.add(getClassCheckItem("Add JFET (p-channel)",  "PJfetElm"));
+		activeMenu.add(getClassCheckItem("Add Op Amp (+ on top)", "OpAmpSwapElm"));
+		activeMenu.add(getClassCheckItem("Add MOSFET (n-channel)", "NMosfetElm"));
+		activeMenu.add(getClassCheckItem("Add MOSFET (p-channel)", "PMosfetElm"));
+		activeMenu.add(getClassCheckItem("Add JFET (n-channel)", "NJfetElm"));
+		activeMenu.add(getClassCheckItem("Add JFET (p-channel)", "PJfetElm"));
 		activeMenu.add(getClassCheckItem("Add Analog Switch (SPST)", "AnalogSwitchElm"));
-		activeMenu.add(getClassCheckItem("Add Analog Switch (SPDT)",  "AnalogSwitch2Elm"));
+		activeMenu.add(getClassCheckItem("Add Analog Switch (SPDT)", "AnalogSwitch2Elm"));
 		activeMenu.add(getClassCheckItem("Add SCR", "SCRElm"));
 		// activeMenu.add(getClassCheckItem("Add Varactor/Varicap",
 		// "VaractorElm"));
@@ -488,8 +487,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		scopeCount = 0;
 
 		random = new Random();
-		cv.setBackground(Color.black);
-		cv.setForeground(Color.lightGray);
+		circuitCanvas.setBackground(Color.black);
+		circuitCanvas.setForeground(Color.lightGray);
 
 		elmMenu = new PopupMenu();
 		elmMenu.add(elmEditMenuItem = getMenuItem("Edit"));
@@ -655,7 +654,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	void handleResize()
 	{
-		winSize = cv.getSize();
+		winSize = circuitCanvas.getSize();
 		if (winSize.width == 0)
 			return;
 		dbimage = main.createImage(winSize.width, winSize.height);
@@ -716,7 +715,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	public void paint(Graphics g)
 	{
-		cv.repaint();
+		circuitCanvas.repaint();
 	}
 
 	static final int resct = 6;
@@ -767,7 +766,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			{
 				e.printStackTrace();
 				analyzeFlag = true;
-				cv.repaint();
+				circuitCanvas.repaint();
 				return;
 			}
 		}
@@ -940,7 +939,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				}
 			}
 
-			cv.repaint(0);
+			circuitCanvas.repaint(0);
 		}
 		lastFrameTime = lastTime;
 	}
@@ -1086,7 +1085,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				{
 					((SwitchElm) ce).toggle();
 					analyzeFlag = true;
-					cv.repaint();
+					circuitCanvas.repaint();
 					return;
 				}
 			}
@@ -1096,7 +1095,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	void needAnalyze()
 	{
 		analyzeFlag = true;
-		cv.repaint();
+		circuitCanvas.repaint();
 	}
 
 	Vector<CircuitNode> nodeList;
@@ -1746,7 +1745,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		stopElm = ce;
 		stoppedCheck.setState(true);
 		analyzeFlag = false;
-		cv.repaint();
+		circuitCanvas.repaint();
 	}
 
 	// control voltage source vs with voltage from n1 to n2 (must
@@ -2057,7 +2056,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	void editFuncPoint(int x, int y)
 	{
 		// XXX
-		cv.repaint(pause);
+		circuitCanvas.repaint(pause);
 	}
 
 	public void componentHidden(ComponentEvent e)
@@ -2070,13 +2069,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	public void componentShown(ComponentEvent e)
 	{
-		cv.repaint();
+		circuitCanvas.repaint();
 	}
 
 	public void componentResized(ComponentEvent e)
 	{
 		handleResize();
-		cv.repaint(100);
+		circuitCanvas.repaint(100);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -2097,7 +2096,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			analyzeFlag = true;
 			t = 0;
 			stoppedCheck.setState(false);
-			cv.repaint();
+			circuitCanvas.repaint();
 		}
 		if (e.getSource() == dumpMatrixButton)
 			dumpMatrix = true;
@@ -2183,7 +2182,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				scopes[menuScope].selectY();
 			if (ac.compareTo("reset") == 0)
 				scopes[menuScope].resetGraph();
-			cv.repaint();
+			circuitCanvas.repaint();
 		}
 		if (ac.indexOf("setup ") == 0)
 		{
@@ -2455,7 +2454,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			CircuitElm.voltageRange = 5;
 			scopeCount = 0;
 		}
-		cv.repaint();
+		circuitCanvas.repaint();
 		int p;
 		for (p = 0; p < len;)
 		{
@@ -2670,7 +2669,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				dragY = snapGrid(e.getY());
 			}
 		}
-		cv.repaint(pause);
+		circuitCanvas.repaint(pause);
 	}
 
 	void dragAll(int x, int y)
@@ -2927,7 +2926,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 		}
 		if (mouseElm != origMouse)
-			cv.repaint();
+			circuitCanvas.repaint();
 	}
 
 	int distanceSq(int x1, int y1, int x2, int y2)
@@ -2954,7 +2953,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	{
 		scopeSelected = -1;
 		mouseElm = plotXElm = plotYElm = null;
-		cv.repaint();
+		circuitCanvas.repaint();
 	}
 
 	public void mousePressed(MouseEvent e)
@@ -3126,7 +3125,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		if (dragElm != null)
 			dragElm.delete();
 		dragElm = null;
-		cv.repaint();
+		circuitCanvas.repaint();
 	}
 
 	void enableItems()
@@ -3146,7 +3145,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	public void itemStateChanged(ItemEvent e)
 	{
-		cv.repaint(pause);
+		circuitCanvas.repaint(pause);
 		Object mi = e.getItemSelectable();
 		if (mi == stoppedCheck)
 			return;
