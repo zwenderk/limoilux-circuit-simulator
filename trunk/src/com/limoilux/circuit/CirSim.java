@@ -34,9 +34,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	Random random;
 	CircuitCanvas circuitCanvas;
-	Circuit applet;
+	private Circuit applet = null;
 
-	CirSim(Circuit a)
+	public CirSim(Circuit a)
 	{
 		super("Circuit Simulator v1.5n");
 		this.applet = a;
