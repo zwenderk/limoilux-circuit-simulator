@@ -668,7 +668,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	@Override
 	public void paint(Graphics g)
 	{
-		circuitCanvas.repaint();
+		this.circuitCanvas.repaint();
 	}
 
 	static final int resct = 6;
