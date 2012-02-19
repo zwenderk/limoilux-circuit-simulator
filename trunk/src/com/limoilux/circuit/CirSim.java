@@ -38,7 +38,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private static final int HINT_3DB_C = 3;
 	private static final int HINT_TWINT = 4;
 	private static final int HINT_3DB_L = 5;
-	
+
 	private static final Random RANDOM_GENERATOR = new Random();
 
 	public static final int MODE_DRAG_ROW = 2;
@@ -56,7 +56,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private String startLabel = null;
 	private String startCircuitText = null;
 	private Image dbimage;
-	
 
 	public CircuitCanvas circuitCanvas;
 	public Dimension winSize;
@@ -433,7 +432,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		scopeColCount = new int[20];
 		scopeCount = 0;
 
-
 		circuitCanvas.setBackground(Color.black);
 		circuitCanvas.setForeground(Color.lightGray);
 
@@ -582,19 +580,19 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			System.out.println("no dump type: " + c);
 			return;
 		}
-		
+
 		Class<Scope> dclass = elm.getDumpClass();
 		if (dumpTypes[t] == dclass)
 		{
 			return;
 		}
-			
+
 		if (dumpTypes[t] != null)
 		{
 			System.out.println("dump type conflict: " + c + " " + dumpTypes[t]);
 			return;
 		}
-		
+
 		this.dumpTypes[t] = dclass;
 	}
 
@@ -606,12 +604,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private void handleResize()
 	{
 		winSize = circuitCanvas.getSize();
-		
+
 		if (winSize.width == 0)
 		{
 			return;
 		}
-	
+
 		dbimage = mainContainer.createImage(winSize.width, winSize.height);
 		int h = winSize.height / 5;
 		/*
@@ -636,26 +634,26 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		// center circuit; we don't use snapGrid() because that rounds
 		int dx = gridMask & ((circuitArea.width - (maxx - minx)) / 2 - minx);
 		int dy = gridMask & ((circuitArea.height - (maxy - miny)) / 2 - miny);
-		
+
 		if (dx + minx < 0)
 		{
 			dx = this.gridMask & (-minx);
 		}
-			
+
 		if (dy + miny < 0)
 		{
 			dy = this.gridMask & (-miny);
 		}
-			
+
 		for (i = 0; i != elmList.size(); i++)
 		{
 			CircuitElm ce = getElm(i);
 			ce.move(dx, dy);
 		}
-		
+
 		// after moving elements, need this to avoid singular matrix probs
 		this.needAnalyze();
-		
+
 		this.circuitBottom = 0;
 	}
 
@@ -3485,48 +3483,11 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return true;
 	}
 
-	// Solves the set of n linear equations using a LU factorization
-	// previously performed by lu_factor. On input, b[0..n-1] is the right
-	// hand side of the equations, and on output, contains the solution.
-	void lu_solve(double a[][], int n, int ipvt[], double b[])
+	@Deprecated
+	static void lu_solve(double a[][], int n, int ipvt[], double b[])
 	{
-		int i;
+		CoreUtil.luSolve(a, n, ipvt, b);
 
-		// find first nonzero b element
-		for (i = 0; i != n; i++)
-		{
-			int row = ipvt[i];
-
-			double swap = b[row];
-			b[row] = b[i];
-			b[i] = swap;
-			if (swap != 0)
-				break;
-		}
-
-		int bi = i++;
-		for (; i < n; i++)
-		{
-			int row = ipvt[i];
-			int j;
-			double tot = b[row];
-
-			b[row] = b[i];
-			// forward substitution using the lower triangular matrix
-			for (j = bi; j < i; j++)
-				tot -= a[i][j] * b[j];
-			b[i] = tot;
-		}
-		for (i = n - 1; i >= 0; i--)
-		{
-			double tot = b[i];
-
-			// back-substitution using the upper triangular matrix
-			int j;
-			for (j = i + 1; j != n; j++)
-				tot -= a[i][j] * b[j];
-			b[i] = tot / a[i][i];
-		}
 	}
 
 	@Deprecated
