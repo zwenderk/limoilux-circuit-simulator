@@ -52,7 +52,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private String startCircuitText = null;
 	private Image dbimage;
 	private Random random;
-	
+
 	public CircuitCanvas circuitCanvas;
 	public Dimension winSize;
 	Vector<CircuitElm> elmList;
@@ -75,7 +75,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	int scopeColCount[];
 
 	Class<?> dumpTypes[];
-	
 
 	int dragX, dragY, initDragX, initDragY;
 	int selectedSource;
@@ -95,61 +94,56 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	String stopMessage;
 	double timeStep;
 
-
-
-	String clipboard;
-	Rectangle circuitArea;
-	int circuitBottom;
-	Vector<String> undoStack, redoStack;
-
-
-
+	private String clipboard;
+	private Rectangle circuitArea;
+	private int circuitBottom;
+	private Vector<String> undoStack, redoStack;
 
 	private Label titleLabel;
 	private Button resetButton;
 	private Button dumpMatrixButton;
-	private MenuItem exportItem, exportLinkItem, importItem, exitItem, undoItem, redoItem, cutItem, copyItem, pasteItem,
-			selectAllItem, optionsItem;
+	private MenuItem exportItem, exportLinkItem, importItem, exitItem, undoItem, redoItem, cutItem, copyItem,
+			pasteItem, selectAllItem, optionsItem;
 	private Menu optionsMenu;
 	public Checkbox stoppedCheck;
-	CheckboxMenuItem dotsCheckItem;
-	CheckboxMenuItem voltsCheckItem;
-	CheckboxMenuItem powerCheckItem;
-	CheckboxMenuItem smallGridCheckItem;
-	CheckboxMenuItem showValuesCheckItem;
-	CheckboxMenuItem conductanceCheckItem;
-	CheckboxMenuItem euroResistorCheckItem;
-	CheckboxMenuItem printableCheckItem;
-	CheckboxMenuItem conventionCheckItem;
-	Scrollbar speedBar;
-	Scrollbar currentBar;
-	Label powerLabel;
-	Scrollbar powerBar;
-	PopupMenu elmMenu;
-	MenuItem elmEditMenuItem;
-	MenuItem elmCutMenuItem;
-	MenuItem elmCopyMenuItem;
-	MenuItem elmDeleteMenuItem;
-	MenuItem elmScopeMenuItem;
-	PopupMenu scopeMenu;
-	PopupMenu transScopeMenu;
-	PopupMenu mainMenu;
-	CheckboxMenuItem scopeVMenuItem;
-	CheckboxMenuItem scopeIMenuItem;
-	CheckboxMenuItem scopeMaxMenuItem;
-	CheckboxMenuItem scopeMinMenuItem;
-	CheckboxMenuItem scopeFreqMenuItem;
-	CheckboxMenuItem scopePowerMenuItem;
-	CheckboxMenuItem scopeIbMenuItem;
-	CheckboxMenuItem scopeIcMenuItem;
-	CheckboxMenuItem scopeIeMenuItem;
-	CheckboxMenuItem scopeVbeMenuItem;
-	CheckboxMenuItem scopeVbcMenuItem;
-	CheckboxMenuItem scopeVceMenuItem;
-	CheckboxMenuItem scopeVIMenuItem;
-	CheckboxMenuItem scopeXYMenuItem;
-	CheckboxMenuItem scopeResistMenuItem;
-	CheckboxMenuItem scopeVceIcMenuItem;
+	public CheckboxMenuItem dotsCheckItem;
+	public CheckboxMenuItem voltsCheckItem;
+	public CheckboxMenuItem powerCheckItem;
+	public CheckboxMenuItem smallGridCheckItem;
+	public CheckboxMenuItem showValuesCheckItem;
+	public CheckboxMenuItem conductanceCheckItem;
+	public CheckboxMenuItem euroResistorCheckItem;
+	public CheckboxMenuItem printableCheckItem;
+	public CheckboxMenuItem conventionCheckItem;
+	private Scrollbar speedBar;
+	private Scrollbar currentBar;
+	private Label powerLabel;
+	private Scrollbar powerBar;
+	private PopupMenu elmMenu;
+	private MenuItem elmEditMenuItem;
+	private MenuItem elmCutMenuItem;
+	private MenuItem elmCopyMenuItem;
+	private MenuItem elmDeleteMenuItem;
+	private MenuItem elmScopeMenuItem;
+	public PopupMenu scopeMenu;
+	public PopupMenu transScopeMenu;
+	private PopupMenu mainMenu;
+	public CheckboxMenuItem scopeVMenuItem;
+	public CheckboxMenuItem scopeIMenuItem;
+	public CheckboxMenuItem scopeMaxMenuItem;
+	public CheckboxMenuItem scopeMinMenuItem;
+	public CheckboxMenuItem scopeFreqMenuItem;
+	public CheckboxMenuItem scopePowerMenuItem;
+	public CheckboxMenuItem scopeIbMenuItem;
+	public CheckboxMenuItem scopeIcMenuItem;
+	public CheckboxMenuItem scopeIeMenuItem;
+	public CheckboxMenuItem scopeVbeMenuItem;
+	public CheckboxMenuItem scopeVbcMenuItem;
+	public CheckboxMenuItem scopeVceMenuItem;
+	public CheckboxMenuItem scopeVIMenuItem;
+	public CheckboxMenuItem scopeXYMenuItem;
+	public CheckboxMenuItem scopeResistMenuItem;
+	public CheckboxMenuItem scopeVceIcMenuItem;
 	MenuItem scopeSelectYMenuItem;
 	Class<?> addingClass;
 	int mouseMode = MODE_SELECT;
@@ -513,7 +507,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		main.add(m);
 		return m;
 	}
-	
+
 	int getrand(int x)
 	{
 		int q = random.nextInt();
@@ -521,7 +515,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			q = -q;
 		return q % x;
 	}
-
 
 	MenuItem getMenuItem(String s)
 	{
@@ -594,7 +587,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 		dumpTypes[t] = dclass;
 	}
-	
 
 	public String getAppletInfo()
 	{
