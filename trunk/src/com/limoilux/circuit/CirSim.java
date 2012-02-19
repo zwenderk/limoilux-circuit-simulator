@@ -3391,96 +3391,11 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 		tempMouseMode = mouseMode;
 	}
-
-	// factors a matrix into upper and lower triangular matrices by
-	// gaussian elimination. On entry, a[0..n-1][0..n-1] is the
-	// matrix to be factored. ipvt[] returns an integer vector of pivot
-	// indices, used in the lu_solve() routine.
+	
+	@Deprecated
 	boolean lu_factor(double a[][], int n, int ipvt[])
 	{
-		double scaleFactors[];
-		int i, j, k;
-
-		scaleFactors = new double[n];
-
-		// divide each row by its largest element, keeping track of the
-		// scaling factors
-		for (i = 0; i != n; i++)
-		{
-			double largest = 0;
-			for (j = 0; j != n; j++)
-			{
-				double x = Math.abs(a[i][j]);
-				if (x > largest)
-					largest = x;
-			}
-			// if all zeros, it's a singular matrix
-			if (largest == 0)
-				return false;
-			scaleFactors[i] = 1.0 / largest;
-		}
-
-		// use Crout's method; loop through the columns
-		for (j = 0; j != n; j++)
-		{
-
-			// calculate upper triangular elements for this column
-			for (i = 0; i != j; i++)
-			{
-				double q = a[i][j];
-				for (k = 0; k != i; k++)
-					q -= a[i][k] * a[k][j];
-				a[i][j] = q;
-			}
-
-			// calculate lower triangular elements for this column
-			double largest = 0;
-			int largestRow = -1;
-			for (i = j; i != n; i++)
-			{
-				double q = a[i][j];
-				for (k = 0; k != j; k++)
-					q -= a[i][k] * a[k][j];
-				a[i][j] = q;
-				double x = Math.abs(q);
-				if (x >= largest)
-				{
-					largest = x;
-					largestRow = i;
-				}
-			}
-
-			// pivoting
-			if (j != largestRow)
-			{
-				double x;
-				for (k = 0; k != n; k++)
-				{
-					x = a[largestRow][k];
-					a[largestRow][k] = a[j][k];
-					a[j][k] = x;
-				}
-				scaleFactors[largestRow] = scaleFactors[j];
-			}
-
-			// keep track of row interchanges
-			ipvt[j] = largestRow;
-
-			// avoid zeros
-			if (a[j][j] == 0.0)
-			{
-				System.out.println("avoided zero");
-				a[j][j] = 1e-18;
-			}
-
-			if (j != n - 1)
-			{
-				double mult = 1.0 / a[j][j];
-				for (i = j + 1; i != n; i++)
-					a[i][j] *= mult;
-			}
-		}
-		return true;
+		return CoreUtil.luFactor(a, n, ipvt);
 	}
 
 	@Deprecated
