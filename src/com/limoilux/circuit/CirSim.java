@@ -1105,7 +1105,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return this.elmList.elementAt(n);
 	}
 
-    private void analyzeCircuit()
+	private void analyzeCircuit()
 	{
 		calcCircuitBottom();
 		if (elmList.isEmpty())
@@ -2703,18 +2703,15 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		mouseElm = cs;
 	}
 
-	void removeZeroLengthElements()
+	private void removeZeroLengthElements()
 	{
-		int i;
-		boolean changed = false;
-		for (i = elmList.size() - 1; i >= 0; i--)
+		for (int i = elmList.size() - 1; i >= 0; i--)
 		{
 			CircuitElm ce = getElm(i);
 			if (ce.x == ce.x2 && ce.y == ce.y2)
 			{
 				elmList.removeElementAt(i);
 				ce.delete();
-				changed = true;
 			}
 		}
 		needAnalyze();
@@ -2817,7 +2814,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	@Deprecated
 	private int distanceSq(int x1, int y1, int x2, int y2)
 	{
-		return CoreUtil.distanceSq(x1,y1,x2,y2);
+		return CoreUtil.distanceSq(x1, y1, x2, y2);
 	}
 
 	@Override
@@ -2826,7 +2823,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
 		{
 			if (mouseMode == MODE_SELECT || mouseMode == MODE_DRAG_SELECTED)
-				clearSelection();
+			{
+				this.clearSelection();
+			}
 		}
 	}
 
@@ -3331,7 +3330,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		int dest;
 		CircuitElm firstElm;
 		int type;
-	
+
 		FindPathInfo(int t, CircuitElm e, int d)
 		{
 			dest = d;
@@ -3339,12 +3338,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			firstElm = e;
 			used = new boolean[nodeList.size()];
 		}
-	
+
 		boolean findPath(int n1)
 		{
 			return findPath(n1, -1);
 		}
-	
+
 		boolean findPath(int n1, int depth)
 		{
 			if (n1 == dest)
