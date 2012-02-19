@@ -9,14 +9,18 @@ import java.awt.event.*;
 
 public class Circuit extends Applet implements ComponentListener
 {
-	static CirSim ogf;
+	static CirSim circuitSim;
 	boolean started = false;
 
 	void destroyFrame()
 	{
-		if (Circuit.ogf != null)
-			Circuit.ogf.dispose();
-		Circuit.ogf = null;
+		if (Circuit.circuitSim != null)
+		{
+			Circuit.circuitSim.dispose();
+		}
+		
+		Circuit.circuitSim = null;
+		
 		this.repaint();
 	}
 
@@ -28,24 +32,24 @@ public class Circuit extends Applet implements ComponentListener
 
 	public static void main(String args[])
 	{
-		ogf = new CirSim(null);
-		ogf.init();
+		Circuit.circuitSim = new CirSim(null);
+		Circuit.circuitSim.init();
 	}
 
 	void showFrame()
 	{
-		if (ogf == null)
+		if (circuitSim == null)
 		{
 			this.started = true;
-			Circuit.ogf = new CirSim(this);
-			Circuit.ogf.init();
+			Circuit.circuitSim = new CirSim(this);
+			Circuit.circuitSim.init();
 			this.repaint();
 		}
 	}
 
 	public void toggleSwitch(int x)
 	{
-		Circuit.ogf.toggleSwitch(x);
+		Circuit.circuitSim.toggleSwitch(x);
 	}
 
 	@Override
@@ -57,13 +61,13 @@ public class Circuit extends Applet implements ComponentListener
 		{
 			message = "Applet is starting.";
 		}
-		else if (ogf == null)
+		else if (circuitSim == null)
 		{
 			message = "Applet is finished.";
 		}
-		else if (Circuit.ogf.useFrame)
+		else if (Circuit.circuitSim.useFrame)
 		{
-			Circuit.ogf.triggerShow();
+			Circuit.circuitSim.triggerShow();
 		}
 
 		g.drawString(message, 10, 30);
@@ -88,19 +92,19 @@ public class Circuit extends Applet implements ComponentListener
 	@Override
 	public void componentResized(ComponentEvent e)
 	{
-		if (Circuit.ogf != null)
-			Circuit.ogf.componentResized(e);
+		if (Circuit.circuitSim != null)
+			Circuit.circuitSim.componentResized(e);
 	}
 
 	@Override
 	public void destroy()
 	{
-		if (Circuit.ogf != null)
+		if (Circuit.circuitSim != null)
 		{
-			Circuit.ogf.dispose();
+			Circuit.circuitSim.dispose();
 		}
 
-		Circuit.ogf = null;
+		Circuit.circuitSim = null;
 		this.repaint();
 	}
 }
