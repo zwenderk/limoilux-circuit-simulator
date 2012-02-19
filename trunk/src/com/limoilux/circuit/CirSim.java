@@ -23,24 +23,25 @@ import java.net.URLEncoder;
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener,
 		MouseMotionListener, MouseListener, ItemListener, KeyListener
 {
-	public static final int SOURCE_RADIUS = 7;
-	public static final double FREQ_MULTIPLIER = 3.14159265 * 8;
-	static final double pi = 3.14159265358979323846;
-	static final int MODE_ADD_ELM = 0;
-	static final int MODE_DRAG_ALL = 1;
-	static final int MODE_DRAG_ROW = 2;
-	static final int MODE_DRAG_COLUMN = 3;
-	static final int MODE_DRAG_SELECTED = 4;
-	static final int MODE_DRAG_POST = 5;
-	static final int MODE_SELECT = 6;
-	static final int infoWidth = 120;
-	static final int HINT_LC = 1;
-	static final int HINT_RC = 2;
-	static final int HINT_3DB_C = 3;
-	static final int HINT_TWINT = 4;
-	static final int HINT_3DB_L = 5;
+	private static final double pi = 3.14159265358979323846;
+	private static final int MODE_ADD_ELM = 0;
+	private static final int MODE_DRAG_ALL = 1;
+	
+	private static final int MODE_DRAG_SELECTED = 4;
+	private static final int MODE_DRAG_POST = 5;
+	private static final int MODE_SELECT = 6;
+	private static final int infoWidth = 120;
+	private static final int HINT_LC = 1;
+	private static final int HINT_RC = 2;
+	private static final int HINT_3DB_C = 3;
+	private static final int HINT_TWINT = 4;
+	private static final int HINT_3DB_L = 5;
+	
+	public static final int MODE_DRAG_ROW = 2;
+	public static final int MODE_DRAG_COLUMN = 3;
 
 	public static Container main;
+	
 	static String muString = "u";
 	static String ohmString = "ohm";
 	static EditDialog editDialog;
@@ -55,44 +56,44 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	public CircuitCanvas circuitCanvas;
 	public Dimension winSize;
-	Vector<CircuitElm> elmList;
-	Vector<?> setupList;
-	CircuitElm dragElm, menuElm, mouseElm, stopElm;
-	int mousePost = -1;
-	CircuitElm plotXElm, plotYElm;
-	int draggingPost;
-	SwitchElm heldSwitchElm;
-	double circuitMatrix[][], circuitRightSide[], origRightSide[], origMatrix[][];
-	RowInfo circuitRowInfo[];
-	int circuitPermute[];
-	boolean circuitNonLinear;
-	int voltageSourceCount;
-	int circuitMatrixSize, circuitMatrixFullSize;
-	boolean circuitNeedsMap;
+	public Vector<CircuitElm> elmList;
+	private Vector<?> setupList;
+	public CircuitElm dragElm, menuElm, mouseElm, stopElm;
+	private int mousePost = -1;
+	public CircuitElm plotXElm, plotYElm;
+	private int draggingPost;
+	private SwitchElm heldSwitchElm;
+	private double circuitMatrix[][], circuitRightSide[], origRightSide[], origMatrix[][];
+	private RowInfo circuitRowInfo[];
+	private int circuitPermute[];
+	private boolean circuitNonLinear;
+	private int voltageSourceCount;
+	private int circuitMatrixSize, circuitMatrixFullSize;
+	private boolean circuitNeedsMap;
 	public boolean useFrame;
-	int scopeCount;
-	Scope scopes[];
-	int scopeColCount[];
+	private int scopeCount;
+	private Scope scopes[];
+	private int scopeColCount[];
 
-	Class<?> dumpTypes[];
+	private Class<?> dumpTypes[];
 
-	int dragX, dragY, initDragX, initDragY;
-	int selectedSource;
-	Rectangle selectedArea;
-	int gridSize, gridMask, gridRound;
-	boolean dragging;
-	boolean analyzeFlag;
-	boolean dumpMatrix;
-	boolean useBufferedImage;
-	boolean isMac;
-	String ctrlMetaKey;
-	double t;
-	int pause = 10;
-	int scopeSelected = -1;
-	int menuScope = -1;
-	int hintType = -1, hintItem1, hintItem2;
-	String stopMessage;
-	double timeStep;
+	private int dragX, dragY, initDragX, initDragY;
+	private int selectedSource;
+	private Rectangle selectedArea;
+	public int gridSize, gridMask, gridRound;
+	private boolean dragging;
+	public boolean analyzeFlag;
+	private boolean dumpMatrix;
+	public boolean useBufferedImage;
+	private boolean isMac;
+	private String ctrlMetaKey;
+	public double t;
+	private int pause = 10;
+	public int scopeSelected = -1;
+	private int menuScope = -1;
+	private int hintType = -1, hintItem1, hintItem2;
+	private String stopMessage;
+	public double timeStep;
 
 	private String clipboard;
 	private Rectangle circuitArea;
@@ -144,11 +145,11 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	public CheckboxMenuItem scopeXYMenuItem;
 	public CheckboxMenuItem scopeResistMenuItem;
 	public CheckboxMenuItem scopeVceIcMenuItem;
-	MenuItem scopeSelectYMenuItem;
-	Class<?> addingClass;
-	int mouseMode = MODE_SELECT;
-	int tempMouseMode = MODE_SELECT;
-	String mouseModeStr = "Select";
+	public MenuItem scopeSelectYMenuItem;
+	private Class<?> addingClass;
+	public int mouseMode = MODE_SELECT;
+	private int tempMouseMode = MODE_SELECT;
+	private String mouseModeStr = "Select";
 
 	public CirSim()
 	{
@@ -178,6 +179,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		ctrlMetaKey = (isMac) ? "\u2318" : "Ctrl";
 		String jv = System.getProperty("java.class.version");
 		double jvf = new Double(jv).doubleValue();
+		
 		if (jvf >= 48)
 		{
 			muString = "\u03bc";
