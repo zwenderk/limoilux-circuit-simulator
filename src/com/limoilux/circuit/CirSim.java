@@ -3264,8 +3264,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	private void clearSelection()
 	{
-		int i;
-		for (i = 0; i != elmList.size(); i++)
+		for (int i = 0; i != elmList.size(); i++)
 		{
 			CircuitElm ce = getElm(i);
 			ce.setSelected(false);
@@ -3298,21 +3297,29 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		{
 			Class<?> c = dumpTypes[e.getKeyChar()];
 			if (c == null || c == Scope.class)
+			{
 				return;
+			}
+				
 			CircuitElm elm = null;
 			elm = constructElement(c, 0, 0);
 			if (elm == null || !(elm.needsShortcut() && elm.getDumpClass() == c))
+			{
 				return;
-			mouseMode = MODE_ADD_ELM;
-			mouseModeStr = c.getName();
-			addingClass = c;
+			}
+			
+			this.mouseMode = MODE_ADD_ELM;
+			this.mouseModeStr = c.getName();
+			this.addingClass = c;
 		}
+		
 		if (e.getKeyChar() == ' ')
 		{
-			mouseMode = MODE_SELECT;
-			mouseModeStr = "Select";
+			this.mouseMode = MODE_SELECT;
+			this.mouseModeStr = "Select";
 		}
-		tempMouseMode = mouseMode;
+		
+		this.tempMouseMode = this.mouseMode;
 	}
 
 	private class FindPathInfo
