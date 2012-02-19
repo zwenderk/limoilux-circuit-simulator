@@ -10,12 +10,13 @@ import java.awt.event.*;
 public class Circuit extends Applet
 {
 	private static CirSim circuitSim;
-	
+
 	private ComponentListener localListener;
 	private boolean started = false;
-	
+
 	public Circuit()
 	{
+
 		this.localListener = new localListener();
 	}
 
@@ -25,9 +26,9 @@ public class Circuit extends Applet
 		{
 			Circuit.circuitSim.dispose();
 		}
-		
+
 		Circuit.circuitSim = null;
-		
+
 		this.repaint();
 	}
 
@@ -37,14 +38,12 @@ public class Circuit extends Applet
 		this.addComponentListener(this.localListener);
 	}
 
-
 	void showFrame()
 	{
 		if (Circuit.circuitSim == null)
 		{
 			this.started = true;
 			Circuit.circuitSim = new CirSim(this);
-			Circuit.circuitSim.init();
 			this.repaint();
 		}
 	}
@@ -58,7 +57,7 @@ public class Circuit extends Applet
 	public void paint(Graphics g)
 	{
 		String message = "Applet is open in a separate window.";
-		
+
 		if (!this.started)
 		{
 			message = "Applet is starting.";
@@ -75,8 +74,6 @@ public class Circuit extends Applet
 		g.drawString(message, 10, 30);
 	}
 
-	
-
 	@Override
 	public void destroy()
 	{
@@ -88,21 +85,21 @@ public class Circuit extends Applet
 		Circuit.circuitSim = null;
 		this.repaint();
 	}
-	
+
 	private class localListener implements ComponentListener
 	{
 		@Override
 		public void componentHidden(ComponentEvent e)
 		{
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void componentMoved(ComponentEvent e)
 		{
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
@@ -118,10 +115,9 @@ public class Circuit extends Applet
 			showFrame();
 		}
 	}
-	
+
 	public static void main(String args[])
 	{
 		Circuit.circuitSim = new CirSim(null);
-		Circuit.circuitSim.init();
 	}
 }
