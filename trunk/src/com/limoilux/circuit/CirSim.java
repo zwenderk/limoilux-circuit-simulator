@@ -42,13 +42,11 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	Random random;
 	CircuitCanvas circuitCanvas;
 
-	@Deprecated
-	private Circuit applet = null;
+
 
 	public CirSim(Circuit a)
 	{
 		super("Circuit Simulator v1.5n");
-		this.applet = a;
 
 		this.useFrame = false;
 
@@ -186,55 +184,14 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 		CircuitElm.initClass(this);
 
-		try
-		{
-			baseURL = applet.getDocumentBase().getFile();
-			// look for circuit embedded in URL
-			String doc = applet.getDocumentBase().toString();
-			int in = doc.indexOf('#');
-			if (in > 0)
-			{
-				String x = null;
-				try
-				{
-					x = doc.substring(in + 1);
-					x = URLDecoder.decode(x);
-					startCircuitText = x;
-				}
-				catch (Exception e)
-				{
-					System.out.println("can't decode " + x);
-					e.printStackTrace();
-				}
-			}
-			in = doc.lastIndexOf('/');
-			if (in > 0)
-				baseURL = doc.substring(0, in + 1);
-
-			String param = applet.getParameter("PAUSE");
-			if (param != null)
-				pause = Integer.parseInt(param);
-			startCircuit = applet.getParameter("startCircuit");
-			startLabel = applet.getParameter("startLabel");
-			euroResistor = applet.getParameter("euroResistors");
-			useFrameStr = applet.getParameter("useFrame");
-			String x = applet.getParameter("whiteBackground");
-			if (x != null && x.equalsIgnoreCase("true"))
-				printable = true;
-			x = applet.getParameter("conventionalCurrent");
-			if (x != null && x.equalsIgnoreCase("true"))
-				convention = false;
-		}
-		catch (Exception e)
-		{
-		}
+		
 
 		boolean euro = (euroResistor != null && euroResistor.equalsIgnoreCase("true"));
 		useFrame = (useFrameStr == null || !useFrameStr.equalsIgnoreCase("false"));
-		if (useFrame)
+		
+
 			main = this;
-		else
-			main = applet;
+
 
 		String os = System.getProperty("os.name");
 		isMac = (os.indexOf("Mac ") == 0);
@@ -514,27 +471,14 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		else if (stopMessage == null && startCircuit != null)
 			readSetupFile(startCircuit, startLabel);
 
-		if (useFrame)
-		{
+		
 			Dimension screen = getToolkit().getScreenSize();
 			resize(860, 640);
 			handleResize();
 			Dimension x = getSize();
 			setLocation((screen.width - x.width) / 2, (screen.height - x.height) / 2);
 			show();
-		}
-		else
-		{
-			if (!powerCheckItem.getState())
-			{
-				main.remove(powerBar);
-				main.remove(powerLabel);
-				main.validate();
-			}
-			hide();
-			handleResize();
-			applet.validate();
-		}
+
 		main.requestFocus();
 	}
 
@@ -702,14 +646,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	private void destroyFrame()
 	{
-		if (this.applet == null)
-		{
+	
 			this.dispose();
-		}
-		else
-		{
-			this.applet.destroyFrame();
-		}
+
 	}
 
 	@Override
