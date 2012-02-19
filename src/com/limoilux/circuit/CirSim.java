@@ -26,7 +26,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private static final double pi = 3.14159265358979323846;
 	private static final int MODE_ADD_ELM = 0;
 	private static final int MODE_DRAG_ALL = 1;
-	
+
 	private static final int MODE_DRAG_SELECTED = 4;
 	private static final int MODE_DRAG_POST = 5;
 	private static final int MODE_SELECT = 6;
@@ -36,12 +36,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private static final int HINT_3DB_C = 3;
 	private static final int HINT_TWINT = 4;
 	private static final int HINT_3DB_L = 5;
-	
+
 	public static final int MODE_DRAG_ROW = 2;
 	public static final int MODE_DRAG_COLUMN = 3;
 
 	public Container mainContainer;
-	
+
 	static String muString = "u";
 	static String ohmString = "ohm";
 	static EditDialog editDialog;
@@ -68,7 +68,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private boolean circuitNonLinear;
 	private int circuitMatrixSize, circuitMatrixFullSize;
 	private boolean circuitNeedsMap;
-	public boolean useFrame;
+	private boolean useFrame = true;
 	private int scopeCount;
 	private Scope scopes[];
 	private int scopeColCount[];
@@ -81,7 +81,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	public boolean analyzeFlag;
 	private boolean dumpMatrix;
 	public boolean useBufferedImage;
-	private boolean isMac;
 	private String ctrlMetaKey;
 	public double t;
 	private int pause = 10;
@@ -146,10 +145,11 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	public int mouseMode = MODE_SELECT;
 	private int tempMouseMode = MODE_SELECT;
 	private String mouseModeStr = "Select";
-
+	private boolean shown = false;
+	
 	public CirSim()
 	{
-		super("Circuit Simulator v1.5n");
+		super("Limoilux Circuit Simulator v1.1");
 
 		this.useFrame = false;
 
@@ -166,16 +166,25 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		CircuitElm.initClass(this);
 
 		boolean euro = (euroResistor != null && euroResistor.equalsIgnoreCase("true"));
-		useFrame = (useFrameStr == null || !useFrameStr.equalsIgnoreCase("false"));
+		
 
-		mainContainer = this;
+		this.mainContainer = this;
 
 		String os = System.getProperty("os.name");
-		isMac = (os.indexOf("Mac ") == 0);
-		ctrlMetaKey = (isMac) ? "\u2318" : "Ctrl";
+		boolean isMac = os.indexOf("Mac ") == 0;
+
+		if (isMac)
+		{
+			this.ctrlMetaKey = "\u2318";
+		}
+		else
+		{
+			this.ctrlMetaKey = "Ctrl";
+		}
+
 		String jv = System.getProperty("java.class.version");
 		double jvf = new Double(jv).doubleValue();
-		
+
 		if (jvf >= 48)
 		{
 			muString = "\u03bc";
@@ -202,13 +211,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 		mainMenu = new PopupMenu();
 		MenuBar mb = null;
-		if (useFrame)
-			mb = new MenuBar();
+
+		mb = new MenuBar();
 		Menu m = new Menu("File");
-		if (useFrame)
-			mb.add(m);
-		else
-			mainMenu.add(m);
+
+		mb.add(m);
+
 		m.add(importItem = getMenuItem("Import"));
 		m.add(exportItem = getMenuItem("Export"));
 		m.add(exportLinkItem = getMenuItem("Export Link"));
@@ -308,8 +316,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		inputMenu.add(getClassCheckItem("Add LED", "LEDElm"));
 		inputMenu.add(getClassCheckItem("Add Lamp (beta)", "LampElm"));
 
-		String path = "com.limoilux.circuit";
-
 		Menu activeMenu = new Menu("Active Components");
 		mainMenu.add(activeMenu);
 		activeMenu.add(getClassCheckItem("Add Diode", "DiodeElm"));
@@ -365,9 +371,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		otherMenu.add(getClassCheckItem("Add Text", "TextElm"));
 		otherMenu.add(getClassCheckItem("Add Scope Probe", "ProbeElm"));
 		otherMenu.add(getCheckItem("Drag All (Alt-drag)", "DragAll"));
+		
+	
 		otherMenu.add(getCheckItem(isMac ? "Drag Row (Alt-S-drag, S-right)" : "Drag Row (S-right)", "DragRow"));
 		otherMenu.add(getCheckItem(isMac ? "Drag Column (Alt-\u2318-drag, \u2318-right)" : "Drag Column (C-right)",
 				"DragColumn"));
+		
 		otherMenu.add(getCheckItem("Drag Selected", "DragSelected"));
 		otherMenu.add(getCheckItem("Drag Post (" + ctrlMetaKey + "-drag)", "DragPost"));
 
@@ -441,24 +450,33 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		transScopeMenu = buildScopeMenu(true);
 
 		getSetupList(circuitsMenu, false);
-		if (useFrame)
-			setMenuBar(mb);
+
+		setMenuBar(mb);
+
 		if (startCircuitText != null)
+		{
 			readSetup(startCircuitText);
+		}
 		else if (stopMessage == null && startCircuit != null)
-			readSetupFile(startCircuit, startLabel);
-
-		Dimension screen = getToolkit().getScreenSize();
+		{
+			this.readSetupFile(startCircuit, startLabel);
+		}
+		
+		Dimension screen = this.getToolkit().getScreenSize();
+		
 		this.setSize(860, 640);
+		
 		handleResize();
-		Dimension x = getSize();
+		
+		Dimension x = this.getSize();
 		setLocation((screen.width - x.width) / 2, (screen.height - x.height) / 2);
-		show();
 
-		mainContainer.requestFocus();
+		this.setVisible(true);
+
+		this.requestFocus();
 	}
 
-	boolean shown = false;
+
 
 	public void triggerShow()
 	{
@@ -1179,7 +1197,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				ce.setVoltageSource(j, vscount++);
 			}
 		}
-		//voltageSourceCount = vscount;
+		// voltageSourceCount = vscount;
 
 		int matrixSize = nodeList.size() - 1 + vscount;
 		circuitMatrix = new double[matrixSize][matrixSize];
