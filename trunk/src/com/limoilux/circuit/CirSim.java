@@ -22,8 +22,8 @@ import java.net.URLEncoder;
 
 import com.limoilux.circuit.core.CoreUtil;
 
-public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener,
-		MouseMotionListener, MouseListener, ItemListener, KeyListener
+public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener, MouseListener,
+		ItemListener, KeyListener
 {
 	@Deprecated
 	private static final double PI = 3.14159265358979323846;
@@ -159,17 +159,16 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	public Vector<CircuitNode> nodeList;
 	private CircuitElm voltageSources[];
 
+	private MouseMotionListener mouseMotionList;
+
 	public CirSim()
 	{
 		super("Limoilux Circuit Simulator v1.1");
 
 		this.useFrame = false;
 
-		this.init();
-	}
+		this.mouseMotionList = new MyMouseMotionListener();
 
-	private void init()
-	{
 		String euroResistor = null;
 		String useFrameStr = null;
 		boolean printable = false;
@@ -215,7 +214,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		mainContainer.setLayout(new CircuitLayout());
 		circuitCanvas = new CircuitCanvas(this);
 		circuitCanvas.addComponentListener(this);
-		circuitCanvas.addMouseMotionListener(this);
+		circuitCanvas.addMouseMotionListener(this.mouseMotionList);
 		circuitCanvas.addMouseListener(this);
 		circuitCanvas.addKeyListener(this);
 		mainContainer.add(circuitCanvas);
@@ -2510,66 +2509,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return -1;
 	}
 
-	@Override
-	public void mouseDragged(MouseEvent e)
-	{
-		// ignore right mouse button with no modifiers (needed on PC)
-		if ((e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0)
-		{
-			int ex = e.getModifiersEx();
-			if ((ex & (MouseEvent.META_DOWN_MASK | MouseEvent.SHIFT_DOWN_MASK | MouseEvent.CTRL_DOWN_MASK | MouseEvent.ALT_DOWN_MASK)) == 0)
-				return;
-		}
-		if (!circuitArea.contains(e.getX(), e.getY()))
-			return;
-		if (dragElm != null)
-			dragElm.drag(e.getX(), e.getY());
-		boolean success = true;
-		switch (tempMouseMode)
-		{
-		case MODE_DRAG_ALL:
-			dragAll(snapGrid(e.getX()), snapGrid(e.getY()));
-			break;
-		case MODE_DRAG_ROW:
-			dragRow(snapGrid(e.getX()), snapGrid(e.getY()));
-			break;
-		case MODE_DRAG_COLUMN:
-			dragColumn(snapGrid(e.getX()), snapGrid(e.getY()));
-			break;
-		case MODE_DRAG_POST:
-			if (mouseElm != null)
-				dragPost(snapGrid(e.getX()), snapGrid(e.getY()));
-			break;
-		case MODE_SELECT:
-			if (mouseElm == null)
-				selectArea(e.getX(), e.getY());
-			else
-			{
-				tempMouseMode = MODE_DRAG_SELECTED;
-				success = dragSelected(e.getX(), e.getY());
-			}
-			break;
-		case MODE_DRAG_SELECTED:
-			success = dragSelected(e.getX(), e.getY());
-			break;
-		}
-
-		if (success)
-		{
-			if (tempMouseMode == MODE_DRAG_SELECTED && mouseElm instanceof TextElm)
-			{
-				dragX = e.getX();
-				dragY = e.getY();
-			}
-			else
-			{
-				dragX = snapGrid(e.getX());
-				dragY = snapGrid(e.getY());
-			}
-		}
-		circuitCanvas.repaint(pause);
-	}
-
 	private void dragAll(int x, int y)
 	{
 		int dx = x - dragX;
@@ -2731,179 +2670,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		needAnalyze();
 	}
 
-	@Override
-	public void mouseMoved(MouseEvent e)
-	{
-		if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
-			return;
-		int x = e.getX();
-		int y = e.getY();
-		dragX = snapGrid(x);
-		dragY = snapGrid(y);
-		draggingPost = -1;
-		int i;
-		CircuitElm origMouse = mouseElm;
-		mouseElm = null;
-		mousePost = -1;
-		plotXElm = plotYElm = null;
-		int bestDist = 100000;
-		int bestArea = 100000;
-		for (i = 0; i != elmList.size(); i++)
-		{
-			CircuitElm ce = getElm(i);
-			if (ce.boundingBox.contains(x, y))
-			{
-				int j;
-				int area = ce.boundingBox.width * ce.boundingBox.height;
-				int jn = ce.getPostCount();
-				if (jn > 2)
-					jn = 2;
-				for (j = 0; j != jn; j++)
-				{
-					Point pt = ce.getPost(j);
-					int dist = distanceSq(x, y, pt.x, pt.y);
-
-					// if multiple elements have overlapping bounding boxes,
-					// we prefer selecting elements that have posts close
-					// to the mouse pointer and that have a small bounding
-					// box area.
-					if (dist <= bestDist && area <= bestArea)
-					{
-						bestDist = dist;
-						bestArea = area;
-						mouseElm = ce;
-					}
-				}
-				if (ce.getPostCount() == 0)
-					mouseElm = ce;
-			}
-		}
-		scopeSelected = -1;
-		if (mouseElm == null)
-		{
-			for (i = 0; i != scopeCount; i++)
-			{
-				Scope s = scopes[i];
-				if (s.rect.contains(x, y))
-				{
-					s.select();
-					scopeSelected = i;
-				}
-			}
-			// the mouse pointer was not in any of the bounding boxes, but we
-			// might still be close to a post
-			for (i = 0; i != elmList.size(); i++)
-			{
-				CircuitElm ce = getElm(i);
-				int j;
-				int jn = ce.getPostCount();
-				for (j = 0; j != jn; j++)
-				{
-					Point pt = ce.getPost(j);
-					int dist = distanceSq(x, y, pt.x, pt.y);
-					if (distanceSq(pt.x, pt.y, x, y) < 26)
-					{
-						mouseElm = ce;
-						mousePost = j;
-						break;
-					}
-				}
-			}
-		}
-		else
-		{
-			mousePost = -1;
-			// look for post close to the mouse pointer
-			for (i = 0; i != mouseElm.getPostCount(); i++)
-			{
-				Point pt = mouseElm.getPost(i);
-				if (distanceSq(pt.x, pt.y, x, y) < 26)
-					mousePost = i;
-			}
-		}
-		if (mouseElm != origMouse)
-			circuitCanvas.repaint();
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e)
-	{
-		if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
-		{
-			if (mouseMode == MODE_SELECT || mouseMode == MODE_DRAG_SELECTED)
-			{
-				this.clearSelection();
-			}
-		}
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e)
-	{
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e)
-	{
-		scopeSelected = -1;
-		mouseElm = plotXElm = plotYElm = null;
-		circuitCanvas.repaint();
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e)
-	{
-		System.out.println(e.getModifiers());
-		int ex = e.getModifiersEx();
-		if ((ex & (MouseEvent.META_DOWN_MASK | MouseEvent.SHIFT_DOWN_MASK)) == 0 && e.isPopupTrigger())
-		{
-			doPopupMenu(e);
-			return;
-		}
-		if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
-		{
-			// left mouse
-			tempMouseMode = mouseMode;
-			if ((ex & MouseEvent.ALT_DOWN_MASK) != 0 && (ex & MouseEvent.META_DOWN_MASK) != 0)
-				tempMouseMode = MODE_DRAG_COLUMN;
-			else if ((ex & MouseEvent.ALT_DOWN_MASK) != 0 && (ex & MouseEvent.SHIFT_DOWN_MASK) != 0)
-				tempMouseMode = MODE_DRAG_ROW;
-			else if ((ex & MouseEvent.SHIFT_DOWN_MASK) != 0)
-				tempMouseMode = MODE_SELECT;
-			else if ((ex & MouseEvent.ALT_DOWN_MASK) != 0)
-				tempMouseMode = MODE_DRAG_ALL;
-			else if ((ex & (MouseEvent.CTRL_DOWN_MASK | MouseEvent.META_DOWN_MASK)) != 0)
-				tempMouseMode = MODE_DRAG_POST;
-		}
-		else if ((e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0)
-		{
-			// right mouse
-			if ((ex & MouseEvent.SHIFT_DOWN_MASK) != 0)
-				tempMouseMode = MODE_DRAG_ROW;
-			else if ((ex & (MouseEvent.CTRL_DOWN_MASK | MouseEvent.META_DOWN_MASK)) != 0)
-				tempMouseMode = MODE_DRAG_COLUMN;
-			else
-				return;
-		}
-
-		if (tempMouseMode != MODE_SELECT && tempMouseMode != MODE_DRAG_SELECTED)
-			clearSelection();
-		if (doSwitch(e.getX(), e.getY()))
-			return;
-		pushUndo();
-		initDragX = e.getX();
-		initDragY = e.getY();
-		if (tempMouseMode != MODE_ADD_ELM || addingClass == null)
-			return;
-
-		int x0 = snapGrid(e.getX());
-		int y0 = snapGrid(e.getY());
-		if (!circuitArea.contains(x0, y0))
-			return;
-
-		dragElm = constructElement(addingClass, x0, y0);
-	}
-
 	private CircuitElm constructElement(Class<?> c, int x0, int y0)
 	{
 		// find element class
@@ -2983,45 +2749,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
-	@Override
-	public void mouseReleased(MouseEvent e)
-	{
-		int ex = e.getModifiersEx();
-		if ((ex & (MouseEvent.SHIFT_DOWN_MASK | MouseEvent.CTRL_DOWN_MASK | MouseEvent.META_DOWN_MASK)) == 0
-				&& e.isPopupTrigger())
-		{
-			doPopupMenu(e);
-			return;
-		}
-		tempMouseMode = mouseMode;
-		selectedArea = null;
-		boolean circuitChanged = false;
-		if (heldSwitchElm != null)
-		{
-			heldSwitchElm.mouseUp();
-			heldSwitchElm = null;
-			circuitChanged = true;
-		}
-		if (dragElm != null)
-		{
-			// if the element is zero size then don't create it
-			if (dragElm.x == dragElm.x2 && dragElm.y == dragElm.y2)
-				dragElm.delete();
-			else
-			{
-				elmList.addElement(dragElm);
-				circuitChanged = true;
-			}
-			dragElm = null;
-		}
-		if (circuitChanged)
-			needAnalyze();
-		if (dragElm != null)
-			dragElm.delete();
-		dragElm = null;
-		circuitCanvas.repaint();
-	}
-
 	private void enableItems()
 	{
 		if (powerCheckItem.getState())
@@ -3084,7 +2811,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			{
 				try
 				{
-					addingClass = Class.forName(s);
+					addingClass = Class.forName("com.limoilux.circuit." + s);
 				}
 				catch (Exception ee)
 				{
@@ -3105,8 +2832,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		{
 			this.gridSize = 16;
 		}
-		
-		//  le "~" est un "not" bitwise.
+
+		// le "~" est un "not" bitwise.
 		this.gridMask = ~(this.gridSize - 1);
 		this.gridRound = this.gridSize / 2 - 1;
 	}
@@ -3127,7 +2854,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		{
 			return;
 		}
-		
+
 		this.redoStack.add(this.dumpCircuit());
 		String s = (String) (this.undoStack.remove(this.undoStack.size() - 1));
 		readSetup(s);
@@ -3316,6 +3043,85 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	}
 
 	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+		if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
+		{
+			if (mouseMode == MODE_SELECT || mouseMode == MODE_DRAG_SELECTED)
+			{
+				this.clearSelection();
+			}
+		}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e)
+	{
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e)
+	{
+		scopeSelected = -1;
+		mouseElm = plotXElm = plotYElm = null;
+		circuitCanvas.repaint();
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e)
+	{
+		System.out.println(e.getModifiers());
+		int ex = e.getModifiersEx();
+		if ((ex & (MouseEvent.META_DOWN_MASK | MouseEvent.SHIFT_DOWN_MASK)) == 0 && e.isPopupTrigger())
+		{
+			doPopupMenu(e);
+			return;
+		}
+		if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
+		{
+			// left mouse
+			tempMouseMode = mouseMode;
+			if ((ex & MouseEvent.ALT_DOWN_MASK) != 0 && (ex & MouseEvent.META_DOWN_MASK) != 0)
+				tempMouseMode = MODE_DRAG_COLUMN;
+			else if ((ex & MouseEvent.ALT_DOWN_MASK) != 0 && (ex & MouseEvent.SHIFT_DOWN_MASK) != 0)
+				tempMouseMode = MODE_DRAG_ROW;
+			else if ((ex & MouseEvent.SHIFT_DOWN_MASK) != 0)
+				tempMouseMode = MODE_SELECT;
+			else if ((ex & MouseEvent.ALT_DOWN_MASK) != 0)
+				tempMouseMode = MODE_DRAG_ALL;
+			else if ((ex & (MouseEvent.CTRL_DOWN_MASK | MouseEvent.META_DOWN_MASK)) != 0)
+				tempMouseMode = MODE_DRAG_POST;
+		}
+		else if ((e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0)
+		{
+			// right mouse
+			if ((ex & MouseEvent.SHIFT_DOWN_MASK) != 0)
+				tempMouseMode = MODE_DRAG_ROW;
+			else if ((ex & (MouseEvent.CTRL_DOWN_MASK | MouseEvent.META_DOWN_MASK)) != 0)
+				tempMouseMode = MODE_DRAG_COLUMN;
+			else
+				return;
+		}
+
+		if (tempMouseMode != MODE_SELECT && tempMouseMode != MODE_DRAG_SELECTED)
+			clearSelection();
+		if (doSwitch(e.getX(), e.getY()))
+			return;
+		pushUndo();
+		initDragX = e.getX();
+		initDragY = e.getY();
+		if (tempMouseMode != MODE_ADD_ELM || addingClass == null)
+			return;
+
+		int x0 = snapGrid(e.getX());
+		int y0 = snapGrid(e.getY());
+		if (!circuitArea.contains(x0, y0))
+			return;
+
+		dragElm = constructElement(addingClass, x0, y0);
+	}
+
+	@Override
 	public void keyPressed(KeyEvent e)
 	{
 	}
@@ -3355,6 +3161,212 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 
 		this.tempMouseMode = this.mouseMode;
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e)
+	{
+		int ex = e.getModifiersEx();
+		if ((ex & (MouseEvent.SHIFT_DOWN_MASK | MouseEvent.CTRL_DOWN_MASK | MouseEvent.META_DOWN_MASK)) == 0
+				&& e.isPopupTrigger())
+		{
+			doPopupMenu(e);
+			return;
+		}
+		tempMouseMode = mouseMode;
+		selectedArea = null;
+		boolean circuitChanged = false;
+		if (heldSwitchElm != null)
+		{
+			heldSwitchElm.mouseUp();
+			heldSwitchElm = null;
+			circuitChanged = true;
+		}
+		if (dragElm != null)
+		{
+			// if the element is zero size then don't create it
+			if (dragElm.x == dragElm.x2 && dragElm.y == dragElm.y2)
+				dragElm.delete();
+			else
+			{
+				elmList.addElement(dragElm);
+				circuitChanged = true;
+			}
+			dragElm = null;
+		}
+		if (circuitChanged)
+			needAnalyze();
+		if (dragElm != null)
+			dragElm.delete();
+		dragElm = null;
+		circuitCanvas.repaint();
+	}
+
+	private class MyMouseMotionListener implements MouseMotionListener
+	{
+		@Override
+		public void mouseDragged(MouseEvent e)
+		{
+			// ignore right mouse button with no modifiers (needed on PC)
+			if ((e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0)
+			{
+				int ex = e.getModifiersEx();
+				if ((ex & (MouseEvent.META_DOWN_MASK | MouseEvent.SHIFT_DOWN_MASK | MouseEvent.CTRL_DOWN_MASK | MouseEvent.ALT_DOWN_MASK)) == 0)
+					return;
+			}
+			if (!circuitArea.contains(e.getX(), e.getY()))
+				return;
+			if (dragElm != null)
+				dragElm.drag(e.getX(), e.getY());
+			boolean success = true;
+			switch (tempMouseMode)
+			{
+			case MODE_DRAG_ALL:
+				dragAll(snapGrid(e.getX()), snapGrid(e.getY()));
+				break;
+			case MODE_DRAG_ROW:
+				dragRow(snapGrid(e.getX()), snapGrid(e.getY()));
+				break;
+			case MODE_DRAG_COLUMN:
+				dragColumn(snapGrid(e.getX()), snapGrid(e.getY()));
+				break;
+			case MODE_DRAG_POST:
+				if (mouseElm != null)
+					dragPost(snapGrid(e.getX()), snapGrid(e.getY()));
+				break;
+			case MODE_SELECT:
+				if (mouseElm == null)
+					selectArea(e.getX(), e.getY());
+				else
+				{
+					tempMouseMode = MODE_DRAG_SELECTED;
+					success = dragSelected(e.getX(), e.getY());
+				}
+				break;
+			case MODE_DRAG_SELECTED:
+				success = dragSelected(e.getX(), e.getY());
+				break;
+			}
+
+			if (success)
+			{
+				if (tempMouseMode == MODE_DRAG_SELECTED && mouseElm instanceof TextElm)
+				{
+					dragX = e.getX();
+					dragY = e.getY();
+				}
+				else
+				{
+					dragX = snapGrid(e.getX());
+					dragY = snapGrid(e.getY());
+				}
+			}
+			circuitCanvas.repaint(pause);
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e)
+		{
+			if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
+			{
+				return;
+			}
+
+			int x = e.getX();
+			int y = e.getY();
+			dragX = snapGrid(x);
+			dragY = snapGrid(y);
+			draggingPost = -1;
+			int i;
+			CircuitElm origMouse = mouseElm;
+			mouseElm = null;
+			mousePost = -1;
+			plotXElm = plotYElm = null;
+			int bestDist = 100000;
+			int bestArea = 100000;
+			for (i = 0; i != elmList.size(); i++)
+			{
+				CircuitElm ce = getElm(i);
+				if (ce.boundingBox.contains(x, y))
+				{
+					int j;
+					int area = ce.boundingBox.width * ce.boundingBox.height;
+					int jn = ce.getPostCount();
+					if (jn > 2)
+						jn = 2;
+					for (j = 0; j != jn; j++)
+					{
+						Point pt = ce.getPost(j);
+						int dist = CoreUtil.distanceSq(x, y, pt.x, pt.y);
+
+						// if multiple elements have overlapping bounding boxes,
+						// we prefer selecting elements that have posts close
+						// to the mouse pointer and that have a small bounding
+						// box area.
+						if (dist <= bestDist && area <= bestArea)
+						{
+							bestDist = dist;
+							bestArea = area;
+							mouseElm = ce;
+						}
+					}
+					if (ce.getPostCount() == 0)
+						mouseElm = ce;
+				}
+			}
+			scopeSelected = -1;
+			if (mouseElm == null)
+			{
+				for (i = 0; i != scopeCount; i++)
+				{
+					Scope s = scopes[i];
+					if (s.rect.contains(x, y))
+					{
+						s.select();
+						scopeSelected = i;
+					}
+				}
+				// the mouse pointer was not in any of the bounding boxes, but
+				// we
+				// might still be close to a post
+				for (i = 0; i != elmList.size(); i++)
+				{
+					CircuitElm ce = getElm(i);
+					int j;
+					int jn = ce.getPostCount();
+					for (j = 0; j != jn; j++)
+					{
+						Point pt = ce.getPost(j);
+						int dist = CoreUtil.distanceSq(x, y, pt.x, pt.y);
+						if (CoreUtil.distanceSq(pt.x, pt.y, x, y) < 26)
+						{
+							mouseElm = ce;
+							mousePost = j;
+							break;
+						}
+					}
+				}
+			}
+			else
+			{
+				mousePost = -1;
+				// look for post close to the mouse pointer
+				for (i = 0; i != mouseElm.getPostCount(); i++)
+				{
+					Point pt = mouseElm.getPost(i);
+					if (CoreUtil.distanceSq(pt.x, pt.y, x, y) < 26)
+					{
+						mousePost = i;
+					}
+
+				}
+			}
+			if (mouseElm != origMouse)
+			{
+				circuitCanvas.repaint();
+			}
+
+		}
 	}
 
 	private class FindPathInfo
