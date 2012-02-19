@@ -40,7 +40,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	public static final int MODE_DRAG_ROW = 2;
 	public static final int MODE_DRAG_COLUMN = 3;
 
-	public static Container main;
+	public Container mainContainer;
 	
 	static String muString = "u";
 	static String ohmString = "ohm";
@@ -57,7 +57,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	public CircuitCanvas circuitCanvas;
 	public Dimension winSize;
 	public Vector<CircuitElm> elmList;
-	private Vector<?> setupList;
 	public CircuitElm dragElm, menuElm, mouseElm, stopElm;
 	private int mousePost = -1;
 	public CircuitElm plotXElm, plotYElm;
@@ -67,7 +66,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private RowInfo circuitRowInfo[];
 	private int circuitPermute[];
 	private boolean circuitNonLinear;
-	private int voltageSourceCount;
 	private int circuitMatrixSize, circuitMatrixFullSize;
 	private boolean circuitNeedsMap;
 	public boolean useFrame;
@@ -78,10 +76,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private Class<?> dumpTypes[];
 
 	private int dragX, dragY, initDragX, initDragY;
-	private int selectedSource;
 	private Rectangle selectedArea;
 	public int gridSize, gridMask, gridRound;
-	private boolean dragging;
 	public boolean analyzeFlag;
 	private boolean dumpMatrix;
 	public boolean useBufferedImage;
@@ -172,7 +168,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		boolean euro = (euroResistor != null && euroResistor.equalsIgnoreCase("true"));
 		useFrame = (useFrameStr == null || !useFrameStr.equalsIgnoreCase("false"));
 
-		main = this;
+		mainContainer = this;
 
 		String os = System.getProperty("os.name");
 		isMac = (os.indexOf("Mac ") == 0);
@@ -196,13 +192,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		dumpTypes[(int) '?'] = Scope.class;
 		dumpTypes[(int) 'B'] = Scope.class;
 
-		main.setLayout(new CircuitLayout());
+		mainContainer.setLayout(new CircuitLayout());
 		circuitCanvas = new CircuitCanvas(this);
 		circuitCanvas.addComponentListener(this);
 		circuitCanvas.addMouseMotionListener(this);
 		circuitCanvas.addMouseListener(this);
 		circuitCanvas.addKeyListener(this);
-		main.add(circuitCanvas);
+		mainContainer.add(circuitCanvas);
 
 		mainMenu = new PopupMenu();
 		MenuBar mb = null;
@@ -376,38 +372,38 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		otherMenu.add(getCheckItem("Drag Post (" + ctrlMetaKey + "-drag)", "DragPost"));
 
 		mainMenu.add(getCheckItem("Select/Drag Selected (space or Shift-drag)", "Select"));
-		main.add(mainMenu);
+		mainContainer.add(mainMenu);
 
-		main.add(resetButton = new Button("Reset"));
+		mainContainer.add(resetButton = new Button("Reset"));
 		resetButton.addActionListener(this);
 		dumpMatrixButton = new Button("Dump Matrix");
 		// main.add(dumpMatrixButton);
 		dumpMatrixButton.addActionListener(this);
 		stoppedCheck = new Checkbox("Stopped");
 		stoppedCheck.addItemListener(this);
-		main.add(stoppedCheck);
+		mainContainer.add(stoppedCheck);
 
-		main.add(new Label("Simulation Speed", Label.CENTER));
+		mainContainer.add(new Label("Simulation Speed", Label.CENTER));
 
 		// was max of 140
-		main.add(speedBar = new Scrollbar(Scrollbar.HORIZONTAL, 3, 1, 0, 260));
+		mainContainer.add(speedBar = new Scrollbar(Scrollbar.HORIZONTAL, 3, 1, 0, 260));
 		speedBar.addAdjustmentListener(this);
 
-		main.add(new Label("Current Speed", Label.CENTER));
+		mainContainer.add(new Label("Current Speed", Label.CENTER));
 		currentBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100);
 		currentBar.addAdjustmentListener(this);
-		main.add(currentBar);
+		mainContainer.add(currentBar);
 
-		main.add(powerLabel = new Label("Power Brightness", Label.CENTER));
-		main.add(powerBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100));
+		mainContainer.add(powerLabel = new Label("Power Brightness", Label.CENTER));
+		mainContainer.add(powerBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100));
 		powerBar.addAdjustmentListener(this);
 		powerBar.disable();
 		powerLabel.disable();
 
-		main.add(new Label("www.falstad.com"));
+		mainContainer.add(new Label("www.falstad.com"));
 
 		if (useFrame)
-			main.add(new Label(""));
+			mainContainer.add(new Label(""));
 		Font f = new Font("SansSerif", 0, 10);
 		Label l;
 		l = new Label("Current Circuit:");
@@ -416,13 +412,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		titleLabel.setFont(f);
 		if (useFrame)
 		{
-			main.add(l);
-			main.add(titleLabel);
+			mainContainer.add(l);
+			mainContainer.add(titleLabel);
 		}
 
 		setGrid();
 		elmList = new Vector<CircuitElm>();
-		setupList = new Vector<Object>();
 		undoStack = new Vector<String>();
 		redoStack = new Vector<String>();
 
@@ -440,7 +435,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		elmMenu.add(elmCutMenuItem = getMenuItem("Cut"));
 		elmMenu.add(elmCopyMenuItem = getMenuItem("Copy"));
 		elmMenu.add(elmDeleteMenuItem = getMenuItem("Delete"));
-		main.add(elmMenu);
+		mainContainer.add(elmMenu);
 
 		scopeMenu = buildScopeMenu(false);
 		transScopeMenu = buildScopeMenu(true);
@@ -454,13 +449,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			readSetupFile(startCircuit, startLabel);
 
 		Dimension screen = getToolkit().getScreenSize();
-		resize(860, 640);
+		this.setSize(860, 640);
 		handleResize();
 		Dimension x = getSize();
 		setLocation((screen.width - x.width) / 2, (screen.height - x.height) / 2);
 		show();
 
-		main.requestFocus();
+		mainContainer.requestFocus();
 	}
 
 	boolean shown = false;
@@ -506,7 +501,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			m.add(scopeSelectYMenuItem = getMenuItem("Select Y", "selecty"));
 			m.add(scopeResistMenuItem = getCheckItem("Show Resistance"));
 		}
-		main.add(m);
+		mainContainer.add(m);
 		return m;
 	}
 
@@ -600,7 +595,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		winSize = circuitCanvas.getSize();
 		if (winSize.width == 0)
 			return;
-		dbimage = main.createImage(winSize.width, winSize.height);
+		dbimage = mainContainer.createImage(winSize.width, winSize.height);
 		int h = winSize.height / 5;
 		/*
 		 * if (h < 128 && winSize.height > 300) h = 128;
@@ -1184,7 +1179,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				ce.setVoltageSource(j, vscount++);
 			}
 		}
-		voltageSourceCount = vscount;
+		//voltageSourceCount = vscount;
 
 		int matrixSize = nodeList.size() - 1 + vscount;
 		circuitMatrix = new double[matrixSize][matrixSize];
@@ -2036,7 +2031,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 			// on IE, drawImage() stops working inexplicably every once in
 			// a while. Recreating it fixes the problem, so we do that here.
-			dbimage = main.createImage(winSize.width, winSize.height);
+			dbimage = mainContainer.createImage(winSize.width, winSize.height);
 
 			for (i = 0; i != elmList.size(); i++)
 				getElm(i).reset();
@@ -2610,7 +2605,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			success = dragSelected(e.getX(), e.getY());
 			break;
 		}
-		dragging = true;
+
 		if (success)
 		{
 			if (tempMouseMode == MODE_DRAG_SELECTED && mouseElm instanceof TextElm)
@@ -2958,7 +2953,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		pushUndo();
 		initDragX = e.getX();
 		initDragY = e.getY();
-		dragging = true;
 		if (tempMouseMode != MODE_ADD_ELM || addingClass == null)
 			return;
 
@@ -3061,7 +3055,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 		tempMouseMode = mouseMode;
 		selectedArea = null;
-		dragging = false;
 		boolean circuitChanged = false;
 		if (heldSwitchElm != null)
 		{

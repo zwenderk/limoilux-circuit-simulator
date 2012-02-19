@@ -1,8 +1,8 @@
 package com.limoilux.circuit;
-import java.awt.*;
+
 import java.util.StringTokenizer;
 
-class ADCElm extends ChipElm
+public class ADCElm extends ChipElm
 {
 	public ADCElm(int xx, int yy)
 	{
@@ -14,6 +14,7 @@ class ADCElm extends ChipElm
 		super(xa, ya, xb, yb, f, st);
 	}
 
+	@Override
 	String getChipName()
 	{
 		return "ADC";

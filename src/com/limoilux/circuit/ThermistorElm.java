@@ -48,10 +48,10 @@ class ThermistorElm extends CircuitElm
 
 	void createSlider()
 	{
-		sim.main.add(label = new Label("Temperature", Label.CENTER));
+		sim.mainContainer.add(label = new Label("Temperature", Label.CENTER));
 		int value = 50;
-		sim.main.add(slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
-		sim.main.validate();
+		sim.mainContainer.add(slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
+		sim.mainContainer.validate();
 	}
 
 	void setPoints()
@@ -64,8 +64,8 @@ class ThermistorElm extends CircuitElm
 
 	void delete()
 	{
-		sim.main.remove(label);
-		sim.main.remove(slider);
+		sim.mainContainer.remove(label);
+		sim.mainContainer.remove(slider);
 	}
 
 	void draw(Graphics g)
