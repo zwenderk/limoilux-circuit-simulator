@@ -2069,7 +2069,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
-	void stackScope(int s)
+	private void stackScope(int s)
 	{
 		if (s == 0)
 		{
@@ -2084,7 +2084,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			scopes[s].position--;
 	}
 
-	void unstackScope(int s)
+	private void unstackScope(int s)
 	{
 		if (s == 0)
 		{
@@ -2098,7 +2098,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			scopes[s].position++;
 	}
 
-	void stackAll()
+	private void stackAll()
 	{
 		int i;
 		for (i = 0; i != scopeCount; i++)
@@ -2108,7 +2108,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
-	void unstackAll()
+	private void unstackAll()
 	{
 		int i;
 		for (i = 0; i != scopeCount; i++)
@@ -2118,7 +2118,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
-	void doEdit(Editable eable)
+	private void doEdit(Editable eable)
 	{
 		clearSelection();
 		pushUndo();
@@ -2132,7 +2132,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		editDialog.show();
 	}
 
-	void doImport(boolean imp, boolean url)
+	private void doImport(boolean imp, boolean url)
 	{
 		if (impDialog != null)
 		{
@@ -2148,7 +2148,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		pushUndo();
 	}
 
-	String dumpCircuit()
+	private String dumpCircuit()
 	{
 		int i;
 		int f = (dotsCheckItem.getState()) ? 1 : 0;
@@ -2178,7 +2178,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		System.out.print(((Scrollbar) e.getSource()).getValue() + "\n");
 	}
 
-	ByteArrayOutputStream readUrlData(URL url) throws java.io.IOException
+	private ByteArrayOutputStream readUrlData(URL url) throws java.io.IOException
 	{
 		Object o = url.getContent();
 		FilterInputStream fis = (FilterInputStream) o;
@@ -2215,7 +2215,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return out;
 	}
 
-	void getSetupList(Menu menu, boolean retry)
+	private void getSetupList(Menu menu, boolean retry)
 	{
 		Menu stack[] = new Menu[6];
 		int stackptr = 0;
@@ -2283,18 +2283,18 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
-	void readSetup(String text)
+	public void readSetup(String text)
 	{
 		readSetup(text, false);
 	}
 
-	void readSetup(String text, boolean retain)
+	private void readSetup(String text, boolean retain)
 	{
 		readSetup(text.getBytes(), text.length(), retain);
 		titleLabel.setText("untitled");
 	}
 
-	void readSetupFile(String str, String title)
+	private void readSetupFile(String str, String title)
 	{
 		t = 0;
 		System.out.println(str);
@@ -2312,7 +2312,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		titleLabel.setText(title);
 	}
 
-	void readSetup(byte b[], int len, boolean retain)
+	private void readSetup(byte b[], int len, boolean retain)
 	{
 		int i;
 		if (!retain)
@@ -2382,15 +2382,21 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 						// ignore afilter-specific stuff
 						break;
 					}
+					
 					if (tint >= '0' && tint <= '9')
+					{
 						tint = new Integer(type).intValue();
+					}
+
 					int x1 = new Integer(st.nextToken()).intValue();
 					int y1 = new Integer(st.nextToken()).intValue();
 					int x2 = new Integer(st.nextToken()).intValue();
 					int y2 = new Integer(st.nextToken()).intValue();
 					int f = new Integer(st.nextToken()).intValue();
+					
 					CircuitElm ce = null;
 					Class<?> cls = dumpTypes[tint];
+					
 					if (cls == null)
 					{
 						System.out.println("unrecognized dump type: " + type);
@@ -2438,14 +2444,14 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		needAnalyze();
 	}
 
-	void readHint(StringTokenizer st)
+	private void readHint(StringTokenizer st)
 	{
 		hintType = new Integer(st.nextToken()).intValue();
 		hintItem1 = new Integer(st.nextToken()).intValue();
 		hintItem2 = new Integer(st.nextToken()).intValue();
 	}
 
-	void readOptions(StringTokenizer st)
+	private void readOptions(StringTokenizer st)
 	{
 		int flags = new Integer(st.nextToken()).intValue();
 		dotsCheckItem.setState((flags & 1) != 0);
@@ -2470,24 +2476,32 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		setGrid();
 	}
 
-	int snapGrid(int x)
+	public int snapGrid(int x)
 	{
 		return (x + gridRound) & gridMask;
 	}
 
-	boolean doSwitch(int x, int y)
+	private boolean doSwitch(int x, int y)
 	{
 		if (mouseElm == null || !(mouseElm instanceof SwitchElm))
+		{
 			return false;
+		}
+		
 		SwitchElm se = (SwitchElm) mouseElm;
 		se.toggle();
+		
 		if (se.momentary)
+		{
 			heldSwitchElm = se;
-		needAnalyze();
+		}
+		
+		this.needAnalyze();
+		
 		return true;
 	}
 
-	int locateElm(CircuitElm elm)
+	public int locateElm(CircuitElm elm)
 	{
 		int i;
 		for (i = 0; i != elmList.size(); i++)
@@ -2556,7 +2570,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		circuitCanvas.repaint(pause);
 	}
 
-	void dragAll(int x, int y)
+	private void dragAll(int x, int y)
 	{
 		int dx = x - dragX;
 		int dy = y - dragY;
@@ -2571,7 +2585,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		removeZeroLengthElements();
 	}
 
-	void dragRow(int x, int y)
+	private void dragRow(int x, int y)
 	{
 		int dy = y - dragY;
 		if (dy == 0)
@@ -2588,7 +2602,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		removeZeroLengthElements();
 	}
 
-	void dragColumn(int x, int y)
+	private void dragColumn(int x, int y)
 	{
 		int dx = x - dragX;
 		if (dx == 0)
@@ -2605,7 +2619,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		removeZeroLengthElements();
 	}
 
-	boolean dragSelected(int x, int y)
+	private boolean dragSelected(int x, int y)
 	{
 		boolean me = false;
 		if (mouseElm != null && !mouseElm.isSelected())
@@ -2662,7 +2676,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return allowed;
 	}
 
-	void dragPost(int x, int y)
+	private void dragPost(int x, int y)
 	{
 		if (draggingPost == -1)
 		{
@@ -2677,7 +2691,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		needAnalyze();
 	}
 
-	void selectArea(int x, int y)
+	private void selectArea(int x, int y)
 	{
 		int x1 = min(x, initDragX);
 		int x2 = max(x, initDragX);
@@ -2692,7 +2706,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
-	void setSelectedElm(CircuitElm cs)
+	private void setSelectedElm(CircuitElm cs)
 	{
 		int i;
 		for (i = 0; i != elmList.size(); i++)
@@ -3301,25 +3315,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		tempMouseMode = mouseMode;
 	}
 
-	@Deprecated
-	private boolean lu_factor(double a[][], int n, int ipvt[])
-	{
-		return CoreUtil.luFactor(a, n, ipvt);
-	}
-
-	@Deprecated
-	private static void lu_solve(double a[][], int n, int ipvt[], double b[])
-	{
-		CoreUtil.luSolve(a, n, ipvt, b);
-
-	}
-
-	@Deprecated
-	public static int getRandom(int max)
-	{
-		return CoreUtil.getRandomInt(max);
-	}
-
 	private class FindPathInfo
 	{
 		static final int INDUCT = 1;
@@ -3330,7 +3325,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		int dest;
 		CircuitElm firstElm;
 		int type;
-
+	
 		FindPathInfo(int t, CircuitElm e, int d)
 		{
 			dest = d;
@@ -3338,12 +3333,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			firstElm = e;
 			used = new boolean[nodeList.size()];
 		}
-
+	
 		boolean findPath(int n1)
 		{
 			return findPath(n1, -1);
 		}
-
+	
 		boolean findPath(int n1, int depth)
 		{
 			if (n1 == dest)
@@ -3437,6 +3432,25 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			// System.out.println(n1 + " failed");
 			return false;
 		}
+	}
+
+	@Deprecated
+	private static boolean lu_factor(double a[][], int n, int ipvt[])
+	{
+		return CoreUtil.luFactor(a, n, ipvt);
+	}
+
+	@Deprecated
+	private static void lu_solve(double a[][], int n, int ipvt[], double b[])
+	{
+		CoreUtil.luSolve(a, n, ipvt, b);
+
+	}
+
+	@Deprecated
+	public static int getRandom(int max)
+	{
+		return CoreUtil.getRandomInt(max);
 	}
 
 	public static void main(String args[])
