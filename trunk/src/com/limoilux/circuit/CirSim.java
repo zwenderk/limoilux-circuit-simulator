@@ -3326,7 +3326,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		CircuitElm firstElm;
 		int type;
 	
-		FindPathInfo(int t, CircuitElm e, int d)
+		private FindPathInfo(int t, CircuitElm e, int d)
 		{
 			dest = d;
 			type = t;
@@ -3334,22 +3334,30 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			used = new boolean[nodeList.size()];
 		}
 	
-		boolean findPath(int n1)
+		private boolean findPath(int n1)
 		{
-			return findPath(n1, -1);
+			return this.findPath(n1, -1);
 		}
 	
-		boolean findPath(int n1, int depth)
+		private boolean findPath(int n1, int depth)
 		{
 			if (n1 == dest)
+			{
 				return true;
+			}
+		
 			if (depth-- == 0)
+			{
 				return false;
+				
+			}
+		
 			if (used[n1])
 			{
 				// System.out.println("used " + n1);
 				return false;
 			}
+			
 			used[n1] = true;
 			int i;
 			for (i = 0; i != elmList.size(); i++)
