@@ -2331,14 +2331,19 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return ba;
 	}
 
-	URL getCodeBase()
+	private URL getCodeBase()
 	{
 		try
 		{
 			if (applet != null)
+			{
 				return applet.getCodeBase();
-			File f = new File(".");
-			return new URL("file:" + f.getCanonicalPath() + "/");
+			}
+			else
+			{
+				File f = new File(".");
+				return new URL("file:" + f.getCanonicalPath() + "/");
+			}
 		}
 		catch (Exception e)
 		{
