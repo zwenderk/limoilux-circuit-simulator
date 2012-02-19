@@ -3,24 +3,17 @@ package com.limoilux.circuit;
 
 // For information about the theory behind this, see Electronic Circuit & System Simulation Methods by Pillage
 
-import java.io.InputStream;
 import java.awt.*;
-import java.awt.image.*;
-import java.applet.Applet;
 import java.util.Vector;
 import java.io.File;
 import java.util.Random;
-import java.util.Arrays;
 import java.lang.Math;
 import java.net.URL;
 import java.awt.event.*;
 import java.io.FilterInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.StringTokenizer;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
