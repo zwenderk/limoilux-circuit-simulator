@@ -6,8 +6,9 @@ class DCVoltageElm extends VoltageElm
 		super(xx, yy, WF_DC);
 	}
 
-	Class getDumpClass()
+	public Class getDumpClass()
 	{
+		
 		return VoltageElm.class;
 	}
 }

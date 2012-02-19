@@ -32,7 +32,7 @@ public abstract class CircuitElm implements Editable
 		return 0;
 	}
 
-	Class getDumpClass()
+	public Class getDumpClass()
 	{
 		return getClass();
 	}
