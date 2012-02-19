@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener,
@@ -2299,7 +2298,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		stack[stackptr++] = menu;
 		try
 		{
-			URL url = new URL(getCodeBase() + "../setuplist.txt");
+			URL url = new URL(getCodeBase() + "setuplist.txt");
 			ByteArrayOutputStream ba = readUrlData(url);
 			byte b[] = ba.toByteArray();
 			int len = ba.size();
@@ -2377,7 +2376,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		System.out.println(str);
 		try
 		{
-			URL url = new URL(getCodeBase() + "../circuits/" + str);
+			URL url = new URL(getCodeBase() + "circuits/" + str);
 			ByteArrayOutputStream ba = readUrlData(url);
 			readSetup(ba.toByteArray(), ba.size(), false);
 		}
