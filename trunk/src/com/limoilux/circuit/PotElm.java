@@ -59,10 +59,10 @@ class PotElm extends CircuitElm implements AdjustmentListener
 
 	void createSlider()
 	{
-		sim.main.add(label = new Label(sliderText, Label.CENTER));
+		sim.mainContainer.add(label = new Label(sliderText, Label.CENTER));
 		int value = (int) (position * 100);
-		sim.main.add(slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
-		sim.main.validate();
+		sim.mainContainer.add(slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
+		sim.mainContainer.validate();
 		slider.addAdjustmentListener(this);
 	}
 
@@ -74,8 +74,8 @@ class PotElm extends CircuitElm implements AdjustmentListener
 
 	void delete()
 	{
-		sim.main.remove(label);
-		sim.main.remove(slider);
+		sim.mainContainer.remove(label);
+		sim.mainContainer.remove(slider);
 	}
 
 	Point post3, corner2, arrowPoint, midpoint, arrow1, arrow2;

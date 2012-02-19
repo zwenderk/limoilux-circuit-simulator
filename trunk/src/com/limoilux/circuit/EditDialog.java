@@ -68,7 +68,7 @@ class EditDialog extends Dialog implements AdjustmentListener, ActionListener, I
 		applyButton.addActionListener(this);
 		add(okButton = new Button("OK"));
 		okButton.addActionListener(this);
-		Point x = cframe.main.getLocationOnScreen();
+		Point x = cframe.mainContainer.getLocationOnScreen();
 		Dimension d = getSize();
 		setLocation(x.x + (cframe.winSize.width - d.width) / 2, x.y + (cframe.winSize.height - d.height) / 2);
 	}
@@ -197,7 +197,7 @@ class EditDialog extends Dialog implements AdjustmentListener, ActionListener, I
 		if (e.getSource() == okButton)
 		{
 			apply();
-			cframe.main.requestFocus();
+			cframe.mainContainer.requestFocus();
 			setVisible(false);
 			cframe.editDialog = null;
 		}
@@ -261,7 +261,7 @@ class EditDialog extends Dialog implements AdjustmentListener, ActionListener, I
 	{
 		if (ev.id == Event.WINDOW_DESTROY)
 		{
-			cframe.main.requestFocus();
+			cframe.mainContainer.requestFocus();
 			setVisible(false);
 			cframe.editDialog = null;
 			return true;

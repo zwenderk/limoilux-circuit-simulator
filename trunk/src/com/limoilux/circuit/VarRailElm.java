@@ -25,11 +25,13 @@ class VarRailElm extends RailElm
 		createSlider();
 	}
 
+	@Override
 	String dump()
 	{
 		return super.dump() + " " + sliderText;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 172;
@@ -38,24 +40,27 @@ class VarRailElm extends RailElm
 	void createSlider()
 	{
 		waveform = WF_VAR;
-		sim.main.add(label = new Label(sliderText, Label.CENTER));
+		sim.mainContainer.add(label = new Label(sliderText, Label.CENTER));
 		int value = (int) ((frequency - bias) * 100 / (maxVoltage - bias));
-		sim.main.add(slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
-		sim.main.validate();
+		sim.mainContainer.add(slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
+		sim.mainContainer.validate();
 	}
 
+	@Override
 	double getVoltage()
 	{
 		frequency = slider.getValue() * (maxVoltage - bias) / 100. + bias;
 		return frequency;
 	}
 
+	@Override
 	void delete()
 	{
-		sim.main.remove(label);
-		sim.main.remove(slider);
+		sim.mainContainer.remove(label);
+		sim.mainContainer.remove(slider);
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
@@ -71,6 +76,7 @@ class VarRailElm extends RailElm
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (n == 0)
