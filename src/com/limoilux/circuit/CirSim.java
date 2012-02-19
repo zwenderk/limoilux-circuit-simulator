@@ -20,6 +20,10 @@ import java.net.URLEncoder;
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener,
 		MouseMotionListener, MouseListener, ItemListener, KeyListener
 {
+	public static final int sourceRadius = 7;
+	public static final double freqMult = 3.14159265 * 8;
+	
+	static Container main;
 
 	Thread engine = null;
 
@@ -27,15 +31,21 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	Image dbimage;
 
 	Random random;
-	public static final int sourceRadius = 7;
-	public static final double freqMult = 3.14159265 * 2 * 4;
+	
+	
+	CirSim(Circuit a)
+	{
+		super("Circuit Simulator v1.5n");
+		this.applet = a;
+		this.useFrame = false;
+	}
 
 	public String getAppletInfo()
 	{
 		return "Circuit by Paul Falstad";
 	}
 
-	static Container main;
+
 	Label titleLabel;
 	Button resetButton;
 	Button dumpMatrixButton;
@@ -156,12 +166,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	CircuitCanvas cv;
 	Circuit applet;
 
-	CirSim(Circuit a)
-	{
-		super("Circuit Simulator v1.5n");
-		applet = a;
-		useFrame = false;
-	}
+	
 
 	String startCircuit = null;
 	String startLabel = null;
