@@ -8,7 +8,6 @@ package com.limoilux.circuit;
 import java.awt.*;
 import java.util.Vector;
 import java.io.File;
-import java.util.Random;
 import java.lang.Math;
 import java.net.URL;
 import java.awt.event.*;
@@ -23,7 +22,7 @@ import java.net.URLEncoder;
 import com.limoilux.circuit.core.CoreUtil;
 
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener, MouseListener,
-		ItemListener, KeyListener
+		ItemListener
 {
 	@Deprecated
 	private static final double PI = 3.14159265358979323846;
@@ -159,7 +158,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	public Vector<CircuitNode> nodeList;
 	private CircuitElm voltageSources[];
 
-	private MouseMotionListener mouseMotionList;
+	private final MouseMotionListener mouseMotionList;
+	private final KeyListener keyList;
 
 	public CirSim()
 	{
@@ -168,9 +168,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		this.useFrame = false;
 
 		this.mouseMotionList = new MyMouseMotionListener();
+		this.keyList = new MyKeyListener();
 
 		String euroResistor = null;
-		String useFrameStr = null;
 		boolean printable = false;
 		boolean convention = true;
 
@@ -216,7 +216,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		circuitCanvas.addComponentListener(this);
 		circuitCanvas.addMouseMotionListener(this.mouseMotionList);
 		circuitCanvas.addMouseListener(this);
-		circuitCanvas.addKeyListener(this);
+		circuitCanvas.addKeyListener(this.keyList);
 		mainContainer.add(circuitCanvas);
 
 		mainMenu = new PopupMenu();
@@ -1853,7 +1853,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 						return;
 					}
 				}
-				lu_solve(circuitMatrix, circuitMatrixSize, circuitPermute, circuitRightSide);
+				CoreUtil.luSolve(circuitMatrix, circuitMatrixSize, circuitPermute, circuitRightSide);
 
 				for (j = 0; j != circuitMatrixFullSize; j++)
 				{
@@ -1980,7 +1980,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	{
 		if (impDialog != null)
 		{
-			requestFocus();
+			this.requestFocus();
 			impDialog.setVisible(false);
 			impDialog = null;
 		}
@@ -3102,6 +3102,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 		dragElm = constructElement(addingClass, x0, y0);
 	}
+	
+	private class MyKeyListener implements KeyListener
+	{
 
 	@Override
 	public void keyPressed(KeyEvent e)
@@ -3131,20 +3134,20 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				return;
 			}
 
-			this.mouseMode = MODE_ADD_ELM;
-			this.mouseModeStr = c.getName();
-			this.addingClass = c;
+			CirSim.this.mouseMode = MODE_ADD_ELM;
+			CirSim.this.mouseModeStr = c.getName();
+			CirSim.this.addingClass = c;
 		}
 
 		if (e.getKeyChar() == ' ')
 		{
-			this.mouseMode = MODE_SELECT;
-			this.mouseModeStr = "Select";
+			CirSim.this.mouseMode = MODE_SELECT;
+			CirSim.this.mouseModeStr = "Select";
 		}
 
-		this.tempMouseMode = this.mouseMode;
+		CirSim.this.tempMouseMode = CirSim.this.mouseMode;
 	}
-
+	}
 	@Override
 	public void mouseReleased(MouseEvent e)
 	{
@@ -3490,13 +3493,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private static boolean lu_factor(double a[][], int n, int ipvt[])
 	{
 		return CoreUtil.luFactor(a, n, ipvt);
-	}
-
-	@Deprecated
-	private static void lu_solve(double a[][], int n, int ipvt[], double b[])
-	{
-		CoreUtil.luSolve(a, n, ipvt, b);
-
 	}
 
 	@Deprecated
