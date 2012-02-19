@@ -1913,18 +1913,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		// iter);
 	}
 
-	@Deprecated
-	private static int min(int a, int b)
-	{
-		return Math.min(a, b);
-	}
-
-	@Deprecated
-	private static int max(int a, int b)
-	{
-		return Math.max(a, b);
-	}
-	
 	private void stackScope(int s)
 	{
 		if (s == 0)
@@ -3180,7 +3168,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		{
 			// if the element is zero size then don't create it
 			if (dragElm.x == dragElm.x2 && dragElm.y == dragElm.y2)
+			{
 				dragElm.delete();
+			}
 			else
 			{
 				elmList.addElement(dragElm);
@@ -3507,6 +3497,18 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	{
 		CoreUtil.luSolve(a, n, ipvt, b);
 
+	}
+
+	@Deprecated
+	private static int min(int a, int b)
+	{
+		return Math.min(a, b);
+	}
+
+	@Deprecated
+	private static int max(int a, int b)
+	{
+		return Math.max(a, b);
 	}
 
 	@Deprecated
