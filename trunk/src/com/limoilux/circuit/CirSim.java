@@ -240,24 +240,20 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		pasteItem.setEnabled(false);
 		m.add(selectAllItem = getMenuItem("Select All"));
 		selectAllItem.setShortcut(new MenuShortcut(KeyEvent.VK_A));
-		if (useFrame)
-			mb.add(m);
-		else
-			mainMenu.add(m);
+
+		mb.add(m);
 
 		m = new Menu("Scope");
-		if (useFrame)
-			mb.add(m);
-		else
-			mainMenu.add(m);
+
+		mb.add(m);
+
 		m.add(getMenuItem("Stack All", "stackAll"));
 		m.add(getMenuItem("Unstack All", "unstackAll"));
 
 		optionsMenu = m = new Menu("Options");
-		if (useFrame)
-			mb.add(m);
-		else
-			mainMenu.add(m);
+
+		mb.add(m);
+
 		m.add(dotsCheckItem = getCheckItem("Show Current"));
 		dotsCheckItem.setState(true);
 		m.add(voltsCheckItem = getCheckItem("Show Voltage"));
@@ -276,10 +272,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		m.add(optionsItem = getMenuItem("Other Options..."));
 
 		Menu circuitsMenu = new Menu("Circuits");
-		if (useFrame)
-			mb.add(circuitsMenu);
-		else
-			mainMenu.add(circuitsMenu);
+
+		mb.add(circuitsMenu);
 
 		mainMenu.add(getClassCheckItem("Add Wire", "WireElm"));
 		mainMenu.add(getClassCheckItem("Add Resistor", "ResistorElm"));
@@ -3391,7 +3385,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 		tempMouseMode = mouseMode;
 	}
-	
+
 	@Deprecated
 	boolean lu_factor(double a[][], int n, int ipvt[])
 	{
