@@ -1926,7 +1926,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return Math.max(a, b);
 	}
 
-	void editFuncPoint(int x, int y)
+	private void editFuncPoint(int x, int y)
 	{
 		// XXX
 		this.circuitCanvas.repaint(this.pause);
@@ -2814,11 +2814,10 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			circuitCanvas.repaint();
 	}
 
-	int distanceSq(int x1, int y1, int x2, int y2)
+	@Deprecated
+	private int distanceSq(int x1, int y1, int x2, int y2)
 	{
-		x2 -= x1;
-		y2 -= y1;
-		return x2 * x2 + y2 * y2;
+		return CoreUtil.distanceSq(x1,y1,x2,y2);
 	}
 
 	@Override
@@ -2898,7 +2897,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		dragElm = constructElement(addingClass, x0, y0);
 	}
 
-	CircuitElm constructElement(Class<?> c, int x0, int y0)
+	private CircuitElm constructElement(Class<?> c, int x0, int y0)
 	{
 		// find element class
 		Class<?> carr[] = new Class[2];
@@ -2935,7 +2934,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return null;
 	}
 
-	void doPopupMenu(MouseEvent e)
+	private void doPopupMenu(MouseEvent e)
 	{
 		menuElm = mouseElm;
 		menuScope = -1;
@@ -2959,7 +2958,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
-	void doMainMenuChecks(Menu m)
+	private void doMainMenuChecks(Menu m)
 	{
 		int i;
 		if (m == optionsMenu)
@@ -3016,7 +3015,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		circuitCanvas.repaint();
 	}
 
-	void enableItems()
+	private void enableItems()
 	{
 		if (powerCheckItem.getState())
 		{
@@ -3089,14 +3088,14 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
-	void setGrid()
+	private void setGrid()
 	{
 		gridSize = (smallGridCheckItem.getState()) ? 8 : 16;
 		gridMask = ~(gridSize - 1);
 		gridRound = gridSize / 2 - 1;
 	}
 
-	void pushUndo()
+	private void pushUndo()
 	{
 		redoStack.removeAllElements();
 		String s = dumpCircuit();
@@ -3106,7 +3105,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		enableUndoRedo();
 	}
 
-	void doUndo()
+	private void doUndo()
 	{
 		if (undoStack.size() == 0)
 			return;
