@@ -41,9 +41,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	Random random;
 	CircuitCanvas circuitCanvas;
 
-
-
-	public CirSim(Circuit a)
+	public CirSim()
 	{
 		super("Circuit Simulator v1.5n");
 
@@ -183,14 +181,10 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 		CircuitElm.initClass(this);
 
-		
-
 		boolean euro = (euroResistor != null && euroResistor.equalsIgnoreCase("true"));
 		useFrame = (useFrameStr == null || !useFrameStr.equalsIgnoreCase("false"));
-		
 
-			main = this;
-
+		main = this;
 
 		String os = System.getProperty("os.name");
 		isMac = (os.indexOf("Mac ") == 0);
@@ -470,13 +464,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		else if (stopMessage == null && startCircuit != null)
 			readSetupFile(startCircuit, startLabel);
 
-		
-			Dimension screen = getToolkit().getScreenSize();
-			resize(860, 640);
-			handleResize();
-			Dimension x = getSize();
-			setLocation((screen.width - x.width) / 2, (screen.height - x.height) / 2);
-			show();
+		Dimension screen = getToolkit().getScreenSize();
+		resize(860, 640);
+		handleResize();
+		Dimension x = getSize();
+		setLocation((screen.width - x.width) / 2, (screen.height - x.height) / 2);
+		show();
 
 		main.requestFocus();
 	}
@@ -645,8 +638,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	private void destroyFrame()
 	{
-	
-			this.dispose();
+
+		this.dispose();
 
 	}
 
@@ -2275,11 +2268,11 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	{
 		URL out = null;
 		File f = null;
-		
+
 		try
 		{
 			f = new File(".");
-			out  = new URL("file:" + f.getCanonicalPath() + "/");
+			out = new URL("file:" + f.getCanonicalPath() + "/");
 		}
 		catch (MalformedURLException e)
 		{
@@ -3517,4 +3510,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
+	public static void main(String args[])
+	{
+		CirSim c = new CirSim();
+
+	}
 }
