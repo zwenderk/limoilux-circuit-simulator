@@ -170,12 +170,12 @@ class OpAmpElm extends CircuitElm
 		double x = 0;
 		int vn = sim.nodeList.size() + voltSource;
 		double dx = 0;
-		if (vd >= maxOut / gain && (lastvd >= 0 || sim.getrand(4) == 1))
+		if (vd >= maxOut / gain && (lastvd >= 0 || sim.getRandom(4) == 1))
 		{
 			dx = 1e-4;
 			x = maxOut - dx * maxOut / gain;
 		}
-		else if (vd <= minOut / gain && (lastvd <= 0 || sim.getrand(4) == 1))
+		else if (vd <= minOut / gain && (lastvd <= 0 || sim.getRandom(4) == 1))
 		{
 			dx = 1e-4;
 			x = minOut - dx * minOut / gain;

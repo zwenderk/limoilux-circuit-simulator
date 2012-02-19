@@ -36,6 +36,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private static final int HINT_3DB_C = 3;
 	private static final int HINT_TWINT = 4;
 	private static final int HINT_3DB_L = 5;
+	
+	private static final Random RANDOM_GENERATOR = new Random();
 
 	public static final int MODE_DRAG_ROW = 2;
 	public static final int MODE_DRAG_COLUMN = 3;
@@ -52,7 +54,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private String startLabel = null;
 	private String startCircuitText = null;
 	private Image dbimage;
-	private Random random;
+	
 
 	public CircuitCanvas circuitCanvas;
 	public Dimension winSize;
@@ -429,7 +431,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		scopeColCount = new int[20];
 		scopeCount = 0;
 
-		random = new Random();
+
 		circuitCanvas.setBackground(Color.black);
 		circuitCanvas.setForeground(Color.lightGray);
 
@@ -517,22 +519,14 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return m;
 	}
 
-	int getrand(int x)
-	{
-		int q = random.nextInt();
-		if (q < 0)
-			q = -q;
-		return q % x;
-	}
-
-	MenuItem getMenuItem(String s)
+	private MenuItem getMenuItem(String s)
 	{
 		MenuItem mi = new MenuItem(s);
 		mi.addActionListener(this);
 		return mi;
 	}
 
-	MenuItem getMenuItem(String s, String ac)
+	private MenuItem getMenuItem(String s, String ac)
 	{
 		MenuItem mi = new MenuItem(s);
 		mi.setActionCommand(ac);
@@ -540,7 +534,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return mi;
 	}
 
-	CheckboxMenuItem getCheckItem(String s)
+	private CheckboxMenuItem getCheckItem(String s)
 	{
 		CheckboxMenuItem mi = new CheckboxMenuItem(s);
 		mi.addItemListener(this);
@@ -3531,6 +3525,11 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				tot -= a[i][j] * b[j];
 			b[i] = tot / a[i][i];
 		}
+	}
+
+	public static int getRandom(int max)
+	{
+		return CirSim.RANDOM_GENERATOR.nextInt(0) % max;
 	}
 
 	public static void main(String args[])
