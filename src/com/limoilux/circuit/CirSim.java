@@ -22,22 +22,26 @@ import java.net.URLEncoder;
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener,
 		MouseMotionListener, MouseListener, ItemListener, KeyListener
 {
+	
 	public static final int SOURCE_RADIUS = 7;
 	public static final double FREQ_MULTIPLIER = 3.14159265 * 8;
-
+	
 	static Container main;
+	
+	private String baseURL = "http://www.falstad.com/circuit/";
 
 	Thread engine = null;
-
+	String startCircuit = null;
+	String startLabel = null;
+	String startCircuitText = null;
 	Dimension winSize;
 	Image dbimage;
 
 	Random random;
 	CircuitCanvas circuitCanvas;
-	
+
 	@Deprecated
 	private Circuit applet = null;
-	
 
 	public CirSim(Circuit a)
 	{
@@ -45,7 +49,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		this.applet = a;
 
 		this.useFrame = false;
-		
+
 		this.init();
 	}
 
@@ -170,13 +174,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			q = -q;
 		return q % x;
 	}
-
-
-
-	String startCircuit = null;
-	String startLabel = null;
-	String startCircuitText = null;
-	String baseURL = "http://www.falstad.com/circuit/";
 
 	private void init()
 	{
@@ -701,12 +698,16 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		circuitBottom = 0;
 	}
 
-	void destroyFrame()
+	private void destroyFrame()
 	{
-		if (applet == null)
-			dispose();
+		if (this.applet == null)
+		{
+			this.dispose();
+		}
 		else
-			applet.destroyFrame();
+		{
+			this.applet.destroyFrame();
+		}
 	}
 
 	@Override
