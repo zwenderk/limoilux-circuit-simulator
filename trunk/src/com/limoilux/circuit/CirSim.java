@@ -56,6 +56,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private String startLabel = null;
 	private String startCircuitText = null;
 	private Image dbimage;
+	
+	public boolean converged;
+	public int subIterations;
 
 	public CircuitCanvas circuitCanvas;
 	public Dimension winSize;
@@ -467,15 +470,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		this.requestFocus();
 	}
 
-	public void triggerShow()
-	{
-
-		this.setVisible(true);
-
-		this.shown = true;
-	}
-
-	PopupMenu buildScopeMenu(boolean t)
+	private PopupMenu buildScopeMenu(boolean t)
 	{
 		PopupMenu m = new PopupMenu();
 		m.add(getMenuItem("Remove", "remove"));
@@ -899,7 +894,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		lastFrameTime = lastTime;
 	}
 
-	void setupScopes()
+	private void setupScopes()
 	{
 		int i;
 
@@ -968,7 +963,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
-	String getHint()
+	private String getHint()
 	{
 		CircuitElm c1 = getElm(hintItem1);
 		CircuitElm c2 = getElm(hintItem2);
@@ -1856,8 +1851,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return .1 * Math.exp((speedBar.getValue() - 61) / 24.);
 	}
 
-	boolean converged;
-	int subIterations;
+
 
 	void runCircuit()
 	{
