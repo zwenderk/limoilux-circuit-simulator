@@ -34,12 +34,17 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	Random random;
 	CircuitCanvas circuitCanvas;
+	
+	@Deprecated
 	private Circuit applet = null;
+	
+	private ComponentListener componentListener = null;
 
-	public CirSim(Circuit a)
+	public CirSim(Circuit a,ComponentListener componentListener)
 	{
 		super("Circuit Simulator v1.5n");
 		this.applet = a;
+		this.componentListener = componentListener;
 		this.useFrame = false;
 	}
 
@@ -703,6 +708,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			applet.destroyFrame();
 	}
 
+	@Override
 	public boolean handleEvent(Event ev)
 	{
 		if (ev.id == Event.WINDOW_DESTROY)
@@ -713,6 +719,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return super.handleEvent(ev);
 	}
 
+	@Override
 	public void paint(Graphics g)
 	{
 		circuitCanvas.repaint();
@@ -2059,25 +2066,30 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		circuitCanvas.repaint(pause);
 	}
 
+	@Override
 	public void componentHidden(ComponentEvent e)
 	{
 	}
 
+	@Override
 	public void componentMoved(ComponentEvent e)
 	{
 	}
 
+	@Override
 	public void componentShown(ComponentEvent e)
 	{
 		circuitCanvas.repaint();
 	}
 
+	@Override
 	public void componentResized(ComponentEvent e)
 	{
 		handleResize();
 		circuitCanvas.repaint(100);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		String ac = e.getActionCommand();
@@ -2294,6 +2306,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return dump;
 	}
 
+	@Override
 	public void adjustmentValueChanged(AdjustmentEvent e)
 	{
 		System.out.print(((Scrollbar) e.getSource()).getValue() + "\n");
@@ -2613,6 +2626,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return -1;
 	}
 
+	@Override
 	public void mouseDragged(MouseEvent e)
 	{
 		// ignore right mouse button with no modifiers (needed on PC)
@@ -2836,6 +2850,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		needAnalyze();
 	}
 
+	@Override
 	public void mouseMoved(MouseEvent e)
 	{
 		if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
@@ -2936,6 +2951,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return x2 * x2 + y2 * y2;
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 		if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
@@ -2945,10 +2961,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e)
 	{
 		scopeSelected = -1;
@@ -2956,6 +2974,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		circuitCanvas.repaint();
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		System.out.println(e.getModifiers());
@@ -3089,6 +3108,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		int ex = e.getModifiersEx();
@@ -3143,6 +3163,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		enableUndoRedo();
 	}
 
+	@Override
 	public void itemStateChanged(ItemEvent e)
 	{
 		circuitCanvas.repaint(pause);
@@ -3381,14 +3402,17 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
+	@Override
 	public void keyPressed(KeyEvent e)
 	{
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e)
 	{
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e)
 	{
 		if (e.getKeyChar() > ' ' && e.getKeyChar() < 127)
