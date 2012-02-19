@@ -38,8 +38,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	Dimension winSize;
 	Image dbimage;
 
-	Random random;
-	CircuitCanvas circuitCanvas;
+	private Random random;
+	public CircuitCanvas circuitCanvas;
 
 	public CirSim()
 	{
