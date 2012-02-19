@@ -2382,7 +2382,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 						// ignore afilter-specific stuff
 						break;
 					}
-					
+
 					if (tint >= '0' && tint <= '9')
 					{
 						tint = new Integer(type).intValue();
@@ -2393,10 +2393,10 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 					int x2 = new Integer(st.nextToken()).intValue();
 					int y2 = new Integer(st.nextToken()).intValue();
 					int f = new Integer(st.nextToken()).intValue();
-					
+
 					CircuitElm ce = null;
 					Class<?> cls = dumpTypes[tint];
-					
+
 					if (cls == null)
 					{
 						System.out.println("unrecognized dump type: " + type);
@@ -2487,17 +2487,17 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		{
 			return false;
 		}
-		
+
 		SwitchElm se = (SwitchElm) mouseElm;
 		se.toggle();
-		
+
 		if (se.momentary)
 		{
 			heldSwitchElm = se;
 		}
-		
+
 		this.needAnalyze();
-		
+
 		return true;
 	}
 
@@ -3222,9 +3222,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			CircuitElm ce = getElm(i);
 			Rectangle bb = ce.getBoundingBox();
 			if (oldbb != null)
+			{
 				oldbb = oldbb.union(bb);
+			}
 			else
+			{
 				oldbb = bb;
+			}
 		}
 		int oldsz = elmList.size();
 		readSetup(clipboard, true);
@@ -3236,21 +3240,34 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			CircuitElm ce = getElm(i);
 			ce.setSelected(true);
 			Rectangle bb = ce.getBoundingBox();
+
 			if (newbb != null)
+			{
 				newbb = newbb.union(bb);
+			}
 			else
+			{
 				newbb = bb;
+			}
+
 		}
+
 		if (oldbb != null && newbb != null && oldbb.intersects(newbb))
 		{
 			// find a place for new items
-			int dx = 0, dy = 0;
+			int dx = 0;
+			int dy = 0;
 			int spacew = circuitArea.width - oldbb.width - newbb.width;
 			int spaceh = circuitArea.height - oldbb.height - newbb.height;
 			if (spacew > spaceh)
+			{
 				dx = snapGrid(oldbb.x + oldbb.width - newbb.x + gridSize);
+			}
 			else
+			{
 				dy = snapGrid(oldbb.y + oldbb.height - newbb.y + gridSize);
+			}
+
 			for (i = oldsz; i != elmList.size(); i++)
 			{
 				CircuitElm ce = getElm(i);
@@ -3300,25 +3317,25 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			{
 				return;
 			}
-				
+
 			CircuitElm elm = null;
 			elm = constructElement(c, 0, 0);
 			if (elm == null || !(elm.needsShortcut() && elm.getDumpClass() == c))
 			{
 				return;
 			}
-			
+
 			this.mouseMode = MODE_ADD_ELM;
 			this.mouseModeStr = c.getName();
 			this.addingClass = c;
 		}
-		
+
 		if (e.getKeyChar() == ' ')
 		{
 			this.mouseMode = MODE_SELECT;
 			this.mouseModeStr = "Select";
 		}
-		
+
 		this.tempMouseMode = this.mouseMode;
 	}
 
@@ -3332,7 +3349,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		int dest;
 		CircuitElm firstElm;
 		int type;
-	
+
 		private FindPathInfo(int t, CircuitElm e, int d)
 		{
 			dest = d;
@@ -3340,31 +3357,31 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			firstElm = e;
 			used = new boolean[nodeList.size()];
 		}
-	
+
 		private boolean findPath(int n1)
 		{
 			return this.findPath(n1, -1);
 		}
-	
+
 		private boolean findPath(int n1, int depth)
 		{
 			if (n1 == dest)
 			{
 				return true;
 			}
-		
+
 			if (depth-- == 0)
 			{
 				return false;
-				
+
 			}
-		
+
 			if (used[n1])
 			{
 				// System.out.println("used " + n1);
 				return false;
 			}
-			
+
 			used[n1] = true;
 			int i;
 			for (i = 0; i != elmList.size(); i++)
