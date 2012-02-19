@@ -89,7 +89,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	CheckboxMenuItem scopeResistMenuItem;
 	CheckboxMenuItem scopeVceIcMenuItem;
 	MenuItem scopeSelectYMenuItem;
-	Class addingClass;
+	Class<?> addingClass;
 	int mouseMode = MODE_SELECT;
 	int tempMouseMode = MODE_SELECT;
 	String mouseModeStr = "Select";
@@ -124,8 +124,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	static final int HINT_3DB_C = 3;
 	static final int HINT_TWINT = 4;
 	static final int HINT_3DB_L = 5;
-	Vector elmList;
-	Vector setupList;
+	Vector<CircuitElm> elmList;
+	Vector<?> setupList;
 	CircuitElm dragElm, menuElm, mouseElm, stopElm;
 	int mousePost = -1;
 	CircuitElm plotXElm, plotYElm;
@@ -144,13 +144,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	int scopeColCount[];
 	static EditDialog editDialog;
 	static ImportDialog impDialog;
-	Class dumpTypes[];
+	Class<?> dumpTypes[];
 	static String muString = "u";
 	static String ohmString = "ohm";
 	String clipboard;
 	Rectangle circuitArea;
 	int circuitBottom;
-	Vector undoStack, redoStack;
+	Vector<String> undoStack, redoStack;
 
 	int getrand(int x)
 	{
@@ -370,6 +370,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		inputMenu.add(getClassCheckItem("Add Current Source", "CurrentElm"));
 		inputMenu.add(getClassCheckItem("Add LED", "LEDElm"));
 		inputMenu.add(getClassCheckItem("Add Lamp (beta)", "LampElm"));
+		
+		String path = "com.limoilux.circuit";
 
 		Menu activeMenu = new Menu("Active Components");
 		mainMenu.add(activeMenu);
@@ -378,13 +380,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		activeMenu.add(getClassCheckItem("Add Transistor (bipolar, NPN)", "NTransistorElm"));
 		activeMenu.add(getClassCheckItem("Add Transistor (bipolar, PNP)", "PTransistorElm"));
 		activeMenu.add(getClassCheckItem("Add Op Amp (- on top)", "OpAmpElm"));
-		activeMenu.add(getClassCheckItem("Add Op Amp (+ on top)", "OpAmpSwapElm"));
-		activeMenu.add(getClassCheckItem("Add MOSFET (n-channel)", "NMosfetElm"));
-		activeMenu.add(getClassCheckItem("Add MOSFET (p-channel)", "PMosfetElm"));
-		activeMenu.add(getClassCheckItem("Add JFET (n-channel)", "NJfetElm"));
-		activeMenu.add(getClassCheckItem("Add JFET (p-channel)", "PJfetElm"));
+		activeMenu.add(getClassCheckItem("Add Op Amp (+ on top)",  "OpAmpSwapElm"));
+		activeMenu.add(getClassCheckItem("Add MOSFET (n-channel)",  "NMosfetElm"));
+		activeMenu.add(getClassCheckItem("Add MOSFET (p-channel)",  "PMosfetElm"));
+		activeMenu.add(getClassCheckItem("Add JFET (n-channel)",  "NJfetElm"));
+		activeMenu.add(getClassCheckItem("Add JFET (p-channel)",  "PJfetElm"));
 		activeMenu.add(getClassCheckItem("Add Analog Switch (SPST)", "AnalogSwitchElm"));
-		activeMenu.add(getClassCheckItem("Add Analog Switch (SPDT)", "AnalogSwitch2Elm"));
+		activeMenu.add(getClassCheckItem("Add Analog Switch (SPDT)",  "AnalogSwitch2Elm"));
 		activeMenu.add(getClassCheckItem("Add SCR", "SCRElm"));
 		// activeMenu.add(getClassCheckItem("Add Varactor/Varicap",
 		// "VaractorElm"));
@@ -478,10 +480,10 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 
 		setGrid();
-		elmList = new Vector();
-		setupList = new Vector();
-		undoStack = new Vector();
-		redoStack = new Vector();
+		elmList = new Vector<CircuitElm>();
+		setupList = new Vector<Object>();
+		undoStack = new Vector<String>();
+		redoStack = new Vector<String>();
 
 		scopes = new Scope[20];
 		scopeColCount = new int[20];
@@ -608,7 +610,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	{
 		try
 		{
-			Class c = Class.forName(t);
+			Class<?> c = Class.forName("com.limoilux.circuit." + t);
 			CircuitElm elm = constructElement(c, 0, 0);
 			register(c, elm);
 			int dt = 0;
@@ -634,7 +636,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return mi;
 	}
 
-	void register(Class c, CircuitElm elm)
+	void register(Class<?> c, CircuitElm elm)
 	{
 		int t = elm.getDumpType();
 		if (t == 0)
@@ -642,7 +644,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			System.out.println("no dump type: " + c);
 			return;
 		}
-		Class dclass = elm.getDumpClass();
+		Class<Scope> dclass = elm.getDumpClass();
 		if (dumpTypes[t] == dclass)
 			return;
 		if (dumpTypes[t] != null)
@@ -1099,7 +1101,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		cv.repaint();
 	}
 
-	Vector nodeList;
+	Vector<CircuitNode> nodeList;
 	CircuitElm voltageSources[];
 
 	public CircuitNode getCircuitNode(int n)
@@ -1125,7 +1127,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		stopElm = null;
 		int i, j;
 		int vscount = 0;
-		nodeList = new Vector();
+		nodeList = new Vector<CircuitNode>();
 		boolean gotGround = false;
 		boolean gotRail = false;
 		CircuitElm volt = null;
@@ -2508,18 +2510,18 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 					int y2 = new Integer(st.nextToken()).intValue();
 					int f = new Integer(st.nextToken()).intValue();
 					CircuitElm ce = null;
-					Class cls = dumpTypes[tint];
+					Class<?> cls = dumpTypes[tint];
 					if (cls == null)
 					{
 						System.out.println("unrecognized dump type: " + type);
 						break;
 					}
 					// find element class
-					Class carr[] = new Class[6];
+					Class<?> carr[] = new Class[6];
 					// carr[0] = getClass();
 					carr[0] = carr[1] = carr[2] = carr[3] = carr[4] = int.class;
 					carr[5] = StringTokenizer.class;
-					Constructor cstr = null;
+					Constructor<?> cstr = null;
 					cstr = cls.getConstructor(carr);
 
 					// invoke constructor with starting coordinates
@@ -3011,13 +3013,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		dragElm = constructElement(addingClass, x0, y0);
 	}
 
-	CircuitElm constructElement(Class c, int x0, int y0)
+	CircuitElm constructElement(Class<?> c, int x0, int y0)
 	{
 		// find element class
-		Class carr[] = new Class[2];
+		Class<?> carr[] = new Class[2];
 		// carr[0] = getClass();
 		carr[0] = carr[1] = int.class;
-		Constructor cstr = null;
+		Constructor<?> cstr = null;
 		try
 		{
 			cstr = c.getConstructor(carr);
@@ -3394,7 +3396,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	{
 		if (e.getKeyChar() > ' ' && e.getKeyChar() < 127)
 		{
-			Class c = dumpTypes[e.getKeyChar()];
+			Class<?> c = dumpTypes[e.getKeyChar()];
 			if (c == null || c == Scope.class)
 				return;
 			CircuitElm elm = null;
