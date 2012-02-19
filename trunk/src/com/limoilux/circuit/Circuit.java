@@ -9,7 +9,7 @@ import java.awt.event.*;
 
 public class Circuit extends Applet implements ComponentListener
 {
-	static CirSim circuitSim;
+	private static CirSim circuitSim;
 	private ComponentListener localListener;
 	boolean started = false;
 	
