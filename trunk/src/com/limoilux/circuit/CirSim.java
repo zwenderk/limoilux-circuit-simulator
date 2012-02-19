@@ -146,7 +146,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private int tempMouseMode = MODE_SELECT;
 	private String mouseModeStr = "Select";
 	private boolean shown = false;
-	
+
 	public CirSim()
 	{
 		super("Limoilux Circuit Simulator v1.1");
@@ -166,7 +166,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		CircuitElm.initClass(this);
 
 		boolean euro = (euroResistor != null && euroResistor.equalsIgnoreCase("true"));
-		
 
 		this.mainContainer = this;
 
@@ -371,12 +370,11 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		otherMenu.add(getClassCheckItem("Add Text", "TextElm"));
 		otherMenu.add(getClassCheckItem("Add Scope Probe", "ProbeElm"));
 		otherMenu.add(getCheckItem("Drag All (Alt-drag)", "DragAll"));
-		
-	
+
 		otherMenu.add(getCheckItem(isMac ? "Drag Row (Alt-S-drag, S-right)" : "Drag Row (S-right)", "DragRow"));
 		otherMenu.add(getCheckItem(isMac ? "Drag Column (Alt-\u2318-drag, \u2318-right)" : "Drag Column (C-right)",
 				"DragColumn"));
-		
+
 		otherMenu.add(getCheckItem("Drag Selected", "DragSelected"));
 		otherMenu.add(getCheckItem("Drag Post (" + ctrlMetaKey + "-drag)", "DragPost"));
 
@@ -411,19 +409,16 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 		mainContainer.add(new Label("www.falstad.com"));
 
-		if (useFrame)
-			mainContainer.add(new Label(""));
+		mainContainer.add(new Label(""));
 		Font f = new Font("SansSerif", 0, 10);
 		Label l;
 		l = new Label("Current Circuit:");
 		l.setFont(f);
 		titleLabel = new Label("Label");
 		titleLabel.setFont(f);
-		if (useFrame)
-		{
-			mainContainer.add(l);
-			mainContainer.add(titleLabel);
-		}
+
+		mainContainer.add(l);
+		mainContainer.add(titleLabel);
 
 		setGrid();
 		elmList = new Vector<CircuitElm>();
@@ -461,28 +456,27 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		{
 			this.readSetupFile(startCircuit, startLabel);
 		}
-		
+
 		Dimension screen = this.getToolkit().getScreenSize();
-		
+
 		this.setSize(860, 640);
-		
-		handleResize();
-		
+
+		this.handleResize();
+
 		Dimension x = this.getSize();
-		setLocation((screen.width - x.width) / 2, (screen.height - x.height) / 2);
+		this.setLocation((screen.width - x.width) / 2, (screen.height - x.height) / 2);
 
 		this.setVisible(true);
 
 		this.requestFocus();
 	}
 
-
-
 	public void triggerShow()
 	{
-		if (!shown)
-			show();
-		shown = true;
+
+		this.setVisible(true);
+
+		this.shown = true;
 	}
 
 	PopupMenu buildScopeMenu(boolean t)
@@ -584,7 +578,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return mi;
 	}
 
-	void register(Class<?> c, CircuitElm elm)
+	private void register(Class<?> c, CircuitElm elm)
 	{
 		int t = elm.getDumpType();
 		if (t == 0)
@@ -592,15 +586,20 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			System.out.println("no dump type: " + c);
 			return;
 		}
+		
 		Class<Scope> dclass = elm.getDumpClass();
 		if (dumpTypes[t] == dclass)
+		{
 			return;
+		}
+			
 		if (dumpTypes[t] != null)
 		{
 			System.out.println("dump type conflict: " + c + " " + dumpTypes[t]);
 			return;
 		}
-		dumpTypes[t] = dclass;
+		
+		this.dumpTypes[t] = dclass;
 	}
 
 	public String getAppletInfo()
@@ -608,11 +607,15 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return "Circuit by Paul Falstad";
 	}
 
-	void handleResize()
+	private void handleResize()
 	{
 		winSize = circuitCanvas.getSize();
+		
 		if (winSize.width == 0)
+		{
 			return;
+		}
+	
 		dbimage = mainContainer.createImage(winSize.width, winSize.height);
 		int h = winSize.height / 5;
 		/*
@@ -637,25 +640,32 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		// center circuit; we don't use snapGrid() because that rounds
 		int dx = gridMask & ((circuitArea.width - (maxx - minx)) / 2 - minx);
 		int dy = gridMask & ((circuitArea.height - (maxy - miny)) / 2 - miny);
+		
 		if (dx + minx < 0)
-			dx = gridMask & (-minx);
+		{
+			dx = this.gridMask & (-minx);
+		}
+			
 		if (dy + miny < 0)
-			dy = gridMask & (-miny);
+		{
+			dy = this.gridMask & (-miny);
+		}
+			
 		for (i = 0; i != elmList.size(); i++)
 		{
 			CircuitElm ce = getElm(i);
 			ce.move(dx, dy);
 		}
+		
 		// after moving elements, need this to avoid singular matrix probs
-		needAnalyze();
-		circuitBottom = 0;
+		this.needAnalyze();
+		
+		this.circuitBottom = 0;
 	}
 
 	private void destroyFrame()
 	{
-
 		this.dispose();
-
 	}
 
 	@Override
