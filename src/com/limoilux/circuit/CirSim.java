@@ -14,20 +14,22 @@ import java.net.URL;
 import java.awt.event.*;
 import java.io.FilterInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.StringTokenizer;
 import java.lang.reflect.Constructor;
+import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener,
 		MouseMotionListener, MouseListener, ItemListener, KeyListener
 {
-	
+
 	public static final int SOURCE_RADIUS = 7;
 	public static final double FREQ_MULTIPLIER = 3.14159265 * 8;
-	
+
 	static Container main;
-	
+
 	private String baseURL = "http://www.falstad.com/circuit/";
 
 	Thread engine = null;
@@ -2333,23 +2335,22 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	private URL getCodeBase()
 	{
+		URL out = null;
+		File f = null;
+		
 		try
 		{
-			if (applet != null)
-			{
-				return applet.getCodeBase();
-			}
-			else
-			{
-				File f = new File(".");
-				return new URL("file:" + f.getCanonicalPath() + "/");
-			}
+			f = new File(".");
+			out  = new URL("file:" + f.getCanonicalPath() + "/");
 		}
-		catch (Exception e)
+		catch (MalformedURLException e)
 		{
-			e.printStackTrace();
-			return null;
 		}
+		catch (IOException e)
+		{
+		}
+
+		return out;
 	}
 
 	void getSetupList(Menu menu, boolean retry)
