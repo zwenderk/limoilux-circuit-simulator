@@ -21,8 +21,7 @@ import java.net.URLEncoder;
 
 import com.limoilux.circuit.core.CoreUtil;
 
-public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener, MouseListener,
-		ItemListener
+public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
 {
 	@Deprecated
 	private static final double PI = 3.14159265358979323846;
@@ -159,6 +158,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private CircuitElm voltageSources[];
 
 	private final MouseMotionListener mouseMotionList;
+	private final MouseListener mouseList;
 	private final KeyListener keyList;
 
 	public CirSim()
@@ -168,6 +168,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		this.useFrame = false;
 
 		this.mouseMotionList = new MyMouseMotionListener();
+		this.mouseList = new MyMouseListener();
 		this.keyList = new MyKeyListener();
 
 		String euroResistor = null;
@@ -215,7 +216,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		circuitCanvas = new CircuitCanvas(this);
 		circuitCanvas.addComponentListener(this);
 		circuitCanvas.addMouseMotionListener(this.mouseMotionList);
-		circuitCanvas.addMouseListener(this);
+		circuitCanvas.addMouseListener(this.mouseList);
 		circuitCanvas.addKeyListener(this.keyList);
 		mainContainer.add(circuitCanvas);
 
@@ -2853,11 +2854,11 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		if (e.getSource() == resetButton)
 		{
 			int i;
-	
+
 			// on IE, drawImage() stops working inexplicably every once in
 			// a while. Recreating it fixes the problem, so we do that here.
 			dbimage = mainContainer.createImage(winSize.width, winSize.height);
-	
+
 			for (i = 0; i != elmList.size(); i++)
 				getElm(i).reset();
 			for (i = 0; i != scopeCount; i++)
@@ -3024,169 +3025,175 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		System.out.print(((Scrollbar) e.getSource()).getValue() + "\n");
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e)
+	private class MyMouseListener implements MouseListener
 	{
-		if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
+
+		@Override
+		public void mouseClicked(MouseEvent e)
 		{
-			if (mouseMode == MODE_SELECT || mouseMode == MODE_DRAG_SELECTED)
+			if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
 			{
-				this.clearSelection();
+				if (mouseMode == MODE_SELECT || mouseMode == MODE_DRAG_SELECTED)
+				{
+					CirSim.this.clearSelection();
+				}
 			}
 		}
-	}
 
-	@Override
-	public void mouseEntered(MouseEvent e)
-	{
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e)
-	{
-		scopeSelected = -1;
-		mouseElm = plotXElm = plotYElm = null;
-		circuitCanvas.repaint();
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e)
-	{
-		System.out.println(e.getModifiers());
-		int ex = e.getModifiersEx();
-		if ((ex & (MouseEvent.META_DOWN_MASK | MouseEvent.SHIFT_DOWN_MASK)) == 0 && e.isPopupTrigger())
+		@Override
+		public void mouseEntered(MouseEvent e)
 		{
-			doPopupMenu(e);
-			return;
 		}
-		if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
+
+		@Override
+		public void mouseExited(MouseEvent e)
 		{
-			// left mouse
-			tempMouseMode = mouseMode;
-			if ((ex & MouseEvent.ALT_DOWN_MASK) != 0 && (ex & MouseEvent.META_DOWN_MASK) != 0)
-				tempMouseMode = MODE_DRAG_COLUMN;
-			else if ((ex & MouseEvent.ALT_DOWN_MASK) != 0 && (ex & MouseEvent.SHIFT_DOWN_MASK) != 0)
-				tempMouseMode = MODE_DRAG_ROW;
-			else if ((ex & MouseEvent.SHIFT_DOWN_MASK) != 0)
-				tempMouseMode = MODE_SELECT;
-			else if ((ex & MouseEvent.ALT_DOWN_MASK) != 0)
-				tempMouseMode = MODE_DRAG_ALL;
-			else if ((ex & (MouseEvent.CTRL_DOWN_MASK | MouseEvent.META_DOWN_MASK)) != 0)
-				tempMouseMode = MODE_DRAG_POST;
+			scopeSelected = -1;
+			mouseElm = plotXElm = plotYElm = null;
+			circuitCanvas.repaint();
 		}
-		else if ((e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0)
+
+		@Override
+		public void mousePressed(MouseEvent e)
 		{
-			// right mouse
-			if ((ex & MouseEvent.SHIFT_DOWN_MASK) != 0)
-				tempMouseMode = MODE_DRAG_ROW;
-			else if ((ex & (MouseEvent.CTRL_DOWN_MASK | MouseEvent.META_DOWN_MASK)) != 0)
-				tempMouseMode = MODE_DRAG_COLUMN;
-			else
+			System.out.println(e.getModifiers());
+			int ex = e.getModifiersEx();
+			if ((ex & (MouseEvent.META_DOWN_MASK | MouseEvent.SHIFT_DOWN_MASK)) == 0 && e.isPopupTrigger())
+			{
+				doPopupMenu(e);
 				return;
+			}
+			if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
+			{
+				// left mouse
+				tempMouseMode = mouseMode;
+				if ((ex & MouseEvent.ALT_DOWN_MASK) != 0 && (ex & MouseEvent.META_DOWN_MASK) != 0)
+					tempMouseMode = MODE_DRAG_COLUMN;
+				else if ((ex & MouseEvent.ALT_DOWN_MASK) != 0 && (ex & MouseEvent.SHIFT_DOWN_MASK) != 0)
+					tempMouseMode = MODE_DRAG_ROW;
+				else if ((ex & MouseEvent.SHIFT_DOWN_MASK) != 0)
+					tempMouseMode = MODE_SELECT;
+				else if ((ex & MouseEvent.ALT_DOWN_MASK) != 0)
+					tempMouseMode = MODE_DRAG_ALL;
+				else if ((ex & (MouseEvent.CTRL_DOWN_MASK | MouseEvent.META_DOWN_MASK)) != 0)
+					tempMouseMode = MODE_DRAG_POST;
+			}
+			else if ((e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0)
+			{
+				// right mouse
+				if ((ex & MouseEvent.SHIFT_DOWN_MASK) != 0)
+					tempMouseMode = MODE_DRAG_ROW;
+				else if ((ex & (MouseEvent.CTRL_DOWN_MASK | MouseEvent.META_DOWN_MASK)) != 0)
+					tempMouseMode = MODE_DRAG_COLUMN;
+				else
+					return;
+			}
+
+			if (tempMouseMode != MODE_SELECT && tempMouseMode != MODE_DRAG_SELECTED)
+				clearSelection();
+			if (doSwitch(e.getX(), e.getY()))
+				return;
+			pushUndo();
+			initDragX = e.getX();
+			initDragY = e.getY();
+			if (tempMouseMode != MODE_ADD_ELM || addingClass == null)
+				return;
+
+			int x0 = snapGrid(e.getX());
+			int y0 = snapGrid(e.getY());
+			if (!circuitArea.contains(x0, y0))
+				return;
+
+			dragElm = constructElement(addingClass, x0, y0);
 		}
 
-		if (tempMouseMode != MODE_SELECT && tempMouseMode != MODE_DRAG_SELECTED)
-			clearSelection();
-		if (doSwitch(e.getX(), e.getY()))
-			return;
-		pushUndo();
-		initDragX = e.getX();
-		initDragY = e.getY();
-		if (tempMouseMode != MODE_ADD_ELM || addingClass == null)
-			return;
+		@Override
+		public void mouseReleased(MouseEvent e)
+		{
+			int ex = e.getModifiersEx();
+			if ((ex & (MouseEvent.SHIFT_DOWN_MASK | MouseEvent.CTRL_DOWN_MASK | MouseEvent.META_DOWN_MASK)) == 0
+					&& e.isPopupTrigger())
+			{
+				doPopupMenu(e);
+				return;
+			}
+			tempMouseMode = mouseMode;
+			selectedArea = null;
+			boolean circuitChanged = false;
+			if (heldSwitchElm != null)
+			{
+				heldSwitchElm.mouseUp();
+				heldSwitchElm = null;
+				circuitChanged = true;
+			}
+			if (dragElm != null)
+			{
+				// if the element is zero size then don't create it
+				if (dragElm.x == dragElm.x2 && dragElm.y == dragElm.y2)
+				{
+					dragElm.delete();
+				}
+				else
+				{
+					elmList.addElement(dragElm);
+					circuitChanged = true;
+				}
+				dragElm = null;
+			}
+			if (circuitChanged)
+				needAnalyze();
+			if (dragElm != null)
+				dragElm.delete();
+			dragElm = null;
+			circuitCanvas.repaint();
+		}
 
-		int x0 = snapGrid(e.getX());
-		int y0 = snapGrid(e.getY());
-		if (!circuitArea.contains(x0, y0))
-			return;
-
-		dragElm = constructElement(addingClass, x0, y0);
 	}
-	
+
 	private class MyKeyListener implements KeyListener
 	{
 
-	@Override
-	public void keyPressed(KeyEvent e)
-	{
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e)
-	{
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e)
-	{
-		if (e.getKeyChar() > ' ' && e.getKeyChar() < 127)
+		@Override
+		public void keyPressed(KeyEvent e)
 		{
-			Class<?> c = dumpTypes[e.getKeyChar()];
-			if (c == null || c == Scope.class)
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e)
+		{
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e)
+		{
+			if (e.getKeyChar() > ' ' && e.getKeyChar() < 127)
 			{
-				return;
+				Class<?> c = dumpTypes[e.getKeyChar()];
+				if (c == null || c == Scope.class)
+				{
+					return;
+				}
+
+				CircuitElm elm = null;
+				elm = constructElement(c, 0, 0);
+				if (elm == null || !(elm.needsShortcut() && elm.getDumpClass() == c))
+				{
+					return;
+				}
+
+				CirSim.this.mouseMode = MODE_ADD_ELM;
+				CirSim.this.mouseModeStr = c.getName();
+				CirSim.this.addingClass = c;
 			}
 
-			CircuitElm elm = null;
-			elm = constructElement(c, 0, 0);
-			if (elm == null || !(elm.needsShortcut() && elm.getDumpClass() == c))
+			if (e.getKeyChar() == ' ')
 			{
-				return;
+				CirSim.this.mouseMode = MODE_SELECT;
+				CirSim.this.mouseModeStr = "Select";
 			}
 
-			CirSim.this.mouseMode = MODE_ADD_ELM;
-			CirSim.this.mouseModeStr = c.getName();
-			CirSim.this.addingClass = c;
+			CirSim.this.tempMouseMode = CirSim.this.mouseMode;
 		}
-
-		if (e.getKeyChar() == ' ')
-		{
-			CirSim.this.mouseMode = MODE_SELECT;
-			CirSim.this.mouseModeStr = "Select";
-		}
-
-		CirSim.this.tempMouseMode = CirSim.this.mouseMode;
-	}
-	}
-	@Override
-	public void mouseReleased(MouseEvent e)
-	{
-		int ex = e.getModifiersEx();
-		if ((ex & (MouseEvent.SHIFT_DOWN_MASK | MouseEvent.CTRL_DOWN_MASK | MouseEvent.META_DOWN_MASK)) == 0
-				&& e.isPopupTrigger())
-		{
-			doPopupMenu(e);
-			return;
-		}
-		tempMouseMode = mouseMode;
-		selectedArea = null;
-		boolean circuitChanged = false;
-		if (heldSwitchElm != null)
-		{
-			heldSwitchElm.mouseUp();
-			heldSwitchElm = null;
-			circuitChanged = true;
-		}
-		if (dragElm != null)
-		{
-			// if the element is zero size then don't create it
-			if (dragElm.x == dragElm.x2 && dragElm.y == dragElm.y2)
-			{
-				dragElm.delete();
-			}
-			else
-			{
-				elmList.addElement(dragElm);
-				circuitChanged = true;
-			}
-			dragElm = null;
-		}
-		if (circuitChanged)
-			needAnalyze();
-		if (dragElm != null)
-			dragElm.delete();
-		dragElm = null;
-		circuitCanvas.repaint();
 	}
 
 	private class MyMouseMotionListener implements MouseMotionListener
