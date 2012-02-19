@@ -36,18 +36,13 @@ public class Circuit extends Applet implements ComponentListener
 		this.addComponentListener(this);
 	}
 
-	public static void main(String args[])
-	{
-		Circuit.circuitSim = new CirSim(null);
-		Circuit.circuitSim.init();
-	}
 
 	void showFrame()
 	{
 		if (Circuit.circuitSim == null)
 		{
 			this.started = true;
-			Circuit.circuitSim = new CirSim(this);
+			Circuit.circuitSim = new CirSim(this, null);
 			Circuit.circuitSim.init();
 			this.repaint();
 		}
@@ -143,5 +138,11 @@ public class Circuit extends Applet implements ComponentListener
 			// TODO Auto-generated method stub
 			
 		}
+	}
+	
+	public static void main(String args[])
+	{
+		Circuit.circuitSim = new CirSim(null, null);
+		Circuit.circuitSim.init();
 	}
 }
