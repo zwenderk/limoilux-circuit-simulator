@@ -1105,7 +1105,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return this.elmList.elementAt(n);
 	}
 
-	void analyzeCircuit()
+    private void analyzeCircuit()
 	{
 		calcCircuitBottom();
 		if (elmList.isEmpty())
@@ -1599,7 +1599,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
-	void calcCircuitBottom()
+	private void calcCircuitBottom()
 	{
 		int i;
 		circuitBottom = 0;
@@ -1612,126 +1612,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
-	class FindPathInfo
-	{
-		static final int INDUCT = 1;
-		static final int VOLTAGE = 2;
-		static final int SHORT = 3;
-		static final int CAP_V = 4;
-		boolean used[];
-		int dest;
-		CircuitElm firstElm;
-		int type;
-
-		FindPathInfo(int t, CircuitElm e, int d)
-		{
-			dest = d;
-			type = t;
-			firstElm = e;
-			used = new boolean[nodeList.size()];
-		}
-
-		boolean findPath(int n1)
-		{
-			return findPath(n1, -1);
-		}
-
-		boolean findPath(int n1, int depth)
-		{
-			if (n1 == dest)
-				return true;
-			if (depth-- == 0)
-				return false;
-			if (used[n1])
-			{
-				// System.out.println("used " + n1);
-				return false;
-			}
-			used[n1] = true;
-			int i;
-			for (i = 0; i != elmList.size(); i++)
-			{
-				CircuitElm ce = getElm(i);
-				if (ce == firstElm)
-					continue;
-				if (type == INDUCT)
-				{
-					if (ce instanceof CurrentElm)
-						continue;
-				}
-				if (type == VOLTAGE)
-				{
-					if (!(ce.isWire() || ce instanceof VoltageElm))
-						continue;
-				}
-				if (type == SHORT && !ce.isWire())
-					continue;
-				if (type == CAP_V)
-				{
-					if (!(ce.isWire() || ce instanceof CapacitorElm || ce instanceof VoltageElm))
-						continue;
-				}
-				if (n1 == 0)
-				{
-					// look for posts which have a ground connection;
-					// our path can go through ground
-					int j;
-					for (j = 0; j != ce.getPostCount(); j++)
-						if (ce.hasGroundConnection(j) && findPath(ce.getNode(j), depth))
-						{
-							used[n1] = false;
-							return true;
-						}
-				}
-				int j;
-				for (j = 0; j != ce.getPostCount(); j++)
-				{
-					// System.out.println(ce + " " + ce.getNode(j));
-					if (ce.getNode(j) == n1)
-						break;
-				}
-				if (j == ce.getPostCount())
-					continue;
-				if (ce.hasGroundConnection(j) && findPath(0, depth))
-				{
-					// System.out.println(ce + " has ground");
-					used[n1] = false;
-					return true;
-				}
-				if (type == INDUCT && ce instanceof InductorElm)
-				{
-					double c = ce.getCurrent();
-					if (j == 0)
-						c = -c;
-					// System.out.println("matching " + c + " to " +
-					// firstElm.getCurrent());
-					// System.out.println(ce + " " + firstElm);
-					if (Math.abs(c - firstElm.getCurrent()) > 1e-10)
-						continue;
-				}
-				int k;
-				for (k = 0; k != ce.getPostCount(); k++)
-				{
-					if (j == k)
-						continue;
-					// System.out.println(ce + " " + ce.getNode(j) + "-" +
-					// ce.getNode(k));
-					if (ce.getConnection(j, k) && findPath(ce.getNode(k), depth))
-					{
-						// System.out.println("got findpath " + n1);
-						used[n1] = false;
-						return true;
-					}
-					// System.out.println("back on findpath " + n1);
-				}
-			}
-			used[n1] = false;
-			// System.out.println(n1 + " failed");
-			return false;
-		}
-	}
-
-	void stop(String s, CircuitElm ce)
+	public void stop(String s, CircuitElm ce)
 	{
 		stopMessage = s;
 		circuitMatrix = null;
@@ -1743,7 +1624,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	// control voltage source vs with voltage from n1 to n2 (must
 	// also call stampVoltageSource())
-	void stampVCVS(int n1, int n2, double coef, int vs)
+	public void stampVCVS(int n1, int n2, double coef, int vs)
 	{
 		int vn = nodeList.size() + vs;
 		stampMatrix(vn, n1, coef);
@@ -1751,7 +1632,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	}
 
 	// stamp independent voltage source #vs, from n1 to n2, amount v
-	void stampVoltageSource(int n1, int n2, int vs, double v)
+	public void stampVoltageSource(int n1, int n2, int vs, double v)
 	{
 		int vn = nodeList.size() + vs;
 		stampMatrix(vn, n1, -1);
@@ -1762,7 +1643,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	}
 
 	// use this if the amount of voltage is going to be updated in doStep()
-	void stampVoltageSource(int n1, int n2, int vs)
+	public void stampVoltageSource(int n1, int n2, int vs)
 	{
 		int vn = nodeList.size() + vs;
 		stampMatrix(vn, n1, -1);
@@ -3439,6 +3320,125 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	public static int getRandom(int max)
 	{
 		return CoreUtil.getRandomInt(max);
+	}
+
+	private class FindPathInfo
+	{
+		static final int INDUCT = 1;
+		static final int VOLTAGE = 2;
+		static final int SHORT = 3;
+		static final int CAP_V = 4;
+		boolean used[];
+		int dest;
+		CircuitElm firstElm;
+		int type;
+	
+		FindPathInfo(int t, CircuitElm e, int d)
+		{
+			dest = d;
+			type = t;
+			firstElm = e;
+			used = new boolean[nodeList.size()];
+		}
+	
+		boolean findPath(int n1)
+		{
+			return findPath(n1, -1);
+		}
+	
+		boolean findPath(int n1, int depth)
+		{
+			if (n1 == dest)
+				return true;
+			if (depth-- == 0)
+				return false;
+			if (used[n1])
+			{
+				// System.out.println("used " + n1);
+				return false;
+			}
+			used[n1] = true;
+			int i;
+			for (i = 0; i != elmList.size(); i++)
+			{
+				CircuitElm ce = getElm(i);
+				if (ce == firstElm)
+					continue;
+				if (type == INDUCT)
+				{
+					if (ce instanceof CurrentElm)
+						continue;
+				}
+				if (type == VOLTAGE)
+				{
+					if (!(ce.isWire() || ce instanceof VoltageElm))
+						continue;
+				}
+				if (type == SHORT && !ce.isWire())
+					continue;
+				if (type == CAP_V)
+				{
+					if (!(ce.isWire() || ce instanceof CapacitorElm || ce instanceof VoltageElm))
+						continue;
+				}
+				if (n1 == 0)
+				{
+					// look for posts which have a ground connection;
+					// our path can go through ground
+					int j;
+					for (j = 0; j != ce.getPostCount(); j++)
+						if (ce.hasGroundConnection(j) && findPath(ce.getNode(j), depth))
+						{
+							used[n1] = false;
+							return true;
+						}
+				}
+				int j;
+				for (j = 0; j != ce.getPostCount(); j++)
+				{
+					// System.out.println(ce + " " + ce.getNode(j));
+					if (ce.getNode(j) == n1)
+						break;
+				}
+				if (j == ce.getPostCount())
+					continue;
+				if (ce.hasGroundConnection(j) && findPath(0, depth))
+				{
+					// System.out.println(ce + " has ground");
+					used[n1] = false;
+					return true;
+				}
+				if (type == INDUCT && ce instanceof InductorElm)
+				{
+					double c = ce.getCurrent();
+					if (j == 0)
+						c = -c;
+					// System.out.println("matching " + c + " to " +
+					// firstElm.getCurrent());
+					// System.out.println(ce + " " + firstElm);
+					if (Math.abs(c - firstElm.getCurrent()) > 1e-10)
+						continue;
+				}
+				int k;
+				for (k = 0; k != ce.getPostCount(); k++)
+				{
+					if (j == k)
+						continue;
+					// System.out.println(ce + " " + ce.getNode(j) + "-" +
+					// ce.getNode(k));
+					if (ce.getConnection(j, k) && findPath(ce.getNode(k), depth))
+					{
+						// System.out.println("got findpath " + n1);
+						used[n1] = false;
+						return true;
+					}
+					// System.out.println("back on findpath " + n1);
+				}
+			}
+			used[n1] = false;
+			// System.out.println(n1 + " failed");
+			return false;
+		}
 	}
 
 	public static void main(String args[])
