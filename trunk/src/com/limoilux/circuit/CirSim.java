@@ -3146,69 +3146,76 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	private void setMenuSelection()
 	{
-		if (menuElm != null)
+		if (this.menuElm != null)
 		{
-			if (menuElm.selected)
+			if (this.menuElm.selected)
+			{
 				return;
-			clearSelection();
-			menuElm.setSelected(true);
+			}
+				
+			this.clearSelection();
+			this.menuElm.setSelected(true);
 		}
 	}
 
 	private void doCut()
 	{
-		int i;
-		pushUndo();
-		setMenuSelection();
-		clipboard = "";
-		for (i = elmList.size() - 1; i >= 0; i--)
+		this.pushUndo();
+		this.setMenuSelection();
+		this.clipboard = "";
+		
+		for (int i = this.elmList.size() - 1; i >= 0; i--)
 		{
 			CircuitElm ce = getElm(i);
 			if (ce.isSelected())
 			{
-				clipboard += ce.dump() + "\n";
+				this.clipboard += ce.dump() + "\n";
 				ce.delete();
-				elmList.removeElementAt(i);
+				this.elmList.removeElementAt(i);
 			}
 		}
-		enablePaste();
-		needAnalyze();
+		this.enablePaste();
+		this.needAnalyze();
 	}
 
 	private void doDelete()
 	{
-		int i;
-		pushUndo();
-		setMenuSelection();
-		for (i = elmList.size() - 1; i >= 0; i--)
+		this.pushUndo();
+		this.setMenuSelection();
+		
+		for (int i = this.elmList.size() - 1; i >= 0; i--)
 		{
 			CircuitElm ce = getElm(i);
 			if (ce.isSelected())
 			{
 				ce.delete();
-				elmList.removeElementAt(i);
+				this.elmList.removeElementAt(i);
 			}
 		}
-		needAnalyze();
+		
+		this.needAnalyze();
 	}
 
 	private void doCopy()
 	{
-		int i;
-		clipboard = "";
+		this.clipboard = "";
 		setMenuSelection();
-		for (i = elmList.size() - 1; i >= 0; i--)
+		for (int i = elmList.size() - 1; i >= 0; i--)
 		{
 			CircuitElm ce = getElm(i);
 			if (ce.isSelected())
-				clipboard += ce.dump() + "\n";
+			{
+				this.clipboard += ce.dump() + "\n";
+			}
+			
 		}
-		enablePaste();
+		
+		this.enablePaste();
 	}
 
 	private void enablePaste()
 	{
-		pasteItem.setEnabled(clipboard.length() > 0);
+		this.pasteItem.setEnabled(this.clipboard.length() > 0);
 	}
 
 	private void doPaste()
