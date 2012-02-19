@@ -55,7 +55,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private String startLabel = null;
 	private String startCircuitText = null;
 	private Image dbimage;
-	
+
 	public boolean converged;
 	public int subIterations;
 
@@ -151,6 +151,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private int tempMouseMode = MODE_SELECT;
 	private String mouseModeStr = "Select";
 	private boolean shown = false;
+
+	public Vector<CircuitNode> nodeList;
+	private CircuitElm voltageSources[];
 
 	public CirSim()
 	{
@@ -530,7 +533,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return mi;
 	}
 
-	CheckboxMenuItem getClassCheckItem(String s, String t)
+	private CheckboxMenuItem getClassCheckItem(String s, String t)
 	{
 		try
 		{
@@ -552,7 +555,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		return getCheckItem(s, t);
 	}
 
-	CheckboxMenuItem getCheckItem(String s, String t)
+	private CheckboxMenuItem getCheckItem(String s, String t)
 	{
 		CheckboxMenuItem mi = new CheckboxMenuItem(s);
 		mi.addItemListener(this);
@@ -655,9 +658,10 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	{
 		if (ev.id == Event.WINDOW_DESTROY)
 		{
-			destroyFrame();
+			this.destroyFrame();
 			return true;
 		}
+		
 		return super.handleEvent(ev);
 	}
 
@@ -1047,28 +1051,34 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		circuitCanvas.repaint();
 	}
 
-	Vector<CircuitNode> nodeList;
-	CircuitElm voltageSources[];
 
 	public CircuitNode getCircuitNode(int n)
 	{
-		if (n >= nodeList.size())
+		if (n >= this.nodeList.size())
+		{
 			return null;
-		return (CircuitNode) nodeList.elementAt(n);
+		}
+		return this.nodeList.elementAt(n);
 	}
 
 	public CircuitElm getElm(int n)
 	{
 		if (n >= elmList.size())
+		{
 			return null;
-		return (CircuitElm) elmList.elementAt(n);
+		}
+
+		return this.elmList.elementAt(n);
 	}
 
 	void analyzeCircuit()
 	{
 		calcCircuitBottom();
 		if (elmList.isEmpty())
+		{
 			return;
+		}
+
 		stopMessage = null;
 		stopElm = null;
 		int i, j;
@@ -1849,8 +1859,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		// return (Math.exp((speedBar.getValue()-1)/24.) + .5);
 		return .1 * Math.exp((speedBar.getValue() - 61) / 24.);
 	}
-
-
 
 	void runCircuit()
 	{
