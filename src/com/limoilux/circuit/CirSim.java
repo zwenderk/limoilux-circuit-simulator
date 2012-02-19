@@ -38,13 +38,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	@Deprecated
 	private Circuit applet = null;
 	
-	private ComponentListener componentListener = null;
 
-	public CirSim(Circuit a,ComponentListener componentListener)
+	public CirSim(Circuit a)
 	{
 		super("Circuit Simulator v1.5n");
 		this.applet = a;
-		this.componentListener = componentListener;
+
 		this.useFrame = false;
 	}
 

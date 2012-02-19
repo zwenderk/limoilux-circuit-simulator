@@ -7,11 +7,12 @@ import java.awt.*;
 import java.applet.Applet;
 import java.awt.event.*;
 
-public class Circuit extends Applet implements ComponentListener
+public class Circuit extends Applet
 {
 	private static CirSim circuitSim;
+	
 	private ComponentListener localListener;
-	boolean started = false;
+	private boolean started = false;
 	
 	public Circuit()
 	{
@@ -33,7 +34,7 @@ public class Circuit extends Applet implements ComponentListener
 	@Override
 	public void init()
 	{
-		this.addComponentListener(this);
+		this.addComponentListener(this.localListener);
 	}
 
 
@@ -42,7 +43,7 @@ public class Circuit extends Applet implements ComponentListener
 		if (Circuit.circuitSim == null)
 		{
 			this.started = true;
-			Circuit.circuitSim = new CirSim(this, null);
+			Circuit.circuitSim = new CirSim(this);
 			Circuit.circuitSim.init();
 			this.repaint();
 		}
@@ -74,28 +75,7 @@ public class Circuit extends Applet implements ComponentListener
 		g.drawString(message, 10, 30);
 	}
 
-	@Override
-	public void componentHidden(ComponentEvent e)
-	{
-	}
-
-	@Override
-	public void componentMoved(ComponentEvent e)
-	{
-	}
-
-	@Override
-	public void componentShown(ComponentEvent e)
-	{
-		showFrame();
-	}
-
-	@Override
-	public void componentResized(ComponentEvent e)
-	{
-		if (Circuit.circuitSim != null)
-			Circuit.circuitSim.componentResized(e);
-	}
+	
 
 	@Override
 	public void destroy()
@@ -128,21 +108,20 @@ public class Circuit extends Applet implements ComponentListener
 		@Override
 		public void componentResized(ComponentEvent e)
 		{
-			// TODO Auto-generated method stub
-			
+			if (Circuit.circuitSim != null)
+				Circuit.circuitSim.componentResized(e);
 		}
 
 		@Override
 		public void componentShown(ComponentEvent e)
 		{
-			// TODO Auto-generated method stub
-			
+			showFrame();
 		}
 	}
 	
 	public static void main(String args[])
 	{
-		Circuit.circuitSim = new CirSim(null, null);
+		Circuit.circuitSim = new CirSim(null);
 		Circuit.circuitSim.init();
 	}
 }
