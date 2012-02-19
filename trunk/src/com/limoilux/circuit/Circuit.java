@@ -10,7 +10,13 @@ import java.awt.event.*;
 public class Circuit extends Applet implements ComponentListener
 {
 	static CirSim circuitSim;
+	private ComponentListener localListener;
 	boolean started = false;
+	
+	public Circuit()
+	{
+		this.localListener = new localListener();
+	}
 
 	void destroyFrame()
 	{
@@ -38,7 +44,7 @@ public class Circuit extends Applet implements ComponentListener
 
 	void showFrame()
 	{
-		if (circuitSim == null)
+		if (Circuit.circuitSim == null)
 		{
 			this.started = true;
 			Circuit.circuitSim = new CirSim(this);
@@ -106,5 +112,36 @@ public class Circuit extends Applet implements ComponentListener
 
 		Circuit.circuitSim = null;
 		this.repaint();
+	}
+	
+	private class localListener implements ComponentListener
+	{
+		@Override
+		public void componentHidden(ComponentEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void componentMoved(ComponentEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void componentResized(ComponentEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void componentShown(ComponentEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
 	}
 }
