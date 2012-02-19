@@ -6,7 +6,7 @@ class PMosfetElm extends MosfetElm
 		super(xx, yy, true);
 	}
 
-	Class getDumpClass()
+	public Class getDumpClass()
 	{
 		return MosfetElm.class;
 	}

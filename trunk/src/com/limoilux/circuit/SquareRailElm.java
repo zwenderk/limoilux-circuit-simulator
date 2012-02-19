@@ -6,7 +6,7 @@ class SquareRailElm extends RailElm
 		super(xx, yy, WF_SQUARE);
 	}
 
-	Class getDumpClass()
+	public Class getDumpClass()
 	{
 		return RailElm.class;
 	}

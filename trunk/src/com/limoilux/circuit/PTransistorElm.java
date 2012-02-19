@@ -6,7 +6,7 @@ class PTransistorElm extends TransistorElm
 		super(xx, yy, true);
 	}
 
-	Class getDumpClass()
+	public Class getDumpClass()
 	{
 		return TransistorElm.class;
 	}
