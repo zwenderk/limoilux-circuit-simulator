@@ -7,7 +7,7 @@ import java.awt.*;
 import java.applet.Applet;
 import java.awt.event.*;
 
-public class Circuit extends Applet
+public class Circuit
 {
 	private static CirSim circuitSim;
 
@@ -16,8 +16,10 @@ public class Circuit extends Applet
 
 	public Circuit()
 	{
+		Circuit.circuitSim = new CirSim(null);
 
 		this.localListener = new localListener();
+		this.showFrame();
 	}
 
 	void destroyFrame()
@@ -29,22 +31,16 @@ public class Circuit extends Applet
 
 		Circuit.circuitSim = null;
 
-		this.repaint();
+		Circuit.circuitSim.repaint();
 	}
 
-	@Override
-	public void init()
-	{
-		this.addComponentListener(this.localListener);
-	}
-
+	
 	void showFrame()
 	{
 		if (Circuit.circuitSim == null)
 		{
 			this.started = true;
-			Circuit.circuitSim = new CirSim(this);
-			this.repaint();
+			Circuit.circuitSim.repaint();
 		}
 	}
 
@@ -53,39 +49,9 @@ public class Circuit extends Applet
 		Circuit.circuitSim.toggleSwitch(x);
 	}
 
-	@Override
-	public void paint(Graphics g)
-	{
-		String message = "Applet is open in a separate window.";
 
-		if (!this.started)
-		{
-			message = "Applet is starting.";
-		}
-		else if (circuitSim == null)
-		{
-			message = "Applet is finished.";
-		}
-		else if (Circuit.circuitSim.useFrame)
-		{
-			Circuit.circuitSim.triggerShow();
-		}
 
-		g.drawString(message, 10, 30);
-	}
-
-	@Override
-	public void destroy()
-	{
-		if (Circuit.circuitSim != null)
-		{
-			Circuit.circuitSim.dispose();
-		}
-
-		Circuit.circuitSim = null;
-		this.repaint();
-	}
-
+	
 	private class localListener implements ComponentListener
 	{
 		@Override
@@ -118,6 +84,7 @@ public class Circuit extends Applet
 
 	public static void main(String args[])
 	{
-		Circuit.circuitSim = new CirSim(null);
+		Circuit c = new Circuit();
+;
 	}
 }
