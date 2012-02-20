@@ -48,7 +48,7 @@ class TransformerElm extends CircuitElm
 	}
 
 	@Override
-	void drag(int xx, int yy)
+	public void drag(int xx, int yy)
 	{
 		xx = CircuitElm.cirSim.snapGrid(xx);
 		yy = CircuitElm.cirSim.snapGrid(yy);
@@ -137,7 +137,7 @@ class TransformerElm extends CircuitElm
 	}
 
 	@Override
-	Point getPost(int n)
+	public Point getPost(int n)
 	{
 		return this.ptEnds[n];
 	}
@@ -254,7 +254,7 @@ class TransformerElm extends CircuitElm
 	}
 
 	@Override
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		if (this.comparePair(n1, n2, 0, 2))
 		{

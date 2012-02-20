@@ -6,6 +6,8 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CoreUtil;
+
 class SparkGapElm extends CircuitElm
 {
 	double resistance, onresistance, offresistance, breakdown, holdcurrent;
@@ -31,7 +33,7 @@ class SparkGapElm extends CircuitElm
 	}
 
 	@Override
-	boolean nonLinear()
+	public boolean nonLinear()
 	{
 		return true;
 	}
@@ -58,9 +60,9 @@ class SparkGapElm extends CircuitElm
 		int dist = 16;
 		int alen = 8;
 		this.calcLeads(dist + alen);
-		Point p1 = this.interpPoint(this.point1, this.point2, (this.dn - alen) / (2 * this.dn));
+		Point p1 = CoreUtil.interpPoint(this.point1, this.point2, (this.dn - alen) / (2 * this.dn));
 		this.arrow1 = this.calcArrow(this.point1, p1, alen, alen);
-		p1 = this.interpPoint(this.point1, this.point2, (this.dn + alen) / (2 * this.dn));
+		p1 = CoreUtil.interpPoint(this.point1, this.point2, (this.dn + alen) / (2 * this.dn));
 		this.arrow2 = this.calcArrow(this.point2, p1, alen, alen);
 	}
 
@@ -132,8 +134,8 @@ class SparkGapElm extends CircuitElm
 		arr[0] = "spark gap";
 		this.getBasicInfo(arr);
 		arr[3] = this.state ? "on" : "off";
-		arr[4] = "Ron = " + CircuitElm.getUnitText(this.onresistance, CircuitElm.cirSim.ohmString);
-		arr[5] = "Roff = " + CircuitElm.getUnitText(this.offresistance, CircuitElm.cirSim.ohmString);
+		arr[4] = "Ron = " + CircuitElm.getUnitText(this.onresistance, CirSim.ohmString);
+		arr[5] = "Roff = " + CircuitElm.getUnitText(this.offresistance, CirSim.ohmString);
 		arr[6] = "Vbreakdown = " + CircuitElm.getUnitText(this.breakdown, "V");
 	}
 

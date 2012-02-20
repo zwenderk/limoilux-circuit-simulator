@@ -117,7 +117,7 @@ class RailElm extends VoltageElm
 	}
 
 	@Override
-	boolean hasGroundConnection(int n1)
+	public boolean hasGroundConnection(int n1)
 	{
 		return true;
 	}

@@ -8,19 +8,19 @@ import java.awt.Graphics;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-class TextElm extends CircuitElm
+public class TextElm extends CircuitElm
 {
-	String text;
-	Vector lines;
-	int size;
-	final int FLAG_CENTER = 1;
-	final int FLAG_BAR = 2;
+	public static final int FLAG_CENTER = 1;
+	public static final int FLAG_BAR = 2;
+	public String text;
+	public Vector<String> lines;
+	public int size;
 
 	public TextElm(int xx, int yy)
 	{
 		super(xx, yy);
 		this.text = "hello";
-		this.lines = new Vector();
+		this.lines = new Vector<String>();
 		this.lines.add(this.text);
 		this.size = 24;
 	}
@@ -37,10 +37,10 @@ class TextElm extends CircuitElm
 		this.split();
 	}
 
-	void split()
+	public void split()
 	{
 		int i;
-		this.lines = new Vector();
+		this.lines = new Vector<String>();
 		StringBuffer sb = new StringBuffer(this.text);
 		for (i = 0; i < sb.length(); i++)
 		{
@@ -58,6 +58,7 @@ class TextElm extends CircuitElm
 				}
 			}
 		}
+
 		this.lines.add(sb.toString());
 	}
 
@@ -74,7 +75,7 @@ class TextElm extends CircuitElm
 	}
 
 	@Override
-	void drag(int xx, int yy)
+	public void drag(int xx, int yy)
 	{
 		this.x = xx;
 		this.y = yy;
@@ -104,12 +105,12 @@ class TextElm extends CircuitElm
 		for (i = 0; i != this.lines.size(); i++)
 		{
 			String s = (String) this.lines.elementAt(i);
-			if ((this.flags & this.FLAG_CENTER) != 0)
+			if ((this.flags & TextElm.FLAG_CENTER) != 0)
 			{
 				this.x = (CircuitElm.cirSim.winSize.width - fm.stringWidth(s)) / 2;
 			}
 			g.drawString(s, this.x, cury);
-			if ((this.flags & this.FLAG_BAR) != 0)
+			if ((this.flags & TextElm.FLAG_BAR) != 0)
 			{
 				int by = cury - fm.getAscent();
 				g.drawLine(this.x, by, this.x + fm.stringWidth(s) - 1, by);
@@ -137,13 +138,13 @@ class TextElm extends CircuitElm
 		if (n == 2)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Center", (this.flags & this.FLAG_CENTER) != 0);
+			ei.checkbox = new Checkbox("Center", (this.flags & TextElm.FLAG_CENTER) != 0);
 			return ei;
 		}
 		if (n == 3)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Draw Bar On Top", (this.flags & this.FLAG_BAR) != 0);
+			ei.checkbox = new Checkbox("Draw Bar On Top", (this.flags & TextElm.FLAG_BAR) != 0);
 			return ei;
 		}
 		return null;
@@ -165,30 +166,30 @@ class TextElm extends CircuitElm
 		{
 			if (ei.checkbox.getState())
 			{
-				this.flags |= this.FLAG_BAR;
+				this.flags |= TextElm.FLAG_BAR;
 			}
 			else
 			{
-				this.flags &= ~this.FLAG_BAR;
+				this.flags &= ~TextElm.FLAG_BAR;
 			}
 		}
 		if (n == 2)
 		{
 			if (ei.checkbox.getState())
 			{
-				this.flags |= this.FLAG_CENTER;
+				this.flags |= TextElm.FLAG_CENTER;
 			}
 			else
 			{
-				this.flags &= ~this.FLAG_CENTER;
+				this.flags &= ~TextElm.FLAG_CENTER;
 			}
 		}
 	}
 
 	@Override
-	boolean isCenteredText()
+	public boolean isCenteredText()
 	{
-		return (this.flags & this.FLAG_CENTER) != 0;
+		return (this.flags & TextElm.FLAG_CENTER) != 0;
 	}
 
 	@Override

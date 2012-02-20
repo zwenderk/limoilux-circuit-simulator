@@ -295,7 +295,7 @@ public abstract class CircuitElm implements Editable
 		return p;
 	}
 
-	void drag(int xx, int yy)
+	public void drag(int xx, int yy)
 	{
 		xx = CircuitElm.cirSim.snapGrid(xx);
 		yy = CircuitElm.cirSim.snapGrid(yy);
@@ -408,7 +408,7 @@ public abstract class CircuitElm implements Editable
 		return this.volts[0] - this.volts[1];
 	}
 
-	boolean nonLinear()
+	public boolean nonLinear()
 	{
 		return false;
 	}
@@ -423,7 +423,7 @@ public abstract class CircuitElm implements Editable
 		return this.nodes[n];
 	}
 
-	Point getPost(int n)
+	public Point getPost(int n)
 	{
 		return n == 0 ? this.point1 : n == 1 ? this.point2 : null;
 	}
@@ -502,7 +502,7 @@ public abstract class CircuitElm implements Editable
 		this.adjustBbox(p1.x, p1.y, p2.x, p2.y);
 	}
 
-	boolean isCenteredText()
+	public boolean isCenteredText()
 	{
 		return false;
 	}
@@ -864,12 +864,12 @@ public abstract class CircuitElm implements Editable
 	{
 	}
 
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		return true;
 	}
 
-	boolean hasGroundConnection(int n1)
+	public boolean hasGroundConnection(int n1)
 	{
 		return false;
 	}

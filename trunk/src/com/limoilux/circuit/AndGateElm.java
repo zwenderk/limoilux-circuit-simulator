@@ -42,13 +42,13 @@ class AndGateElm extends GateElm
 	}
 
 	@Override
-	String getGateName()
+	public String getGateName()
 	{
 		return "AND gate";
 	}
 
 	@Override
-	boolean calcFunction()
+	public boolean calcFunction()
 	{
 		int i;
 		boolean f = true;

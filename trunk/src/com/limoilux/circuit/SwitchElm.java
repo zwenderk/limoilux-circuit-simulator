@@ -156,7 +156,7 @@ class SwitchElm extends CircuitElm
 	}
 
 	@Override
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		return this.position == 0;
 	}

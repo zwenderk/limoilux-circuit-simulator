@@ -21,7 +21,7 @@ class TunnelDiodeElm extends CircuitElm
 	}
 
 	@Override
-	boolean nonLinear()
+	public boolean nonLinear()
 	{
 		return true;
 	}

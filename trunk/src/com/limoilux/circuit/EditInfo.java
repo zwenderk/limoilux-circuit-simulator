@@ -6,9 +6,19 @@ import java.awt.Choice;
 import java.awt.Scrollbar;
 import java.awt.TextField;
 
-class EditInfo
+public class EditInfo
 {
-	EditInfo(String n, double val, double mn, double mx)
+	public String name, text;
+	public double value, minval, maxval;
+	public TextField textf;
+	public Scrollbar bar;
+	public Choice choice;
+	public Checkbox checkbox;
+	public boolean newDialog;
+	public boolean forceLargeM;
+	public boolean dimensionless;
+
+	public EditInfo(String n, double val, double mn, double mx)
 	{
 		this.name = n;
 		this.value = val;
@@ -30,19 +40,10 @@ class EditInfo
 		this.dimensionless = false;
 	}
 
-	EditInfo setDimensionless()
+	public EditInfo setDimensionless()
 	{
 		this.dimensionless = true;
 		return this;
 	}
 
-	String name, text;
-	double value, minval, maxval;
-	TextField textf;
-	Scrollbar bar;
-	Choice choice;
-	Checkbox checkbox;
-	boolean newDialog;
-	boolean forceLargeM;
-	boolean dimensionless;
 }

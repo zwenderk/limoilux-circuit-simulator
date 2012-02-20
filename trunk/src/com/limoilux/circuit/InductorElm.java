@@ -86,7 +86,7 @@ class InductorElm extends CircuitElm
 	}
 
 	@Override
-	boolean nonLinear()
+	public boolean nonLinear()
 	{
 		return this.ind.nonLinear();
 	}

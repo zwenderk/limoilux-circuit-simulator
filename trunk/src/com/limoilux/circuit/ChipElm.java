@@ -122,7 +122,7 @@ abstract class ChipElm extends CircuitElm
 	boolean lastClock;
 
 	@Override
-	void drag(int xx, int yy)
+	public void drag(int xx, int yy)
 	{
 		yy = CircuitElm.cirSim.snapGrid(yy);
 		if (xx < this.x)
@@ -180,7 +180,7 @@ abstract class ChipElm extends CircuitElm
 	}
 
 	@Override
-	Point getPost(int n)
+	public Point getPost(int n)
 	{
 		return this.pins[n].post;
 	}
@@ -330,13 +330,13 @@ abstract class ChipElm extends CircuitElm
 	}
 
 	@Override
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		return false;
 	}
 
 	@Override
-	boolean hasGroundConnection(int n1)
+	public boolean hasGroundConnection(int n1)
 	{
 		return this.pins[n1].output;
 	}

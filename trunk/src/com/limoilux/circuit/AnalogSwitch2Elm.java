@@ -67,7 +67,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 	}
 
 	@Override
-	Point getPost(int n)
+	public Point getPost(int n)
 	{
 		return n == 0 ? this.point1 : n == 3 ? this.ctlPoint : this.swposts[n - 1];
 	}
@@ -120,7 +120,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 	}
 
 	@Override
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		if (n1 == 3 || n2 == 3)
 		{

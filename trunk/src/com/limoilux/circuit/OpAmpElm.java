@@ -64,7 +64,7 @@ class OpAmpElm extends CircuitElm
 	}
 
 	@Override
-	boolean nonLinear()
+	public boolean nonLinear()
 	{
 		return true;
 	}
@@ -146,7 +146,7 @@ class OpAmpElm extends CircuitElm
 	}
 
 	@Override
-	Point getPost(int n)
+	public Point getPost(int n)
 	{
 		return n == 0 ? this.in1p[0] : n == 1 ? this.in2p[0] : this.point2;
 	}
@@ -230,13 +230,13 @@ class OpAmpElm extends CircuitElm
 	// there is no current path through the op-amp inputs, but there
 	// is an indirect path through the output to ground.
 	@Override
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		return false;
 	}
 
 	@Override
-	boolean hasGroundConnection(int n1)
+	public boolean hasGroundConnection(int n1)
 	{
 		return n1 == 2;
 	}

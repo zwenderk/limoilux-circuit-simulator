@@ -207,7 +207,7 @@ class SweepElm extends CircuitElm
 	}
 
 	@Override
-	boolean hasGroundConnection(int n1)
+	public boolean hasGroundConnection(int n1)
 	{
 		return true;
 	}

@@ -15,7 +15,7 @@ public class JfetElm extends MosfetElm
 	public Polygon gatePoly;
 	public Polygon arrowPoly;
 	public Point gatePt;
-	
+
 	public JfetElm(int xx, int yy, boolean pnpflag)
 	{
 		super(xx, yy, pnpflag);
@@ -27,7 +27,6 @@ public class JfetElm extends MosfetElm
 		super(xa, ya, xb, yb, f, st);
 		this.noDiagonal = true;
 	}
-
 
 	@Override
 	public void draw(Graphics g)

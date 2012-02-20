@@ -133,13 +133,13 @@ class InverterElm extends CircuitElm
 	// there is no current path through the inverter input, but there
 	// is an indirect path through the output to ground.
 	@Override
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		return false;
 	}
 
 	@Override
-	boolean hasGroundConnection(int n1)
+	public boolean hasGroundConnection(int n1)
 	{
 		return n1 == 1;
 	}

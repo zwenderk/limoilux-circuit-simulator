@@ -34,7 +34,7 @@ class TriodeElm extends CircuitElm
 	}
 
 	@Override
-	boolean nonLinear()
+	public boolean nonLinear()
 	{
 		return true;
 	}
@@ -134,7 +134,7 @@ class TriodeElm extends CircuitElm
 	}
 
 	@Override
-	Point getPost(int n)
+	public Point getPost(int n)
 	{
 		return n == 0 ? this.plate[0] : n == 1 ? this.grid[0] : this.cath[0];
 	}
@@ -252,7 +252,7 @@ class TriodeElm extends CircuitElm
 
 	// grid not connected to other terminals
 	@Override
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		return !(n1 == 1 || n2 == 1);
 	}

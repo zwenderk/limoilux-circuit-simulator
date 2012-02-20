@@ -201,7 +201,7 @@ class RelayElm extends CircuitElm
 	}
 
 	@Override
-	Point getPost(int n)
+	public Point getPost(int n)
 	{
 		if (n < 3 * this.poleCount)
 		{
@@ -289,7 +289,7 @@ class RelayElm extends CircuitElm
 
 	// we need this to be able to change the matrix for each step
 	@Override
-	boolean nonLinear()
+	public boolean nonLinear()
 	{
 		return true;
 	}
@@ -427,7 +427,7 @@ class RelayElm extends CircuitElm
 	}
 
 	@Override
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		return n1 / 3 == n2 / 3;
 	}

@@ -17,7 +17,7 @@ class OrGateElm extends GateElm
 	}
 
 	@Override
-	String getGateName()
+	public String getGateName()
 	{
 		return "OR gate";
 	}
@@ -62,7 +62,7 @@ class OrGateElm extends GateElm
 	}
 
 	@Override
-	boolean calcFunction()
+	public boolean calcFunction()
 	{
 		int i;
 		boolean f = false;
