@@ -15,31 +15,55 @@ import com.limoilux.circuit.core.CoreUtil;
 public abstract class CircuitElm implements Editable
 {
 	private static final int COLOR_SCALE_COUNT = 32;
+	@Deprecated
+	public static final double PI = 3.14159265358979323846;
 	public static final Font unitsFont = new Font("SansSerif", 0, 10);
 
 	static double voltageRange = 5;
 
 	static Color colorScale[];
 	static double currentMult, powerMult;
-	static Point ps1, ps2;
-	static CirSim cirSim;
-	static Color whiteColor, selectColor, lightGrayColor;
 
+	public static final Point ps1 = new Point();
+	public static final Point ps2 = new Point();
+
+	public static CirSim cirSim;
+	public static Color whiteColor;
+	public static Color selectColor;
+	public static Color lightGrayColor;
 	public static NumberFormat showFormat;
 	public static NumberFormat shortFormat;
 	public static NumberFormat noCommaFormat;
 
-	static final double pi = 3.14159265358979323846;
+	public Rectangle boundingBox;
 
-	int x, y, x2, y2, flags, nodes[], voltSource;
-	int dx, dy, dsign;
-	double dn, dpx1, dpy1;
-	Point point1, point2, lead1, lead2;
-	double volts[];
-	double current, curcount;
-	Rectangle boundingBox;
-	boolean noDiagonal;
+	public Point point1;
+	public Point point2;
+	public Point lead1;
+	public Point lead2;
+
+	public int x;
+	public int y;
+	public int x2;
+	public int y2;
+	public int flags;
+	public int voltSource;
+	public int dx;
+	public int dy;
+	public int dsign;
+
+	public double dn;
+	public double dpx1;
+	public double dpy1;
+	public double current;
+	public double curcount;
+
+	public boolean noDiagonal;
 	public boolean selected;
+
+	public int nodes[];
+
+	public double volts[];
 
 	int getDumpType()
 	{
@@ -78,9 +102,6 @@ public abstract class CircuitElm implements Editable
 				CircuitElm.colorScale[i] = new Color(n2, n1, n2);
 			}
 		}
-
-		CircuitElm.ps1 = new Point();
-		CircuitElm.ps2 = new Point();
 
 		CircuitElm.showFormat = NumberFormat.getInstance();
 		CircuitElm.showFormat.setMaximumFractionDigits(2);
@@ -670,7 +691,7 @@ public abstract class CircuitElm implements Editable
 	static void drawThickCircle(Graphics g, int cx, int cy, int ri)
 	{
 		int a;
-		double m = CircuitElm.pi / 180;
+		double m = CircuitElm.PI / 180;
 		double r = ri * .98;
 		for (a = 0; a != 360; a += 20)
 		{

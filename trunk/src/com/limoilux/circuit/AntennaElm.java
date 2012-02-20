@@ -33,15 +33,15 @@ class AntennaElm extends RailElm
 	@Override
 	double getVoltage()
 	{
-		this.fmphase += 2 * CircuitElm.pi * (2200 + Math.sin(2 * CircuitElm.pi * CircuitElm.cirSim.t * 13) * 100)
+		this.fmphase += 2 * CircuitElm.PI * (2200 + Math.sin(2 * CircuitElm.PI * CircuitElm.cirSim.t * 13) * 100)
 				* CircuitElm.cirSim.timeStep;
 		double fm = 3 * Math.sin(this.fmphase);
-		return Math.sin(2 * CircuitElm.pi * CircuitElm.cirSim.t * 3000)
-				* (1.3 + Math.sin(2 * CircuitElm.pi * CircuitElm.cirSim.t * 12)) * 3
-				+ Math.sin(2 * CircuitElm.pi * CircuitElm.cirSim.t * 2710)
-				* (1.3 + Math.sin(2 * CircuitElm.pi * CircuitElm.cirSim.t * 13)) * 3
-				+ Math.sin(2 * CircuitElm.pi * CircuitElm.cirSim.t * 2433)
-				* (1.3 + Math.sin(2 * CircuitElm.pi * CircuitElm.cirSim.t * 14)) * 3 + fm;
+		return Math.sin(2 * CircuitElm.PI * CircuitElm.cirSim.t * 3000)
+				* (1.3 + Math.sin(2 * CircuitElm.PI * CircuitElm.cirSim.t * 12)) * 3
+				+ Math.sin(2 * CircuitElm.PI * CircuitElm.cirSim.t * 2710)
+				* (1.3 + Math.sin(2 * CircuitElm.PI * CircuitElm.cirSim.t * 13)) * 3
+				+ Math.sin(2 * CircuitElm.PI * CircuitElm.cirSim.t * 2433)
+				* (1.3 + Math.sin(2 * CircuitElm.PI * CircuitElm.cirSim.t * 14)) * 3 + fm;
 	}
 
 	@Override

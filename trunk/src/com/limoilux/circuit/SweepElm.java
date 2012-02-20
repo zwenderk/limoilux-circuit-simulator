@@ -90,7 +90,7 @@ class SweepElm extends CircuitElm
 		}
 		for (i = -xl; i <= xl; i++)
 		{
-			int yy = yc + (int) (.95 * Math.sin(i * CircuitElm.pi * w / xl) * wl);
+			int yy = yc + (int) (.95 * Math.sin(i * CircuitElm.PI * w / xl) * wl);
 			if (ox != -1)
 			{
 				CircuitElm.drawThickLine(g, ox, oy, xc + i, yy);
@@ -165,7 +165,7 @@ class SweepElm extends CircuitElm
 			this.setParams();
 		}
 		this.v = Math.sin(this.freqTime) * this.maxV;
-		this.freqTime += this.frequency * 2 * CircuitElm.pi * CircuitElm.cirSim.timeStep;
+		this.freqTime += this.frequency * 2 * CircuitElm.PI * CircuitElm.cirSim.timeStep;
 		this.frequency = this.frequency * this.fmul + this.fadd;
 		if (this.frequency >= this.maxF && this.dir == 1)
 		{
