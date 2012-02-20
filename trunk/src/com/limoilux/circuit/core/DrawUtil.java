@@ -1,9 +1,12 @@
 
 package com.limoilux.circuit.core;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
+
+import com.limoilux.circuit.CircuitElm;
 
 public class DrawUtil
 {
@@ -54,6 +57,31 @@ public class DrawUtil
 			double bx = Math.cos((a + 20) * m) * r + cx;
 			double by = Math.sin((a + 20) * m) * r + cy;
 			DrawUtil.drawThickLine(g, (int) ax, (int) ay, (int) bx, (int) by);
+		}
+	}
+	
+	public static void drawDots(Graphics g, Point pa, Point pb, double pos)
+	{
+		if (CircuitElm.cirSim.stoppedCheck.getState() || pos == 0 || !CircuitElm.cirSim.dotsCheckItem.getState())
+		{
+			return;
+		}
+		int dx = pb.x - pa.x;
+		int dy = pb.y - pa.y;
+		double dn = Math.sqrt(dx * dx + dy * dy);
+		g.setColor(Color.yellow);
+		int ds = 16;
+		pos %= ds;
+		if (pos < 0)
+		{
+			pos += ds;
+		}
+		double di = 0;
+		for (di = pos; di < dn; di += ds)
+		{
+			int x0 = (int) (pa.x + di * dx / dn);
+			int y0 = (int) (pa.y + di * dy / dn);
+			g.fillRect(x0 - 1, y0 - 1, 4, 4);
 		}
 	}
 }
