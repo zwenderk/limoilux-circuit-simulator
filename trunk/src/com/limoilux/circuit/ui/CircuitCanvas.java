@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit;
+package com.limoilux.circuit.ui;
 
 import java.awt.Canvas;
 import java.awt.Dimension;

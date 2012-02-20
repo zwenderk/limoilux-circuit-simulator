@@ -1,15 +1,18 @@
 
-package com.limoilux.circuit;
+package com.limoilux.circuit.ui;
 
+import java.awt.Choice;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.Label;
 import java.awt.LayoutManager;
+import java.awt.Scrollbar;
 
-public class ImportDialogLayout implements LayoutManager
+public class CircuitLayout implements LayoutManager
 {
-	public ImportDialogLayout()
+	public CircuitLayout()
 	{
 	}
 
@@ -40,30 +43,36 @@ public class ImportDialogLayout implements LayoutManager
 	{
 		Insets insets = target.insets();
 		int targetw = target.size().width - insets.left - insets.right;
+		int cw = targetw * 8 / 10;
 		int targeth = target.size().height - (insets.top + insets.bottom);
-		int i;
-		int pw = 300;
-		if (target.getComponentCount() == 0)
-		{
-			return;
-		}
-		Component cl = target.getComponent(target.getComponentCount() - 1);
-		Dimension dl = cl.getPreferredSize();
 		target.getComponent(0).move(insets.left, insets.top);
-		int cw = target.size().width - insets.left - insets.right;
-		int ch = target.size().height - insets.top - insets.bottom - dl.height;
-		target.getComponent(0).resize(cw, ch);
-		int h = ch + insets.top;
-		int x = 0;
+		target.getComponent(0).resize(cw, targeth);
+		int barwidth = targetw - cw;
+		cw += insets.left;
+		int i;
+		int h = insets.top;
 		for (i = 1; i < target.getComponentCount(); i++)
 		{
 			Component m = target.getComponent(i);
 			if (m.isVisible())
 			{
 				Dimension d = m.getPreferredSize();
-				m.move(insets.left + x, h);
+				if (m instanceof Scrollbar)
+				{
+					d.width = barwidth;
+				}
+				if (m instanceof Choice && d.width > barwidth)
+				{
+					d.width = barwidth;
+				}
+				if (m instanceof Label)
+				{
+					h += d.height / 5;
+					d.width = barwidth;
+				}
+				m.move(cw, h);
 				m.resize(d.width, d.height);
-				x += d.width;
+				h += d.height;
 			}
 		}
 	}
