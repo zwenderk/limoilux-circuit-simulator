@@ -838,10 +838,10 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		for (i = 0; i != this.nodeList.size(); i++)
 		{
 			CircuitNode cn = this.getCircuitNode(i);
-			if (!cn.internal && cn.links.size() == 1)
+			if (!cn.internal && cn.getSize() == 1)
 			{
 				int bb = 0, j;
-				CircuitNodeLink cnl = (CircuitNodeLink) cn.links.elementAt(0);
+				CircuitNodeLink cnl = (CircuitNodeLink) cn.elementAt(0);
 				for (j = 0; j != this.elmList.size(); j++)
 				{
 					if (cnl.elm != this.getElm(j) && this.getElm(j).boundingBox.contains(cn.x, cn.y))
@@ -1300,14 +1300,14 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 					cn.x = pt.x;
 					cn.y = pt.y;
 					CircuitNodeLink cnl = new CircuitNodeLink(j, ce);
-					cn.links.addElement(cnl);
+					cn.addElement(cnl);
 					ce.setNode(j, this.nodeList.size());
 					this.nodeList.addElement(cn);
 				}
 				else
 				{
 					CircuitNodeLink cnl = new CircuitNodeLink(j, ce);
-					this.getCircuitNode(k).links.addElement(cnl);
+					this.getCircuitNode(k).addElement(cnl);
 					ce.setNode(j, k);
 					// if it's the ground node, make sure the node voltage is 0,
 					// cause it may not get set later
@@ -1324,7 +1324,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				cn.internal = true;
 				CircuitNodeLink cnl = new CircuitNodeLink(j + posts, ce);
 
-				cn.links.addElement(cnl);
+				cn.addElement(cnl);
 				ce.setNode(cnl.num, this.nodeList.size());
 				this.nodeList.addElement(cn);
 			}
@@ -2052,9 +2052,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 					if (j < this.nodeList.size() - 1)
 					{
 						CircuitNode cn = this.getCircuitNode(j + 1);
-						for (k = 0; k != cn.links.size(); k++)
+						for (k = 0; k != cn.getSize(); k++)
 						{
-							CircuitNodeLink cnl = (CircuitNodeLink) cn.links.elementAt(k);
+							CircuitNodeLink cnl = (CircuitNodeLink) cn.elementAt(k);
 							cnl.elm.setNodeVoltage(cnl.num, res);
 						}
 					}

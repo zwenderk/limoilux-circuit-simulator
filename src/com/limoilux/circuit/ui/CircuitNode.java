@@ -5,16 +5,30 @@ import java.util.Vector;
 
 public class CircuitNode
 {
-
-	public final Vector<CircuitNodeLink> links;
+	private final Vector<CircuitNodeLink> links;
 
 	public int x;
-    public int y;
-	
+	public int y;
+
 	public boolean internal;
-	
+
 	public CircuitNode()
 	{
-		this.links = new Vector<CircuitNodeLink> ();
+		this.links = new Vector<CircuitNodeLink>();
+	}
+
+	public int getSize()
+	{
+		return links.size();
+	}
+
+	public CircuitNodeLink elementAt(int n)
+	{
+		return this.links.elementAt(n);
+	}
+
+	public void addElement(CircuitNodeLink nodeLink)
+	{
+		this.links.addElement(nodeLink);
 	}
 }
