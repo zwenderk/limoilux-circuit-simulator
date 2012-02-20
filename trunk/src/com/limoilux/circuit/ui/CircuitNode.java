@@ -6,15 +6,20 @@ import java.util.Vector;
 public class CircuitNode
 {
 	private final Vector<CircuitNodeLink> links;
+	private final boolean internal;
 
 	public int x;
 	public int y;
 
-	public boolean internal;
+	public CircuitNode(boolean internal)
+	{
+		this.links = new Vector<CircuitNodeLink>();
+		this.internal = internal;
+	}
 
 	public CircuitNode()
 	{
-		this.links = new Vector<CircuitNodeLink>();
+		this(false);
 	}
 
 	public int getSize()
@@ -30,5 +35,10 @@ public class CircuitNode
 	public void addElement(CircuitNodeLink nodeLink)
 	{
 		this.links.addElement(nodeLink);
+	}
+
+	public boolean isInternal()
+	{
+		return this.internal;
 	}
 }
