@@ -253,7 +253,6 @@ public class CoreUtil
 		}
 		return a;
 	}
-	
 
 	public static Polygon createPolygon(Point a, Point b, Point c)
 	{
@@ -262,7 +261,7 @@ public class CoreUtil
 		p.addPoint(b.x, b.y);
 		p.addPoint(c.x, c.y);
 		return p;
-		
+
 	}
 
 	public static Polygon createPolygon(Point a, Point b, Point c, Point d)
@@ -274,7 +273,7 @@ public class CoreUtil
 		p.addPoint(d.x, d.y);
 		return p;
 	}
-	
+
 	public static Polygon createPolygon(Point a[])
 	{
 		Polygon p = new Polygon();

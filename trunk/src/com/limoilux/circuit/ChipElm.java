@@ -9,13 +9,23 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
-abstract class ChipElm extends CircuitElm
+import com.limoilux.circuit.ui.DrawUtil;
+
+public abstract class ChipElm extends CircuitElm
 {
-	int csize, cspc, cspc2;
-	int bits;
-	final int FLAG_SMALL = 1;
-	final int FLAG_FLIP_X = 1024;
-	final int FLAG_FLIP_Y = 2048;
+
+	private static final int FLAG_SMALL = 1;
+	private static final int FLAG_FLIP_X = 1024;
+	private static final int FLAG_FLIP_Y = 2048;
+
+	public int rectPointsX[], rectPointsY[];
+	public int clockPointsX[], clockPointsY[];
+	public Pin pins[];
+	public int sizeX, sizeY;
+	public boolean lastClock;
+
+	public int csize, cspc, cspc2;
+	public int bits;
 
 	public ChipElm(int xx, int yy)
 	{
@@ -55,7 +65,7 @@ abstract class ChipElm extends CircuitElm
 		return false;
 	}
 
-	void setSize(int s)
+	public void setSize(int s)
 	{
 		this.csize = s;
 		this.cspc = 8 * s;
@@ -72,7 +82,7 @@ abstract class ChipElm extends CircuitElm
 		this.drawChip(g);
 	}
 
-	void drawChip(Graphics g)
+	public void drawChip(Graphics g)
 	{
 		int i;
 		Font f = new Font("SansSerif", 0, 10 * this.csize);
@@ -84,15 +94,15 @@ abstract class ChipElm extends CircuitElm
 			this.setVoltageColor(g, this.volts[i]);
 			Point a = p.post;
 			Point b = p.stub;
-			CircuitElm.drawThickLine(g, a, b);
+			DrawUtil.drawThickLine(g, a, b);
 			p.curcount = this.updateDotCount(p.current, p.curcount);
-			CircuitElm.drawDots(g, b, a, p.curcount);
+			DrawUtil.drawDots(g, b, a, p.curcount);
 			if (p.bubble)
 			{
 				g.setColor(CircuitElm.cirSim.printableCheckItem.getState() ? Color.white : Color.black);
-				CircuitElm.drawThickCircle(g, p.bubbleX, p.bubbleY, 1);
+				DrawUtil.drawThickCircle(g, p.bubbleX, p.bubbleY, 1);
 				g.setColor(CircuitElm.lightGrayColor);
-				CircuitElm.drawThickCircle(g, p.bubbleX, p.bubbleY, 3);
+				DrawUtil.drawThickCircle(g, p.bubbleX, p.bubbleY, 3);
 			}
 			g.setColor(CircuitElm.whiteColor);
 			int sw = fm.stringWidth(p.text);
@@ -104,7 +114,7 @@ abstract class ChipElm extends CircuitElm
 			}
 		}
 		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
-		CircuitElm.drawThickPolygon(g, this.rectPointsX, this.rectPointsY, 4);
+		DrawUtil.drawThickPolygon(g, this.rectPointsX, this.rectPointsY, 4);
 		if (this.clockPointsX != null)
 		{
 			g.drawPolyline(this.clockPointsX, this.clockPointsY, 3);
@@ -114,12 +124,6 @@ abstract class ChipElm extends CircuitElm
 			this.drawPost(g, this.pins[i].post.x, this.pins[i].post.y, this.nodes[i]);
 		}
 	}
-
-	int rectPointsX[], rectPointsY[];
-	int clockPointsX[], clockPointsY[];
-	Pin pins[];
-	int sizeX, sizeY;
-	boolean lastClock;
 
 	@Override
 	public void drag(int xx, int yy)
@@ -189,7 +193,7 @@ abstract class ChipElm extends CircuitElm
 	public abstract int getVoltageSourceCount(); // output count
 
 	@Override
-	void setVoltageSource(int j, int vs)
+	public void setVoltageSource(int j, int vs)
 	{
 		int i;
 		for (i = 0; i != this.getPostCount(); i++)
@@ -312,7 +316,7 @@ abstract class ChipElm extends CircuitElm
 	}
 
 	@Override
-	void setCurrent(int x, double c)
+	public void setCurrent(int x, double c)
 	{
 		int i;
 		for (i = 0; i != this.getPostCount(); i++)
@@ -393,25 +397,25 @@ abstract class ChipElm extends CircuitElm
 	final int SIDE_W = 2;
 	final int SIDE_E = 3;
 
-	class Pin
+	public class Pin
 	{
-		Pin(int p, int s, String t)
+		public Pin(int p, int s, String t)
 		{
 			this.pos = p;
 			this.side = s;
 			this.text = t;
 		}
 
-		Point post, stub;
-		Point textloc;
-		int pos, side, voltSource, bubbleX, bubbleY;
-		String text;
-		boolean lineOver, bubble, clock, output, value, state;
-		double curcount, current;
+		public Point post, stub;
+		public Point textloc;
+		public int pos, side, voltSource, bubbleX, bubbleY;
+		public String text;
+		public boolean lineOver, bubble, clock, output, value, state;
+		public double curcount, current;
 
-		void setPoint(int px, int py, int dx, int dy, int dax, int day, int sx, int sy)
+		public void setPoint(int px, int py, int dx, int dy, int dax, int day, int sx, int sy)
 		{
-			if ((ChipElm.this.flags & ChipElm.this.FLAG_FLIP_X) != 0)
+			if ((ChipElm.this.flags & ChipElm.FLAG_FLIP_X) != 0)
 			{
 				dx = -dx;
 				dax = -dax;

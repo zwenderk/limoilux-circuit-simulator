@@ -84,4 +84,11 @@ public class DrawUtil
 			g.fillRect(x0 - 1, y0 - 1, 4, 4);
 		}
 	}
+
+	public static void drawPost(Graphics g, int x0, int y0)
+	{
+		g.setColor(CircuitElm.whiteColor);
+		g.fillOval(x0 - 3, y0 - 3, 7, 7);
+	}
+
 }

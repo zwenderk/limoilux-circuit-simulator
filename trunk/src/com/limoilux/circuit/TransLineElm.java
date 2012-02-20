@@ -176,7 +176,7 @@ class TransLineElm extends CircuitElm
 	double current1, current2, curCount1, curCount2;
 
 	@Override
-	void setVoltageSource(int n, int v)
+	public void setVoltageSource(int n, int v)
 	{
 		if (n == 0)
 		{
@@ -189,7 +189,7 @@ class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	void setCurrent(int v, double c)
+	public void setCurrent(int v, double c)
 	{
 		if (v == this.voltSource1)
 		{

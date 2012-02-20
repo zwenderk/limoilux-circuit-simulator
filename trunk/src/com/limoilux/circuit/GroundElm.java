@@ -48,7 +48,7 @@ class GroundElm extends CircuitElm
 	}
 
 	@Override
-	void setCurrent(int x, double c)
+	public void setCurrent(int x, double c)
 	{
 		this.current = -c;
 	}

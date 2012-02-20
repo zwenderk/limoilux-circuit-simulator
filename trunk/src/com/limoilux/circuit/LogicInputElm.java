@@ -94,7 +94,7 @@ class LogicInputElm extends SwitchElm
 	}
 
 	@Override
-	void setCurrent(int vs, double c)
+	public void setCurrent(int vs, double c)
 	{
 		this.current = -c;
 	}

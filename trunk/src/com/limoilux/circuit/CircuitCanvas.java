@@ -5,17 +5,19 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
-class CircuitCanvas extends Canvas
+public class CircuitCanvas extends Canvas
 {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3418969740606491502L;
-	CirSim pg;
 
-	CircuitCanvas(CirSim p)
+	@Deprecated
+	private final CirSim cirSim;
+
+	public CircuitCanvas(CirSim cirSim)
 	{
-		this.pg = p;
+		this.cirSim = cirSim;
 	}
 
 	@Override
@@ -27,12 +29,12 @@ class CircuitCanvas extends Canvas
 	@Override
 	public void update(Graphics g)
 	{
-		this.pg.updateCircuit(g);
+		this.cirSim.updateCircuit(g);
 	}
 
 	@Override
 	public void paint(Graphics g)
 	{
-		this.pg.updateCircuit(g);
+		this.cirSim.updateCircuit(g);
 	}
 };
