@@ -838,7 +838,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		for (i = 0; i != this.nodeList.size(); i++)
 		{
 			CircuitNode cn = this.getCircuitNode(i);
-			if (!cn.internal && cn.getSize() == 1)
+			if (!cn.isInternal() && cn.getSize() == 1)
 			{
 				int bb = 0, j;
 				CircuitNodeLink cnl = (CircuitNodeLink) cn.elementAt(0);
@@ -1258,7 +1258,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		// is ground
 		if (!gotGround && volt != null && !gotRail)
 		{
-			CircuitNode cn = new CircuitNode();
+			CircuitNode cn = new CircuitNode(false);
 			Point pt = volt.getPost(0);
 			cn.x = pt.x;
 			cn.y = pt.y;
@@ -1267,7 +1267,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		else
 		{
 			// otherwise allocate extra node for ground
-			CircuitNode cn = new CircuitNode();
+			CircuitNode cn = new CircuitNode(false);
 			cn.x = cn.y = -1;
 			this.nodeList.addElement(cn);
 		}
@@ -1296,7 +1296,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				}
 				if (k == this.nodeList.size())
 				{
-					CircuitNode cn = new CircuitNode();
+					CircuitNode cn = new CircuitNode(false);
 					cn.x = pt.x;
 					cn.y = pt.y;
 					CircuitNodeLink cnl = new CircuitNodeLink(j, ce);
@@ -1319,9 +1319,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 			for (j = 0; j != inodes; j++)
 			{
-				CircuitNode cn = new CircuitNode();
+				CircuitNode cn = new CircuitNode(true);
 				cn.x = cn.y = -1;
-				cn.internal = true;
 				CircuitNodeLink cnl = new CircuitNodeLink(j + posts, ce);
 
 				cn.addElement(cnl);
@@ -1422,7 +1421,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			// connect unconnected nodes
 			for (i = 0; i != this.nodeList.size(); i++)
 			{
-				if (!closure[i] && !this.getCircuitNode(i).internal)
+				if (!closure[i] && !this.getCircuitNode(i).isInternal())
 				{
 					System.out.println("node " + i + " unconnected");
 					this.stampResistor(0, i, 1e8);
