@@ -18,7 +18,6 @@ public class CapacitorElm extends CircuitElm
 	public static final int FLAG_BACK_EULER = 2;
 	public double curSourceValue;
 
-
 	public CapacitorElm(int xx, int yy)
 	{
 		super(xx, yy);
@@ -87,7 +86,7 @@ public class CapacitorElm extends CircuitElm
 
 		// draw first lead and plate
 		this.setVoltageColor(g, this.volts[0]);
-	    DrawUtil.drawThickLine(g, this.point1, this.lead1);
+		DrawUtil.drawThickLine(g, this.point1, this.lead1);
 		this.setPowerColor(g, false);
 		DrawUtil.drawThickLine(g, this.plate1[0], this.plate1[1]);
 		if (CircuitElm.cirSim.powerCheckItem.getState())
@@ -164,7 +163,6 @@ public class CapacitorElm extends CircuitElm
 			this.current = voltdiff / this.compResistance + this.curSourceValue;
 		}
 	}
-
 
 	@Override
 	public void doStep()

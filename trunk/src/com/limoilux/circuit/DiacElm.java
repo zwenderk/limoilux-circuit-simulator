@@ -9,10 +9,10 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
-class DiacElm extends CircuitElm
+public class DiacElm extends CircuitElm
 {
-	double onresistance, offresistance, breakdown, holdcurrent;
-	boolean state;
+	public double onresistance, offresistance, breakdown, holdcurrent;
+	public boolean state;
 
 	public DiacElm(int xx, int yy)
 	{

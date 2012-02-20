@@ -59,7 +59,7 @@ public class DrawUtil
 			DrawUtil.drawThickLine(g, (int) ax, (int) ay, (int) bx, (int) by);
 		}
 	}
-	
+
 	public static void drawDots(Graphics g, Point pa, Point pb, double pos)
 	{
 		if (CircuitElm.cirSim.stoppedCheck.getState() || pos == 0 || !CircuitElm.cirSim.dotsCheckItem.getState())

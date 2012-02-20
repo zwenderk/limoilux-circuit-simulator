@@ -60,7 +60,7 @@ class GroundElm extends CircuitElm
 	}
 
 	@Override
-	double getVoltageDiff()
+	public double getVoltageDiff()
 	{
 		return 0;
 	}

@@ -4,7 +4,7 @@ package com.limoilux.circuit;
 import java.awt.Checkbox;
 import java.util.StringTokenizer;
 
-class DFlipFlopElm extends ChipElm
+public class DFlipFlopElm extends ChipElm
 {
 	final int FLAG_RESET = 2;
 

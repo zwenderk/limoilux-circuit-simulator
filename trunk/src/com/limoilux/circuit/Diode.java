@@ -1,18 +1,24 @@
 
 package com.limoilux.circuit;
 
-class Diode
+public class Diode
 {
-	int nodes[];
-	CirSim sim;
+	public int nodes[];
+	@Deprecated
+	public CirSim sim;
 
-	Diode(CirSim s)
+	public double leakage = 1e-14; // was 1e-9;
+	double vt, vdcoef, fwdrop, zvoltage, zoffset;
+	double lastvoltdiff;
+	double vcrit;
+
+	public Diode(CirSim s)
 	{
 		this.sim = s;
 		this.nodes = new int[2];
 	}
 
-	void setup(double fw, double zv)
+	public void setup(double fw, double zv)
 	{
 		this.fwdrop = fw;
 		this.zvoltage = zv;
@@ -33,17 +39,12 @@ class Diode
 		}
 	}
 
-	void reset()
+	public void reset()
 	{
 		this.lastvoltdiff = 0;
 	}
 
-	public double leakage = 1e-14; // was 1e-9;
-	double vt, vdcoef, fwdrop, zvoltage, zoffset;
-	double lastvoltdiff;
-	double vcrit;
-
-	double limitStep(double vnew, double vold)
+	public double limitStep(double vnew, double vold)
 	{
 		double arg;
 		double oo = vnew;
@@ -113,7 +114,7 @@ class Diode
 		return vnew;
 	}
 
-	void stamp(int n0, int n1)
+	public void stamp(int n0, int n1)
 	{
 		this.nodes[0] = n0;
 		this.nodes[1] = n1;
@@ -121,7 +122,7 @@ class Diode
 		this.sim.stampNonLinear(this.nodes[1]);
 	}
 
-	void doStep(double voltdiff)
+	public void doStep(double voltdiff)
 	{
 		// used to have .1 here, but needed .01 for peak detector
 		if (Math.abs(voltdiff - this.lastvoltdiff) > .01)
@@ -167,7 +168,7 @@ class Diode
 		}
 	}
 
-	double calculateCurrent(double voltdiff)
+	public double calculateCurrent(double voltdiff)
 	{
 		if (voltdiff >= 0 || this.zvoltage == 0)
 		{

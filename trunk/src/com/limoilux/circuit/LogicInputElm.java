@@ -117,7 +117,7 @@ class LogicInputElm extends SwitchElm
 	}
 
 	@Override
-	double getVoltageDiff()
+	public double getVoltageDiff()
 	{
 		return this.volts[0];
 	}

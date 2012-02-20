@@ -403,7 +403,7 @@ public abstract class CircuitElm implements Editable
 		return this.voltSource;
 	}
 
-	double getVoltageDiff()
+	public double getVoltageDiff()
 	{
 		return this.volts[0] - this.volts[1];
 	}

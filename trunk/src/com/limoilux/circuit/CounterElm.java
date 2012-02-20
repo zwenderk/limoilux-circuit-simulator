@@ -3,7 +3,7 @@ package com.limoilux.circuit;
 
 import java.util.StringTokenizer;
 
-class CounterElm extends ChipElm
+public class CounterElm extends ChipElm
 {
 	final int FLAG_ENABLE = 2;
 
@@ -63,7 +63,7 @@ class CounterElm extends ChipElm
 		return this.bits + 2;
 	}
 
-	boolean hasEnable()
+	public boolean hasEnable()
 	{
 		return (this.flags & this.FLAG_ENABLE) != 0;
 	}
