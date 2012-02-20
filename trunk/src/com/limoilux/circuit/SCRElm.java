@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -83,8 +85,9 @@ class SCRElm extends CircuitElm
 	@Override
 	String dump()
 	{
-		return super.dump() + " " + (this.volts[this.anode] - this.volts[this.cnode]) + " " + (this.volts[this.anode] - this.volts[this.gnode]) + " "
-				+ this.triggerI + " " + this.holdingI + " " + this.cresistance;
+		return super.dump() + " " + (this.volts[this.anode] - this.volts[this.cnode]) + " "
+				+ (this.volts[this.anode] - this.volts[this.gnode]) + " " + this.triggerI + " " + this.holdingI + " "
+				+ this.cresistance;
 	}
 
 	double ia, ic, ig, curcount_a, curcount_c, curcount_g;
@@ -166,7 +169,8 @@ class SCRElm extends CircuitElm
 			this.drawDots(g, this.point1, this.lead2, this.curcount_a);
 			this.drawDots(g, this.point2, this.lead2, this.curcount_c);
 			this.drawDots(g, this.gate[1], this.gate[0], this.curcount_g);
-			this.drawDots(g, this.gate[0], this.lead2, this.curcount_g + CircuitElm.distance(this.gate[1], this.gate[0]));
+			this.drawDots(g, this.gate[0], this.lead2,
+					this.curcount_g + CircuitElm.distance(this.gate[1], this.gate[0]));
 		}
 		this.drawPosts(g);
 	}
@@ -192,7 +196,8 @@ class SCRElm extends CircuitElm
 	@Override
 	double getPower()
 	{
-		return (this.volts[this.anode] - this.volts[this.gnode]) * this.ia + (this.volts[this.cnode] - this.volts[this.gnode]) * this.ic;
+		return (this.volts[this.anode] - this.volts[this.gnode]) * this.ia
+				+ (this.volts[this.cnode] - this.volts[this.gnode]) * this.ic;
 	}
 
 	double aresistance;
@@ -211,8 +216,10 @@ class SCRElm extends CircuitElm
 	@Override
 	void doStep()
 	{
-		double vac = this.volts[this.anode] - this.volts[this.cnode]; // typically negative
-		double vag = this.volts[this.anode] - this.volts[this.gnode]; // typically positive
+		double vac = this.volts[this.anode] - this.volts[this.cnode]; // typically
+																		// negative
+		double vag = this.volts[this.anode] - this.volts[this.gnode]; // typically
+																		// positive
 		if (Math.abs(vac - this.lastvac) > .01 || Math.abs(vag - this.lastvag) > .01)
 		{
 			CircuitElm.cirSim.converged = false;

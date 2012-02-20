@@ -141,7 +141,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private Button resetButton;
 	private Button dumpMatrixButton;
 	private MenuItem exportItem, exportLinkItem, importItem, exitItem, undoItem, redoItem, cutItem, copyItem,
-	pasteItem, selectAllItem, optionsItem;
+			pasteItem, selectAllItem, optionsItem;
 	private Menu optionsMenu;
 	public Checkbox stoppedCheck;
 	public CheckboxMenuItem dotsCheckItem;
@@ -413,8 +413,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		otherMenu.add(this.getCheckItem("Drag All (Alt-drag)", "DragAll"));
 
 		otherMenu.add(this.getCheckItem(isMac ? "Drag Row (Alt-S-drag, S-right)" : "Drag Row (S-right)", "DragRow"));
-		otherMenu.add(this.getCheckItem(isMac ? "Drag Column (Alt-\u2318-drag, \u2318-right)" : "Drag Column (C-right)",
-				"DragColumn"));
+		otherMenu.add(this.getCheckItem(
+				isMac ? "Drag Column (Alt-\u2318-drag, \u2318-right)" : "Drag Column (C-right)", "DragColumn"));
 
 		otherMenu.add(this.getCheckItem("Drag Selected", "DragSelected"));
 		otherMenu.add(this.getCheckItem("Drag Post (" + this.ctrlMetaKey + "-drag)", "DragPost"));
@@ -804,8 +804,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			 */
 			this.getElm(i).draw(g);
 		}
-		if (this.tempMouseMode == CirSim.MODE_DRAG_ROW || this.tempMouseMode == CirSim.MODE_DRAG_COLUMN || this.tempMouseMode == CirSim.MODE_DRAG_POST
-				|| this.tempMouseMode == CirSim.MODE_DRAG_SELECTED)
+		if (this.tempMouseMode == CirSim.MODE_DRAG_ROW || this.tempMouseMode == CirSim.MODE_DRAG_COLUMN
+				|| this.tempMouseMode == CirSim.MODE_DRAG_POST || this.tempMouseMode == CirSim.MODE_DRAG_SELECTED)
 		{
 			for (i = 0; i != this.elmList.size(); i++)
 			{
@@ -879,8 +879,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				{
 					info[0] = "V = " + CircuitElm.getUnitText(this.mouseElm.getPostVoltage(this.mousePost), "V");
 					/*
-					 * //shownodes for (i = 0; i != mouseElm.getPostCount(); i++)
-					 * info[0] += " " + mouseElm.nodes[i]; if
+					 * //shownodes for (i = 0; i != mouseElm.getPostCount();
+					 * i++) info[0] += " " + mouseElm.nodes[i]; if
 					 * (mouseElm.getVoltageSourceCount() > 0) info[0] += ";" +
 					 * (mouseElm.getVoltageSource()+nodeList.size());
 					 */
@@ -1092,7 +1092,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 			InductorElm ie = (InductorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
-			return "res.f = " + CircuitElm.getUnitText(1 / (2 * CirSim.PI * Math.sqrt(ie.inductance * ce.capacitance)), "Hz");
+			return "res.f = "
+					+ CircuitElm.getUnitText(1 / (2 * CirSim.PI * Math.sqrt(ie.inductance * ce.capacitance)), "Hz");
 		}
 		if (this.hintType == CirSim.HINT_RC)
 		{
@@ -2185,8 +2186,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		f |= this.powerCheckItem.getState() ? 8 : 0;
 		f |= this.showValuesCheckItem.getState() ? 0 : 16;
 		// 32 = linear scale in afilter
-		String dump = "$ " + f + " " + this.timeStep + " " + this.getIterCount() + " " + this.currentBar.getValue() + " "
-				+ CircuitElm.voltageRange + " " + this.powerBar.getValue() + "\n";
+		String dump = "$ " + f + " " + this.timeStep + " " + this.getIterCount() + " " + this.currentBar.getValue()
+				+ " " + CircuitElm.voltageRange + " " + this.powerBar.getValue() + "\n";
 		for (i = 0; i != this.elmList.size(); i++)
 		{
 			dump += this.getElm(i).dump() + "\n";
@@ -2692,8 +2693,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	{
 		if (this.draggingPost == -1)
 		{
-			this.draggingPost = CirSim.distanceSq(this.mouseElm.x, this.mouseElm.y, x, y) > CirSim.distanceSq(this.mouseElm.x2, this.mouseElm.y2, x, y) ? 1
-					: 0;
+			this.draggingPost = CirSim.distanceSq(this.mouseElm.x, this.mouseElm.y, x, y) > CirSim.distanceSq(
+					this.mouseElm.x2, this.mouseElm.y2, x, y) ? 1 : 0;
 		}
 		int dx = x - this.dragX;
 		int dy = y - this.dragY;
@@ -3430,7 +3431,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				}
 			}
 
-			if (CirSim.this.tempMouseMode != CirSim.MODE_SELECT && CirSim.this.tempMouseMode != CirSim.MODE_DRAG_SELECTED)
+			if (CirSim.this.tempMouseMode != CirSim.MODE_SELECT
+					&& CirSim.this.tempMouseMode != CirSim.MODE_DRAG_SELECTED)
 			{
 				CirSim.this.clearSelection();
 			}

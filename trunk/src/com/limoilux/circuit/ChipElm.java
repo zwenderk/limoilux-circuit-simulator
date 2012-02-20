@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Font;
@@ -151,9 +153,9 @@ abstract class ChipElm extends CircuitElm
 		int xs = this.sizeX * this.cspc2;
 		int ys = this.sizeY * this.cspc2;
 		this.rectPointsX = new int[]
-				{ xr, xr + xs, xr + xs, xr };
+		{ xr, xr + xs, xr + xs, xr };
 		this.rectPointsY = new int[]
-				{ yr, yr, yr + ys, yr + ys };
+		{ yr, yr, yr + ys, yr + ys };
 		this.setBbox(xr, yr, this.rectPointsX[2], this.rectPointsY[2]);
 		int i;
 		for (i = 0; i != this.getPostCount(); i++)

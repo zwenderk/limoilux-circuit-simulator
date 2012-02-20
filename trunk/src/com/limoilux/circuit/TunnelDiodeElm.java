@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -127,11 +129,17 @@ class TunnelDiodeElm extends CircuitElm
 		voltdiff = this.limitStep(voltdiff, this.lastvoltdiff);
 		this.lastvoltdiff = voltdiff;
 
-		double i = TunnelDiodeElm.pip * Math.exp(-TunnelDiodeElm.pvpp / TunnelDiodeElm.pvt) * (Math.exp(voltdiff / TunnelDiodeElm.pvt) - 1) + TunnelDiodeElm.pip * (voltdiff / TunnelDiodeElm.pvp)
-				* Math.exp(1 - voltdiff / TunnelDiodeElm.pvp) + TunnelDiodeElm.piv * Math.exp(voltdiff - TunnelDiodeElm.pvv);
+		double i = TunnelDiodeElm.pip * Math.exp(-TunnelDiodeElm.pvpp / TunnelDiodeElm.pvt)
+				* (Math.exp(voltdiff / TunnelDiodeElm.pvt) - 1) + TunnelDiodeElm.pip * (voltdiff / TunnelDiodeElm.pvp)
+				* Math.exp(1 - voltdiff / TunnelDiodeElm.pvp) + TunnelDiodeElm.piv
+				* Math.exp(voltdiff - TunnelDiodeElm.pvv);
 
-		double geq = TunnelDiodeElm.pip * Math.exp(-TunnelDiodeElm.pvpp / TunnelDiodeElm.pvt) * Math.exp(voltdiff / TunnelDiodeElm.pvt) / TunnelDiodeElm.pvt + TunnelDiodeElm.pip * Math.exp(1 - voltdiff / TunnelDiodeElm.pvp)
-				/ TunnelDiodeElm.pvp - Math.exp(1 - voltdiff / TunnelDiodeElm.pvp) * TunnelDiodeElm.pip * voltdiff / (TunnelDiodeElm.pvp * TunnelDiodeElm.pvp) + Math.exp(voltdiff - TunnelDiodeElm.pvv) * TunnelDiodeElm.piv;
+		double geq = TunnelDiodeElm.pip * Math.exp(-TunnelDiodeElm.pvpp / TunnelDiodeElm.pvt)
+				* Math.exp(voltdiff / TunnelDiodeElm.pvt) / TunnelDiodeElm.pvt + TunnelDiodeElm.pip
+				* Math.exp(1 - voltdiff / TunnelDiodeElm.pvp) / TunnelDiodeElm.pvp
+				- Math.exp(1 - voltdiff / TunnelDiodeElm.pvp) * TunnelDiodeElm.pip * voltdiff
+				/ (TunnelDiodeElm.pvp * TunnelDiodeElm.pvp) + Math.exp(voltdiff - TunnelDiodeElm.pvv)
+				* TunnelDiodeElm.piv;
 		double nc = i - geq * voltdiff;
 		CircuitElm.cirSim.stampConductance(this.nodes[0], this.nodes[1], geq);
 		CircuitElm.cirSim.stampCurrentSource(this.nodes[0], this.nodes[1], nc);
@@ -141,8 +149,10 @@ class TunnelDiodeElm extends CircuitElm
 	void calculateCurrent()
 	{
 		double voltdiff = this.volts[0] - this.volts[1];
-		this.current = TunnelDiodeElm.pip * Math.exp(-TunnelDiodeElm.pvpp / TunnelDiodeElm.pvt) * (Math.exp(voltdiff / TunnelDiodeElm.pvt) - 1) + TunnelDiodeElm.pip * (voltdiff / TunnelDiodeElm.pvp)
-				* Math.exp(1 - voltdiff / TunnelDiodeElm.pvp) + TunnelDiodeElm.piv * Math.exp(voltdiff - TunnelDiodeElm.pvv);
+		this.current = TunnelDiodeElm.pip * Math.exp(-TunnelDiodeElm.pvpp / TunnelDiodeElm.pvt)
+				* (Math.exp(voltdiff / TunnelDiodeElm.pvt) - 1) + TunnelDiodeElm.pip * (voltdiff / TunnelDiodeElm.pvp)
+				* Math.exp(1 - voltdiff / TunnelDiodeElm.pvp) + TunnelDiodeElm.piv
+				* Math.exp(voltdiff - TunnelDiodeElm.pvv);
 	}
 
 	@Override

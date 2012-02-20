@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 // stub PhotoResistorElm based on SparkGapElm
 // FIXME need to uncomment PhotoResistorElm line from CirSim.java
 // FIXME need to add PhotoResistorElm.java to srclist

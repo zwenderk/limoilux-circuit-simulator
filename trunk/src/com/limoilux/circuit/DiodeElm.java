@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -159,7 +161,7 @@ class DiodeElm extends CircuitElm
 	}
 
 	@Override
-	boolean needsShortcut()
+	public boolean needsShortcut()
 	{
 		return this.getClass() == DiodeElm.class;
 	}

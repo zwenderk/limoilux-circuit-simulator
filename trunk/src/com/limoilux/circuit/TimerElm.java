@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.util.StringTokenizer;
 
 class TimerElm extends ChipElm
@@ -115,7 +117,8 @@ class TimerElm extends ChipElm
 			CircuitElm.cirSim.stampResistor(this.nodes[this.N_DIS], 0, 10);
 		}
 		// output
-		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[this.N_OUT], this.pins[this.N_OUT].voltSource, this.out ? this.volts[this.N_VIN] : 0);
+		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[this.N_OUT], this.pins[this.N_OUT].voltSource,
+				this.out ? this.volts[this.N_VIN] : 0);
 	}
 
 	@Override

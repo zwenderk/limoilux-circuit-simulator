@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 // stub implementation of DiacElm, based on SparkGapElm
 // FIXME need to add DiacElm.java to srclist
 // FIXME need to uncomment DiacElm line from CirSim.java
@@ -47,7 +49,8 @@ class DiacElm extends CircuitElm
 	@Override
 	String dump()
 	{
-		return super.dump() + " " + this.onresistance + " " + this.offresistance + " " + this.breakdown + " " + this.holdcurrent;
+		return super.dump() + " " + this.onresistance + " " + this.offresistance + " " + this.breakdown + " "
+				+ this.holdcurrent;
 	}
 
 	Point ps3, ps4;
@@ -181,7 +184,7 @@ class DiacElm extends CircuitElm
 	}
 
 	@Override
-	boolean needsShortcut()
+	public boolean needsShortcut()
 	{
 		return false;
 	}

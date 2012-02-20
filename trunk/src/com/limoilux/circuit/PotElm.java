@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Graphics;
 import java.awt.Label;
 import java.awt.Point;
@@ -215,7 +217,8 @@ class PotElm extends CircuitElm implements AdjustmentListener
 			this.drawDots(g, this.point1, this.midpoint, this.curcount1);
 			this.drawDots(g, this.point2, this.midpoint, this.curcount2);
 			this.drawDots(g, this.post3, this.corner2, this.curcount3);
-			this.drawDots(g, this.corner2, this.midpoint, this.curcount3 + CircuitElm.distance(this.post3, this.corner2));
+			this.drawDots(g, this.corner2, this.midpoint,
+					this.curcount3 + CircuitElm.distance(this.post3, this.corner2));
 		}
 		this.drawPosts(g);
 	}

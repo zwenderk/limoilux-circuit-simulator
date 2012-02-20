@@ -1,6 +1,7 @@
 
 package com.limoilux.circuit.core;
 
+import java.awt.Point;
 import java.util.Random;
 
 public class CoreUtil
@@ -180,5 +181,11 @@ public class CoreUtil
 		return x2 * x2 + y2 * y2;
 	}
 
+	public static double distance(Point p1, Point p2)
+	{
+		double x = p1.x - p2.x;
+		double y = p1.y - p2.y;
+		return Math.sqrt(x * x + y * y);
+	}
 
 }

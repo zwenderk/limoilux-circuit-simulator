@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -217,7 +219,8 @@ class SweepElm extends CircuitElm
 		arr[1] = "I = " + CircuitElm.getCurrentDText(this.getCurrent());
 		arr[2] = "V = " + CircuitElm.getVoltageText(this.volts[0]);
 		arr[3] = "f = " + CircuitElm.getUnitText(this.frequency, "Hz");
-		arr[4] = "range = " + CircuitElm.getUnitText(this.minF, "Hz") + " .. " + CircuitElm.getUnitText(this.maxF, "Hz");
+		arr[4] = "range = " + CircuitElm.getUnitText(this.minF, "Hz") + " .. "
+				+ CircuitElm.getUnitText(this.maxF, "Hz");
 		arr[5] = "time = " + CircuitElm.getUnitText(this.sweepTime, "s");
 	}
 

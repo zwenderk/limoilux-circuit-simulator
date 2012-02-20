@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Graphics;
 import java.util.StringTokenizer;
 
@@ -103,7 +105,8 @@ class VCOElm extends ChipElm
 		{
 			return;
 		}
-		double c = this.cDir * (this.pins[4].current + this.pins[5].current) + (this.volts[3] - this.volts[2]) / this.cResistance;
+		double c = this.cDir * (this.pins[4].current + this.pins[5].current) + (this.volts[3] - this.volts[2])
+				/ this.cResistance;
 		this.pins[2].current = -c;
 		this.pins[3].current = c;
 		this.pins[0].current = -this.pins[4].current;

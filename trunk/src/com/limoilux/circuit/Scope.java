@@ -108,7 +108,8 @@ public class Scope
 		this.showFreq = this.lockScale = this.showMin = false;
 		this.plot2d = false;
 		// no showI for Output
-		if (this.elm != null && (this.elm instanceof OutputElm || this.elm instanceof LogicOutputElm || this.elm instanceof ProbeElm))
+		if (this.elm != null
+				&& (this.elm instanceof OutputElm || this.elm instanceof LogicOutputElm || this.elm instanceof ProbeElm))
 		{
 			this.showI = false;
 		}
@@ -753,8 +754,8 @@ public class Scope
 			return null;
 		}
 		int yno = this.yElm == null ? -1 : this.sim.locateElm(this.yElm);
-		String x = "o " + eno + " " + this.speed + " " + this.value + " " + flags + " " + this.minMaxV + " " + this.minMaxI + " "
-				+ this.position + " " + yno;
+		String x = "o " + eno + " " + this.speed + " " + this.value + " " + flags + " " + this.minMaxV + " "
+				+ this.minMaxI + " " + this.position + " " + yno;
 		if (this.text != null)
 		{
 			x += " " + this.text;
@@ -847,9 +848,9 @@ public class Scope
 				Class dbiclass = Class.forName("java.awt.image.DataBufferInt");
 				Class rasclass = Class.forName("java.awt.image.Raster");
 				Constructor cstr = biclass.getConstructor(new Class[]
-						{ int.class, int.class, int.class });
+				{ int.class, int.class, int.class });
 				this.image = (Image) cstr.newInstance(new Object[]
-						{ new Integer(w), new Integer(h), new Integer(BufferedImage.TYPE_INT_RGB) });
+				{ new Integer(w), new Integer(h), new Integer(BufferedImage.TYPE_INT_RGB) });
 				Method m = biclass.getMethod("getRaster");
 				Object ras = m.invoke(this.image);
 				Object db = rasclass.getMethod("getDataBuffer").invoke(ras);

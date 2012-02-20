@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -136,9 +138,11 @@ class CapacitorElm extends CircuitElm
 		{
 			this.curSourceValue = -this.voltdiff / this.compResistance - this.current;
 		}
-		else {
+		else
+		{
 			this.curSourceValue = -this.voltdiff / this.compResistance;
-			// System.out.println("cap " + compResistance + " " + curSourceValue +
+			// System.out.println("cap " + compResistance + " " + curSourceValue
+			// +
 			// " " + current + " " + voltdiff);
 		}
 	}
@@ -212,7 +216,7 @@ class CapacitorElm extends CircuitElm
 	}
 
 	@Override
-	boolean needsShortcut()
+	public boolean needsShortcut()
 	{
 		return true;
 	}

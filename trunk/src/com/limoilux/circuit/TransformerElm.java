@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Checkbox;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -69,7 +71,8 @@ class TransformerElm extends CircuitElm
 	@Override
 	String dump()
 	{
-		return super.dump() + " " + this.inductance + " " + this.ratio + " " + this.current[0] + " " + this.current[1] + " " + this.couplingCoef;
+		return super.dump() + " " + this.inductance + " " + this.ratio + " " + this.current[0] + " " + this.current[1]
+				+ " " + this.couplingCoef;
 	}
 
 	boolean isTrapezoidal()
@@ -89,7 +92,8 @@ class TransformerElm extends CircuitElm
 		for (i = 0; i != 2; i++)
 		{
 			this.setPowerColor(g, this.current[i] * (this.volts[i] - this.volts[i + 2]));
-			this.drawCoil(g, this.dsign * (i == 1 ? -6 : 6), this.ptCoil[i], this.ptCoil[i + 2], this.volts[i], this.volts[i + 2]);
+			this.drawCoil(g, this.dsign * (i == 1 ? -6 : 6), this.ptCoil[i], this.ptCoil[i + 2], this.volts[i],
+					this.volts[i + 2]);
 		}
 		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
 		for (i = 0; i != 2; i++)

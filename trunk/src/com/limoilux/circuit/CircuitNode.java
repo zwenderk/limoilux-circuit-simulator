@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.util.Vector;
 
 class CircuitNode

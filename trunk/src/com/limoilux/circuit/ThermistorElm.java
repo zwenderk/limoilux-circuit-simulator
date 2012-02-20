@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 // stub ThermistorElm based on SparkGapElm
 // FIXME need to uncomment ThermistorElm line from CirSim.java
 // FIXME need to add ThermistorElm.java to srclist

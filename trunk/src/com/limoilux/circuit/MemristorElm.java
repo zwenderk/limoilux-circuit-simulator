@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
@@ -38,7 +40,8 @@ class MemristorElm extends CircuitElm
 	@Override
 	String dump()
 	{
-		return super.dump() + " " + this.r_on + " " + this.r_off + " " + this.dopeWidth + " " + this.totalWidth + " " + this.mobility;
+		return super.dump() + " " + this.r_on + " " + this.r_off + " " + this.dopeWidth + " " + this.totalWidth + " "
+				+ this.mobility;
 	}
 
 	Point ps3, ps4;

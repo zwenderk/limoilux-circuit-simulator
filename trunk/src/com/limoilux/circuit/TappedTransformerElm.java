@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
@@ -47,7 +49,8 @@ class TappedTransformerElm extends CircuitElm
 	@Override
 	String dump()
 	{
-		return super.dump() + " " + this.inductance + " " + this.ratio + " " + this.current[0] + " " + this.current[1] + " " + this.current[2];
+		return super.dump() + " " + this.inductance + " " + this.ratio + " " + this.current[0] + " " + this.current[1]
+				+ " " + this.current[2];
 	}
 
 	@Override
@@ -182,7 +185,8 @@ class TappedTransformerElm extends CircuitElm
 		this.a = new double[9];
 		// load pre-inverted matrix
 		this.a[0] = (1 + cc) / (l1 * (1 + cc - 2 * cc * cc));
-		this.a[1] = this.a[2] = this.a[3] = this.a[6] = 2 * cc / ((2 * cc * cc - cc - 1) * this.inductance * this.ratio);
+		this.a[1] = this.a[2] = this.a[3] = this.a[6] = 2 * cc
+				/ ((2 * cc * cc - cc - 1) * this.inductance * this.ratio);
 		this.a[4] = this.a[8] = -4 * (1 + cc) / ((2 * cc * cc - cc - 1) * l1 * this.ratio * this.ratio);
 		this.a[5] = this.a[7] = 4 * cc / ((2 * cc * cc - cc - 1) * l1 * this.ratio * this.ratio);
 		int i;

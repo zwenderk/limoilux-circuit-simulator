@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -179,7 +181,8 @@ class TriodeElm extends CircuitElm
 		int plate = 0;
 		double vgk = vs[grid] - vs[cath];
 		double vpk = vs[plate] - vs[cath];
-		if (Math.abs(this.lastv0 - vs[0]) > .01 || Math.abs(this.lastv1 - vs[1]) > .01 || Math.abs(this.lastv2 - vs[2]) > .01)
+		if (Math.abs(this.lastv0 - vs[0]) > .01 || Math.abs(this.lastv1 - vs[1]) > .01
+				|| Math.abs(this.lastv2 - vs[2]) > .01)
 		{
 			CircuitElm.cirSim.converged = false;
 		}

@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -64,8 +66,8 @@ class VoltageElm extends CircuitElm
 	@Override
 	String dump()
 	{
-		return super.dump() + " " + this.waveform + " " + this.frequency + " " + this.maxVoltage + " " + this.bias + " " + this.phaseShift + " "
-				+ this.dutyCycle;
+		return super.dump() + " " + this.waveform + " " + this.frequency + " " + this.maxVoltage + " " + this.bias
+				+ " " + this.phaseShift + " " + this.dutyCycle;
 	}
 
 	/*
@@ -121,7 +123,9 @@ class VoltageElm extends CircuitElm
 		case WF_AC:
 			return Math.sin(w) * this.maxVoltage + this.bias;
 		case WF_SQUARE:
-			return this.bias + (w % (2 * CircuitElm.pi) > 2 * CircuitElm.pi * this.dutyCycle ? -this.maxVoltage : this.maxVoltage);
+			return this.bias
+					+ (w % (2 * CircuitElm.pi) > 2 * CircuitElm.pi * this.dutyCycle ? -this.maxVoltage
+							: this.maxVoltage);
 		case WF_TRIANGLE:
 			return this.bias + this.triangleFunc(w % (2 * CircuitElm.pi)) * this.maxVoltage;
 		case WF_SAWTOOTH:
@@ -139,7 +143,8 @@ class VoltageElm extends CircuitElm
 	void setPoints()
 	{
 		super.setPoints();
-		this.calcLeads(this.waveform == VoltageElm.WF_DC || this.waveform == VoltageElm.WF_VAR ? 8 : this.circleSize * 2);
+		this.calcLeads(this.waveform == VoltageElm.WF_DC || this.waveform == VoltageElm.WF_VAR ? 8
+				: this.circleSize * 2);
 	}
 
 	@Override
@@ -351,7 +356,8 @@ class VoltageElm extends CircuitElm
 		}
 		if (n == 4)
 		{
-			return new EditInfo("Phase Offset (degrees)", this.phaseShift * 180 / CircuitElm.pi, -180, 180).setDimensionless();
+			return new EditInfo("Phase Offset (degrees)", this.phaseShift * 180 / CircuitElm.pi, -180, 180)
+					.setDimensionless();
 		}
 		if (n == 5 && this.waveform == VoltageElm.WF_SQUARE)
 		{
@@ -383,7 +389,8 @@ class VoltageElm extends CircuitElm
 				this.frequency = maxfreq;
 			}
 			double adj = this.frequency - oldfreq;
-			this.freqTimeZero = CircuitElm.cirSim.t - oldfreq * (CircuitElm.cirSim.t - this.freqTimeZero) / this.frequency;
+			this.freqTimeZero = CircuitElm.cirSim.t - oldfreq * (CircuitElm.cirSim.t - this.freqTimeZero)
+					/ this.frequency;
 		}
 		if (n == 1)
 		{
