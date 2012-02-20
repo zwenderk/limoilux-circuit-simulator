@@ -162,7 +162,7 @@ class SwitchElm extends CircuitElm
 	}
 
 	@Override
-	boolean isWire()
+	public boolean isWire()
 	{
 		return true;
 	}

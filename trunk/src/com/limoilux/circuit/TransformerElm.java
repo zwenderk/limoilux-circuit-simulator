@@ -91,7 +91,7 @@ class TransformerElm extends CircuitElm
 		}
 		for (i = 0; i != 2; i++)
 		{
-			this.setPowerColor(g, this.current[i] * (this.volts[i] - this.volts[i + 2]));
+			CircuitElm.setPowerColor(g, this.current[i] * (this.volts[i] - this.volts[i + 2]));
 			this.drawCoil(g, this.dsign * (i == 1 ? -6 : 6), this.ptCoil[i], this.ptCoil[i + 2], this.volts[i],
 					this.volts[i + 2]);
 		}
@@ -99,7 +99,7 @@ class TransformerElm extends CircuitElm
 		for (i = 0; i != 2; i++)
 		{
 			CircuitElm.drawThickLine(g, this.ptCore[i], this.ptCore[i + 2]);
-			this.curcount[i] = this.updateDotCount(this.current[i], this.curcount[i]);
+			this.curcount[i] = CircuitElm.updateDotCount(this.current[i], this.curcount[i]);
 		}
 		for (i = 0; i != 2; i++)
 		{
@@ -256,11 +256,11 @@ class TransformerElm extends CircuitElm
 	@Override
 	public boolean getConnection(int n1, int n2)
 	{
-		if (this.comparePair(n1, n2, 0, 2))
+		if (CircuitElm.comparePair(n1, n2, 0, 2))
 		{
 			return true;
 		}
-		if (this.comparePair(n1, n2, 1, 3))
+		if (CircuitElm.comparePair(n1, n2, 1, 3))
 		{
 			return true;
 		}

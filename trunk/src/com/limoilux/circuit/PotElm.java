@@ -210,9 +210,9 @@ class PotElm extends CircuitElm implements AdjustmentListener
 		CircuitElm.drawThickLine(g, this.corner2, this.arrowPoint);
 		CircuitElm.drawThickLine(g, this.arrow1, this.arrowPoint);
 		CircuitElm.drawThickLine(g, this.arrow2, this.arrowPoint);
-		this.curcount1 = this.updateDotCount(this.current1, this.curcount1);
-		this.curcount2 = this.updateDotCount(this.current2, this.curcount2);
-		this.curcount3 = this.updateDotCount(this.current3, this.curcount3);
+		this.curcount1 = CircuitElm.updateDotCount(this.current1, this.curcount1);
+		this.curcount2 = CircuitElm.updateDotCount(this.current2, this.curcount2);
+		this.curcount3 = CircuitElm.updateDotCount(this.current3, this.curcount3);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
 			CircuitElm.drawDots(g, this.point1, this.midpoint, this.curcount1);

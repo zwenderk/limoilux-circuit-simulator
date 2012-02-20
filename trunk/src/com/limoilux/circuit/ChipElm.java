@@ -95,7 +95,7 @@ public abstract class ChipElm extends CircuitElm
 			Point a = p.post;
 			Point b = p.stub;
 			DrawUtil.drawThickLine(g, a, b);
-			p.curcount = this.updateDotCount(p.current, p.curcount);
+			p.curcount = CircuitElm.updateDotCount(p.current, p.curcount);
 			DrawUtil.drawDots(g, b, a, p.curcount);
 			if (p.bubble)
 			{

@@ -3,7 +3,7 @@ package com.limoilux.circuit;
 
 public interface Editable
 {
-	EditInfo getEditInfo(int n);
+	public EditInfo getEditInfo(int n);
 
-	void setEditValue(int n, EditInfo ei);
+	public void setEditValue(int n, EditInfo ei);
 }

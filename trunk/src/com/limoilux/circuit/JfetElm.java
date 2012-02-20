@@ -43,7 +43,7 @@ public class JfetElm extends MosfetElm
 		g.fillPolygon(this.arrowPoly);
 		this.setPowerColor(g, true);
 		g.fillPolygon(this.gatePoly);
-		this.curcount = this.updateDotCount(-this.ids, this.curcount);
+		this.curcount = CircuitElm.updateDotCount(-this.ids, this.curcount);
 		if (this.curcount != 0)
 		{
 			DrawUtil.drawDots(g, this.src[0], this.src[1], this.curcount);

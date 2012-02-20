@@ -267,7 +267,7 @@ class VoltageElm extends CircuitElm
 	}
 
 	@Override
-	double getPower()
+	public double getPower()
 	{
 		return -this.getVoltageDiff() * this.current;
 	}

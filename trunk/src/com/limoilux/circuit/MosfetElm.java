@@ -142,7 +142,7 @@ class MosfetElm extends CircuitElm
 			// -1
 			g.drawString(this.pnp == -1 ? "S" : "D", this.drn[0].x - 3 + 9 * ds, this.drn[0].y + 4);
 		}
-		this.curcount = this.updateDotCount(-this.ids, this.curcount);
+		this.curcount = CircuitElm.updateDotCount(-this.ids, this.curcount);
 		CircuitElm.drawDots(g, this.src[0], this.src[1], this.curcount);
 		CircuitElm.drawDots(g, this.src[1], this.drn[1], this.curcount);
 		CircuitElm.drawDots(g, this.drn[1], this.drn[0], this.curcount);
@@ -156,13 +156,13 @@ class MosfetElm extends CircuitElm
 	}
 
 	@Override
-	double getCurrent()
+	public double getCurrent()
 	{
 		return this.ids;
 	}
 
 	@Override
-	double getPower()
+	public double getPower()
 	{
 		return this.ids * (this.volts[2] - this.volts[1]);
 	}
@@ -343,7 +343,7 @@ class MosfetElm extends CircuitElm
 	}
 
 	@Override
-	boolean canViewInScope()
+	public boolean canViewInScope()
 	{
 		return true;
 	}

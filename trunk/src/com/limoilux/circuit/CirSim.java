@@ -83,7 +83,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	public Container mainContainer;
 
-	static String muString = "u";
+	public static String muString = "u";
 	static String ohmString = "ohm";
 	static EditDialog editDialog;
 	static ImportDialog impDialog;

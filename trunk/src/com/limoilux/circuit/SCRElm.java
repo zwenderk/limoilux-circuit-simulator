@@ -162,9 +162,9 @@ class SCRElm extends CircuitElm
 		CircuitElm.drawThickLine(g, this.lead2, this.gate[0]);
 		CircuitElm.drawThickLine(g, this.gate[0], this.gate[1]);
 
-		this.curcount_a = this.updateDotCount(this.ia, this.curcount_a);
-		this.curcount_c = this.updateDotCount(this.ic, this.curcount_c);
-		this.curcount_g = this.updateDotCount(this.ig, this.curcount_g);
+		this.curcount_a = CircuitElm.updateDotCount(this.ia, this.curcount_a);
+		this.curcount_c = CircuitElm.updateDotCount(this.ic, this.curcount_c);
+		this.curcount_g = CircuitElm.updateDotCount(this.ig, this.curcount_g);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
 			CircuitElm.drawDots(g, this.point1, this.lead2, this.curcount_a);
@@ -189,13 +189,13 @@ class SCRElm extends CircuitElm
 	}
 
 	@Override
-	int getInternalNodeCount()
+	public int getInternalNodeCount()
 	{
 		return 1;
 	}
 
 	@Override
-	double getPower()
+	public double getPower()
 	{
 		return (this.volts[this.anode] - this.volts[this.gnode]) * this.ia
 				+ (this.volts[this.cnode] - this.volts[this.gnode]) * this.ic;

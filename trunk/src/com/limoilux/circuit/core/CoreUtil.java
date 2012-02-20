@@ -5,6 +5,9 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.util.Random;
 
+import com.limoilux.circuit.CirSim;
+import com.limoilux.circuit.CircuitElm;
+
 public class CoreUtil
 {
 	private static final Random RANDOM_GENERATOR = new Random();
@@ -284,5 +287,126 @@ public class CoreUtil
 		}
 		return p;
 	}
+	
 
+	public static String getVoltageDText(double v)
+	{
+		return CoreUtil.getUnitText(Math.abs(v), "V");
+	}
+
+	public static String getVoltageText(double v)
+	{
+		return CoreUtil.getUnitText(v, "V");
+	}
+	
+
+	public static String getUnitText(double v, String u)
+	{
+		double va = Math.abs(v);
+		if (va < 1e-14)
+		{
+			return "0 " + u;
+		}
+		if (va < 1e-9)
+		{
+			return CircuitElm.showFormat.format(v * 1e12) + " p" + u;
+		}
+		if (va < 1e-6)
+		{
+			return CircuitElm.showFormat.format(v * 1e9) + " n" + u;
+		}
+		if (va < 1e-3)
+		{
+			return CircuitElm.showFormat.format(v * 1e6) + " " + CirSim.muString + u;
+		}
+		if (va < 1)
+		{
+			return CircuitElm.showFormat.format(v * 1e3) + " m" + u;
+		}
+		if (va < 1e3)
+		{
+			return CircuitElm.showFormat.format(v) + " " + u;
+		}
+		if (va < 1e6)
+		{
+			return CircuitElm.showFormat.format(v * 1e-3) + " k" + u;
+		}
+		if (va < 1e9)
+		{
+			return CircuitElm.showFormat.format(v * 1e-6) + " M" + u;
+		}
+		return CircuitElm.showFormat.format(v * 1e-9) + " G" + u;
+	}
+
+	
+	public static String getShortUnitText(double v, String u)
+	{
+		double va = Math.abs(v);
+		if (va < 1e-13)
+		{
+			return null;
+		}
+		if (va < 1e-9)
+		{
+			return CircuitElm.shortFormat.format(v * 1e12) + "p" + u;
+		}
+		if (va < 1e-6)
+		{
+			return CircuitElm.shortFormat.format(v * 1e9) + "n" + u;
+		}
+		if (va < 1e-3)
+		{
+			return CircuitElm.shortFormat.format(v * 1e6) + CirSim.muString + u;
+		}
+		if (va < 1)
+		{
+			return CircuitElm.shortFormat.format(v * 1e3) + "m" + u;
+		}
+		if (va < 1e3)
+		{
+			return CircuitElm.shortFormat.format(v) + u;
+		}
+		if (va < 1e6)
+		{
+			return CircuitElm.shortFormat.format(v * 1e-3) + "k" + u;
+		}
+		if (va < 1e9)
+		{
+			return CircuitElm.shortFormat.format(v * 1e-6) + "M" + u;
+		}
+		return CircuitElm.shortFormat.format(v * 1e-9) + "G" + u;
+	}
+	
+	public static String getCurrentText(double i)
+	{
+		return CoreUtil.getUnitText(i, "A");
+	}
+
+	public static String getCurrentDText(double i)
+	{
+		return CoreUtil.getUnitText(Math.abs(i), "A");
+	}
+	
+	public static double updateDotCount(double cur, double cc)
+	{
+		if (CircuitElm.cirSim.stoppedCheck.getState())
+		{
+			return cc;
+		}
+		double cadd = cur * CircuitElm.currentMult;
+		/*
+		 * if (cur != 0 && cadd <= .05 && cadd >= -.05) cadd = (cadd < 0) ? -.05
+		 * : .05;
+		 */
+		cadd %= 8;
+		/*
+		 * if (cadd > 8) cadd = 8; if (cadd < -8) cadd = -8;
+		 */
+		return cc + cadd;
+	}
+	
+	public static boolean comparePair(int x1, int x2, int y1, int y2)
+	{
+		return x1 == y1 && x2 == y2 || x1 == y2 && x2 == y1;
+	}
 }

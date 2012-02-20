@@ -46,7 +46,7 @@ class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	int getInternalNodeCount()
+	public int getInternalNodeCount()
 	{
 		return 2;
 	}
@@ -161,8 +161,8 @@ class TransLineElm extends CircuitElm
 		CircuitElm.drawThickLine(g, this.inner[0], this.inner[1]);
 		this.drawPosts(g);
 
-		this.curCount1 = this.updateDotCount(-this.current1, this.curCount1);
-		this.curCount2 = this.updateDotCount(this.current2, this.curCount2);
+		this.curCount1 = CircuitElm.updateDotCount(-this.current1, this.curCount1);
+		this.curCount2 = CircuitElm.updateDotCount(this.current2, this.curCount2);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
 			CircuitElm.drawDots(g, this.posts[0], this.inner[0], this.curCount1);

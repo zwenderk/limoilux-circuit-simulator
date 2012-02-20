@@ -157,7 +157,7 @@ class Switch2Elm extends SwitchElm
 		{
 			return false;
 		}
-		return this.comparePair(n1, n2, 0, 1 + this.position);
+		return CircuitElm.comparePair(n1, n2, 0, 1 + this.position);
 	}
 
 	@Override
