@@ -1,5 +1,9 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.LayoutManager;
 
 class ImportDialogLayout implements LayoutManager
 {
@@ -7,24 +11,29 @@ class ImportDialogLayout implements LayoutManager
 	{
 	}
 
+	@Override
 	public void addLayoutComponent(String name, Component c)
 	{
 	}
 
+	@Override
 	public void removeLayoutComponent(Component c)
 	{
 	}
 
+	@Override
 	public Dimension preferredLayoutSize(Container target)
 	{
 		return new Dimension(500, 500);
 	}
 
+	@Override
 	public Dimension minimumLayoutSize(Container target)
 	{
 		return new Dimension(100, 100);
 	}
 
+	@Override
 	public void layoutContainer(Container target)
 	{
 		Insets insets = target.insets();
@@ -33,7 +42,9 @@ class ImportDialogLayout implements LayoutManager
 		int i;
 		int pw = 300;
 		if (target.getComponentCount() == 0)
+		{
 			return;
+		}
 		Component cl = target.getComponent(target.getComponentCount() - 1);
 		Dimension dl = cl.getPreferredSize();
 		target.getComponent(0).move(insets.left, insets.top);

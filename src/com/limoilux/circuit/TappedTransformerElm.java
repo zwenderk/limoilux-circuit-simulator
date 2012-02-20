@@ -1,5 +1,6 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.StringTokenizer;
 
 class TappedTransformerElm extends CircuitElm
@@ -11,128 +12,140 @@ class TappedTransformerElm extends CircuitElm
 	public TappedTransformerElm(int xx, int yy)
 	{
 		super(xx, yy);
-		inductance = 4;
-		ratio = 1;
-		noDiagonal = true;
-		current = new double[4];
-		curcount = new double[4];
+		this.inductance = 4;
+		this.ratio = 1;
+		this.noDiagonal = true;
+		this.current = new double[4];
+		this.curcount = new double[4];
 	}
 
 	public TappedTransformerElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		inductance = new Double(st.nextToken()).doubleValue();
-		ratio = new Double(st.nextToken()).doubleValue();
-		current = new double[4];
-		curcount = new double[4];
-		current[0] = new Double(st.nextToken()).doubleValue();
-		current[1] = new Double(st.nextToken()).doubleValue();
+		this.inductance = new Double(st.nextToken()).doubleValue();
+		this.ratio = new Double(st.nextToken()).doubleValue();
+		this.current = new double[4];
+		this.curcount = new double[4];
+		this.current[0] = new Double(st.nextToken()).doubleValue();
+		this.current[1] = new Double(st.nextToken()).doubleValue();
 		try
 		{
-			current[2] = new Double(st.nextToken()).doubleValue();
+			this.current[2] = new Double(st.nextToken()).doubleValue();
 		}
 		catch (Exception e)
 		{
 		}
-		noDiagonal = true;
+		this.noDiagonal = true;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 169;
 	}
 
+	@Override
 	String dump()
 	{
-		return super.dump() + " " + inductance + " " + ratio + " " + current[0] + " " + current[1] + " " + current[2];
+		return super.dump() + " " + this.inductance + " " + this.ratio + " " + this.current[0] + " " + this.current[1] + " " + this.current[2];
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
 		int i;
 		for (i = 0; i != 5; i++)
 		{
-			setVoltageColor(g, volts[i]);
-			drawThickLine(g, ptEnds[i], ptCoil[i]);
+			this.setVoltageColor(g, this.volts[i]);
+			CircuitElm.drawThickLine(g, this.ptEnds[i], this.ptCoil[i]);
 		}
 		for (i = 0; i != 4; i++)
 		{
 			if (i == 1)
+			{
 				continue;
-			setPowerColor(g, current[i] * (volts[i] - volts[i + 1]));
-			drawCoil(g, i > 1 ? -6 : 6, ptCoil[i], ptCoil[i + 1], volts[i], volts[i + 1]);
+			}
+			this.setPowerColor(g, this.current[i] * (this.volts[i] - this.volts[i + 1]));
+			this.drawCoil(g, i > 1 ? -6 : 6, this.ptCoil[i], this.ptCoil[i + 1], this.volts[i], this.volts[i + 1]);
 		}
-		g.setColor(needsHighlight() ? selectColor : lightGrayColor);
+		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
 		for (i = 0; i != 4; i += 2)
 		{
-			drawThickLine(g, ptCore[i], ptCore[i + 1]);
+			CircuitElm.drawThickLine(g, this.ptCore[i], this.ptCore[i + 1]);
 		}
 		// calc current of tap wire
-		current[3] = current[1] - current[2];
+		this.current[3] = this.current[1] - this.current[2];
 		for (i = 0; i != 4; i++)
-			curcount[i] = updateDotCount(current[i], curcount[i]);
+		{
+			this.curcount[i] = this.updateDotCount(this.current[i], this.curcount[i]);
+		}
 
 		// primary dots
-		drawDots(g, ptEnds[0], ptCoil[0], curcount[0]);
-		drawDots(g, ptCoil[0], ptCoil[1], curcount[0]);
-		drawDots(g, ptCoil[1], ptEnds[1], curcount[0]);
+		this.drawDots(g, this.ptEnds[0], this.ptCoil[0], this.curcount[0]);
+		this.drawDots(g, this.ptCoil[0], this.ptCoil[1], this.curcount[0]);
+		this.drawDots(g, this.ptCoil[1], this.ptEnds[1], this.curcount[0]);
 
 		// secondary dots
-		drawDots(g, ptEnds[2], ptCoil[2], curcount[1]);
-		drawDots(g, ptCoil[2], ptCoil[3], curcount[1]);
-		drawDots(g, ptCoil[3], ptEnds[3], curcount[3]);
-		drawDots(g, ptCoil[3], ptCoil[4], curcount[2]);
-		drawDots(g, ptCoil[4], ptEnds[4], curcount[2]);
+		this.drawDots(g, this.ptEnds[2], this.ptCoil[2], this.curcount[1]);
+		this.drawDots(g, this.ptCoil[2], this.ptCoil[3], this.curcount[1]);
+		this.drawDots(g, this.ptCoil[3], this.ptEnds[3], this.curcount[3]);
+		this.drawDots(g, this.ptCoil[3], this.ptCoil[4], this.curcount[2]);
+		this.drawDots(g, this.ptCoil[4], this.ptEnds[4], this.curcount[2]);
 
-		drawPosts(g);
-		setBbox(ptEnds[0], ptEnds[4], 0);
+		this.drawPosts(g);
+		this.setBbox(this.ptEnds[0], this.ptEnds[4], 0);
 	}
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
 		int hs = 32;
-		ptEnds = newPointArray(5);
-		ptCoil = newPointArray(5);
-		ptCore = newPointArray(4);
-		ptEnds[0] = point1;
-		ptEnds[2] = point2;
-		interpPoint(point1, point2, ptEnds[1], 0, -hs * 2);
-		interpPoint(point1, point2, ptEnds[3], 1, -hs);
-		interpPoint(point1, point2, ptEnds[4], 1, -hs * 2);
-		double ce = .5 - 12 / dn;
-		double cd = .5 - 2 / dn;
+		this.ptEnds = this.newPointArray(5);
+		this.ptCoil = this.newPointArray(5);
+		this.ptCore = this.newPointArray(4);
+		this.ptEnds[0] = this.point1;
+		this.ptEnds[2] = this.point2;
+		this.interpPoint(this.point1, this.point2, this.ptEnds[1], 0, -hs * 2);
+		this.interpPoint(this.point1, this.point2, this.ptEnds[3], 1, -hs);
+		this.interpPoint(this.point1, this.point2, this.ptEnds[4], 1, -hs * 2);
+		double ce = .5 - 12 / this.dn;
+		double cd = .5 - 2 / this.dn;
 		int i;
-		interpPoint(ptEnds[0], ptEnds[2], ptCoil[0], ce);
-		interpPoint(ptEnds[0], ptEnds[2], ptCoil[1], ce, -hs * 2);
-		interpPoint(ptEnds[0], ptEnds[2], ptCoil[2], 1 - ce);
-		interpPoint(ptEnds[0], ptEnds[2], ptCoil[3], 1 - ce, -hs);
-		interpPoint(ptEnds[0], ptEnds[2], ptCoil[4], 1 - ce, -hs * 2);
+		this.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[0], ce);
+		this.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[1], ce, -hs * 2);
+		this.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[2], 1 - ce);
+		this.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[3], 1 - ce, -hs);
+		this.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[4], 1 - ce, -hs * 2);
 		for (i = 0; i != 2; i++)
 		{
 			int b = -hs * i * 2;
-			interpPoint(ptEnds[0], ptEnds[2], ptCore[i], cd, b);
-			interpPoint(ptEnds[0], ptEnds[2], ptCore[i + 2], 1 - cd, b);
+			this.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCore[i], cd, b);
+			this.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCore[i + 2], 1 - cd, b);
 		}
 	}
 
+	@Override
 	Point getPost(int n)
 	{
-		return ptEnds[n];
+		return this.ptEnds[n];
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 5;
 	}
 
+	@Override
 	void reset()
 	{
-		current[0] = current[1] = volts[0] = volts[1] = volts[2] = volts[3] = curcount[0] = curcount[1] = 0;
+		this.current[0] = this.current[1] = this.volts[0] = this.volts[1] = this.volts[2] = this.volts[3] = this.curcount[0] = this.curcount[1] = 0;
 	}
 
 	double a[];
 
+	@Override
 	void stamp()
 	{
 		// equations for transformer:
@@ -156,118 +169,149 @@ class TappedTransformerElm extends CircuitElm
 		// and similarly for i2
 		//
 		// first winding goes from node 0 to 1, second is from 2 to 3 to 4
-		double l1 = inductance;
+		double l1 = this.inductance;
 		// second winding is split in half, so each part has half the turns;
 		// we square the 1/2 to divide by 4
-		double l2 = inductance * ratio * ratio / 4;
+		double l2 = this.inductance * this.ratio * this.ratio / 4;
 		double cc = .99;
 		// double m1 = .999*Math.sqrt(l1*l2);
 		// mutual inductance between two halves of the second winding
 		// is equal to self-inductance of either half (slightly less
 		// because the coupling is not perfect)
 		// double m2 = .999*l2;
-		a = new double[9];
+		this.a = new double[9];
 		// load pre-inverted matrix
-		a[0] = (1 + cc) / (l1 * (1 + cc - 2 * cc * cc));
-		a[1] = a[2] = a[3] = a[6] = 2 * cc / ((2 * cc * cc - cc - 1) * inductance * ratio);
-		a[4] = a[8] = -4 * (1 + cc) / ((2 * cc * cc - cc - 1) * l1 * ratio * ratio);
-		a[5] = a[7] = 4 * cc / ((2 * cc * cc - cc - 1) * l1 * ratio * ratio);
+		this.a[0] = (1 + cc) / (l1 * (1 + cc - 2 * cc * cc));
+		this.a[1] = this.a[2] = this.a[3] = this.a[6] = 2 * cc / ((2 * cc * cc - cc - 1) * this.inductance * this.ratio);
+		this.a[4] = this.a[8] = -4 * (1 + cc) / ((2 * cc * cc - cc - 1) * l1 * this.ratio * this.ratio);
+		this.a[5] = this.a[7] = 4 * cc / ((2 * cc * cc - cc - 1) * l1 * this.ratio * this.ratio);
 		int i;
 		for (i = 0; i != 9; i++)
-			a[i] *= sim.timeStep / 2;
-		sim.stampConductance(nodes[0], nodes[1], a[0]);
-		sim.stampVCCurrentSource(nodes[0], nodes[1], nodes[2], nodes[3], a[1]);
-		sim.stampVCCurrentSource(nodes[0], nodes[1], nodes[3], nodes[4], a[2]);
+		{
+			this.a[i] *= CircuitElm.sim.timeStep / 2;
+		}
+		CircuitElm.sim.stampConductance(this.nodes[0], this.nodes[1], this.a[0]);
+		CircuitElm.sim.stampVCCurrentSource(this.nodes[0], this.nodes[1], this.nodes[2], this.nodes[3], this.a[1]);
+		CircuitElm.sim.stampVCCurrentSource(this.nodes[0], this.nodes[1], this.nodes[3], this.nodes[4], this.a[2]);
 
-		sim.stampVCCurrentSource(nodes[2], nodes[3], nodes[0], nodes[1], a[3]);
-		sim.stampConductance(nodes[2], nodes[3], a[4]);
-		sim.stampVCCurrentSource(nodes[2], nodes[3], nodes[3], nodes[4], a[5]);
+		CircuitElm.sim.stampVCCurrentSource(this.nodes[2], this.nodes[3], this.nodes[0], this.nodes[1], this.a[3]);
+		CircuitElm.sim.stampConductance(this.nodes[2], this.nodes[3], this.a[4]);
+		CircuitElm.sim.stampVCCurrentSource(this.nodes[2], this.nodes[3], this.nodes[3], this.nodes[4], this.a[5]);
 
-		sim.stampVCCurrentSource(nodes[3], nodes[4], nodes[0], nodes[1], a[6]);
-		sim.stampVCCurrentSource(nodes[3], nodes[4], nodes[2], nodes[3], a[7]);
-		sim.stampConductance(nodes[3], nodes[4], a[8]);
+		CircuitElm.sim.stampVCCurrentSource(this.nodes[3], this.nodes[4], this.nodes[0], this.nodes[1], this.a[6]);
+		CircuitElm.sim.stampVCCurrentSource(this.nodes[3], this.nodes[4], this.nodes[2], this.nodes[3], this.a[7]);
+		CircuitElm.sim.stampConductance(this.nodes[3], this.nodes[4], this.a[8]);
 
 		for (i = 0; i != 5; i++)
-			sim.stampRightSide(nodes[i]);
-		voltdiff = new double[3];
-		curSourceValue = new double[3];
+		{
+			CircuitElm.sim.stampRightSide(this.nodes[i]);
+		}
+		this.voltdiff = new double[3];
+		this.curSourceValue = new double[3];
 	}
 
+	@Override
 	void startIteration()
 	{
-		voltdiff[0] = volts[0] - volts[1];
-		voltdiff[1] = volts[2] - volts[3];
-		voltdiff[2] = volts[3] - volts[4];
+		this.voltdiff[0] = this.volts[0] - this.volts[1];
+		this.voltdiff[1] = this.volts[2] - this.volts[3];
+		this.voltdiff[2] = this.volts[3] - this.volts[4];
 		int i, j;
 		for (i = 0; i != 3; i++)
 		{
-			curSourceValue[i] = current[i];
+			this.curSourceValue[i] = this.current[i];
 			for (j = 0; j != 3; j++)
-				curSourceValue[i] += a[i * 3 + j] * voltdiff[j];
+			{
+				this.curSourceValue[i] += this.a[i * 3 + j] * this.voltdiff[j];
+			}
 		}
 	}
 
 	double curSourceValue[], voltdiff[];
 
+	@Override
 	void doStep()
 	{
-		sim.stampCurrentSource(nodes[0], nodes[1], curSourceValue[0]);
-		sim.stampCurrentSource(nodes[2], nodes[3], curSourceValue[1]);
-		sim.stampCurrentSource(nodes[3], nodes[4], curSourceValue[2]);
+		CircuitElm.sim.stampCurrentSource(this.nodes[0], this.nodes[1], this.curSourceValue[0]);
+		CircuitElm.sim.stampCurrentSource(this.nodes[2], this.nodes[3], this.curSourceValue[1]);
+		CircuitElm.sim.stampCurrentSource(this.nodes[3], this.nodes[4], this.curSourceValue[2]);
 	}
 
+	@Override
 	void calculateCurrent()
 	{
-		voltdiff[0] = volts[0] - volts[1];
-		voltdiff[1] = volts[2] - volts[3];
-		voltdiff[2] = volts[3] - volts[4];
+		this.voltdiff[0] = this.volts[0] - this.volts[1];
+		this.voltdiff[1] = this.volts[2] - this.volts[3];
+		this.voltdiff[2] = this.volts[3] - this.volts[4];
 		int i, j;
 		for (i = 0; i != 3; i++)
 		{
-			current[i] = curSourceValue[i];
+			this.current[i] = this.curSourceValue[i];
 			for (j = 0; j != 3; j++)
-				current[i] += a[i * 3 + j] * voltdiff[j];
+			{
+				this.current[i] += this.a[i * 3 + j] * this.voltdiff[j];
+			}
 		}
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
 		arr[0] = "transformer";
-		arr[1] = "L = " + getUnitText(inductance, "H");
-		arr[2] = "Ratio = " + ratio;
+		arr[1] = "L = " + CircuitElm.getUnitText(this.inductance, "H");
+		arr[2] = "Ratio = " + this.ratio;
 		// arr[3] = "I1 = " + getCurrentText(current1);
-		arr[3] = "Vd1 = " + getVoltageText(volts[0] - volts[2]);
+		arr[3] = "Vd1 = " + CircuitElm.getVoltageText(this.volts[0] - this.volts[2]);
 		// arr[5] = "I2 = " + getCurrentText(current2);
-		arr[4] = "Vd2 = " + getVoltageText(volts[1] - volts[3]);
+		arr[4] = "Vd2 = " + CircuitElm.getVoltageText(this.volts[1] - this.volts[3]);
 	}
 
+	@Override
 	boolean getConnection(int n1, int n2)
 	{
-		if (comparePair(n1, n2, 0, 1))
+		if (this.comparePair(n1, n2, 0, 1))
+		{
 			return true;
-		if (comparePair(n1, n2, 2, 3))
+		}
+		if (this.comparePair(n1, n2, 2, 3))
+		{
 			return true;
-		if (comparePair(n1, n2, 3, 4))
+		}
+		if (this.comparePair(n1, n2, 3, 4))
+		{
 			return true;
-		if (comparePair(n1, n2, 2, 4))
+		}
+		if (this.comparePair(n1, n2, 2, 4))
+		{
 			return true;
+		}
 		return false;
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
-			return new EditInfo("Primary Inductance (H)", inductance, .01, 5);
+		{
+			return new EditInfo("Primary Inductance (H)", this.inductance, .01, 5);
+		}
 		if (n == 1)
-			return new EditInfo("Ratio", ratio, 1, 10).setDimensionless();
+		{
+			return new EditInfo("Ratio", this.ratio, 1, 10).setDimensionless();
+		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (n == 0)
-			inductance = ei.value;
+		{
+			this.inductance = ei.value;
+		}
 		if (n == 1)
-			ratio = ei.value;
+		{
+			this.ratio = ei.value;
+		}
 	}
 }

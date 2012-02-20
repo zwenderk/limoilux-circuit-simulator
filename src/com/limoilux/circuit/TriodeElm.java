@@ -1,5 +1,7 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.StringTokenizer;
 
 class TriodeElm extends CircuitElm
@@ -11,40 +13,44 @@ class TriodeElm extends CircuitElm
 	public TriodeElm(int xx, int yy)
 	{
 		super(xx, yy);
-		mu = 93;
-		kg1 = 680;
-		setup();
+		this.mu = 93;
+		this.kg1 = 680;
+		this.setup();
 	}
 
 	public TriodeElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		mu = new Double(st.nextToken()).doubleValue();
-		kg1 = new Double(st.nextToken()).doubleValue();
-		setup();
+		this.mu = new Double(st.nextToken()).doubleValue();
+		this.kg1 = new Double(st.nextToken()).doubleValue();
+		this.setup();
 	}
 
 	void setup()
 	{
-		noDiagonal = true;
+		this.noDiagonal = true;
 	}
 
+	@Override
 	boolean nonLinear()
 	{
 		return true;
 	}
 
+	@Override
 	void reset()
 	{
-		volts[0] = volts[1] = volts[2] = 0;
-		curcount = 0;
+		this.volts[0] = this.volts[1] = this.volts[2] = 0;
+		this.curcount = 0;
 	}
 
+	@Override
 	String dump()
 	{
-		return super.dump() + " " + mu + " " + kg1;
+		return super.dump() + " " + this.mu + " " + this.kg1;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 173;
@@ -53,122 +59,142 @@ class TriodeElm extends CircuitElm
 	Point plate[], grid[], cath[], midgrid, midcath;
 	int circler;
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
-		plate = newPointArray(4);
-		grid = newPointArray(8);
-		cath = newPointArray(4);
-		grid[0] = point1;
+		this.plate = this.newPointArray(4);
+		this.grid = this.newPointArray(8);
+		this.cath = this.newPointArray(4);
+		this.grid[0] = this.point1;
 		int nearw = 8;
-		interpPoint(point1, point2, plate[1], 1, nearw);
+		this.interpPoint(this.point1, this.point2, this.plate[1], 1, nearw);
 		int farw = 32;
-		interpPoint(point1, point2, plate[0], 1, farw);
+		this.interpPoint(this.point1, this.point2, this.plate[0], 1, farw);
 		int platew = 18;
-		interpPoint2(point2, plate[1], plate[2], plate[3], 1, platew);
+		this.interpPoint2(this.point2, this.plate[1], this.plate[2], this.plate[3], 1, platew);
 
-		circler = 24;
-		interpPoint(point1, point2, grid[1], (dn - circler) / dn, 0);
+		this.circler = 24;
+		this.interpPoint(this.point1, this.point2, this.grid[1], (this.dn - this.circler) / this.dn, 0);
 		int i;
 		for (i = 0; i != 3; i++)
 		{
-			interpPoint(grid[1], point2, grid[2 + i * 2], (i * 3 + 1) / 4.5, 0);
-			interpPoint(grid[1], point2, grid[3 + i * 2], (i * 3 + 2) / 4.5, 0);
+			this.interpPoint(this.grid[1], this.point2, this.grid[2 + i * 2], (i * 3 + 1) / 4.5, 0);
+			this.interpPoint(this.grid[1], this.point2, this.grid[3 + i * 2], (i * 3 + 2) / 4.5, 0);
 		}
-		midgrid = point2;
+		this.midgrid = this.point2;
 
 		int cathw = 16;
-		midcath = interpPoint(point1, point2, 1, -nearw);
-		interpPoint2(point2, plate[1], cath[1], cath[2], -1, cathw);
-		interpPoint(point2, plate[1], cath[3], -1.2, -cathw);
-		interpPoint(point2, plate[1], cath[0], -farw / (double) nearw, cathw);
+		this.midcath = this.interpPoint(this.point1, this.point2, 1, -nearw);
+		this.interpPoint2(this.point2, this.plate[1], this.cath[1], this.cath[2], -1, cathw);
+		this.interpPoint(this.point2, this.plate[1], this.cath[3], -1.2, -cathw);
+		this.interpPoint(this.point2, this.plate[1], this.cath[0], -farw / (double) nearw, cathw);
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
 		g.setColor(Color.gray);
-		drawThickCircle(g, point2.x, point2.y, circler);
-		setBbox(point1, plate[0], 16);
-		adjustBbox(cath[0].x, cath[1].y, point2.x + circler, point2.y + circler);
-		setPowerColor(g, true);
+		CircuitElm.drawThickCircle(g, this.point2.x, this.point2.y, this.circler);
+		this.setBbox(this.point1, this.plate[0], 16);
+		this.adjustBbox(this.cath[0].x, this.cath[1].y, this.point2.x + this.circler, this.point2.y + this.circler);
+		this.setPowerColor(g, true);
 		// draw plate
-		setVoltageColor(g, volts[0]);
-		drawThickLine(g, plate[0], plate[1]);
-		drawThickLine(g, plate[2], plate[3]);
+		this.setVoltageColor(g, this.volts[0]);
+		CircuitElm.drawThickLine(g, this.plate[0], this.plate[1]);
+		CircuitElm.drawThickLine(g, this.plate[2], this.plate[3]);
 		// draw grid
-		setVoltageColor(g, volts[1]);
+		this.setVoltageColor(g, this.volts[1]);
 		int i;
 		for (i = 0; i != 8; i += 2)
-			drawThickLine(g, grid[i], grid[i + 1]);
-		// draw cathode
-		setVoltageColor(g, volts[2]);
-		for (i = 0; i != 3; i++)
-			drawThickLine(g, cath[i], cath[i + 1]);
-		// draw dots
-		curcountp = updateDotCount(currentp, curcountp);
-		curcountc = updateDotCount(currentc, curcountc);
-		curcountg = updateDotCount(currentg, curcountg);
-		if (sim.dragElm != this)
 		{
-			drawDots(g, plate[0], midgrid, curcountp);
-			drawDots(g, midgrid, midcath, curcountc);
-			drawDots(g, midcath, cath[1], curcountc + 8);
-			drawDots(g, cath[1], cath[0], curcountc + 8);
-			drawDots(g, point1, midgrid, curcountg);
+			CircuitElm.drawThickLine(g, this.grid[i], this.grid[i + 1]);
 		}
-		drawPosts(g);
+		// draw cathode
+		this.setVoltageColor(g, this.volts[2]);
+		for (i = 0; i != 3; i++)
+		{
+			CircuitElm.drawThickLine(g, this.cath[i], this.cath[i + 1]);
+		}
+		// draw dots
+		this.curcountp = this.updateDotCount(this.currentp, this.curcountp);
+		this.curcountc = this.updateDotCount(this.currentc, this.curcountc);
+		this.curcountg = this.updateDotCount(this.currentg, this.curcountg);
+		if (CircuitElm.sim.dragElm != this)
+		{
+			this.drawDots(g, this.plate[0], this.midgrid, this.curcountp);
+			this.drawDots(g, this.midgrid, this.midcath, this.curcountc);
+			this.drawDots(g, this.midcath, this.cath[1], this.curcountc + 8);
+			this.drawDots(g, this.cath[1], this.cath[0], this.curcountc + 8);
+			this.drawDots(g, this.point1, this.midgrid, this.curcountg);
+		}
+		this.drawPosts(g);
 	}
 
+	@Override
 	Point getPost(int n)
 	{
-		return (n == 0) ? plate[0] : (n == 1) ? grid[0] : cath[0];
+		return n == 0 ? this.plate[0] : n == 1 ? this.grid[0] : this.cath[0];
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 3;
 	}
 
+	@Override
 	double getPower()
 	{
-		return (volts[0] - volts[2]) * current;
+		return (this.volts[0] - this.volts[2]) * this.current;
 	}
 
 	double lastv0, lastv1, lastv2;
 
+	@Override
 	void doStep()
 	{
 		double vs[] = new double[3];
-		vs[0] = volts[0];
-		vs[1] = volts[1];
-		vs[2] = volts[2];
-		if (vs[1] > lastv1 + .5)
-			vs[1] = lastv1 + .5;
-		if (vs[1] < lastv1 - .5)
-			vs[1] = lastv1 - .5;
-		if (vs[2] > lastv2 + .5)
-			vs[2] = lastv2 + .5;
-		if (vs[2] < lastv2 - .5)
-			vs[2] = lastv2 - .5;
+		vs[0] = this.volts[0];
+		vs[1] = this.volts[1];
+		vs[2] = this.volts[2];
+		if (vs[1] > this.lastv1 + .5)
+		{
+			vs[1] = this.lastv1 + .5;
+		}
+		if (vs[1] < this.lastv1 - .5)
+		{
+			vs[1] = this.lastv1 - .5;
+		}
+		if (vs[2] > this.lastv2 + .5)
+		{
+			vs[2] = this.lastv2 + .5;
+		}
+		if (vs[2] < this.lastv2 - .5)
+		{
+			vs[2] = this.lastv2 - .5;
+		}
 		int grid = 1;
 		int cath = 2;
 		int plate = 0;
 		double vgk = vs[grid] - vs[cath];
 		double vpk = vs[plate] - vs[cath];
-		if (Math.abs(lastv0 - vs[0]) > .01 || Math.abs(lastv1 - vs[1]) > .01 || Math.abs(lastv2 - vs[2]) > .01)
-			sim.converged = false;
-		lastv0 = vs[0];
-		lastv1 = vs[1];
-		lastv2 = vs[2];
+		if (Math.abs(this.lastv0 - vs[0]) > .01 || Math.abs(this.lastv1 - vs[1]) > .01 || Math.abs(this.lastv2 - vs[2]) > .01)
+		{
+			CircuitElm.sim.converged = false;
+		}
+		this.lastv0 = vs[0];
+		this.lastv1 = vs[1];
+		this.lastv2 = vs[2];
 		double ids = 0;
 		double gm = 0;
 		double Gds = 0;
-		double ival = vgk + vpk / mu;
-		currentg = 0;
+		double ival = vgk + vpk / this.mu;
+		this.currentg = 0;
 		if (vgk > .01)
 		{
-			sim.stampResistor(nodes[grid], nodes[cath], gridCurrentR);
-			currentg = vgk / gridCurrentR;
+			CircuitElm.sim.stampResistor(this.nodes[grid], this.nodes[cath], this.gridCurrentR);
+			this.currentg = vgk / this.gridCurrentR;
 		}
 		if (ival < 0)
 		{
@@ -179,47 +205,50 @@ class TriodeElm extends CircuitElm
 		}
 		else
 		{
-			ids = Math.pow(ival, 1.5) / kg1;
-			double q = 1.5 * Math.sqrt(ival) / kg1;
+			ids = Math.pow(ival, 1.5) / this.kg1;
+			double q = 1.5 * Math.sqrt(ival) / this.kg1;
 			// gm = dids/dgk;
 			// Gds = dids/dpk;
 			Gds = q;
-			gm = q / mu;
+			gm = q / this.mu;
 		}
-		currentp = ids;
-		currentc = ids + currentg;
+		this.currentp = ids;
+		this.currentc = ids + this.currentg;
 		double rs = -ids + Gds * vpk + gm * vgk;
-		sim.stampMatrix(nodes[plate], nodes[plate], Gds);
-		sim.stampMatrix(nodes[plate], nodes[cath], -Gds - gm);
-		sim.stampMatrix(nodes[plate], nodes[grid], gm);
+		CircuitElm.sim.stampMatrix(this.nodes[plate], this.nodes[plate], Gds);
+		CircuitElm.sim.stampMatrix(this.nodes[plate], this.nodes[cath], -Gds - gm);
+		CircuitElm.sim.stampMatrix(this.nodes[plate], this.nodes[grid], gm);
 
-		sim.stampMatrix(nodes[cath], nodes[plate], -Gds);
-		sim.stampMatrix(nodes[cath], nodes[cath], Gds + gm);
-		sim.stampMatrix(nodes[cath], nodes[grid], -gm);
+		CircuitElm.sim.stampMatrix(this.nodes[cath], this.nodes[plate], -Gds);
+		CircuitElm.sim.stampMatrix(this.nodes[cath], this.nodes[cath], Gds + gm);
+		CircuitElm.sim.stampMatrix(this.nodes[cath], this.nodes[grid], -gm);
 
-		sim.stampRightSide(nodes[plate], rs);
-		sim.stampRightSide(nodes[cath], -rs);
+		CircuitElm.sim.stampRightSide(this.nodes[plate], rs);
+		CircuitElm.sim.stampRightSide(this.nodes[cath], -rs);
 	}
 
+	@Override
 	void stamp()
 	{
-		sim.stampNonLinear(nodes[0]);
-		sim.stampNonLinear(nodes[1]);
-		sim.stampNonLinear(nodes[2]);
+		CircuitElm.sim.stampNonLinear(this.nodes[0]);
+		CircuitElm.sim.stampNonLinear(this.nodes[1]);
+		CircuitElm.sim.stampNonLinear(this.nodes[2]);
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
 		arr[0] = "triode";
-		double vbc = volts[0] - volts[1];
-		double vbe = volts[0] - volts[2];
-		double vce = volts[1] - volts[2];
-		arr[1] = "Vbe = " + getVoltageText(vbe);
-		arr[2] = "Vbc = " + getVoltageText(vbc);
-		arr[3] = "Vce = " + getVoltageText(vce);
+		double vbc = this.volts[0] - this.volts[1];
+		double vbe = this.volts[0] - this.volts[2];
+		double vce = this.volts[1] - this.volts[2];
+		arr[1] = "Vbe = " + CircuitElm.getVoltageText(vbe);
+		arr[2] = "Vbc = " + CircuitElm.getVoltageText(vbc);
+		arr[3] = "Vce = " + CircuitElm.getVoltageText(vce);
 	}
 
 	// grid not connected to other terminals
+	@Override
 	boolean getConnection(int n1, int n2)
 	{
 		return !(n1 == 1 || n2 == 1);

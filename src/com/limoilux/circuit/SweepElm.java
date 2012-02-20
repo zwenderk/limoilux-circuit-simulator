@@ -1,5 +1,7 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Checkbox;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.StringTokenizer;
 
 class SweepElm extends CircuitElm
@@ -11,29 +13,31 @@ class SweepElm extends CircuitElm
 	public SweepElm(int xx, int yy)
 	{
 		super(xx, yy);
-		minF = 20;
-		maxF = 4000;
-		maxV = 5;
-		sweepTime = .1;
-		flags = FLAG_BIDIR;
-		reset();
+		this.minF = 20;
+		this.maxF = 4000;
+		this.maxV = 5;
+		this.sweepTime = .1;
+		this.flags = this.FLAG_BIDIR;
+		this.reset();
 	}
 
 	public SweepElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		minF = new Double(st.nextToken()).doubleValue();
-		maxF = new Double(st.nextToken()).doubleValue();
-		maxV = new Double(st.nextToken()).doubleValue();
-		sweepTime = new Double(st.nextToken()).doubleValue();
-		reset();
+		this.minF = new Double(st.nextToken()).doubleValue();
+		this.maxF = new Double(st.nextToken()).doubleValue();
+		this.maxV = new Double(st.nextToken()).doubleValue();
+		this.sweepTime = new Double(st.nextToken()).doubleValue();
+		this.reset();
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 170;
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 1;
@@ -41,29 +45,32 @@ class SweepElm extends CircuitElm
 
 	final int circleSize = 17;
 
+	@Override
 	String dump()
 	{
-		return super.dump() + " " + minF + " " + maxF + " " + maxV + " " + sweepTime;
+		return super.dump() + " " + this.minF + " " + this.maxF + " " + this.maxV + " " + this.sweepTime;
 	}
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
-		lead1 = interpPoint(point1, point2, 1 - circleSize / dn);
+		this.lead1 = this.interpPoint(this.point1, this.point2, 1 - this.circleSize / this.dn);
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
-		setBbox(point1, point2, circleSize);
-		setVoltageColor(g, volts[0]);
-		drawThickLine(g, point1, lead1);
-		g.setColor(needsHighlight() ? selectColor : Color.gray);
-		setPowerColor(g, false);
-		int xc = point2.x;
-		int yc = point2.y;
-		drawThickCircle(g, xc, yc, circleSize);
+		this.setBbox(this.point1, this.point2, this.circleSize);
+		this.setVoltageColor(g, this.volts[0]);
+		CircuitElm.drawThickLine(g, this.point1, this.lead1);
+		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : Color.gray);
+		this.setPowerColor(g, false);
+		int xc = this.point2.x;
+		int yc = this.point2.y;
+		CircuitElm.drawThickCircle(g, xc, yc, this.circleSize);
 		int wl = 8;
-		adjustBbox(xc - circleSize, yc - circleSize, xc + circleSize, yc + circleSize);
+		this.adjustBbox(xc - this.circleSize, yc - this.circleSize, xc + this.circleSize, yc + this.circleSize);
 		int i;
 		int xl = 10;
 		int ox = -1, oy = -1;
@@ -71,34 +78,45 @@ class SweepElm extends CircuitElm
 		// double w = (this == mouseElm ? 3 : 2);
 		tm %= 2000;
 		if (tm > 1000)
+		{
 			tm = 2000 - tm;
+		}
 		double w = 1 + tm * .002;
-		if (!sim.stoppedCheck.getState())
-			w = 1 + 2 * (frequency - minF) / (maxF - minF);
+		if (!CircuitElm.sim.stoppedCheck.getState())
+		{
+			w = 1 + 2 * (this.frequency - this.minF) / (this.maxF - this.minF);
+		}
 		for (i = -xl; i <= xl; i++)
 		{
-			int yy = yc + (int) (.95 * Math.sin(i * pi * w / xl) * wl);
+			int yy = yc + (int) (.95 * Math.sin(i * CircuitElm.pi * w / xl) * wl);
 			if (ox != -1)
-				drawThickLine(g, ox, oy, xc + i, yy);
+			{
+				CircuitElm.drawThickLine(g, ox, oy, xc + i, yy);
+			}
 			ox = xc + i;
 			oy = yy;
 		}
-		if (sim.showValuesCheckItem.getState())
+		if (CircuitElm.sim.showValuesCheckItem.getState())
 		{
-			String s = getShortUnitText(frequency, "Hz");
-			if (dx == 0 || dy == 0)
-				drawValues(g, s, circleSize);
+			String s = CircuitElm.getShortUnitText(this.frequency, "Hz");
+			if (this.dx == 0 || this.dy == 0)
+			{
+				this.drawValues(g, s, this.circleSize);
+			}
 		}
 
-		drawPosts(g);
-		curcount = updateDotCount(-current, curcount);
-		if (sim.dragElm != this)
-			drawDots(g, point1, lead1, curcount);
+		this.drawPosts(g);
+		this.curcount = this.updateDotCount(-this.current, this.curcount);
+		if (CircuitElm.sim.dragElm != this)
+		{
+			this.drawDots(g, this.point1, this.lead1, this.curcount);
+		}
 	}
 
+	@Override
 	void stamp()
 	{
-		sim.stampVoltageSource(0, nodes[0], voltSource);
+		CircuitElm.sim.stampVoltageSource(0, this.nodes[0], this.voltSource);
 	}
 
 	double fadd, fmul, freqTime, savedTimeStep;
@@ -106,148 +124,181 @@ class SweepElm extends CircuitElm
 
 	void setParams()
 	{
-		if (frequency < minF || frequency > maxF)
+		if (this.frequency < this.minF || this.frequency > this.maxF)
 		{
-			frequency = minF;
-			freqTime = 0;
-			dir = 1;
+			this.frequency = this.minF;
+			this.freqTime = 0;
+			this.dir = 1;
 		}
-		if ((flags & FLAG_LOG) == 0)
+		if ((this.flags & this.FLAG_LOG) == 0)
 		{
-			fadd = dir * sim.timeStep * (maxF - minF) / sweepTime;
-			fmul = 1;
+			this.fadd = this.dir * CircuitElm.sim.timeStep * (this.maxF - this.minF) / this.sweepTime;
+			this.fmul = 1;
 		}
 		else
 		{
-			fadd = 0;
-			fmul = Math.pow(maxF / minF, dir * sim.timeStep / sweepTime);
+			this.fadd = 0;
+			this.fmul = Math.pow(this.maxF / this.minF, this.dir * CircuitElm.sim.timeStep / this.sweepTime);
 		}
-		savedTimeStep = sim.timeStep;
+		this.savedTimeStep = CircuitElm.sim.timeStep;
 	}
 
+	@Override
 	void reset()
 	{
-		frequency = minF;
-		freqTime = 0;
-		dir = 1;
-		setParams();
+		this.frequency = this.minF;
+		this.freqTime = 0;
+		this.dir = 1;
+		this.setParams();
 	}
 
 	double v;
 
+	@Override
 	void startIteration()
 	{
 		// has timestep been changed?
-		if (sim.timeStep != savedTimeStep)
-			setParams();
-		v = Math.sin(freqTime) * maxV;
-		freqTime += frequency * 2 * pi * sim.timeStep;
-		frequency = frequency * fmul + fadd;
-		if (frequency >= maxF && dir == 1)
+		if (CircuitElm.sim.timeStep != this.savedTimeStep)
 		{
-			if ((flags & FLAG_BIDIR) != 0)
+			this.setParams();
+		}
+		this.v = Math.sin(this.freqTime) * this.maxV;
+		this.freqTime += this.frequency * 2 * CircuitElm.pi * CircuitElm.sim.timeStep;
+		this.frequency = this.frequency * this.fmul + this.fadd;
+		if (this.frequency >= this.maxF && this.dir == 1)
+		{
+			if ((this.flags & this.FLAG_BIDIR) != 0)
 			{
-				fadd = -fadd;
-				fmul = 1 / fmul;
-				dir = -1;
+				this.fadd = -this.fadd;
+				this.fmul = 1 / this.fmul;
+				this.dir = -1;
 			}
 			else
-				frequency = minF;
+			{
+				this.frequency = this.minF;
+			}
 		}
-		if (frequency <= minF && dir == -1)
+		if (this.frequency <= this.minF && this.dir == -1)
 		{
-			fadd = -fadd;
-			fmul = 1 / fmul;
-			dir = 1;
+			this.fadd = -this.fadd;
+			this.fmul = 1 / this.fmul;
+			this.dir = 1;
 		}
 	}
 
+	@Override
 	void doStep()
 	{
-		sim.updateVoltageSource(0, nodes[0], voltSource, v);
+		CircuitElm.sim.updateVoltageSource(0, this.nodes[0], this.voltSource, this.v);
 	}
 
+	@Override
 	double getVoltageDiff()
 	{
-		return volts[0];
+		return this.volts[0];
 	}
 
+	@Override
 	int getVoltageSourceCount()
 	{
 		return 1;
 	}
 
+	@Override
 	boolean hasGroundConnection(int n1)
 	{
 		return true;
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
-		arr[0] = "sweep " + (((flags & FLAG_LOG) == 0) ? "(linear)" : "(log)");
-		arr[1] = "I = " + getCurrentDText(getCurrent());
-		arr[2] = "V = " + getVoltageText(volts[0]);
-		arr[3] = "f = " + getUnitText(frequency, "Hz");
-		arr[4] = "range = " + getUnitText(minF, "Hz") + " .. " + getUnitText(maxF, "Hz");
-		arr[5] = "time = " + getUnitText(sweepTime, "s");
+		arr[0] = "sweep " + ((this.flags & this.FLAG_LOG) == 0 ? "(linear)" : "(log)");
+		arr[1] = "I = " + CircuitElm.getCurrentDText(this.getCurrent());
+		arr[2] = "V = " + CircuitElm.getVoltageText(this.volts[0]);
+		arr[3] = "f = " + CircuitElm.getUnitText(this.frequency, "Hz");
+		arr[4] = "range = " + CircuitElm.getUnitText(this.minF, "Hz") + " .. " + CircuitElm.getUnitText(this.maxF, "Hz");
+		arr[5] = "time = " + CircuitElm.getUnitText(this.sweepTime, "s");
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
-			return new EditInfo("Min Frequency (Hz)", minF, 0, 0);
+		{
+			return new EditInfo("Min Frequency (Hz)", this.minF, 0, 0);
+		}
 		if (n == 1)
-			return new EditInfo("Max Frequency (Hz)", maxF, 0, 0);
+		{
+			return new EditInfo("Max Frequency (Hz)", this.maxF, 0, 0);
+		}
 		if (n == 2)
-			return new EditInfo("Sweep Time (s)", sweepTime, 0, 0);
+		{
+			return new EditInfo("Sweep Time (s)", this.sweepTime, 0, 0);
+		}
 		if (n == 3)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Logarithmic", (flags & FLAG_LOG) != 0);
+			ei.checkbox = new Checkbox("Logarithmic", (this.flags & this.FLAG_LOG) != 0);
 			return ei;
 		}
 		if (n == 4)
-			return new EditInfo("Max Voltage", maxV, 0, 0);
+		{
+			return new EditInfo("Max Voltage", this.maxV, 0, 0);
+		}
 		if (n == 5)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Bidirectional", (flags & FLAG_BIDIR) != 0);
+			ei.checkbox = new Checkbox("Bidirectional", (this.flags & this.FLAG_BIDIR) != 0);
 			return ei;
 		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
-		double maxfreq = 1 / (8 * sim.timeStep);
+		double maxfreq = 1 / (8 * CircuitElm.sim.timeStep);
 		if (n == 0)
 		{
-			minF = ei.value;
-			if (minF > maxfreq)
-				minF = maxfreq;
+			this.minF = ei.value;
+			if (this.minF > maxfreq)
+			{
+				this.minF = maxfreq;
+			}
 		}
 		if (n == 1)
 		{
-			maxF = ei.value;
-			if (maxF > maxfreq)
-				maxF = maxfreq;
+			this.maxF = ei.value;
+			if (this.maxF > maxfreq)
+			{
+				this.maxF = maxfreq;
+			}
 		}
 		if (n == 2)
-			sweepTime = ei.value;
+		{
+			this.sweepTime = ei.value;
+		}
 		if (n == 3)
 		{
-			flags &= ~FLAG_LOG;
+			this.flags &= ~this.FLAG_LOG;
 			if (ei.checkbox.getState())
-				flags |= FLAG_LOG;
+			{
+				this.flags |= this.FLAG_LOG;
+			}
 		}
 		if (n == 4)
-			maxV = ei.value;
+		{
+			this.maxV = ei.value;
+		}
 		if (n == 5)
 		{
-			flags &= ~FLAG_BIDIR;
+			this.flags &= ~this.FLAG_BIDIR;
 			if (ei.checkbox.getState())
-				flags |= FLAG_BIDIR;
+			{
+				this.flags |= this.FLAG_BIDIR;
+			}
 		}
-		setParams();
+		this.setParams();
 	}
 }

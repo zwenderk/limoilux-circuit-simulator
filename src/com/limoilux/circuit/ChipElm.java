@@ -1,5 +1,10 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Checkbox;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.StringTokenizer;
 
 abstract class ChipElm extends CircuitElm
@@ -13,28 +18,32 @@ abstract class ChipElm extends CircuitElm
 	public ChipElm(int xx, int yy)
 	{
 		super(xx, yy);
-		if (needsBits())
-			bits = (this instanceof DecadeElm) ? 10 : 4;
-		noDiagonal = true;
-		setupPins();
-		setSize(sim.smallGridCheckItem.getState() ? 1 : 2);
+		if (this.needsBits())
+		{
+			this.bits = this instanceof DecadeElm ? 10 : 4;
+		}
+		this.noDiagonal = true;
+		this.setupPins();
+		this.setSize(CircuitElm.sim.smallGridCheckItem.getState() ? 1 : 2);
 	}
 
 	public ChipElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		if (needsBits())
-			bits = new Integer(st.nextToken()).intValue();
-		noDiagonal = true;
-		setupPins();
-		setSize((f & FLAG_SMALL) != 0 ? 1 : 2);
-		int i;
-		for (i = 0; i != getPostCount(); i++)
+		if (this.needsBits())
 		{
-			if (pins[i].state)
+			this.bits = new Integer(st.nextToken()).intValue();
+		}
+		this.noDiagonal = true;
+		this.setupPins();
+		this.setSize((f & this.FLAG_SMALL) != 0 ? 1 : 2);
+		int i;
+		for (i = 0; i != this.getPostCount(); i++)
+		{
+			if (this.pins[i].state)
 			{
-				volts[i] = new Double(st.nextToken()).doubleValue();
-				pins[i].value = volts[i] > 2.5;
+				this.volts[i] = new Double(st.nextToken()).doubleValue();
+				this.pins[i].value = this.volts[i] > 2.5;
 			}
 		}
 	}
@@ -46,43 +55,44 @@ abstract class ChipElm extends CircuitElm
 
 	void setSize(int s)
 	{
-		csize = s;
-		cspc = 8 * s;
-		cspc2 = cspc * 2;
-		flags &= ~FLAG_SMALL;
-		flags |= (s == 1) ? FLAG_SMALL : 0;
+		this.csize = s;
+		this.cspc = 8 * s;
+		this.cspc2 = this.cspc * 2;
+		this.flags &= ~this.FLAG_SMALL;
+		this.flags |= s == 1 ? this.FLAG_SMALL : 0;
 	}
 
 	abstract void setupPins();
 
+	@Override
 	void draw(Graphics g)
 	{
-		drawChip(g);
+		this.drawChip(g);
 	}
 
 	void drawChip(Graphics g)
 	{
 		int i;
-		Font f = new Font("SansSerif", 0, 10 * csize);
+		Font f = new Font("SansSerif", 0, 10 * this.csize);
 		g.setFont(f);
 		FontMetrics fm = g.getFontMetrics();
-		for (i = 0; i != getPostCount(); i++)
+		for (i = 0; i != this.getPostCount(); i++)
 		{
-			Pin p = pins[i];
-			setVoltageColor(g, volts[i]);
+			Pin p = this.pins[i];
+			this.setVoltageColor(g, this.volts[i]);
 			Point a = p.post;
 			Point b = p.stub;
-			drawThickLine(g, a, b);
-			p.curcount = updateDotCount(p.current, p.curcount);
-			drawDots(g, b, a, p.curcount);
+			CircuitElm.drawThickLine(g, a, b);
+			p.curcount = this.updateDotCount(p.current, p.curcount);
+			this.drawDots(g, b, a, p.curcount);
 			if (p.bubble)
 			{
-				g.setColor(sim.printableCheckItem.getState() ? Color.white : Color.black);
-				drawThickCircle(g, p.bubbleX, p.bubbleY, 1);
-				g.setColor(lightGrayColor);
-				drawThickCircle(g, p.bubbleX, p.bubbleY, 3);
+				g.setColor(CircuitElm.sim.printableCheckItem.getState() ? Color.white : Color.black);
+				CircuitElm.drawThickCircle(g, p.bubbleX, p.bubbleY, 1);
+				g.setColor(CircuitElm.lightGrayColor);
+				CircuitElm.drawThickCircle(g, p.bubbleX, p.bubbleY, 3);
 			}
-			g.setColor(whiteColor);
+			g.setColor(CircuitElm.whiteColor);
 			int sw = fm.stringWidth(p.text);
 			g.drawString(p.text, p.textloc.x - sw / 2, p.textloc.y + fm.getAscent() / 2);
 			if (p.lineOver)
@@ -91,12 +101,16 @@ abstract class ChipElm extends CircuitElm
 				g.drawLine(p.textloc.x - sw / 2, ya, p.textloc.x + sw / 2, ya);
 			}
 		}
-		g.setColor(needsHighlight() ? selectColor : lightGrayColor);
-		drawThickPolygon(g, rectPointsX, rectPointsY, 4);
-		if (clockPointsX != null)
-			g.drawPolyline(clockPointsX, clockPointsY, 3);
-		for (i = 0; i != getPostCount(); i++)
-			drawPost(g, pins[i].post.x, pins[i].post.y, nodes[i]);
+		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
+		CircuitElm.drawThickPolygon(g, this.rectPointsX, this.rectPointsY, 4);
+		if (this.clockPointsX != null)
+		{
+			g.drawPolyline(this.clockPointsX, this.clockPointsY, 3);
+		}
+		for (i = 0; i != this.getPostCount(); i++)
+		{
+			this.drawPost(g, this.pins[i].post.x, this.pins[i].post.y, this.nodes[i]);
+		}
 	}
 
 	int rectPointsX[], rectPointsY[];
@@ -105,73 +119,80 @@ abstract class ChipElm extends CircuitElm
 	int sizeX, sizeY;
 	boolean lastClock;
 
+	@Override
 	void drag(int xx, int yy)
 	{
-		yy = sim.snapGrid(yy);
-		if (xx < x)
+		yy = CircuitElm.sim.snapGrid(yy);
+		if (xx < this.x)
 		{
-			xx = x;
-			yy = y;
+			xx = this.x;
+			yy = this.y;
 		}
 		else
 		{
-			y = y2 = yy;
-			x2 = sim.snapGrid(xx);
+			this.y = this.y2 = yy;
+			this.x2 = CircuitElm.sim.snapGrid(xx);
 		}
-		setPoints();
+		this.setPoints();
 	}
 
+	@Override
 	void setPoints()
 	{
-		if (x2 - x > sizeX * cspc2 && this == sim.dragElm)
-			setSize(2);
-		int hs = cspc;
-		int x0 = x + cspc2;
-		int y0 = y;
-		int xr = x0 - cspc;
-		int yr = y0 - cspc;
-		int xs = sizeX * cspc2;
-		int ys = sizeY * cspc2;
-		rectPointsX = new int[]
-		{ xr, xr + xs, xr + xs, xr };
-		rectPointsY = new int[]
-		{ yr, yr, yr + ys, yr + ys };
-		setBbox(xr, yr, rectPointsX[2], rectPointsY[2]);
-		int i;
-		for (i = 0; i != getPostCount(); i++)
+		if (this.x2 - this.x > this.sizeX * this.cspc2 && this == CircuitElm.sim.dragElm)
 		{
-			Pin p = pins[i];
+			this.setSize(2);
+		}
+		int hs = this.cspc;
+		int x0 = this.x + this.cspc2;
+		int y0 = this.y;
+		int xr = x0 - this.cspc;
+		int yr = y0 - this.cspc;
+		int xs = this.sizeX * this.cspc2;
+		int ys = this.sizeY * this.cspc2;
+		this.rectPointsX = new int[]
+				{ xr, xr + xs, xr + xs, xr };
+		this.rectPointsY = new int[]
+				{ yr, yr, yr + ys, yr + ys };
+		this.setBbox(xr, yr, this.rectPointsX[2], this.rectPointsY[2]);
+		int i;
+		for (i = 0; i != this.getPostCount(); i++)
+		{
+			Pin p = this.pins[i];
 			switch (p.side)
 			{
 			case SIDE_N:
 				p.setPoint(x0, y0, 1, 0, 0, -1, 0, 0);
 				break;
 			case SIDE_S:
-				p.setPoint(x0, y0, 1, 0, 0, 1, 0, ys - cspc2);
+				p.setPoint(x0, y0, 1, 0, 0, 1, 0, ys - this.cspc2);
 				break;
 			case SIDE_W:
 				p.setPoint(x0, y0, 0, 1, -1, 0, 0, 0);
 				break;
 			case SIDE_E:
-				p.setPoint(x0, y0, 0, 1, 1, 0, xs - cspc2, 0);
+				p.setPoint(x0, y0, 0, 1, 1, 0, xs - this.cspc2, 0);
 				break;
 			}
 		}
 	}
 
+	@Override
 	Point getPost(int n)
 	{
-		return pins[n].post;
+		return this.pins[n].post;
 	}
 
+	@Override
 	abstract int getVoltageSourceCount(); // output count
 
+	@Override
 	void setVoltageSource(int j, int vs)
 	{
 		int i;
-		for (i = 0; i != getPostCount(); i++)
+		for (i = 0; i != this.getPostCount(); i++)
 		{
-			Pin p = pins[i];
+			Pin p = this.pins[i];
 			if (p.output && j-- == 0)
 			{
 				p.voltSource = vs;
@@ -181,14 +202,17 @@ abstract class ChipElm extends CircuitElm
 		System.out.println("setVoltageSource failed for " + this);
 	}
 
+	@Override
 	void stamp()
 	{
 		int i;
-		for (i = 0; i != getPostCount(); i++)
+		for (i = 0; i != this.getPostCount(); i++)
 		{
-			Pin p = pins[i];
+			Pin p = this.pins[i];
 			if (p.output)
-				sim.stampVoltageSource(0, nodes[i], p.voltSource);
+			{
+				CircuitElm.sim.stampVoltageSource(0, this.nodes[i], p.voltSource);
+			}
 		}
 	}
 
@@ -196,79 +220,106 @@ abstract class ChipElm extends CircuitElm
 	{
 	}
 
+	@Override
 	void doStep()
 	{
 		int i;
-		for (i = 0; i != getPostCount(); i++)
+		for (i = 0; i != this.getPostCount(); i++)
 		{
-			Pin p = pins[i];
+			Pin p = this.pins[i];
 			if (!p.output)
-				p.value = volts[i] > 2.5;
+			{
+				p.value = this.volts[i] > 2.5;
+			}
 		}
-		execute();
-		for (i = 0; i != getPostCount(); i++)
+		this.execute();
+		for (i = 0; i != this.getPostCount(); i++)
 		{
-			Pin p = pins[i];
+			Pin p = this.pins[i];
 			if (p.output)
-				sim.updateVoltageSource(0, nodes[i], p.voltSource, p.value ? 5 : 0);
+			{
+				CircuitElm.sim.updateVoltageSource(0, this.nodes[i], p.voltSource, p.value ? 5 : 0);
+			}
 		}
 	}
 
+	@Override
 	void reset()
 	{
 		int i;
-		for (i = 0; i != getPostCount(); i++)
+		for (i = 0; i != this.getPostCount(); i++)
 		{
-			pins[i].value = false;
-			pins[i].curcount = 0;
-			volts[i] = 0;
+			this.pins[i].value = false;
+			this.pins[i].curcount = 0;
+			this.volts[i] = 0;
 		}
-		lastClock = false;
+		this.lastClock = false;
 	}
 
+	@Override
 	String dump()
 	{
-		int t = getDumpType();
+		int t = this.getDumpType();
 		String s = super.dump();
-		if (needsBits())
-			s += " " + bits;
-		int i;
-		for (i = 0; i != getPostCount(); i++)
+		if (this.needsBits())
 		{
-			if (pins[i].state)
-				s += " " + volts[i];
+			s += " " + this.bits;
+		}
+		int i;
+		for (i = 0; i != this.getPostCount(); i++)
+		{
+			if (this.pins[i].state)
+			{
+				s += " " + this.volts[i];
+			}
 		}
 		return s;
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
-		arr[0] = getChipName();
+		arr[0] = this.getChipName();
 		int i, a = 1;
-		for (i = 0; i != getPostCount(); i++)
+		for (i = 0; i != this.getPostCount(); i++)
 		{
-			Pin p = pins[i];
+			Pin p = this.pins[i];
 			if (arr[a] != null)
+			{
 				arr[a] += "; ";
+			}
 			else
+			{
 				arr[a] = "";
+			}
 			String t = p.text;
 			if (p.lineOver)
+			{
 				t += '\'';
+			}
 			if (p.clock)
+			{
 				t = "Clk";
-			arr[a] += t + " = " + getVoltageText(volts[i]);
+			}
+			arr[a] += t + " = " + CircuitElm.getVoltageText(this.volts[i]);
 			if (i % 2 == 1)
+			{
 				a++;
+			}
 		}
 	}
 
+	@Override
 	void setCurrent(int x, double c)
 	{
 		int i;
-		for (i = 0; i != getPostCount(); i++)
-			if (pins[i].output && pins[i].voltSource == x)
-				pins[i].current = c;
+		for (i = 0; i != this.getPostCount(); i++)
+		{
+			if (this.pins[i].output && this.pins[i].voltSource == x)
+			{
+				this.pins[i].current = c;
+			}
+		}
 	}
 
 	String getChipName()
@@ -276,50 +327,62 @@ abstract class ChipElm extends CircuitElm
 		return "chip";
 	}
 
+	@Override
 	boolean getConnection(int n1, int n2)
 	{
 		return false;
 	}
 
+	@Override
 	boolean hasGroundConnection(int n1)
 	{
-		return pins[n1].output;
+		return this.pins[n1].output;
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Flip X", (flags & FLAG_FLIP_X) != 0);
+			ei.checkbox = new Checkbox("Flip X", (this.flags & this.FLAG_FLIP_X) != 0);
 			return ei;
 		}
 		if (n == 1)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Flip Y", (flags & FLAG_FLIP_Y) != 0);
+			ei.checkbox = new Checkbox("Flip Y", (this.flags & this.FLAG_FLIP_Y) != 0);
 			return ei;
 		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (n == 0)
 		{
 			if (ei.checkbox.getState())
-				flags |= FLAG_FLIP_X;
+			{
+				this.flags |= this.FLAG_FLIP_X;
+			}
 			else
-				flags &= ~FLAG_FLIP_X;
-			setPoints();
+			{
+				this.flags &= ~this.FLAG_FLIP_X;
+			}
+			this.setPoints();
 		}
 		if (n == 1)
 		{
 			if (ei.checkbox.getState())
-				flags |= FLAG_FLIP_Y;
+			{
+				this.flags |= this.FLAG_FLIP_Y;
+			}
 			else
-				flags &= ~FLAG_FLIP_Y;
-			setPoints();
+			{
+				this.flags &= ~this.FLAG_FLIP_Y;
+			}
+			this.setPoints();
 		}
 	}
 
@@ -332,9 +395,9 @@ abstract class ChipElm extends CircuitElm
 	{
 		Pin(int p, int s, String t)
 		{
-			pos = p;
-			side = s;
-			text = t;
+			this.pos = p;
+			this.side = s;
+			this.text = t;
 		}
 
 		Point post, stub;
@@ -346,40 +409,40 @@ abstract class ChipElm extends CircuitElm
 
 		void setPoint(int px, int py, int dx, int dy, int dax, int day, int sx, int sy)
 		{
-			if ((flags & FLAG_FLIP_X) != 0)
+			if ((ChipElm.this.flags & ChipElm.this.FLAG_FLIP_X) != 0)
 			{
 				dx = -dx;
 				dax = -dax;
-				px += cspc2 * (sizeX - 1);
+				px += ChipElm.this.cspc2 * (ChipElm.this.sizeX - 1);
 				sx = -sx;
 			}
-			if ((flags & FLAG_FLIP_Y) != 0)
+			if ((ChipElm.this.flags & ChipElm.this.FLAG_FLIP_Y) != 0)
 			{
 				dy = -dy;
 				day = -day;
-				py += cspc2 * (sizeY - 1);
+				py += ChipElm.this.cspc2 * (ChipElm.this.sizeY - 1);
 				sy = -sy;
 			}
-			int xa = px + cspc2 * dx * pos + sx;
-			int ya = py + cspc2 * dy * pos + sy;
-			post = new Point(xa + dax * cspc2, ya + day * cspc2);
-			stub = new Point(xa + dax * cspc, ya + day * cspc);
-			textloc = new Point(xa, ya);
-			if (bubble)
+			int xa = px + ChipElm.this.cspc2 * dx * this.pos + sx;
+			int ya = py + ChipElm.this.cspc2 * dy * this.pos + sy;
+			this.post = new Point(xa + dax * ChipElm.this.cspc2, ya + day * ChipElm.this.cspc2);
+			this.stub = new Point(xa + dax * ChipElm.this.cspc, ya + day * ChipElm.this.cspc);
+			this.textloc = new Point(xa, ya);
+			if (this.bubble)
 			{
-				bubbleX = xa + dax * 10 * csize;
-				bubbleY = ya + day * 10 * csize;
+				this.bubbleX = xa + dax * 10 * ChipElm.this.csize;
+				this.bubbleY = ya + day * 10 * ChipElm.this.csize;
 			}
-			if (clock)
+			if (this.clock)
 			{
-				clockPointsX = new int[3];
-				clockPointsY = new int[3];
-				clockPointsX[0] = xa + dax * cspc - dx * cspc / 2;
-				clockPointsY[0] = ya + day * cspc - dy * cspc / 2;
-				clockPointsX[1] = xa;
-				clockPointsY[1] = ya;
-				clockPointsX[2] = xa + dax * cspc + dx * cspc / 2;
-				clockPointsY[2] = ya + day * cspc + dy * cspc / 2;
+				ChipElm.this.clockPointsX = new int[3];
+				ChipElm.this.clockPointsY = new int[3];
+				ChipElm.this.clockPointsX[0] = xa + dax * ChipElm.this.cspc - dx * ChipElm.this.cspc / 2;
+				ChipElm.this.clockPointsY[0] = ya + day * ChipElm.this.cspc - dy * ChipElm.this.cspc / 2;
+				ChipElm.this.clockPointsX[1] = xa;
+				ChipElm.this.clockPointsY[1] = ya;
+				ChipElm.this.clockPointsX[2] = xa + dax * ChipElm.this.cspc + dx * ChipElm.this.cspc / 2;
+				ChipElm.this.clockPointsY[2] = ya + day * ChipElm.this.cspc + dy * ChipElm.this.cspc / 2;
 			}
 		}
 	}

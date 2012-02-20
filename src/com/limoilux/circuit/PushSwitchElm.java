@@ -6,6 +6,7 @@ class PushSwitchElm extends SwitchElm
 		super(xx, yy, true);
 	}
 
+	@Override
 	public Class getDumpClass()
 	{
 		return SwitchElm.class;

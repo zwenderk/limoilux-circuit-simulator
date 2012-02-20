@@ -1,5 +1,4 @@
 package com.limoilux.circuit;
-import java.awt.*;
 import java.util.StringTokenizer;
 
 class XorGateElm extends OrGateElm
@@ -14,20 +13,25 @@ class XorGateElm extends OrGateElm
 		super(xa, ya, xb, yb, f, st);
 	}
 
+	@Override
 	String getGateName()
 	{
 		return "XOR gate";
 	}
 
+	@Override
 	boolean calcFunction()
 	{
 		int i;
 		boolean f = false;
-		for (i = 0; i != inputCount; i++)
-			f ^= getInput(i);
+		for (i = 0; i != this.inputCount; i++)
+		{
+			f ^= this.getInput(i);
+		}
 		return f;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 154;

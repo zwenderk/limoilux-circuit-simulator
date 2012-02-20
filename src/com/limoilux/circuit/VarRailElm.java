@@ -1,5 +1,6 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Label;
+import java.awt.Scrollbar;
 import java.util.StringTokenizer;
 
 class VarRailElm extends RailElm
@@ -10,25 +11,27 @@ class VarRailElm extends RailElm
 
 	public VarRailElm(int xx, int yy)
 	{
-		super(xx, yy, WF_VAR);
-		sliderText = "Voltage";
-		frequency = maxVoltage;
-		createSlider();
+		super(xx, yy, VoltageElm.WF_VAR);
+		this.sliderText = "Voltage";
+		this.frequency = this.maxVoltage;
+		this.createSlider();
 	}
 
 	public VarRailElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f, st);
-		sliderText = st.nextToken();
+		this.sliderText = st.nextToken();
 		while (st.hasMoreTokens())
-			sliderText += ' ' + st.nextToken();
-		createSlider();
+		{
+			this.sliderText += ' ' + st.nextToken();
+		}
+		this.createSlider();
 	}
 
 	@Override
 	String dump()
 	{
-		return super.dump() + " " + sliderText;
+		return super.dump() + " " + this.sliderText;
 	}
 
 	@Override
@@ -39,38 +42,42 @@ class VarRailElm extends RailElm
 
 	void createSlider()
 	{
-		waveform = WF_VAR;
-		sim.mainContainer.add(label = new Label(sliderText, Label.CENTER));
-		int value = (int) ((frequency - bias) * 100 / (maxVoltage - bias));
-		sim.mainContainer.add(slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
-		sim.mainContainer.validate();
+		this.waveform = VoltageElm.WF_VAR;
+		CircuitElm.sim.mainContainer.add(this.label = new Label(this.sliderText, Label.CENTER));
+		int value = (int) ((this.frequency - this.bias) * 100 / (this.maxVoltage - this.bias));
+		CircuitElm.sim.mainContainer.add(this.slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
+		CircuitElm.sim.mainContainer.validate();
 	}
 
 	@Override
 	double getVoltage()
 	{
-		frequency = slider.getValue() * (maxVoltage - bias) / 100. + bias;
-		return frequency;
+		this.frequency = this.slider.getValue() * (this.maxVoltage - this.bias) / 100. + this.bias;
+		return this.frequency;
 	}
 
 	@Override
 	void delete()
 	{
-		sim.mainContainer.remove(label);
-		sim.mainContainer.remove(slider);
+		CircuitElm.sim.mainContainer.remove(this.label);
+		CircuitElm.sim.mainContainer.remove(this.slider);
 	}
 
 	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
-			return new EditInfo("Min Voltage", bias, -20, 20);
+		{
+			return new EditInfo("Min Voltage", this.bias, -20, 20);
+		}
 		if (n == 1)
-			return new EditInfo("Max Voltage", maxVoltage, -20, 20);
+		{
+			return new EditInfo("Max Voltage", this.maxVoltage, -20, 20);
+		}
 		if (n == 2)
 		{
 			EditInfo ei = new EditInfo("Slider Text", 0, -1, -1);
-			ei.text = sliderText;
+			ei.text = this.sliderText;
 			return ei;
 		}
 		return null;
@@ -80,13 +87,17 @@ class VarRailElm extends RailElm
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (n == 0)
-			bias = ei.value;
+		{
+			this.bias = ei.value;
+		}
 		if (n == 1)
-			maxVoltage = ei.value;
+		{
+			this.maxVoltage = ei.value;
+		}
 		if (n == 2)
 		{
-			sliderText = ei.textf.getText();
-			label.setText(sliderText);
+			this.sliderText = ei.textf.getText();
+			this.label.setText(this.sliderText);
 		}
 	}
 }

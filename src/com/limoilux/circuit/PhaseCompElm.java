@@ -1,5 +1,4 @@
 package com.limoilux.circuit;
-import java.awt.*;
 import java.util.StringTokenizer;
 
 class PhaseCompElm extends ChipElm
@@ -14,71 +13,87 @@ class PhaseCompElm extends ChipElm
 		super(xa, ya, xb, yb, f, st);
 	}
 
+	@Override
 	String getChipName()
 	{
 		return "phase comparator";
 	}
 
+	@Override
 	void setupPins()
 	{
-		sizeX = 2;
-		sizeY = 2;
-		pins = new Pin[3];
-		pins[0] = new Pin(0, SIDE_W, "I1");
-		pins[1] = new Pin(1, SIDE_W, "I2");
-		pins[2] = new Pin(0, SIDE_E, "O");
-		pins[2].output = true;
+		this.sizeX = 2;
+		this.sizeY = 2;
+		this.pins = new Pin[3];
+		this.pins[0] = new Pin(0, this.SIDE_W, "I1");
+		this.pins[1] = new Pin(1, this.SIDE_W, "I2");
+		this.pins[2] = new Pin(0, this.SIDE_E, "O");
+		this.pins[2].output = true;
 	}
 
+	@Override
 	boolean nonLinear()
 	{
 		return true;
 	}
 
+	@Override
 	void stamp()
 	{
-		int vn = sim.nodeList.size() + pins[2].voltSource;
-		sim.stampNonLinear(vn);
-		sim.stampNonLinear(0);
-		sim.stampNonLinear(nodes[2]);
+		int vn = CircuitElm.sim.nodeList.size() + this.pins[2].voltSource;
+		CircuitElm.sim.stampNonLinear(vn);
+		CircuitElm.sim.stampNonLinear(0);
+		CircuitElm.sim.stampNonLinear(this.nodes[2]);
 	}
 
 	boolean ff1, ff2;
 
+	@Override
 	void doStep()
 	{
-		boolean v1 = volts[0] > 2.5;
-		boolean v2 = volts[1] > 2.5;
-		if (v1 && !pins[0].value)
-			ff1 = true;
-		if (v2 && !pins[1].value)
-			ff2 = true;
-		if (ff1 && ff2)
-			ff1 = ff2 = false;
-		double out = (ff1) ? 5 : (ff2) ? 0 : -1;
+		boolean v1 = this.volts[0] > 2.5;
+		boolean v2 = this.volts[1] > 2.5;
+		if (v1 && !this.pins[0].value)
+		{
+			this.ff1 = true;
+		}
+		if (v2 && !this.pins[1].value)
+		{
+			this.ff2 = true;
+		}
+		if (this.ff1 && this.ff2)
+		{
+			this.ff1 = this.ff2 = false;
+		}
+		double out = this.ff1 ? 5 : this.ff2 ? 0 : -1;
 		// System.out.println(out + " " + v1 + " " + v2);
 		if (out != -1)
-			sim.stampVoltageSource(0, nodes[2], pins[2].voltSource, out);
+		{
+			CircuitElm.sim.stampVoltageSource(0, this.nodes[2], this.pins[2].voltSource, out);
+		}
 		else
 		{
 			// tie current through output pin to 0
-			int vn = sim.nodeList.size() + pins[2].voltSource;
-			sim.stampMatrix(vn, vn, 1);
+			int vn = CircuitElm.sim.nodeList.size() + this.pins[2].voltSource;
+			CircuitElm.sim.stampMatrix(vn, vn, 1);
 		}
-		pins[0].value = v1;
-		pins[1].value = v2;
+		this.pins[0].value = v1;
+		this.pins[1].value = v2;
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 3;
 	}
 
+	@Override
 	int getVoltageSourceCount()
 	{
 		return 1;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 161;

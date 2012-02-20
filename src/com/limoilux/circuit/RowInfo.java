@@ -13,6 +13,6 @@ class RowInfo
 
 	RowInfo()
 	{
-		type = ROW_NORMAL;
+		this.type = RowInfo.ROW_NORMAL;
 	}
 }

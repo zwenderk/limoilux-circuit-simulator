@@ -20,49 +20,57 @@ public class ADCElm extends ChipElm
 		return "ADC";
 	}
 
+	@Override
 	boolean needsBits()
 	{
 		return true;
 	}
 
+	@Override
 	void setupPins()
 	{
-		sizeX = 2;
-		sizeY = bits > 2 ? bits : 2;
-		pins = new Pin[getPostCount()];
+		this.sizeX = 2;
+		this.sizeY = this.bits > 2 ? this.bits : 2;
+		this.pins = new Pin[this.getPostCount()];
 		int i;
-		for (i = 0; i != bits; i++)
+		for (i = 0; i != this.bits; i++)
 		{
-			pins[i] = new Pin(bits - 1 - i, SIDE_E, "D" + i);
-			pins[i].output = true;
+			this.pins[i] = new Pin(this.bits - 1 - i, this.SIDE_E, "D" + i);
+			this.pins[i].output = true;
 		}
-		pins[bits] = new Pin(0, SIDE_W, "In");
-		pins[bits + 1] = new Pin(sizeY - 1, SIDE_W, "V+");
-		allocNodes();
+		this.pins[this.bits] = new Pin(0, this.SIDE_W, "In");
+		this.pins[this.bits + 1] = new Pin(this.sizeY - 1, this.SIDE_W, "V+");
+		this.allocNodes();
 	}
 
+	@Override
 	void execute()
 	{
-		int imax = (1 << bits) - 1;
+		int imax = (1 << this.bits) - 1;
 		// if we round, the half-flash doesn't work
-		double val = imax * volts[bits] / volts[bits + 1]; // + .5;
+		double val = imax * this.volts[this.bits] / this.volts[this.bits + 1]; // + .5;
 		int ival = (int) val;
-		ival = min(imax, max(0, ival));
+		ival = CircuitElm.min(imax, CircuitElm.max(0, ival));
 		int i;
-		for (i = 0; i != bits; i++)
-			pins[i].value = ((ival & (1 << i)) != 0);
+		for (i = 0; i != this.bits; i++)
+		{
+			this.pins[i].value = (ival & 1 << i) != 0;
+		}
 	}
 
+	@Override
 	int getVoltageSourceCount()
 	{
-		return bits;
+		return this.bits;
 	}
 
+	@Override
 	int getPostCount()
 	{
-		return bits + 2;
+		return this.bits + 2;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 167;

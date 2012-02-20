@@ -1,31 +1,36 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Checkbox;
+import java.awt.Choice;
+import java.awt.Scrollbar;
+import java.awt.TextField;
 
 class EditInfo
 {
 	EditInfo(String n, double val, double mn, double mx)
 	{
-		name = n;
-		value = val;
+		this.name = n;
+		this.value = val;
 		if (mn == 0 && mx == 0 && val > 0)
 		{
-			minval = 1e10;
-			while (minval > val / 100)
-				minval /= 10.;
-			maxval = minval * 1000;
+			this.minval = 1e10;
+			while (this.minval > val / 100)
+			{
+				this.minval /= 10.;
+			}
+			this.maxval = this.minval * 1000;
 		}
 		else
 		{
-			minval = mn;
-			maxval = mx;
+			this.minval = mn;
+			this.maxval = mx;
 		}
-		forceLargeM = name.indexOf("(ohms)") > 0 || name.indexOf("(Hz)") > 0;
-		dimensionless = false;
+		this.forceLargeM = this.name.indexOf("(ohms)") > 0 || this.name.indexOf("(Hz)") > 0;
+		this.dimensionless = false;
 	}
 
 	EditInfo setDimensionless()
 	{
-		dimensionless = true;
+		this.dimensionless = true;
 		return this;
 	}
 

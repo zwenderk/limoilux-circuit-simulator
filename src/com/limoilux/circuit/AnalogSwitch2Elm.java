@@ -1,5 +1,6 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.StringTokenizer;
 
 class AnalogSwitch2Elm extends AnalogSwitchElm
@@ -17,101 +18,119 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 	final int openhs = 16;
 	Point swposts[], swpoles[], ctlPoint;
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
-		calcLeads(32);
-		swposts = newPointArray(2);
-		swpoles = newPointArray(2);
-		interpPoint2(lead1, lead2, swpoles[0], swpoles[1], 1, openhs);
-		interpPoint2(point1, point2, swposts[0], swposts[1], 1, openhs);
-		ctlPoint = interpPoint(point1, point2, .5, openhs);
+		this.calcLeads(32);
+		this.swposts = this.newPointArray(2);
+		this.swpoles = this.newPointArray(2);
+		this.interpPoint2(this.lead1, this.lead2, this.swpoles[0], this.swpoles[1], 1, this.openhs);
+		this.interpPoint2(this.point1, this.point2, this.swposts[0], this.swposts[1], 1, this.openhs);
+		this.ctlPoint = this.interpPoint(this.point1, this.point2, .5, this.openhs);
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 4;
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
-		setBbox(point1, point2, openhs);
+		this.setBbox(this.point1, this.point2, this.openhs);
 
 		// draw first lead
-		setVoltageColor(g, volts[0]);
-		drawThickLine(g, point1, lead1);
+		this.setVoltageColor(g, this.volts[0]);
+		CircuitElm.drawThickLine(g, this.point1, this.lead1);
 
 		// draw second lead
-		setVoltageColor(g, volts[1]);
-		drawThickLine(g, swpoles[0], swposts[0]);
+		this.setVoltageColor(g, this.volts[1]);
+		CircuitElm.drawThickLine(g, this.swpoles[0], this.swposts[0]);
 
 		// draw third lead
-		setVoltageColor(g, volts[2]);
-		drawThickLine(g, swpoles[1], swposts[1]);
+		this.setVoltageColor(g, this.volts[2]);
+		CircuitElm.drawThickLine(g, this.swpoles[1], this.swposts[1]);
 
 		// draw switch
-		g.setColor(lightGrayColor);
-		int position = (open) ? 1 : 0;
-		drawThickLine(g, lead1, swpoles[position]);
+		g.setColor(CircuitElm.lightGrayColor);
+		int position = this.open ? 1 : 0;
+		CircuitElm.drawThickLine(g, this.lead1, this.swpoles[position]);
 
-		updateDotCount();
-		drawDots(g, point1, lead1, curcount);
-		drawDots(g, swpoles[position], swposts[position], curcount);
-		drawPosts(g);
+		this.updateDotCount();
+		this.drawDots(g, this.point1, this.lead1, this.curcount);
+		this.drawDots(g, this.swpoles[position], this.swposts[position], this.curcount);
+		this.drawPosts(g);
 	}
 
+	@Override
 	Point getPost(int n)
 	{
-		return (n == 0) ? point1 : (n == 3) ? ctlPoint : swposts[n - 1];
+		return n == 0 ? this.point1 : n == 3 ? this.ctlPoint : this.swposts[n - 1];
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 160;
 	}
 
+	@Override
 	void calculateCurrent()
 	{
-		if (open)
-			current = (volts[0] - volts[2]) / r_on;
+		if (this.open)
+		{
+			this.current = (this.volts[0] - this.volts[2]) / this.r_on;
+		}
 		else
-			current = (volts[0] - volts[1]) / r_on;
+		{
+			this.current = (this.volts[0] - this.volts[1]) / this.r_on;
+		}
 	}
 
+	@Override
 	void stamp()
 	{
-		sim.stampNonLinear(nodes[0]);
-		sim.stampNonLinear(nodes[1]);
-		sim.stampNonLinear(nodes[2]);
+		CircuitElm.sim.stampNonLinear(this.nodes[0]);
+		CircuitElm.sim.stampNonLinear(this.nodes[1]);
+		CircuitElm.sim.stampNonLinear(this.nodes[2]);
 	}
 
+	@Override
 	void doStep()
 	{
-		open = (volts[3] < 2.5);
-		if ((flags & FLAG_INVERT) != 0)
-			open = !open;
-		if (open)
+		this.open = this.volts[3] < 2.5;
+		if ((this.flags & this.FLAG_INVERT) != 0)
 		{
-			sim.stampResistor(nodes[0], nodes[2], r_on);
-			sim.stampResistor(nodes[0], nodes[1], r_off);
+			this.open = !this.open;
+		}
+		if (this.open)
+		{
+			CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[2], this.r_on);
+			CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[1], this.r_off);
 		}
 		else
 		{
-			sim.stampResistor(nodes[0], nodes[1], r_on);
-			sim.stampResistor(nodes[0], nodes[2], r_off);
+			CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[1], this.r_on);
+			CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[2], this.r_off);
 		}
 	}
 
+	@Override
 	boolean getConnection(int n1, int n2)
 	{
 		if (n1 == 3 || n2 == 3)
+		{
 			return false;
+		}
 		return true;
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
 		arr[0] = "analog switch (SPDT)";
-		arr[1] = "I = " + getCurrentDText(getCurrent());
+		arr[1] = "I = " + CircuitElm.getCurrentDText(this.getCurrent());
 	}
 }

@@ -12,25 +12,25 @@ class Inductor
 
 	Inductor(CirSim s)
 	{
-		sim = s;
-		nodes = new int[2];
+		this.sim = s;
+		this.nodes = new int[2];
 	}
 
 	void setup(double ic, double cr, int f)
 	{
-		inductance = ic;
-		current = cr;
-		flags = f;
+		this.inductance = ic;
+		this.current = cr;
+		this.flags = f;
 	}
 
 	boolean isTrapezoidal()
 	{
-		return (flags & FLAG_BACK_EULER) == 0;
+		return (this.flags & Inductor.FLAG_BACK_EULER) == 0;
 	}
 
 	void reset()
 	{
-		current = 0;
+		this.current = 0;
 	}
 
 	void stamp(int n0, int n1)
@@ -40,16 +40,20 @@ class Inductor
 		// source in parallel with a resistor. Trapezoidal is more
 		// accurate than backward euler but can cause oscillatory behavior.
 		// The oscillation is a real problem in circuits with switches.
-		nodes[0] = n0;
-		nodes[1] = n1;
-		if (isTrapezoidal())
-			compResistance = 2 * inductance / sim.timeStep;
+		this.nodes[0] = n0;
+		this.nodes[1] = n1;
+		if (this.isTrapezoidal())
+		{
+			this.compResistance = 2 * this.inductance / this.sim.timeStep;
+		}
 		else
+		{
 			// backward euler
-			compResistance = inductance / sim.timeStep;
-		sim.stampResistor(nodes[0], nodes[1], compResistance);
-		sim.stampRightSide(nodes[0]);
-		sim.stampRightSide(nodes[1]);
+			this.compResistance = this.inductance / this.sim.timeStep;
+		}
+		this.sim.stampResistor(this.nodes[0], this.nodes[1], this.compResistance);
+		this.sim.stampRightSide(this.nodes[0]);
+		this.sim.stampRightSide(this.nodes[1]);
 	}
 
 	boolean nonLinear()
@@ -59,11 +63,15 @@ class Inductor
 
 	void startIteration(double voltdiff)
 	{
-		if (isTrapezoidal())
-			curSourceValue = voltdiff / compResistance + current;
+		if (this.isTrapezoidal())
+		{
+			this.curSourceValue = voltdiff / this.compResistance + this.current;
+		}
 		else
+		{
 			// backward euler
-			curSourceValue = current;
+			this.curSourceValue = this.current;
+		}
 	}
 
 	double calculateCurrent(double voltdiff)
@@ -71,13 +79,15 @@ class Inductor
 		// we check compResistance because this might get called
 		// before stamp(), which sets compResistance, causing
 		// infinite current
-		if (compResistance > 0)
-			current = voltdiff / compResistance + curSourceValue;
-		return current;
+		if (this.compResistance > 0)
+		{
+			this.current = voltdiff / this.compResistance + this.curSourceValue;
+		}
+		return this.current;
 	}
 
 	void doStep(double voltdiff)
 	{
-		sim.stampCurrentSource(nodes[0], nodes[1], curSourceValue);
+		this.sim.stampCurrentSource(this.nodes[0], this.nodes[1], this.curSourceValue);
 	}
 }

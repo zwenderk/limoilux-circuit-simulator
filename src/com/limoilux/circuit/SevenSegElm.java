@@ -1,5 +1,6 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.StringTokenizer;
 
 class SevenSegElm extends ChipElm
@@ -14,6 +15,7 @@ class SevenSegElm extends ChipElm
 		super(xa, ya, xb, yb, f, st);
 	}
 
+	@Override
 	String getChipName()
 	{
 		return "7-segment driver/display";
@@ -21,58 +23,63 @@ class SevenSegElm extends ChipElm
 
 	Color darkred;
 
+	@Override
 	void setupPins()
 	{
-		darkred = new Color(30, 0, 0);
-		sizeX = 4;
-		sizeY = 4;
-		pins = new Pin[7];
-		pins[0] = new Pin(0, SIDE_W, "a");
-		pins[1] = new Pin(1, SIDE_W, "b");
-		pins[2] = new Pin(2, SIDE_W, "c");
-		pins[3] = new Pin(3, SIDE_W, "d");
-		pins[4] = new Pin(1, SIDE_S, "e");
-		pins[5] = new Pin(2, SIDE_S, "f");
-		pins[6] = new Pin(3, SIDE_S, "g");
+		this.darkred = new Color(30, 0, 0);
+		this.sizeX = 4;
+		this.sizeY = 4;
+		this.pins = new Pin[7];
+		this.pins[0] = new Pin(0, this.SIDE_W, "a");
+		this.pins[1] = new Pin(1, this.SIDE_W, "b");
+		this.pins[2] = new Pin(2, this.SIDE_W, "c");
+		this.pins[3] = new Pin(3, this.SIDE_W, "d");
+		this.pins[4] = new Pin(1, this.SIDE_S, "e");
+		this.pins[5] = new Pin(2, this.SIDE_S, "f");
+		this.pins[6] = new Pin(3, this.SIDE_S, "g");
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
-		drawChip(g);
+		this.drawChip(g);
 		g.setColor(Color.red);
-		int xl = x + cspc * 5;
-		int yl = y + cspc;
-		setColor(g, 0);
-		drawThickLine(g, xl, yl, xl + cspc, yl);
-		setColor(g, 1);
-		drawThickLine(g, xl + cspc, yl, xl + cspc, yl + cspc);
-		setColor(g, 2);
-		drawThickLine(g, xl + cspc, yl + cspc, xl + cspc, yl + cspc2);
-		setColor(g, 3);
-		drawThickLine(g, xl, yl + cspc2, xl + cspc, yl + cspc2);
-		setColor(g, 4);
-		drawThickLine(g, xl, yl + cspc, xl, yl + cspc2);
-		setColor(g, 5);
-		drawThickLine(g, xl, yl, xl, yl + cspc);
-		setColor(g, 6);
-		drawThickLine(g, xl, yl + cspc, xl + cspc, yl + cspc);
+		int xl = this.x + this.cspc * 5;
+		int yl = this.y + this.cspc;
+		this.setColor(g, 0);
+		CircuitElm.drawThickLine(g, xl, yl, xl + this.cspc, yl);
+		this.setColor(g, 1);
+		CircuitElm.drawThickLine(g, xl + this.cspc, yl, xl + this.cspc, yl + this.cspc);
+		this.setColor(g, 2);
+		CircuitElm.drawThickLine(g, xl + this.cspc, yl + this.cspc, xl + this.cspc, yl + this.cspc2);
+		this.setColor(g, 3);
+		CircuitElm.drawThickLine(g, xl, yl + this.cspc2, xl + this.cspc, yl + this.cspc2);
+		this.setColor(g, 4);
+		CircuitElm.drawThickLine(g, xl, yl + this.cspc, xl, yl + this.cspc2);
+		this.setColor(g, 5);
+		CircuitElm.drawThickLine(g, xl, yl, xl, yl + this.cspc);
+		this.setColor(g, 6);
+		CircuitElm.drawThickLine(g, xl, yl + this.cspc, xl + this.cspc, yl + this.cspc);
 	}
 
 	void setColor(Graphics g, int p)
 	{
-		g.setColor(pins[p].value ? Color.red : sim.printableCheckItem.getState() ? Color.white : darkred);
+		g.setColor(this.pins[p].value ? Color.red : CircuitElm.sim.printableCheckItem.getState() ? Color.white : this.darkred);
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 7;
 	}
 
+	@Override
 	int getVoltageSourceCount()
 	{
 		return 0;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 157;

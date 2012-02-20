@@ -1,5 +1,7 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Checkbox;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.util.StringTokenizer;
 
 class LogicInputElm extends SwitchElm
@@ -11,8 +13,8 @@ class LogicInputElm extends SwitchElm
 	public LogicInputElm(int xx, int yy)
 	{
 		super(xx, yy, false);
-		hiV = 5;
-		loV = 0;
+		this.hiV = 5;
+		this.loV = 0;
 	}
 
 	public LogicInputElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
@@ -20,126 +22,157 @@ class LogicInputElm extends SwitchElm
 		super(xa, ya, xb, yb, f, st);
 		try
 		{
-			hiV = new Double(st.nextToken()).doubleValue();
-			loV = new Double(st.nextToken()).doubleValue();
+			this.hiV = new Double(st.nextToken()).doubleValue();
+			this.loV = new Double(st.nextToken()).doubleValue();
 		}
 		catch (Exception e)
 		{
-			hiV = 5;
-			loV = 0;
+			this.hiV = 5;
+			this.loV = 0;
 		}
-		if (isTernary())
-			posCount = 3;
+		if (this.isTernary())
+		{
+			this.posCount = 3;
+		}
 	}
 
 	boolean isTernary()
 	{
-		return (flags & FLAG_TERNARY) != 0;
+		return (this.flags & this.FLAG_TERNARY) != 0;
 	}
 
 	boolean isNumeric()
 	{
-		return (flags & (FLAG_TERNARY | FLAG_NUMERIC)) != 0;
+		return (this.flags & (this.FLAG_TERNARY | this.FLAG_NUMERIC)) != 0;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 'L';
 	}
 
+	@Override
 	String dump()
 	{
-		return super.dump() + " " + hiV + " " + loV;
+		return super.dump() + " " + this.hiV + " " + this.loV;
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 1;
 	}
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
-		lead1 = interpPoint(point1, point2, 1 - 12 / dn);
+		this.lead1 = this.interpPoint(this.point1, this.point2, 1 - 12 / this.dn);
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
 		Font f = new Font("SansSerif", Font.BOLD, 20);
 		g.setFont(f);
-		g.setColor(needsHighlight() ? selectColor : whiteColor);
-		String s = position == 0 ? "L" : "H";
-		if (isNumeric())
-			s = "" + position;
-		setBbox(point1, lead1, 0);
-		drawCenteredText(g, s, x2, y2, true);
-		setVoltageColor(g, volts[0]);
-		drawThickLine(g, point1, lead1);
-		updateDotCount();
-		drawDots(g, point1, lead1, curcount);
-		drawPosts(g);
+		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.whiteColor);
+		String s = this.position == 0 ? "L" : "H";
+		if (this.isNumeric())
+		{
+			s = "" + this.position;
+		}
+		this.setBbox(this.point1, this.lead1, 0);
+		this.drawCenteredText(g, s, this.x2, this.y2, true);
+		this.setVoltageColor(g, this.volts[0]);
+		CircuitElm.drawThickLine(g, this.point1, this.lead1);
+		this.updateDotCount();
+		this.drawDots(g, this.point1, this.lead1, this.curcount);
+		this.drawPosts(g);
 	}
 
+	@Override
 	void setCurrent(int vs, double c)
 	{
-		current = -c;
+		this.current = -c;
 	}
 
+	@Override
 	void stamp()
 	{
-		double v = (position == 0) ? loV : hiV;
-		if (isTernary())
-			v = position * 2.5;
-		sim.stampVoltageSource(0, nodes[0], voltSource, v);
+		double v = this.position == 0 ? this.loV : this.hiV;
+		if (this.isTernary())
+		{
+			v = this.position * 2.5;
+		}
+		CircuitElm.sim.stampVoltageSource(0, this.nodes[0], this.voltSource, v);
 	}
 
+	@Override
 	int getVoltageSourceCount()
 	{
 		return 1;
 	}
 
+	@Override
 	double getVoltageDiff()
 	{
-		return volts[0];
+		return this.volts[0];
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
 		arr[0] = "logic input";
-		arr[1] = (position == 0) ? "low" : "high";
-		if (isNumeric())
-			arr[1] = "" + position;
-		arr[1] += " (" + getVoltageText(volts[0]) + ")";
-		arr[2] = "I = " + getCurrentText(getCurrent());
+		arr[1] = this.position == 0 ? "low" : "high";
+		if (this.isNumeric())
+		{
+			arr[1] = "" + this.position;
+		}
+		arr[1] += " (" + CircuitElm.getVoltageText(this.volts[0]) + ")";
+		arr[2] = "I = " + CircuitElm.getCurrentText(this.getCurrent());
 	}
 
+	@Override
 	boolean hasGroundConnection(int n1)
 	{
 		return true;
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
 		{
 			EditInfo ei = new EditInfo("", 0, 0, 0);
-			ei.checkbox = new Checkbox("Momentary Switch", momentary);
+			ei.checkbox = new Checkbox("Momentary Switch", this.momentary);
 			return ei;
 		}
 		if (n == 1)
-			return new EditInfo("High Voltage", hiV, 10, -10);
+		{
+			return new EditInfo("High Voltage", this.hiV, 10, -10);
+		}
 		if (n == 2)
-			return new EditInfo("Low Voltage", loV, 10, -10);
+		{
+			return new EditInfo("Low Voltage", this.loV, 10, -10);
+		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (n == 0)
-			momentary = ei.checkbox.getState();
+		{
+			this.momentary = ei.checkbox.getState();
+		}
 		if (n == 1)
-			hiV = ei.value;
+		{
+			this.hiV = ei.value;
+		}
 		if (n == 2)
-			loV = ei.value;
+		{
+			this.loV = ei.value;
+		}
 	}
 }

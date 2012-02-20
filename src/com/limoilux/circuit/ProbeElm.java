@@ -1,5 +1,8 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Checkbox;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.StringTokenizer;
 
 class ProbeElm extends CircuitElm
@@ -16,6 +19,7 @@ class ProbeElm extends CircuitElm
 		super(xa, ya, xb, yb, f);
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 'p';
@@ -23,83 +27,101 @@ class ProbeElm extends CircuitElm
 
 	Point center;
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
 		// swap points so that we subtract higher from lower
-		if (point2.y < point1.y)
+		if (this.point2.y < this.point1.y)
 		{
-			Point x = point1;
-			point1 = point2;
-			point2 = x;
+			Point x = this.point1;
+			this.point1 = this.point2;
+			this.point2 = x;
 		}
-		center = interpPoint(point1, point2, .5);
+		this.center = this.interpPoint(this.point1, this.point2, .5);
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
 		int hs = 8;
-		setBbox(point1, point2, hs);
-		boolean selected = (needsHighlight() || sim.plotYElm == this);
-		double len = (selected || sim.dragElm == this) ? 16 : dn - 32;
-		calcLeads((int) len);
-		setVoltageColor(g, volts[0]);
+		this.setBbox(this.point1, this.point2, hs);
+		boolean selected = this.needsHighlight() || CircuitElm.sim.plotYElm == this;
+		double len = selected || CircuitElm.sim.dragElm == this ? 16 : this.dn - 32;
+		this.calcLeads((int) len);
+		this.setVoltageColor(g, this.volts[0]);
 		if (selected)
-			g.setColor(selectColor);
-		drawThickLine(g, point1, lead1);
-		setVoltageColor(g, volts[1]);
+		{
+			g.setColor(CircuitElm.selectColor);
+		}
+		CircuitElm.drawThickLine(g, this.point1, this.lead1);
+		this.setVoltageColor(g, this.volts[1]);
 		if (selected)
-			g.setColor(selectColor);
-		drawThickLine(g, lead2, point2);
+		{
+			g.setColor(CircuitElm.selectColor);
+		}
+		CircuitElm.drawThickLine(g, this.lead2, this.point2);
 		Font f = new Font("SansSerif", Font.BOLD, 14);
 		g.setFont(f);
-		if (this == sim.plotXElm)
-			drawCenteredText(g, "X", center.x, center.y, true);
-		if (this == sim.plotYElm)
-			drawCenteredText(g, "Y", center.x, center.y, true);
-		if (mustShowVoltage())
+		if (this == CircuitElm.sim.plotXElm)
 		{
-			String s = getShortUnitText(volts[0], "V");
-			drawValues(g, s, 4);
+			this.drawCenteredText(g, "X", this.center.x, this.center.y, true);
 		}
-		drawPosts(g);
+		if (this == CircuitElm.sim.plotYElm)
+		{
+			this.drawCenteredText(g, "Y", this.center.x, this.center.y, true);
+		}
+		if (this.mustShowVoltage())
+		{
+			String s = CircuitElm.getShortUnitText(this.volts[0], "V");
+			this.drawValues(g, s, 4);
+		}
+		this.drawPosts(g);
 	}
 
 	boolean mustShowVoltage()
 	{
-		return (flags & FLAG_SHOWVOLTAGE) != 0;
+		return (this.flags & ProbeElm.FLAG_SHOWVOLTAGE) != 0;
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
 		arr[0] = "scope probe";
-		arr[1] = "Vd = " + getVoltageText(getVoltageDiff());
+		arr[1] = "Vd = " + CircuitElm.getVoltageText(this.getVoltageDiff());
 	}
 
+	@Override
 	boolean getConnection(int n1, int n2)
 	{
 		return false;
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Show Voltage", mustShowVoltage());
+			ei.checkbox = new Checkbox("Show Voltage", this.mustShowVoltage());
 			return ei;
 		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (n == 0)
 		{
 			if (ei.checkbox.getState())
-				flags = FLAG_SHOWVOLTAGE;
+			{
+				this.flags = ProbeElm.FLAG_SHOWVOLTAGE;
+			}
 			else
-				flags &= ~FLAG_SHOWVOLTAGE;
+			{
+				this.flags &= ~ProbeElm.FLAG_SHOWVOLTAGE;
+			}
 		}
 	}
 }

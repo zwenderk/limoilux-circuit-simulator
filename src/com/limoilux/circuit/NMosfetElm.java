@@ -6,6 +6,7 @@ class NMosfetElm extends MosfetElm
 		super(xx, yy, false);
 	}
 
+	@Override
 	public Class getDumpClass()
 	{
 		return MosfetElm.class;

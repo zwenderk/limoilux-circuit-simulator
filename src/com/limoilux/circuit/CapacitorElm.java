@@ -1,5 +1,8 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Checkbox;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.StringTokenizer;
 
 class CapacitorElm extends CircuitElm
@@ -12,91 +15,100 @@ class CapacitorElm extends CircuitElm
 	public CapacitorElm(int xx, int yy)
 	{
 		super(xx, yy);
-		capacitance = 1e-5;
+		this.capacitance = 1e-5;
 	}
 
 	public CapacitorElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		capacitance = new Double(st.nextToken()).doubleValue();
-		voltdiff = new Double(st.nextToken()).doubleValue();
+		this.capacitance = new Double(st.nextToken()).doubleValue();
+		this.voltdiff = new Double(st.nextToken()).doubleValue();
 	}
 
 	boolean isTrapezoidal()
 	{
-		return (flags & FLAG_BACK_EULER) == 0;
+		return (this.flags & CapacitorElm.FLAG_BACK_EULER) == 0;
 	}
 
+	@Override
 	void setNodeVoltage(int n, double c)
 	{
 		super.setNodeVoltage(n, c);
-		voltdiff = volts[0] - volts[1];
+		this.voltdiff = this.volts[0] - this.volts[1];
 	}
 
+	@Override
 	void reset()
 	{
-		current = curcount = 0;
+		this.current = this.curcount = 0;
 		// put small charge on caps when reset to start oscillators
-		voltdiff = 1e-3;
+		this.voltdiff = 1e-3;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 'c';
 	}
 
+	@Override
 	String dump()
 	{
-		return super.dump() + " " + capacitance + " " + voltdiff;
+		return super.dump() + " " + this.capacitance + " " + this.voltdiff;
 	}
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
-		double f = (dn / 2 - 4) / dn;
+		double f = (this.dn / 2 - 4) / this.dn;
 		// calc leads
-		lead1 = interpPoint(point1, point2, f);
-		lead2 = interpPoint(point1, point2, 1 - f);
+		this.lead1 = this.interpPoint(this.point1, this.point2, f);
+		this.lead2 = this.interpPoint(this.point1, this.point2, 1 - f);
 		// calc plates
-		plate1 = newPointArray(2);
-		plate2 = newPointArray(2);
-		interpPoint2(point1, point2, plate1[0], plate1[1], f, 12);
-		interpPoint2(point1, point2, plate2[0], plate2[1], 1 - f, 12);
+		this.plate1 = this.newPointArray(2);
+		this.plate2 = this.newPointArray(2);
+		this.interpPoint2(this.point1, this.point2, this.plate1[0], this.plate1[1], f, 12);
+		this.interpPoint2(this.point1, this.point2, this.plate2[0], this.plate2[1], 1 - f, 12);
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
 		int hs = 12;
-		setBbox(point1, point2, hs);
+		this.setBbox(this.point1, this.point2, hs);
 
 		// draw first lead and plate
-		setVoltageColor(g, volts[0]);
-		drawThickLine(g, point1, lead1);
-		setPowerColor(g, false);
-		drawThickLine(g, plate1[0], plate1[1]);
-		if (sim.powerCheckItem.getState())
+		this.setVoltageColor(g, this.volts[0]);
+		CircuitElm.drawThickLine(g, this.point1, this.lead1);
+		this.setPowerColor(g, false);
+		CircuitElm.drawThickLine(g, this.plate1[0], this.plate1[1]);
+		if (CircuitElm.sim.powerCheckItem.getState())
+		{
 			g.setColor(Color.gray);
+		}
 
 		// draw second lead and plate
-		setVoltageColor(g, volts[1]);
-		drawThickLine(g, point2, lead2);
-		setPowerColor(g, false);
-		drawThickLine(g, plate2[0], plate2[1]);
+		this.setVoltageColor(g, this.volts[1]);
+		CircuitElm.drawThickLine(g, this.point2, this.lead2);
+		this.setPowerColor(g, false);
+		CircuitElm.drawThickLine(g, this.plate2[0], this.plate2[1]);
 
-		updateDotCount();
-		if (sim.dragElm != this)
+		this.updateDotCount();
+		if (CircuitElm.sim.dragElm != this)
 		{
-			drawDots(g, point1, lead1, curcount);
-			drawDots(g, point2, lead2, -curcount);
+			this.drawDots(g, this.point1, this.lead1, this.curcount);
+			this.drawDots(g, this.point2, this.lead2, -this.curcount);
 		}
-		drawPosts(g);
-		if (sim.showValuesCheckItem.getState())
+		this.drawPosts(g);
+		if (CircuitElm.sim.showValuesCheckItem.getState())
 		{
-			String s = getShortUnitText(capacitance, "F");
-			drawValues(g, s, hs);
+			String s = CircuitElm.getShortUnitText(this.capacitance, "F");
+			this.drawValues(g, s, hs);
 		}
 	}
 
+	@Override
 	void stamp()
 	{
 		// capacitor companion model using trapezoidal approximation
@@ -104,78 +116,102 @@ class CapacitorElm extends CircuitElm
 		// parallel with a resistor. Trapezoidal is more accurate
 		// than backward euler but can cause oscillatory behavior
 		// if RC is small relative to the timestep.
-		if (isTrapezoidal())
-			compResistance = sim.timeStep / (2 * capacitance);
+		if (this.isTrapezoidal())
+		{
+			this.compResistance = CircuitElm.sim.timeStep / (2 * this.capacitance);
+		}
 		else
-			compResistance = sim.timeStep / capacitance;
-		sim.stampResistor(nodes[0], nodes[1], compResistance);
-		sim.stampRightSide(nodes[0]);
-		sim.stampRightSide(nodes[1]);
+		{
+			this.compResistance = CircuitElm.sim.timeStep / this.capacitance;
+		}
+		CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[1], this.compResistance);
+		CircuitElm.sim.stampRightSide(this.nodes[0]);
+		CircuitElm.sim.stampRightSide(this.nodes[1]);
 	}
 
+	@Override
 	void startIteration()
 	{
-		if (isTrapezoidal())
-			curSourceValue = -voltdiff / compResistance - current;
-		else
-			curSourceValue = -voltdiff / compResistance;
-		// System.out.println("cap " + compResistance + " " + curSourceValue +
-		// " " + current + " " + voltdiff);
+		if (this.isTrapezoidal())
+		{
+			this.curSourceValue = -this.voltdiff / this.compResistance - this.current;
+		}
+		else {
+			this.curSourceValue = -this.voltdiff / this.compResistance;
+			// System.out.println("cap " + compResistance + " " + curSourceValue +
+			// " " + current + " " + voltdiff);
+		}
 	}
 
+	@Override
 	void calculateCurrent()
 	{
-		double voltdiff = volts[0] - volts[1];
+		double voltdiff = this.volts[0] - this.volts[1];
 		// we check compResistance because this might get called
 		// before stamp(), which sets compResistance, causing
 		// infinite current
-		if (compResistance > 0)
-			current = voltdiff / compResistance + curSourceValue;
+		if (this.compResistance > 0)
+		{
+			this.current = voltdiff / this.compResistance + this.curSourceValue;
+		}
 	}
 
 	double curSourceValue;
 
+	@Override
 	void doStep()
 	{
-		sim.stampCurrentSource(nodes[0], nodes[1], curSourceValue);
+		CircuitElm.sim.stampCurrentSource(this.nodes[0], this.nodes[1], this.curSourceValue);
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
 		arr[0] = "capacitor";
-		getBasicInfo(arr);
-		arr[3] = "C = " + getUnitText(capacitance, "F");
-		arr[4] = "P = " + getUnitText(getPower(), "W");
+		this.getBasicInfo(arr);
+		arr[3] = "C = " + CircuitElm.getUnitText(this.capacitance, "F");
+		arr[4] = "P = " + CircuitElm.getUnitText(this.getPower(), "W");
 		// double v = getVoltageDiff();
 		// arr[4] = "U = " + getUnitText(.5*capacitance*v*v, "J");
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
-			return new EditInfo("Capacitance (F)", capacitance, 0, 0);
+		{
+			return new EditInfo("Capacitance (F)", this.capacitance, 0, 0);
+		}
 		if (n == 1)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Trapezoidal Approximation", isTrapezoidal());
+			ei.checkbox = new Checkbox("Trapezoidal Approximation", this.isTrapezoidal());
 			return ei;
 		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (n == 0 && ei.value > 0)
-			capacitance = ei.value;
+		{
+			this.capacitance = ei.value;
+		}
 		if (n == 1)
 		{
 			if (ei.checkbox.getState())
-				flags &= ~FLAG_BACK_EULER;
+			{
+				this.flags &= ~CapacitorElm.FLAG_BACK_EULER;
+			}
 			else
-				flags |= FLAG_BACK_EULER;
+			{
+				this.flags |= CapacitorElm.FLAG_BACK_EULER;
+			}
 		}
 	}
 
+	@Override
 	boolean needsShortcut()
 	{
 		return true;

@@ -3,7 +3,8 @@ package com.limoilux.circuit;
 // FIXME need to add DiacElm.java to srclist
 // FIXME need to uncomment DiacElm line from CirSim.java
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.StringTokenizer;
 
 class DiacElm extends CircuitElm
@@ -15,130 +16,171 @@ class DiacElm extends CircuitElm
 	{
 		super(xx, yy);
 		// FIXME need to adjust defaults to make sense for diac
-		offresistance = 1e9;
-		onresistance = 1e3;
-		breakdown = 1e3;
-		holdcurrent = 0.001;
-		state = false;
+		this.offresistance = 1e9;
+		this.onresistance = 1e3;
+		this.breakdown = 1e3;
+		this.holdcurrent = 0.001;
+		this.state = false;
 	}
 
 	public DiacElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		onresistance = new Double(st.nextToken()).doubleValue();
-		offresistance = new Double(st.nextToken()).doubleValue();
-		breakdown = new Double(st.nextToken()).doubleValue();
-		holdcurrent = new Double(st.nextToken()).doubleValue();
+		this.onresistance = new Double(st.nextToken()).doubleValue();
+		this.offresistance = new Double(st.nextToken()).doubleValue();
+		this.breakdown = new Double(st.nextToken()).doubleValue();
+		this.holdcurrent = new Double(st.nextToken()).doubleValue();
 	}
 
+	@Override
 	boolean nonLinear()
 	{
 		return true;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 185;
 	}
 
+	@Override
 	String dump()
 	{
-		return super.dump() + " " + onresistance + " " + offresistance + " " + breakdown + " " + holdcurrent;
+		return super.dump() + " " + this.onresistance + " " + this.offresistance + " " + this.breakdown + " " + this.holdcurrent;
 	}
 
 	Point ps3, ps4;
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
-		calcLeads(32);
-		ps3 = new Point();
-		ps4 = new Point();
+		this.calcLeads(32);
+		this.ps3 = new Point();
+		this.ps4 = new Point();
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
 		// FIXME need to draw Diac
 		int i;
-		double v1 = volts[0];
-		double v2 = volts[1];
-		setBbox(point1, point2, 6);
-		draw2Leads(g);
-		setPowerColor(g, true);
-		doDots(g);
-		drawPosts(g);
+		double v1 = this.volts[0];
+		double v2 = this.volts[1];
+		this.setBbox(this.point1, this.point2, 6);
+		this.draw2Leads(g);
+		this.setPowerColor(g, true);
+		this.doDots(g);
+		this.drawPosts(g);
 	}
 
+	@Override
 	void calculateCurrent()
 	{
-		double vd = volts[0] - volts[1];
-		if (state)
-			current = vd / onresistance;
+		double vd = this.volts[0] - this.volts[1];
+		if (this.state)
+		{
+			this.current = vd / this.onresistance;
+		}
 		else
-			current = vd / offresistance;
+		{
+			this.current = vd / this.offresistance;
+		}
 	}
 
+	@Override
 	void startIteration()
 	{
-		double vd = volts[0] - volts[1];
-		if (Math.abs(current) < holdcurrent)
-			state = false;
-		if (Math.abs(vd) > breakdown)
-			state = true;
-		// System.out.print(this + " res current set to " + current + "\n");
+		double vd = this.volts[0] - this.volts[1];
+		if (Math.abs(this.current) < this.holdcurrent)
+		{
+			this.state = false;
+		}
+		if (Math.abs(vd) > this.breakdown)
+		{
+			this.state = true;
+			// System.out.print(this + " res current set to " + current + "\n");
+		}
 	}
 
+	@Override
 	void doStep()
 	{
-		if (state)
-			sim.stampResistor(nodes[0], nodes[1], onresistance);
+		if (this.state)
+		{
+			CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[1], this.onresistance);
+		}
 		else
-			sim.stampResistor(nodes[0], nodes[1], offresistance);
+		{
+			CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[1], this.offresistance);
+		}
 	}
 
+	@Override
 	void stamp()
 	{
-		sim.stampNonLinear(nodes[0]);
-		sim.stampNonLinear(nodes[1]);
+		CircuitElm.sim.stampNonLinear(this.nodes[0]);
+		CircuitElm.sim.stampNonLinear(this.nodes[1]);
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
 		// FIXME
 		arr[0] = "spark gap";
-		getBasicInfo(arr);
-		arr[3] = state ? "on" : "off";
-		arr[4] = "Ron = " + getUnitText(onresistance, sim.ohmString);
-		arr[5] = "Roff = " + getUnitText(offresistance, sim.ohmString);
-		arr[6] = "Vbrkdn = " + getUnitText(breakdown, "V");
-		arr[7] = "Ihold = " + getUnitText(holdcurrent, "A");
+		this.getBasicInfo(arr);
+		arr[3] = this.state ? "on" : "off";
+		arr[4] = "Ron = " + CircuitElm.getUnitText(this.onresistance, CircuitElm.sim.ohmString);
+		arr[5] = "Roff = " + CircuitElm.getUnitText(this.offresistance, CircuitElm.sim.ohmString);
+		arr[6] = "Vbrkdn = " + CircuitElm.getUnitText(this.breakdown, "V");
+		arr[7] = "Ihold = " + CircuitElm.getUnitText(this.holdcurrent, "A");
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
-			return new EditInfo("On resistance (ohms)", onresistance, 0, 0);
+		{
+			return new EditInfo("On resistance (ohms)", this.onresistance, 0, 0);
+		}
 		if (n == 1)
-			return new EditInfo("Off resistance (ohms)", offresistance, 0, 0);
+		{
+			return new EditInfo("Off resistance (ohms)", this.offresistance, 0, 0);
+		}
 		if (n == 2)
-			return new EditInfo("Breakdown voltage (volts)", breakdown, 0, 0);
+		{
+			return new EditInfo("Breakdown voltage (volts)", this.breakdown, 0, 0);
+		}
 		if (n == 3)
-			return new EditInfo("Hold current (amps)", holdcurrent, 0, 0);
+		{
+			return new EditInfo("Hold current (amps)", this.holdcurrent, 0, 0);
+		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (ei.value > 0 && n == 0)
-			onresistance = ei.value;
+		{
+			this.onresistance = ei.value;
+		}
 		if (ei.value > 0 && n == 1)
-			offresistance = ei.value;
+		{
+			this.offresistance = ei.value;
+		}
 		if (ei.value > 0 && n == 2)
-			breakdown = ei.value;
+		{
+			this.breakdown = ei.value;
+		}
 		if (ei.value > 0 && n == 3)
-			holdcurrent = ei.value;
+		{
+			this.holdcurrent = ei.value;
+		}
 	}
 
+	@Override
 	boolean needsShortcut()
 	{
 		return false;

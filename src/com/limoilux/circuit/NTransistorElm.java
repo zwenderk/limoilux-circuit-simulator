@@ -6,6 +6,7 @@ class NTransistorElm extends TransistorElm
 		super(xx, yy, false);
 	}
 
+	@Override
 	public Class getDumpClass()
 	{
 		return TransistorElm.class;

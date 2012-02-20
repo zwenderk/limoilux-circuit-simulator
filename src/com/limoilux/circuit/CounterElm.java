@@ -1,5 +1,4 @@
 package com.limoilux.circuit;
-import java.awt.*;
 import java.util.StringTokenizer;
 
 class CounterElm extends ChipElm
@@ -16,82 +15,97 @@ class CounterElm extends ChipElm
 		super(xa, ya, xb, yb, f, st);
 	}
 
+	@Override
 	boolean needsBits()
 	{
 		return true;
 	}
 
+	@Override
 	String getChipName()
 	{
 		return "Counter";
 	}
 
+	@Override
 	void setupPins()
 	{
-		sizeX = 2;
-		sizeY = bits > 2 ? bits : 2;
-		pins = new Pin[getPostCount()];
-		pins[0] = new Pin(0, SIDE_W, "");
-		pins[0].clock = true;
-		pins[1] = new Pin(sizeY - 1, SIDE_W, "R");
-		pins[1].bubble = true;
+		this.sizeX = 2;
+		this.sizeY = this.bits > 2 ? this.bits : 2;
+		this.pins = new Pin[this.getPostCount()];
+		this.pins[0] = new Pin(0, this.SIDE_W, "");
+		this.pins[0].clock = true;
+		this.pins[1] = new Pin(this.sizeY - 1, this.SIDE_W, "R");
+		this.pins[1].bubble = true;
 		int i;
-		for (i = 0; i != bits; i++)
+		for (i = 0; i != this.bits; i++)
 		{
 			int ii = i + 2;
-			pins[ii] = new Pin(i, SIDE_E, "Q" + (bits - i - 1));
-			pins[ii].output = pins[ii].state = true;
+			this.pins[ii] = new Pin(i, this.SIDE_E, "Q" + (this.bits - i - 1));
+			this.pins[ii].output = this.pins[ii].state = true;
 		}
-		if (hasEnable())
-			pins[bits + 2] = new Pin(sizeY - 2, SIDE_W, "En");
-		allocNodes();
+		if (this.hasEnable())
+		{
+			this.pins[this.bits + 2] = new Pin(this.sizeY - 2, this.SIDE_W, "En");
+		}
+		this.allocNodes();
 	}
 
+	@Override
 	int getPostCount()
 	{
-		if (hasEnable())
-			return bits + 3;
-		return bits + 2;
+		if (this.hasEnable())
+		{
+			return this.bits + 3;
+		}
+		return this.bits + 2;
 	}
 
 	boolean hasEnable()
 	{
-		return (flags & FLAG_ENABLE) != 0;
+		return (this.flags & this.FLAG_ENABLE) != 0;
 	}
 
+	@Override
 	int getVoltageSourceCount()
 	{
-		return bits;
+		return this.bits;
 	}
 
+	@Override
 	void execute()
 	{
 		boolean en = true;
-		if (hasEnable())
-			en = pins[bits + 2].value;
-		if (pins[0].value && !lastClock && en)
+		if (this.hasEnable())
+		{
+			en = this.pins[this.bits + 2].value;
+		}
+		if (this.pins[0].value && !this.lastClock && en)
 		{
 			int i;
-			for (i = bits - 1; i >= 0; i--)
+			for (i = this.bits - 1; i >= 0; i--)
 			{
 				int ii = i + 2;
-				if (!pins[ii].value)
+				if (!this.pins[ii].value)
 				{
-					pins[ii].value = true;
+					this.pins[ii].value = true;
 					break;
 				}
-				pins[ii].value = false;
+				this.pins[ii].value = false;
 			}
 		}
-		if (!pins[1].value)
+		if (!this.pins[1].value)
 		{
 			int i;
-			for (i = 0; i != bits; i++)
-				pins[i + 2].value = false;
+			for (i = 0; i != this.bits; i++)
+			{
+				this.pins[i + 2].value = false;
+			}
 		}
-		lastClock = pins[0].value;
+		this.lastClock = this.pins[0].value;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 164;

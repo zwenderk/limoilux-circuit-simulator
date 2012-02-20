@@ -1,5 +1,7 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Checkbox;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.StringTokenizer;
 
 class Switch2Elm extends SwitchElm
@@ -10,163 +12,195 @@ class Switch2Elm extends SwitchElm
 	public Switch2Elm(int xx, int yy)
 	{
 		super(xx, yy, false);
-		noDiagonal = true;
+		this.noDiagonal = true;
 	}
 
 	Switch2Elm(int xx, int yy, boolean mm)
 	{
 		super(xx, yy, mm);
-		noDiagonal = true;
+		this.noDiagonal = true;
 	}
 
 	public Switch2Elm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f, st);
-		link = new Integer(st.nextToken()).intValue();
-		noDiagonal = true;
+		this.link = new Integer(st.nextToken()).intValue();
+		this.noDiagonal = true;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 'S';
 	}
 
+	@Override
 	String dump()
 	{
-		return super.dump() + " " + link;
+		return super.dump() + " " + this.link;
 	}
 
 	final int openhs = 16;
 	Point swposts[], swpoles[];
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
-		calcLeads(32);
-		swposts = newPointArray(2);
-		swpoles = newPointArray(3);
-		interpPoint2(lead1, lead2, swpoles[0], swpoles[1], 1, openhs);
-		swpoles[2] = lead2;
-		interpPoint2(point1, point2, swposts[0], swposts[1], 1, openhs);
-		posCount = hasCenterOff() ? 3 : 2;
+		this.calcLeads(32);
+		this.swposts = this.newPointArray(2);
+		this.swpoles = this.newPointArray(3);
+		this.interpPoint2(this.lead1, this.lead2, this.swpoles[0], this.swpoles[1], 1, this.openhs);
+		this.swpoles[2] = this.lead2;
+		this.interpPoint2(this.point1, this.point2, this.swposts[0], this.swposts[1], 1, this.openhs);
+		this.posCount = this.hasCenterOff() ? 3 : 2;
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
-		setBbox(point1, point2, openhs);
+		this.setBbox(this.point1, this.point2, this.openhs);
 
 		// draw first lead
-		setVoltageColor(g, volts[0]);
-		drawThickLine(g, point1, lead1);
+		this.setVoltageColor(g, this.volts[0]);
+		CircuitElm.drawThickLine(g, this.point1, this.lead1);
 
 		// draw second lead
-		setVoltageColor(g, volts[1]);
-		drawThickLine(g, swpoles[0], swposts[0]);
+		this.setVoltageColor(g, this.volts[1]);
+		CircuitElm.drawThickLine(g, this.swpoles[0], this.swposts[0]);
 
 		// draw third lead
-		setVoltageColor(g, volts[2]);
-		drawThickLine(g, swpoles[1], swposts[1]);
+		this.setVoltageColor(g, this.volts[2]);
+		CircuitElm.drawThickLine(g, this.swpoles[1], this.swposts[1]);
 
 		// draw switch
-		if (!needsHighlight())
-			g.setColor(whiteColor);
-		drawThickLine(g, lead1, swpoles[position]);
+		if (!this.needsHighlight())
+		{
+			g.setColor(CircuitElm.whiteColor);
+		}
+		CircuitElm.drawThickLine(g, this.lead1, this.swpoles[this.position]);
 
-		updateDotCount();
-		drawDots(g, point1, lead1, curcount);
-		if (position != 2)
-			drawDots(g, swpoles[position], swposts[position], curcount);
-		drawPosts(g);
+		this.updateDotCount();
+		this.drawDots(g, this.point1, this.lead1, this.curcount);
+		if (this.position != 2)
+		{
+			this.drawDots(g, this.swpoles[this.position], this.swposts[this.position], this.curcount);
+		}
+		this.drawPosts(g);
 	}
 
+	@Override
 	Point getPost(int n)
 	{
-		return (n == 0) ? point1 : swposts[n - 1];
+		return n == 0 ? this.point1 : this.swposts[n - 1];
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 3;
 	}
 
+	@Override
 	void calculateCurrent()
 	{
-		if (position == 2)
-			current = 0;
+		if (this.position == 2)
+		{
+			this.current = 0;
+		}
 	}
 
+	@Override
 	void stamp()
 	{
-		if (position == 2) // in center?
+		if (this.position == 2)
+		{
 			return;
-		sim.stampVoltageSource(nodes[0], nodes[position + 1], voltSource, 0);
+		}
+		CircuitElm.sim.stampVoltageSource(this.nodes[0], this.nodes[this.position + 1], this.voltSource, 0);
 	}
 
+	@Override
 	int getVoltageSourceCount()
 	{
-		return (position == 2) ? 0 : 1;
+		return this.position == 2 ? 0 : 1;
 	}
 
+	@Override
 	void toggle()
 	{
 		super.toggle();
-		if (link != 0)
+		if (this.link != 0)
 		{
 			int i;
-			for (i = 0; i != sim.elmList.size(); i++)
+			for (i = 0; i != CircuitElm.sim.elmList.size(); i++)
 			{
-				Object o = sim.elmList.elementAt(i);
+				Object o = CircuitElm.sim.elmList.elementAt(i);
 				if (o instanceof Switch2Elm)
 				{
 					Switch2Elm s2 = (Switch2Elm) o;
-					if (s2.link == link)
-						s2.position = position;
+					if (s2.link == this.link)
+					{
+						s2.position = this.position;
+					}
 				}
 			}
 		}
 	}
 
+	@Override
 	boolean getConnection(int n1, int n2)
 	{
-		if (position == 2)
+		if (this.position == 2)
+		{
 			return false;
-		return comparePair(n1, n2, 0, 1 + position);
+		}
+		return this.comparePair(n1, n2, 0, 1 + this.position);
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
-		arr[0] = (link == 0) ? "switch (SPDT)" : "switch (DPDT)";
-		arr[1] = "I = " + getCurrentDText(getCurrent());
+		arr[0] = this.link == 0 ? "switch (SPDT)" : "switch (DPDT)";
+		arr[1] = "I = " + CircuitElm.getCurrentDText(this.getCurrent());
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 1)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Center Off", hasCenterOff());
+			ei.checkbox = new Checkbox("Center Off", this.hasCenterOff());
 			return ei;
 		}
 		return super.getEditInfo(n);
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (n == 1)
 		{
-			flags &= ~FLAG_CENTER_OFF;
+			this.flags &= ~Switch2Elm.FLAG_CENTER_OFF;
 			if (ei.checkbox.getState())
-				flags |= FLAG_CENTER_OFF;
-			if (hasCenterOff())
-				momentary = false;
-			setPoints();
+			{
+				this.flags |= Switch2Elm.FLAG_CENTER_OFF;
+			}
+			if (this.hasCenterOff())
+			{
+				this.momentary = false;
+			}
+			this.setPoints();
 		}
 		else
+		{
 			super.setEditValue(n, ei);
+		}
 	}
 
 	boolean hasCenterOff()
 	{
-		return (flags & FLAG_CENTER_OFF) != 0;
+		return (this.flags & Switch2Elm.FLAG_CENTER_OFF) != 0;
 	}
 }

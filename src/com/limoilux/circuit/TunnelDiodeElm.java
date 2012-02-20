@@ -1,5 +1,7 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.util.StringTokenizer;
 
 class TunnelDiodeElm extends CircuitElm
@@ -7,15 +9,16 @@ class TunnelDiodeElm extends CircuitElm
 	public TunnelDiodeElm(int xx, int yy)
 	{
 		super(xx, yy);
-		setup();
+		this.setup();
 	}
 
 	public TunnelDiodeElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		setup();
+		this.setup();
 	}
 
+	@Override
 	boolean nonLinear()
 	{
 		return true;
@@ -25,6 +28,7 @@ class TunnelDiodeElm extends CircuitElm
 	{
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 175;
@@ -34,45 +38,48 @@ class TunnelDiodeElm extends CircuitElm
 	Polygon poly;
 	Point cathode[];
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
-		calcLeads(16);
-		cathode = newPointArray(4);
-		Point pa[] = newPointArray(2);
-		interpPoint2(lead1, lead2, pa[0], pa[1], 0, hs);
-		interpPoint2(lead1, lead2, cathode[0], cathode[1], 1, hs);
-		interpPoint2(lead1, lead2, cathode[2], cathode[3], .8, hs);
-		poly = createPolygon(pa[0], pa[1], lead2);
+		this.calcLeads(16);
+		this.cathode = this.newPointArray(4);
+		Point pa[] = this.newPointArray(2);
+		this.interpPoint2(this.lead1, this.lead2, pa[0], pa[1], 0, this.hs);
+		this.interpPoint2(this.lead1, this.lead2, this.cathode[0], this.cathode[1], 1, this.hs);
+		this.interpPoint2(this.lead1, this.lead2, this.cathode[2], this.cathode[3], .8, this.hs);
+		this.poly = this.createPolygon(pa[0], pa[1], this.lead2);
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
-		setBbox(point1, point2, hs);
+		this.setBbox(this.point1, this.point2, this.hs);
 
-		double v1 = volts[0];
-		double v2 = volts[1];
+		double v1 = this.volts[0];
+		double v2 = this.volts[1];
 
-		draw2Leads(g);
+		this.draw2Leads(g);
 
 		// draw arrow thingy
-		setPowerColor(g, true);
-		setVoltageColor(g, v1);
-		g.fillPolygon(poly);
+		this.setPowerColor(g, true);
+		this.setVoltageColor(g, v1);
+		g.fillPolygon(this.poly);
 
 		// draw thing arrow is pointing to
-		setVoltageColor(g, v2);
-		drawThickLine(g, cathode[0], cathode[1]);
-		drawThickLine(g, cathode[2], cathode[0]);
-		drawThickLine(g, cathode[3], cathode[1]);
+		this.setVoltageColor(g, v2);
+		CircuitElm.drawThickLine(g, this.cathode[0], this.cathode[1]);
+		CircuitElm.drawThickLine(g, this.cathode[2], this.cathode[0]);
+		CircuitElm.drawThickLine(g, this.cathode[3], this.cathode[1]);
 
-		doDots(g);
-		drawPosts(g);
+		this.doDots(g);
+		this.drawPosts(g);
 	}
 
+	@Override
 	void reset()
 	{
-		lastvoltdiff = volts[0] = volts[1] = curcount = 0;
+		this.lastvoltdiff = this.volts[0] = this.volts[1] = this.curcount = 0;
 	}
 
 	double lastvoltdiff;
@@ -83,16 +90,21 @@ class TunnelDiodeElm extends CircuitElm
 		// thought it would be
 		// much harder than this to prevent convergence problems.
 		if (vnew > vold + 1)
+		{
 			return vold + 1;
+		}
 		if (vnew < vold - 1)
+		{
 			return vold - 1;
+		}
 		return vnew;
 	}
 
+	@Override
 	void stamp()
 	{
-		sim.stampNonLinear(nodes[0]);
-		sim.stampNonLinear(nodes[1]);
+		CircuitElm.sim.stampNonLinear(this.nodes[0]);
+		CircuitElm.sim.stampNonLinear(this.nodes[1]);
 	}
 
 	static final double pvp = .1;
@@ -102,38 +114,43 @@ class TunnelDiodeElm extends CircuitElm
 	static final double pvpp = .525;
 	static final double piv = 370e-6;
 
+	@Override
 	void doStep()
 	{
-		double voltdiff = volts[0] - volts[1];
-		if (Math.abs(voltdiff - lastvoltdiff) > .01)
-			sim.converged = false;
+		double voltdiff = this.volts[0] - this.volts[1];
+		if (Math.abs(voltdiff - this.lastvoltdiff) > .01)
+		{
+			CircuitElm.sim.converged = false;
+		}
 		// System.out.println(voltdiff + " " + lastvoltdiff + " " +
 		// Math.abs(voltdiff-lastvoltdiff));
-		voltdiff = limitStep(voltdiff, lastvoltdiff);
-		lastvoltdiff = voltdiff;
+		voltdiff = this.limitStep(voltdiff, this.lastvoltdiff);
+		this.lastvoltdiff = voltdiff;
 
-		double i = pip * Math.exp(-pvpp / pvt) * (Math.exp(voltdiff / pvt) - 1) + pip * (voltdiff / pvp)
-				* Math.exp(1 - voltdiff / pvp) + piv * Math.exp(voltdiff - pvv);
+		double i = TunnelDiodeElm.pip * Math.exp(-TunnelDiodeElm.pvpp / TunnelDiodeElm.pvt) * (Math.exp(voltdiff / TunnelDiodeElm.pvt) - 1) + TunnelDiodeElm.pip * (voltdiff / TunnelDiodeElm.pvp)
+				* Math.exp(1 - voltdiff / TunnelDiodeElm.pvp) + TunnelDiodeElm.piv * Math.exp(voltdiff - TunnelDiodeElm.pvv);
 
-		double geq = pip * Math.exp(-pvpp / pvt) * Math.exp(voltdiff / pvt) / pvt + pip * Math.exp(1 - voltdiff / pvp)
-				/ pvp - Math.exp(1 - voltdiff / pvp) * pip * voltdiff / (pvp * pvp) + Math.exp(voltdiff - pvv) * piv;
+		double geq = TunnelDiodeElm.pip * Math.exp(-TunnelDiodeElm.pvpp / TunnelDiodeElm.pvt) * Math.exp(voltdiff / TunnelDiodeElm.pvt) / TunnelDiodeElm.pvt + TunnelDiodeElm.pip * Math.exp(1 - voltdiff / TunnelDiodeElm.pvp)
+				/ TunnelDiodeElm.pvp - Math.exp(1 - voltdiff / TunnelDiodeElm.pvp) * TunnelDiodeElm.pip * voltdiff / (TunnelDiodeElm.pvp * TunnelDiodeElm.pvp) + Math.exp(voltdiff - TunnelDiodeElm.pvv) * TunnelDiodeElm.piv;
 		double nc = i - geq * voltdiff;
-		sim.stampConductance(nodes[0], nodes[1], geq);
-		sim.stampCurrentSource(nodes[0], nodes[1], nc);
+		CircuitElm.sim.stampConductance(this.nodes[0], this.nodes[1], geq);
+		CircuitElm.sim.stampCurrentSource(this.nodes[0], this.nodes[1], nc);
 	}
 
+	@Override
 	void calculateCurrent()
 	{
-		double voltdiff = volts[0] - volts[1];
-		current = pip * Math.exp(-pvpp / pvt) * (Math.exp(voltdiff / pvt) - 1) + pip * (voltdiff / pvp)
-				* Math.exp(1 - voltdiff / pvp) + piv * Math.exp(voltdiff - pvv);
+		double voltdiff = this.volts[0] - this.volts[1];
+		this.current = TunnelDiodeElm.pip * Math.exp(-TunnelDiodeElm.pvpp / TunnelDiodeElm.pvt) * (Math.exp(voltdiff / TunnelDiodeElm.pvt) - 1) + TunnelDiodeElm.pip * (voltdiff / TunnelDiodeElm.pvp)
+				* Math.exp(1 - voltdiff / TunnelDiodeElm.pvp) + TunnelDiodeElm.piv * Math.exp(voltdiff - TunnelDiodeElm.pvv);
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
 		arr[0] = "tunnel diode";
-		arr[1] = "I = " + getCurrentText(getCurrent());
-		arr[2] = "Vd = " + getVoltageText(getVoltageDiff());
-		arr[3] = "P = " + getUnitText(getPower(), "W");
+		arr[1] = "I = " + CircuitElm.getCurrentText(this.getCurrent());
+		arr[2] = "Vd = " + CircuitElm.getVoltageText(this.getVoltageDiff());
+		arr[3] = "P = " + CircuitElm.getUnitText(this.getPower(), "W");
 	}
 }

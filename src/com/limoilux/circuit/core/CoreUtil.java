@@ -35,7 +35,9 @@ public class CoreUtil
 			b[row] = b[i];
 			b[i] = swap;
 			if (swap != 0)
+			{
 				break;
+			}
 		}
 
 		int bi = i++;
@@ -48,7 +50,9 @@ public class CoreUtil
 			b[row] = b[i];
 			// forward substitution using the lower triangular matrix
 			for (j = bi; j < i; j++)
+			{
 				tot -= a[i][j] * b[j];
+			}
 			b[i] = tot;
 		}
 		for (i = n - 1; i >= 0; i--)
@@ -89,11 +93,15 @@ public class CoreUtil
 			{
 				double x = Math.abs(a[i][j]);
 				if (x > largest)
+				{
 					largest = x;
+				}
 			}
 			// if all zeros, it's a singular matrix
 			if (largest == 0)
+			{
 				return false;
+			}
 			scaleFactors[i] = 1.0 / largest;
 		}
 
@@ -106,7 +114,9 @@ public class CoreUtil
 			{
 				double q = a[i][j];
 				for (k = 0; k != i; k++)
+				{
 					q -= a[i][k] * a[k][j];
+				}
 				a[i][j] = q;
 			}
 
@@ -117,7 +127,9 @@ public class CoreUtil
 			{
 				double q = a[i][j];
 				for (k = 0; k != j; k++)
+				{
 					q -= a[i][k] * a[k][j];
+				}
 				a[i][j] = q;
 				double x = Math.abs(q);
 				if (x >= largest)
@@ -153,12 +165,14 @@ public class CoreUtil
 			{
 				double mult = 1.0 / a[j][j];
 				for (i = j + 1; i != n; i++)
+				{
 					a[i][j] *= mult;
+				}
 			}
 		}
 		return true;
 	}
-	
+
 	public static int distanceSq(int x1, int y1, int x2, int y2)
 	{
 		x2 -= x1;

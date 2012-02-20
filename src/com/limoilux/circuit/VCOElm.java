@@ -1,5 +1,5 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Graphics;
 import java.util.StringTokenizer;
 
 class VCOElm extends ChipElm
@@ -14,56 +14,61 @@ class VCOElm extends ChipElm
 		super(xa, ya, xb, yb, f, st);
 	}
 
+	@Override
 	String getChipName()
 	{
 		return "VCO";
 	}
 
+	@Override
 	void setupPins()
 	{
-		sizeX = 2;
-		sizeY = 4;
-		pins = new Pin[6];
-		pins[0] = new Pin(0, SIDE_W, "Vi");
-		pins[1] = new Pin(3, SIDE_W, "Vo");
-		pins[1].output = true;
-		pins[2] = new Pin(0, SIDE_E, "C");
-		pins[3] = new Pin(1, SIDE_E, "C");
-		pins[4] = new Pin(2, SIDE_E, "R1");
-		pins[4].output = true;
-		pins[5] = new Pin(3, SIDE_E, "R2");
-		pins[5].output = true;
+		this.sizeX = 2;
+		this.sizeY = 4;
+		this.pins = new Pin[6];
+		this.pins[0] = new Pin(0, this.SIDE_W, "Vi");
+		this.pins[1] = new Pin(3, this.SIDE_W, "Vo");
+		this.pins[1].output = true;
+		this.pins[2] = new Pin(0, this.SIDE_E, "C");
+		this.pins[3] = new Pin(1, this.SIDE_E, "C");
+		this.pins[4] = new Pin(2, this.SIDE_E, "R1");
+		this.pins[4].output = true;
+		this.pins[5] = new Pin(3, this.SIDE_E, "R2");
+		this.pins[5].output = true;
 	}
 
+	@Override
 	boolean nonLinear()
 	{
 		return true;
 	}
 
+	@Override
 	void stamp()
 	{
 		// output pin
-		sim.stampVoltageSource(0, nodes[1], pins[1].voltSource);
+		CircuitElm.sim.stampVoltageSource(0, this.nodes[1], this.pins[1].voltSource);
 		// attach Vi to R1 pin so its current is proportional to Vi
-		sim.stampVoltageSource(nodes[0], nodes[4], pins[4].voltSource, 0);
+		CircuitElm.sim.stampVoltageSource(this.nodes[0], this.nodes[4], this.pins[4].voltSource, 0);
 		// attach 5V to R2 pin so we get a current going
-		sim.stampVoltageSource(0, nodes[5], pins[5].voltSource, 5);
+		CircuitElm.sim.stampVoltageSource(0, this.nodes[5], this.pins[5].voltSource, 5);
 		// put resistor across cap pins to give current somewhere to go
 		// in case cap is not connected
-		sim.stampResistor(nodes[2], nodes[3], cResistance);
-		sim.stampNonLinear(nodes[2]);
-		sim.stampNonLinear(nodes[3]);
+		CircuitElm.sim.stampResistor(this.nodes[2], this.nodes[3], this.cResistance);
+		CircuitElm.sim.stampNonLinear(this.nodes[2]);
+		CircuitElm.sim.stampNonLinear(this.nodes[3]);
 	}
 
 	final double cResistance = 1e6;
 	double cCurrent;
 	int cDir;
 
+	@Override
 	void doStep()
 	{
-		double vc = volts[3] - volts[2];
-		double vo = volts[1];
-		int dir = (vo < 2.5) ? 1 : -1;
+		double vc = this.volts[3] - this.volts[2];
+		double vo = this.volts[1];
+		int dir = vo < 2.5 ? 1 : -1;
 		// switch direction of current through cap as we oscillate
 		if (vo < 2.5 && vc > 4.5)
 		{
@@ -77,47 +82,53 @@ class VCOElm extends ChipElm
 		}
 
 		// generate output voltage
-		sim.updateVoltageSource(0, nodes[1], pins[1].voltSource, vo);
+		CircuitElm.sim.updateVoltageSource(0, this.nodes[1], this.pins[1].voltSource, vo);
 		// now we set the current through the cap to be equal to the
 		// current through R1 and R2, so we can measure the voltage
 		// across the cap
-		int cur1 = sim.nodeList.size() + pins[4].voltSource;
-		int cur2 = sim.nodeList.size() + pins[5].voltSource;
-		sim.stampMatrix(nodes[2], cur1, dir);
-		sim.stampMatrix(nodes[2], cur2, dir);
-		sim.stampMatrix(nodes[3], cur1, -dir);
-		sim.stampMatrix(nodes[3], cur2, -dir);
-		cDir = dir;
+		int cur1 = CircuitElm.sim.nodeList.size() + this.pins[4].voltSource;
+		int cur2 = CircuitElm.sim.nodeList.size() + this.pins[5].voltSource;
+		CircuitElm.sim.stampMatrix(this.nodes[2], cur1, dir);
+		CircuitElm.sim.stampMatrix(this.nodes[2], cur2, dir);
+		CircuitElm.sim.stampMatrix(this.nodes[3], cur1, -dir);
+		CircuitElm.sim.stampMatrix(this.nodes[3], cur2, -dir);
+		this.cDir = dir;
 	}
 
 	// can't do this in calculateCurrent() because it's called before
 	// we get pins[4].current and pins[5].current, which we need
 	void computeCurrent()
 	{
-		if (cResistance == 0)
+		if (this.cResistance == 0)
+		{
 			return;
-		double c = cDir * (pins[4].current + pins[5].current) + (volts[3] - volts[2]) / cResistance;
-		pins[2].current = -c;
-		pins[3].current = c;
-		pins[0].current = -pins[4].current;
+		}
+		double c = this.cDir * (this.pins[4].current + this.pins[5].current) + (this.volts[3] - this.volts[2]) / this.cResistance;
+		this.pins[2].current = -c;
+		this.pins[3].current = c;
+		this.pins[0].current = -this.pins[4].current;
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
-		computeCurrent();
-		drawChip(g);
+		this.computeCurrent();
+		this.drawChip(g);
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 6;
 	}
 
+	@Override
 	int getVoltageSourceCount()
 	{
 		return 3;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 158;

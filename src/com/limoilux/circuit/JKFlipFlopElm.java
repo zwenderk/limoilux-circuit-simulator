@@ -1,5 +1,4 @@
 package com.limoilux.circuit;
-import java.awt.*;
 import java.util.StringTokenizer;
 
 class JKFlipFlopElm extends ChipElm
@@ -12,61 +11,73 @@ class JKFlipFlopElm extends ChipElm
 	public JKFlipFlopElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f, st);
-		pins[4].value = !pins[3].value;
+		this.pins[4].value = !this.pins[3].value;
 	}
 
+	@Override
 	String getChipName()
 	{
 		return "JK flip-flop";
 	}
 
+	@Override
 	void setupPins()
 	{
-		sizeX = 2;
-		sizeY = 3;
-		pins = new Pin[5];
-		pins[0] = new Pin(0, SIDE_W, "J");
-		pins[1] = new Pin(1, SIDE_W, "");
-		pins[1].clock = true;
-		pins[1].bubble = true;
-		pins[2] = new Pin(2, SIDE_W, "K");
-		pins[3] = new Pin(0, SIDE_E, "Q");
-		pins[3].output = pins[3].state = true;
-		pins[4] = new Pin(2, SIDE_E, "Q");
-		pins[4].output = true;
-		pins[4].lineOver = true;
+		this.sizeX = 2;
+		this.sizeY = 3;
+		this.pins = new Pin[5];
+		this.pins[0] = new Pin(0, this.SIDE_W, "J");
+		this.pins[1] = new Pin(1, this.SIDE_W, "");
+		this.pins[1].clock = true;
+		this.pins[1].bubble = true;
+		this.pins[2] = new Pin(2, this.SIDE_W, "K");
+		this.pins[3] = new Pin(0, this.SIDE_E, "Q");
+		this.pins[3].output = this.pins[3].state = true;
+		this.pins[4] = new Pin(2, this.SIDE_E, "Q");
+		this.pins[4].output = true;
+		this.pins[4].lineOver = true;
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 5;
 	}
 
+	@Override
 	int getVoltageSourceCount()
 	{
 		return 2;
 	}
 
+	@Override
 	void execute()
 	{
-		if (!pins[1].value && lastClock)
+		if (!this.pins[1].value && this.lastClock)
 		{
-			boolean q = pins[3].value;
-			if (pins[0].value)
+			boolean q = this.pins[3].value;
+			if (this.pins[0].value)
 			{
-				if (pins[2].value)
+				if (this.pins[2].value)
+				{
 					q = !q;
+				}
 				else
+				{
 					q = true;
+				}
 			}
-			else if (pins[2].value)
+			else if (this.pins[2].value)
+			{
 				q = false;
-			pins[3].value = q;
-			pins[4].value = !q;
+			}
+			this.pins[3].value = q;
+			this.pins[4].value = !q;
 		}
-		lastClock = pins[1].value;
+		this.lastClock = this.pins[1].value;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 156;
