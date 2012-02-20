@@ -93,7 +93,7 @@ class TransistorElm extends CircuitElm
 		g.fillPolygon(this.arrowPoly);
 		// draw base
 		this.setVoltageColor(g, this.volts[0]);
-		if (CircuitElm.sim.powerCheckItem.getState())
+		if (CircuitElm.cirSim.powerCheckItem.getState())
 		{
 			g.setColor(Color.gray);
 		}
@@ -110,7 +110,7 @@ class TransistorElm extends CircuitElm
 		this.setPowerColor(g, true);
 		g.fillPolygon(this.rectPoly);
 
-		if ((this.needsHighlight() || CircuitElm.sim.dragElm == this) && this.dy == 0)
+		if ((this.needsHighlight() || CircuitElm.cirSim.dragElm == this) && this.dy == 0)
 		{
 			g.setColor(Color.white);
 			g.setFont(CircuitElm.unitsFont);
@@ -214,7 +214,7 @@ class TransistorElm extends CircuitElm
 			{
 				vnew = TransistorElm.vt * Math.log(vnew / TransistorElm.vt);
 			}
-			CircuitElm.sim.converged = false;
+			CircuitElm.cirSim.converged = false;
 			// System.out.println(vnew + " " + oo + " " + vold);
 		}
 		return vnew;
@@ -223,9 +223,9 @@ class TransistorElm extends CircuitElm
 	@Override
 	void stamp()
 	{
-		CircuitElm.sim.stampNonLinear(this.nodes[0]);
-		CircuitElm.sim.stampNonLinear(this.nodes[1]);
-		CircuitElm.sim.stampNonLinear(this.nodes[2]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[2]);
 	}
 
 	@Override
@@ -236,15 +236,15 @@ class TransistorElm extends CircuitElm
 		if (Math.abs(vbc - this.lastvbc) > .01 || // .01
 				Math.abs(vbe - this.lastvbe) > .01)
 		{
-			CircuitElm.sim.converged = false;
+			CircuitElm.cirSim.converged = false;
 		}
 		this.gmin = 0;
-		if (CircuitElm.sim.subIterations > 100)
+		if (CircuitElm.cirSim.subIterations > 100)
 		{
 			// if we have trouble converging, put a conductance in parallel with
 			// all P-N junctions.
 			// Gradually increase the conductance value for each iteration.
-			this.gmin = Math.exp(-9 * Math.log(10) * (1 - CircuitElm.sim.subIterations / 3000.));
+			this.gmin = Math.exp(-9 * Math.log(10) * (1 - CircuitElm.cirSim.subIterations / 3000.));
 			if (this.gmin > .1)
 			{
 				this.gmin = .1;
@@ -290,21 +290,21 @@ class TransistorElm extends CircuitElm
 		// stamps from page 302 of Pillage. Node 0 is the base,
 		// node 1 the collector, node 2 the emitter. Also stamp
 		// minimum conductance (gmin) between b,e and b,c
-		CircuitElm.sim.stampMatrix(this.nodes[0], this.nodes[0], -gee - gec - gce - gcc + this.gmin * 2);
-		CircuitElm.sim.stampMatrix(this.nodes[0], this.nodes[1], gec + gcc - this.gmin);
-		CircuitElm.sim.stampMatrix(this.nodes[0], this.nodes[2], gee + gce - this.gmin);
-		CircuitElm.sim.stampMatrix(this.nodes[1], this.nodes[0], gce + gcc - this.gmin);
-		CircuitElm.sim.stampMatrix(this.nodes[1], this.nodes[1], -gcc + this.gmin);
-		CircuitElm.sim.stampMatrix(this.nodes[1], this.nodes[2], -gce);
-		CircuitElm.sim.stampMatrix(this.nodes[2], this.nodes[0], gee + gec - this.gmin);
-		CircuitElm.sim.stampMatrix(this.nodes[2], this.nodes[1], -gec);
-		CircuitElm.sim.stampMatrix(this.nodes[2], this.nodes[2], -gee + this.gmin);
+		CircuitElm.cirSim.stampMatrix(this.nodes[0], this.nodes[0], -gee - gec - gce - gcc + this.gmin * 2);
+		CircuitElm.cirSim.stampMatrix(this.nodes[0], this.nodes[1], gec + gcc - this.gmin);
+		CircuitElm.cirSim.stampMatrix(this.nodes[0], this.nodes[2], gee + gce - this.gmin);
+		CircuitElm.cirSim.stampMatrix(this.nodes[1], this.nodes[0], gce + gcc - this.gmin);
+		CircuitElm.cirSim.stampMatrix(this.nodes[1], this.nodes[1], -gcc + this.gmin);
+		CircuitElm.cirSim.stampMatrix(this.nodes[1], this.nodes[2], -gce);
+		CircuitElm.cirSim.stampMatrix(this.nodes[2], this.nodes[0], gee + gec - this.gmin);
+		CircuitElm.cirSim.stampMatrix(this.nodes[2], this.nodes[1], -gec);
+		CircuitElm.cirSim.stampMatrix(this.nodes[2], this.nodes[2], -gee + this.gmin);
 
 		// we are solving for v(k+1), not delta v, so we use formula
 		// 10.5.13, multiplying J by v(k)
-		CircuitElm.sim.stampRightSide(this.nodes[0], -this.ib - (gec + gcc) * vbc - (gee + gce) * vbe);
-		CircuitElm.sim.stampRightSide(this.nodes[1], -this.ic + gce * vbe + gcc * vbc);
-		CircuitElm.sim.stampRightSide(this.nodes[2], -this.ie + gee * vbe + gec * vbc);
+		CircuitElm.cirSim.stampRightSide(this.nodes[0], -this.ib - (gec + gcc) * vbc - (gee + gce) * vbe);
+		CircuitElm.cirSim.stampRightSide(this.nodes[1], -this.ic + gce * vbe + gcc * vbc);
+		CircuitElm.cirSim.stampRightSide(this.nodes[2], -this.ie + gee * vbe + gec * vbc);
 	}
 
 	@Override

@@ -21,7 +21,7 @@ class OpAmpElm extends CircuitElm
 		this.maxOut = 15;
 		this.minOut = -15;
 		this.gbw = 1e6;
-		this.setSize(CircuitElm.sim.smallGridCheckItem.getState() ? 1 : 2);
+		this.setSize(CircuitElm.cirSim.smallGridCheckItem.getState() ? 1 : 2);
 		this.setGain();
 	}
 
@@ -110,7 +110,7 @@ class OpAmpElm extends CircuitElm
 	void setPoints()
 	{
 		super.setPoints();
-		if (this.dn > 150 && this == CircuitElm.sim.dragElm)
+		if (this.dn > 150 && this == CircuitElm.cirSim.dragElm)
 		{
 			this.setSize(2);
 		}
@@ -174,9 +174,9 @@ class OpAmpElm extends CircuitElm
 	@Override
 	void stamp()
 	{
-		int vn = CircuitElm.sim.nodeList.size() + this.voltSource;
-		CircuitElm.sim.stampNonLinear(vn);
-		CircuitElm.sim.stampMatrix(this.nodes[2], vn, 1);
+		int vn = CircuitElm.cirSim.nodeList.size() + this.voltSource;
+		CircuitElm.cirSim.stampNonLinear(vn);
+		CircuitElm.cirSim.stampMatrix(this.nodes[2], vn, 1);
 	}
 
 	@Override
@@ -185,21 +185,21 @@ class OpAmpElm extends CircuitElm
 		double vd = this.volts[1] - this.volts[0];
 		if (Math.abs(this.lastvd - vd) > .1)
 		{
-			CircuitElm.sim.converged = false;
+			CircuitElm.cirSim.converged = false;
 		}
 		else if (this.volts[2] > this.maxOut + .1 || this.volts[2] < this.minOut - .1)
 		{
-			CircuitElm.sim.converged = false;
+			CircuitElm.cirSim.converged = false;
 		}
 		double x = 0;
-		int vn = CircuitElm.sim.nodeList.size() + this.voltSource;
+		int vn = CircuitElm.cirSim.nodeList.size() + this.voltSource;
 		double dx = 0;
-		if (vd >= this.maxOut / this.gain && (this.lastvd >= 0 || CircuitElm.sim.getRandom(4) == 1))
+		if (vd >= this.maxOut / this.gain && (this.lastvd >= 0 || CircuitElm.cirSim.getRandom(4) == 1))
 		{
 			dx = 1e-4;
 			x = this.maxOut - dx * this.maxOut / this.gain;
 		}
-		else if (vd <= this.minOut / this.gain && (this.lastvd <= 0 || CircuitElm.sim.getRandom(4) == 1))
+		else if (vd <= this.minOut / this.gain && (this.lastvd <= 0 || CircuitElm.cirSim.getRandom(4) == 1))
 		{
 			dx = 1e-4;
 			x = this.minOut - dx * this.minOut / this.gain;
@@ -211,10 +211,10 @@ class OpAmpElm extends CircuitElm
 		}
 
 		// newton-raphson
-		CircuitElm.sim.stampMatrix(vn, this.nodes[0], dx);
-		CircuitElm.sim.stampMatrix(vn, this.nodes[1], -dx);
-		CircuitElm.sim.stampMatrix(vn, this.nodes[2], 1);
-		CircuitElm.sim.stampRightSide(vn, x);
+		CircuitElm.cirSim.stampMatrix(vn, this.nodes[0], dx);
+		CircuitElm.cirSim.stampMatrix(vn, this.nodes[1], -dx);
+		CircuitElm.cirSim.stampMatrix(vn, this.nodes[2], 1);
+		CircuitElm.cirSim.stampRightSide(vn, x);
 
 		this.lastvd = vd;
 		/*

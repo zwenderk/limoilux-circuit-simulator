@@ -69,25 +69,25 @@ class PotElm extends CircuitElm implements AdjustmentListener
 
 	void createSlider()
 	{
-		CircuitElm.sim.mainContainer.add(this.label = new Label(this.sliderText, Label.CENTER));
+		CircuitElm.cirSim.mainContainer.add(this.label = new Label(this.sliderText, Label.CENTER));
 		int value = (int) (this.position * 100);
-		CircuitElm.sim.mainContainer.add(this.slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
-		CircuitElm.sim.mainContainer.validate();
+		CircuitElm.cirSim.mainContainer.add(this.slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
+		CircuitElm.cirSim.mainContainer.validate();
 		this.slider.addAdjustmentListener(this);
 	}
 
 	@Override
 	public void adjustmentValueChanged(AdjustmentEvent e)
 	{
-		CircuitElm.sim.analyzeFlag = true;
+		CircuitElm.cirSim.analyzeFlag = true;
 		this.setPoints();
 	}
 
 	@Override
 	void delete()
 	{
-		CircuitElm.sim.mainContainer.remove(this.label);
-		CircuitElm.sim.mainContainer.remove(this.slider);
+		CircuitElm.cirSim.mainContainer.remove(this.label);
+		CircuitElm.cirSim.mainContainer.remove(this.slider);
 	}
 
 	Point post3, corner2, arrowPoint, midpoint, arrow1, arrow2;
@@ -101,21 +101,21 @@ class PotElm extends CircuitElm implements AdjustmentListener
 		int offset = 0;
 		if (CircuitElm.abs(this.dx) > CircuitElm.abs(this.dy))
 		{
-			this.dx = CircuitElm.sim.snapGrid(this.dx / 2) * 2;
+			this.dx = CircuitElm.cirSim.snapGrid(this.dx / 2) * 2;
 			this.point2.x = this.x2 = this.point1.x + this.dx;
 			offset = this.dx < 0 ? this.dy : -this.dy;
 			this.point2.y = this.point1.y;
 		}
 		else
 		{
-			this.dy = CircuitElm.sim.snapGrid(this.dy / 2) * 2;
+			this.dy = CircuitElm.cirSim.snapGrid(this.dy / 2) * 2;
 			this.point2.y = this.y2 = this.point1.y + this.dy;
 			offset = this.dy > 0 ? this.dx : -this.dx;
 			this.point2.x = this.point1.x;
 		}
 		if (offset == 0)
 		{
-			offset = CircuitElm.sim.gridSize;
+			offset = CircuitElm.cirSim.gridSize;
 		}
 		this.dn = CircuitElm.distance(this.point1, this.point2);
 		int bodyLen = 32;
@@ -141,7 +141,7 @@ class PotElm extends CircuitElm implements AdjustmentListener
 		int segments = 16;
 		int i;
 		int ox = 0;
-		int hs = CircuitElm.sim.euroResistorCheckItem.getState() ? 6 : 8;
+		int hs = CircuitElm.cirSim.euroResistorCheckItem.getState() ? 6 : 8;
 		double v1 = this.volts[0];
 		double v2 = this.volts[1];
 		double v3 = this.volts[2];
@@ -150,7 +150,7 @@ class PotElm extends CircuitElm implements AdjustmentListener
 		this.setPowerColor(g, true);
 		double segf = 1. / segments;
 		int divide = (int) (segments * this.position);
-		if (!CircuitElm.sim.euroResistorCheckItem.getState())
+		if (!CircuitElm.cirSim.euroResistorCheckItem.getState())
 		{
 			// draw zigzag
 			for (i = 0; i != segments; i++)
@@ -210,7 +210,7 @@ class PotElm extends CircuitElm implements AdjustmentListener
 		this.curcount1 = this.updateDotCount(this.current1, this.curcount1);
 		this.curcount2 = this.updateDotCount(this.current2, this.curcount2);
 		this.curcount3 = this.updateDotCount(this.current3, this.curcount3);
-		if (CircuitElm.sim.dragElm != this)
+		if (CircuitElm.cirSim.dragElm != this)
 		{
 			this.drawDots(g, this.point1, this.midpoint, this.curcount1);
 			this.drawDots(g, this.point2, this.midpoint, this.curcount2);
@@ -233,8 +233,8 @@ class PotElm extends CircuitElm implements AdjustmentListener
 	{
 		this.resistance1 = this.maxResistance * this.position;
 		this.resistance2 = this.maxResistance * (1 - this.position);
-		CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[2], this.resistance1);
-		CircuitElm.sim.stampResistor(this.nodes[2], this.nodes[1], this.resistance2);
+		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[2], this.resistance1);
+		CircuitElm.cirSim.stampResistor(this.nodes[2], this.nodes[1], this.resistance2);
 	}
 
 	@Override
@@ -242,8 +242,8 @@ class PotElm extends CircuitElm implements AdjustmentListener
 	{
 		arr[0] = "potentiometer";
 		arr[1] = "Vd = " + CircuitElm.getVoltageDText(this.getVoltageDiff());
-		arr[2] = "R1 = " + CircuitElm.getUnitText(this.resistance1, CircuitElm.sim.ohmString);
-		arr[3] = "R2 = " + CircuitElm.getUnitText(this.resistance2, CircuitElm.sim.ohmString);
+		arr[2] = "R1 = " + CircuitElm.getUnitText(this.resistance1, CircuitElm.cirSim.ohmString);
+		arr[3] = "R2 = " + CircuitElm.getUnitText(this.resistance2, CircuitElm.cirSim.ohmString);
 		arr[4] = "I1 = " + CircuitElm.getCurrentDText(this.current1);
 		arr[5] = "I2 = " + CircuitElm.getCurrentDText(this.current2);
 	}

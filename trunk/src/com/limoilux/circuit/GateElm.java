@@ -15,7 +15,7 @@ abstract class GateElm extends CircuitElm
 		super(xx, yy);
 		this.noDiagonal = true;
 		this.inputCount = 2;
-		this.setSize(CircuitElm.sim.smallGridCheckItem.getState() ? 1 : 2);
+		this.setSize(CircuitElm.cirSim.smallGridCheckItem.getState() ? 1 : 2);
 	}
 
 	public GateElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
@@ -56,7 +56,7 @@ abstract class GateElm extends CircuitElm
 	void setPoints()
 	{
 		super.setPoints();
-		if (this.dn > 150 && this == CircuitElm.sim.dragElm)
+		if (this.dn > 150 && this == CircuitElm.cirSim.dragElm)
 		{
 			this.setSize(2);
 		}
@@ -157,7 +157,7 @@ abstract class GateElm extends CircuitElm
 	@Override
 	void stamp()
 	{
-		CircuitElm.sim.stampVoltageSource(0, this.nodes[this.inputCount], this.voltSource);
+		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[this.inputCount], this.voltSource);
 	}
 
 	boolean getInput(int x)
@@ -178,7 +178,7 @@ abstract class GateElm extends CircuitElm
 		}
 		this.lastOutput = f;
 		double res = f ? 5 : 0;
-		CircuitElm.sim.updateVoltageSource(0, this.nodes[this.inputCount], this.voltSource, res);
+		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[this.inputCount], this.voltSource, res);
 	}
 
 	@Override

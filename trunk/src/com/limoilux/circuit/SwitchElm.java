@@ -109,7 +109,7 @@ class SwitchElm extends CircuitElm
 	{
 		if (this.position == 0)
 		{
-			CircuitElm.sim.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, 0);
+			CircuitElm.cirSim.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, 0);
 		}
 	}
 

@@ -19,23 +19,23 @@ class AntennaElm extends RailElm
 	@Override
 	void stamp()
 	{
-		CircuitElm.sim.stampVoltageSource(0, this.nodes[0], this.voltSource);
+		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[0], this.voltSource);
 	}
 
 	@Override
 	void doStep()
 	{
-		CircuitElm.sim.updateVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
+		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
 	}
 
 	@Override
 	double getVoltage()
 	{
-		this.fmphase += 2 * CircuitElm.pi * (2200 + Math.sin(2 * CircuitElm.pi * CircuitElm.sim.t * 13) * 100) * CircuitElm.sim.timeStep;
+		this.fmphase += 2 * CircuitElm.pi * (2200 + Math.sin(2 * CircuitElm.pi * CircuitElm.cirSim.t * 13) * 100) * CircuitElm.cirSim.timeStep;
 		double fm = 3 * Math.sin(this.fmphase);
-		return Math.sin(2 * CircuitElm.pi * CircuitElm.sim.t * 3000) * (1.3 + Math.sin(2 * CircuitElm.pi * CircuitElm.sim.t * 12)) * 3
-				+ Math.sin(2 * CircuitElm.pi * CircuitElm.sim.t * 2710) * (1.3 + Math.sin(2 * CircuitElm.pi * CircuitElm.sim.t * 13)) * 3
-				+ Math.sin(2 * CircuitElm.pi * CircuitElm.sim.t * 2433) * (1.3 + Math.sin(2 * CircuitElm.pi * CircuitElm.sim.t * 14)) * 3 + fm;
+		return Math.sin(2 * CircuitElm.pi * CircuitElm.cirSim.t * 3000) * (1.3 + Math.sin(2 * CircuitElm.pi * CircuitElm.cirSim.t * 12)) * 3
+				+ Math.sin(2 * CircuitElm.pi * CircuitElm.cirSim.t * 2710) * (1.3 + Math.sin(2 * CircuitElm.pi * CircuitElm.cirSim.t * 13)) * 3
+				+ Math.sin(2 * CircuitElm.pi * CircuitElm.cirSim.t * 2433) * (1.3 + Math.sin(2 * CircuitElm.pi * CircuitElm.cirSim.t * 14)) * 3 + fm;
 	}
 
 	@Override

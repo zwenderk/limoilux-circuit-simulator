@@ -108,7 +108,7 @@ class MosfetElm extends CircuitElm
 			this.setVoltageColor(g, this.pnp == 1 ? this.volts[1] : this.volts[2]);
 			g.fillPolygon(this.arrowPoly);
 		}
-		if (CircuitElm.sim.powerCheckItem.getState())
+		if (CircuitElm.cirSim.powerCheckItem.getState())
 		{
 			g.setColor(Color.gray);
 		}
@@ -126,7 +126,7 @@ class MosfetElm extends CircuitElm
 			g.setFont(CircuitElm.unitsFont);
 			this.drawCenteredText(g, s, this.x2 + 2, this.y2, false);
 		}
-		if ((this.needsHighlight() || CircuitElm.sim.dragElm == this) && this.dy == 0)
+		if ((this.needsHighlight() || CircuitElm.cirSim.dragElm == this) && this.dy == 0)
 		{
 			g.setColor(Color.white);
 			g.setFont(CircuitElm.unitsFont);
@@ -222,8 +222,8 @@ class MosfetElm extends CircuitElm
 	@Override
 	void stamp()
 	{
-		CircuitElm.sim.stampNonLinear(this.nodes[1]);
-		CircuitElm.sim.stampNonLinear(this.nodes[2]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[2]);
 	}
 
 	@Override
@@ -261,7 +261,7 @@ class MosfetElm extends CircuitElm
 		double vds = vs[drain] - vs[source];
 		if (Math.abs(this.lastv1 - vs[1]) > .01 || Math.abs(this.lastv2 - vs[2]) > .01)
 		{
-			CircuitElm.sim.converged = false;
+			CircuitElm.cirSim.converged = false;
 		}
 		this.lastv1 = vs[1];
 		this.lastv2 = vs[2];
@@ -275,7 +275,7 @@ class MosfetElm extends CircuitElm
 		double beta = this.getBeta();
 		if (vgs > .5 && this instanceof JfetElm)
 		{
-			CircuitElm.sim.stop("JFET is reverse biased!", this);
+			CircuitElm.cirSim.stop("JFET is reverse biased!", this);
 			return;
 		}
 		if (vgs < this.vt)
@@ -307,16 +307,16 @@ class MosfetElm extends CircuitElm
 		// System.out.println("M " + vds + " " + vgs + " " + ids + " " + gm +
 		// " "+ Gds + " " + volts[0] + " " + volts[1] + " " + volts[2] + " " +
 		// source + " " + rs + " " + this);
-		CircuitElm.sim.stampMatrix(this.nodes[drain], this.nodes[drain], Gds);
-		CircuitElm.sim.stampMatrix(this.nodes[drain], this.nodes[source], -Gds - this.gm);
-		CircuitElm.sim.stampMatrix(this.nodes[drain], this.nodes[gate], this.gm);
+		CircuitElm.cirSim.stampMatrix(this.nodes[drain], this.nodes[drain], Gds);
+		CircuitElm.cirSim.stampMatrix(this.nodes[drain], this.nodes[source], -Gds - this.gm);
+		CircuitElm.cirSim.stampMatrix(this.nodes[drain], this.nodes[gate], this.gm);
 
-		CircuitElm.sim.stampMatrix(this.nodes[source], this.nodes[drain], -Gds);
-		CircuitElm.sim.stampMatrix(this.nodes[source], this.nodes[source], Gds + this.gm);
-		CircuitElm.sim.stampMatrix(this.nodes[source], this.nodes[gate], -this.gm);
+		CircuitElm.cirSim.stampMatrix(this.nodes[source], this.nodes[drain], -Gds);
+		CircuitElm.cirSim.stampMatrix(this.nodes[source], this.nodes[source], Gds + this.gm);
+		CircuitElm.cirSim.stampMatrix(this.nodes[source], this.nodes[gate], -this.gm);
 
-		CircuitElm.sim.stampRightSide(this.nodes[drain], rs);
-		CircuitElm.sim.stampRightSide(this.nodes[source], -rs);
+		CircuitElm.cirSim.stampRightSide(this.nodes[drain], rs);
+		CircuitElm.cirSim.stampRightSide(this.nodes[source], -rs);
 		if (source == 2 && this.pnp == 1 || source == 1 && this.pnp == -1)
 		{
 			this.ids = -this.ids;

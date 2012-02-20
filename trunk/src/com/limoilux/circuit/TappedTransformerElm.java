@@ -188,23 +188,23 @@ class TappedTransformerElm extends CircuitElm
 		int i;
 		for (i = 0; i != 9; i++)
 		{
-			this.a[i] *= CircuitElm.sim.timeStep / 2;
+			this.a[i] *= CircuitElm.cirSim.timeStep / 2;
 		}
-		CircuitElm.sim.stampConductance(this.nodes[0], this.nodes[1], this.a[0]);
-		CircuitElm.sim.stampVCCurrentSource(this.nodes[0], this.nodes[1], this.nodes[2], this.nodes[3], this.a[1]);
-		CircuitElm.sim.stampVCCurrentSource(this.nodes[0], this.nodes[1], this.nodes[3], this.nodes[4], this.a[2]);
+		CircuitElm.cirSim.stampConductance(this.nodes[0], this.nodes[1], this.a[0]);
+		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[0], this.nodes[1], this.nodes[2], this.nodes[3], this.a[1]);
+		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[0], this.nodes[1], this.nodes[3], this.nodes[4], this.a[2]);
 
-		CircuitElm.sim.stampVCCurrentSource(this.nodes[2], this.nodes[3], this.nodes[0], this.nodes[1], this.a[3]);
-		CircuitElm.sim.stampConductance(this.nodes[2], this.nodes[3], this.a[4]);
-		CircuitElm.sim.stampVCCurrentSource(this.nodes[2], this.nodes[3], this.nodes[3], this.nodes[4], this.a[5]);
+		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[2], this.nodes[3], this.nodes[0], this.nodes[1], this.a[3]);
+		CircuitElm.cirSim.stampConductance(this.nodes[2], this.nodes[3], this.a[4]);
+		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[2], this.nodes[3], this.nodes[3], this.nodes[4], this.a[5]);
 
-		CircuitElm.sim.stampVCCurrentSource(this.nodes[3], this.nodes[4], this.nodes[0], this.nodes[1], this.a[6]);
-		CircuitElm.sim.stampVCCurrentSource(this.nodes[3], this.nodes[4], this.nodes[2], this.nodes[3], this.a[7]);
-		CircuitElm.sim.stampConductance(this.nodes[3], this.nodes[4], this.a[8]);
+		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[3], this.nodes[4], this.nodes[0], this.nodes[1], this.a[6]);
+		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[3], this.nodes[4], this.nodes[2], this.nodes[3], this.a[7]);
+		CircuitElm.cirSim.stampConductance(this.nodes[3], this.nodes[4], this.a[8]);
 
 		for (i = 0; i != 5; i++)
 		{
-			CircuitElm.sim.stampRightSide(this.nodes[i]);
+			CircuitElm.cirSim.stampRightSide(this.nodes[i]);
 		}
 		this.voltdiff = new double[3];
 		this.curSourceValue = new double[3];
@@ -232,9 +232,9 @@ class TappedTransformerElm extends CircuitElm
 	@Override
 	void doStep()
 	{
-		CircuitElm.sim.stampCurrentSource(this.nodes[0], this.nodes[1], this.curSourceValue[0]);
-		CircuitElm.sim.stampCurrentSource(this.nodes[2], this.nodes[3], this.curSourceValue[1]);
-		CircuitElm.sim.stampCurrentSource(this.nodes[3], this.nodes[4], this.curSourceValue[2]);
+		CircuitElm.cirSim.stampCurrentSource(this.nodes[0], this.nodes[1], this.curSourceValue[0]);
+		CircuitElm.cirSim.stampCurrentSource(this.nodes[2], this.nodes[3], this.curSourceValue[1]);
+		CircuitElm.cirSim.stampCurrentSource(this.nodes[3], this.nodes[4], this.curSourceValue[2]);
 	}
 
 	@Override

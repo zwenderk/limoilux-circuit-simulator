@@ -42,17 +42,17 @@ class OutputElm extends CircuitElm
 	@Override
 	void draw(Graphics g)
 	{
-		boolean selected = this.needsHighlight() || CircuitElm.sim.plotYElm == this;
+		boolean selected = this.needsHighlight() || CircuitElm.cirSim.plotYElm == this;
 		Font f = new Font("SansSerif", selected ? Font.BOLD : 0, 14);
 		g.setFont(f);
 		g.setColor(selected ? CircuitElm.selectColor : CircuitElm.whiteColor);
 		String s = (this.flags & this.FLAG_VALUE) != 0 ? CircuitElm.getVoltageText(this.volts[0]) : "out";
 		FontMetrics fm = g.getFontMetrics();
-		if (this == CircuitElm.sim.plotXElm)
+		if (this == CircuitElm.cirSim.plotXElm)
 		{
 			s = "X";
 		}
-		if (this == CircuitElm.sim.plotYElm)
+		if (this == CircuitElm.cirSim.plotYElm)
 		{
 			s = "Y";
 		}

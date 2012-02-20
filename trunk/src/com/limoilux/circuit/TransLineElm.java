@@ -13,7 +13,7 @@ class TransLineElm extends CircuitElm
 	public TransLineElm(int xx, int yy)
 	{
 		super(xx, yy);
-		this.delay = 1000 * CircuitElm.sim.timeStep;
+		this.delay = 1000 * CircuitElm.cirSim.timeStep;
 		this.imped = 75;
 		this.noDiagonal = true;
 		this.reset();
@@ -58,10 +58,10 @@ class TransLineElm extends CircuitElm
 	@Override
 	void drag(int xx, int yy)
 	{
-		xx = CircuitElm.sim.snapGrid(xx);
-		yy = CircuitElm.sim.snapGrid(yy);
-		int w1 = CircuitElm.max(CircuitElm.sim.gridSize, CircuitElm.abs(yy - this.y));
-		int w2 = CircuitElm.max(CircuitElm.sim.gridSize, CircuitElm.abs(xx - this.x));
+		xx = CircuitElm.cirSim.snapGrid(xx);
+		yy = CircuitElm.cirSim.snapGrid(yy);
+		int w1 = CircuitElm.max(CircuitElm.cirSim.gridSize, CircuitElm.abs(yy - this.y));
+		int w2 = CircuitElm.max(CircuitElm.cirSim.gridSize, CircuitElm.abs(xx - this.x));
 		if (w1 > w2)
 		{
 			xx = this.x;
@@ -82,11 +82,11 @@ class TransLineElm extends CircuitElm
 	@Override
 	void reset()
 	{
-		if (CircuitElm.sim.timeStep == 0)
+		if (CircuitElm.cirSim.timeStep == 0)
 		{
 			return;
 		}
-		this.lenSteps = (int) (this.delay / CircuitElm.sim.timeStep);
+		this.lenSteps = (int) (this.delay / CircuitElm.cirSim.timeStep);
 		System.out.println(this.lenSteps + " steps");
 		if (this.lenSteps > 100000)
 		{
@@ -108,7 +108,7 @@ class TransLineElm extends CircuitElm
 		int ds = this.dy == 0 ? CircuitElm.sign(this.dx) : -CircuitElm.sign(this.dy);
 		Point p3 = this.interpPoint(this.point1, this.point2, 0, -this.width * ds);
 		Point p4 = this.interpPoint(this.point1, this.point2, 1, -this.width * ds);
-		int sep = CircuitElm.sim.gridSize / 2;
+		int sep = CircuitElm.cirSim.gridSize / 2;
 		Point p5 = this.interpPoint(this.point1, this.point2, 0, -(this.width / 2 - sep) * ds);
 		Point p6 = this.interpPoint(this.point1, this.point2, 1, -(this.width / 2 - sep) * ds);
 		Point p7 = this.interpPoint(this.point1, this.point2, 0, -(this.width / 2 + sep) * ds);
@@ -160,7 +160,7 @@ class TransLineElm extends CircuitElm
 
 		this.curCount1 = this.updateDotCount(-this.current1, this.curCount1);
 		this.curCount2 = this.updateDotCount(this.current2, this.curCount2);
-		if (CircuitElm.sim.dragElm != this)
+		if (CircuitElm.cirSim.dragElm != this)
 		{
 			this.drawDots(g, this.posts[0], this.inner[0], this.curCount1);
 			this.drawDots(g, this.posts[2], this.inner[2], -this.curCount1);
@@ -201,10 +201,10 @@ class TransLineElm extends CircuitElm
 	@Override
 	void stamp()
 	{
-		CircuitElm.sim.stampVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1);
-		CircuitElm.sim.stampVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2);
-		CircuitElm.sim.stampResistor(this.nodes[2], this.nodes[4], this.imped);
-		CircuitElm.sim.stampResistor(this.nodes[3], this.nodes[5], this.imped);
+		CircuitElm.cirSim.stampVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1);
+		CircuitElm.cirSim.stampVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2);
+		CircuitElm.cirSim.stampResistor(this.nodes[2], this.nodes[4], this.imped);
+		CircuitElm.cirSim.stampResistor(this.nodes[3], this.nodes[5], this.imped);
 	}
 
 	@Override
@@ -213,7 +213,7 @@ class TransLineElm extends CircuitElm
 		// calculate voltages, currents sent over wire
 		if (this.voltageL == null)
 		{
-			CircuitElm.sim.stop("Transmission line delay too large!", this);
+			CircuitElm.cirSim.stop("Transmission line delay too large!", this);
 			return;
 		}
 		this.voltageL[this.ptr] = this.volts[2] - this.volts[0] + this.volts[2] - this.volts[4];
@@ -233,14 +233,14 @@ class TransLineElm extends CircuitElm
 	{
 		if (this.voltageL == null)
 		{
-			CircuitElm.sim.stop("Transmission line delay too large!", this);
+			CircuitElm.cirSim.stop("Transmission line delay too large!", this);
 			return;
 		}
-		CircuitElm.sim.updateVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1, -this.voltageR[this.ptr]);
-		CircuitElm.sim.updateVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2, -this.voltageL[this.ptr]);
+		CircuitElm.cirSim.updateVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1, -this.voltageR[this.ptr]);
+		CircuitElm.cirSim.updateVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2, -this.voltageL[this.ptr]);
 		if (Math.abs(this.volts[0]) > 1e-5 || Math.abs(this.volts[1]) > 1e-5)
 		{
-			CircuitElm.sim.stop("Need to ground transmission line!", this);
+			CircuitElm.cirSim.stop("Need to ground transmission line!", this);
 			return;
 		}
 	}
@@ -278,7 +278,7 @@ class TransLineElm extends CircuitElm
 	void getInfo(String arr[])
 	{
 		arr[0] = "transmission line";
-		arr[1] = CircuitElm.getUnitText(this.imped, CircuitElm.sim.ohmString);
+		arr[1] = CircuitElm.getUnitText(this.imped, CircuitElm.cirSim.ohmString);
 		arr[2] = "length = " + CircuitElm.getUnitText(2.9979e8 * this.delay, "m");
 		arr[3] = "delay = " + CircuitElm.getUnitText(this.delay, "s");
 	}

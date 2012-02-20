@@ -124,7 +124,7 @@ class LampElm extends CircuitElm
 		this.setVoltageColor(g, (v1 + v2) * .5);
 		CircuitElm.drawThickLine(g, this.filament[0], this.filament[1]);
 		this.updateDotCount();
-		if (CircuitElm.sim.dragElm != this)
+		if (CircuitElm.cirSim.dragElm != this)
 		{
 			this.drawDots(g, this.point1, this.lead1, this.curcount);
 			double cc = this.curcount + (this.dn - 16) / 2;
@@ -149,8 +149,8 @@ class LampElm extends CircuitElm
 	@Override
 	void stamp()
 	{
-		CircuitElm.sim.stampNonLinear(this.nodes[0]);
-		CircuitElm.sim.stampNonLinear(this.nodes[1]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);
 	}
 
 	@Override
@@ -171,16 +171,16 @@ class LampElm extends CircuitElm
 		double capw = cap * this.warmTime / .4;
 		double capc = cap * this.coolTime / .4;
 		// System.out.println(nom_r + " " + (resistance/nom_r));
-		this.temp += this.getPower() * CircuitElm.sim.timeStep / capw;
+		this.temp += this.getPower() * CircuitElm.cirSim.timeStep / capw;
 		double cr = 2600 / this.nom_pow;
-		this.temp -= CircuitElm.sim.timeStep * (this.temp - this.roomTemp) / (capc * cr);
+		this.temp -= CircuitElm.cirSim.timeStep * (this.temp - this.roomTemp) / (capc * cr);
 		// System.out.println(capw + " " + capc + " " + temp + " " +resistance);
 	}
 
 	@Override
 	void doStep()
 	{
-		CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
+		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
 	}
 
 	@Override
@@ -188,7 +188,7 @@ class LampElm extends CircuitElm
 	{
 		arr[0] = "lamp";
 		this.getBasicInfo(arr);
-		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CircuitElm.sim.ohmString);
+		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CircuitElm.cirSim.ohmString);
 		arr[4] = "P = " + CircuitElm.getUnitText(this.getPower(), "W");
 		arr[5] = "T = " + (int) this.temp + " K";
 	}

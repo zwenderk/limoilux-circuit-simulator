@@ -14,7 +14,7 @@ class DiodeElm extends CircuitElm
 	public DiodeElm(int xx, int yy)
 	{
 		super(xx, yy);
-		this.diode = new Diode(CircuitElm.sim);
+		this.diode = new Diode(CircuitElm.cirSim);
 		this.fwdrop = this.defaultdrop;
 		this.zvoltage = 0;
 		this.setup();
@@ -23,7 +23,7 @@ class DiodeElm extends CircuitElm
 	public DiodeElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		this.diode = new Diode(CircuitElm.sim);
+		this.diode = new Diode(CircuitElm.cirSim);
 		this.fwdrop = this.defaultdrop;
 		this.zvoltage = 0;
 		if ((f & DiodeElm.FLAG_FWDROP) > 0)

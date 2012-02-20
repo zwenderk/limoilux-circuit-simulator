@@ -62,10 +62,10 @@ class CC2Elm extends ChipElm
 	void stamp()
 	{
 		// X voltage = Y voltage
-		CircuitElm.sim.stampVoltageSource(0, this.nodes[0], this.pins[0].voltSource);
-		CircuitElm.sim.stampVCVS(0, this.nodes[1], 1, this.pins[0].voltSource);
+		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[0], this.pins[0].voltSource);
+		CircuitElm.cirSim.stampVCVS(0, this.nodes[1], 1, this.pins[0].voltSource);
 		// Z current = gain * X current
-		CircuitElm.sim.stampCCCS(0, this.nodes[2], this.pins[0].voltSource, this.gain);
+		CircuitElm.cirSim.stampCCCS(0, this.nodes[2], this.pins[0].voltSource, this.gain);
 	}
 
 	@Override

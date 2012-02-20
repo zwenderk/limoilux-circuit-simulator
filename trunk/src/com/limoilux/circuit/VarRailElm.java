@@ -43,10 +43,10 @@ class VarRailElm extends RailElm
 	void createSlider()
 	{
 		this.waveform = VoltageElm.WF_VAR;
-		CircuitElm.sim.mainContainer.add(this.label = new Label(this.sliderText, Label.CENTER));
+		CircuitElm.cirSim.mainContainer.add(this.label = new Label(this.sliderText, Label.CENTER));
 		int value = (int) ((this.frequency - this.bias) * 100 / (this.maxVoltage - this.bias));
-		CircuitElm.sim.mainContainer.add(this.slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
-		CircuitElm.sim.mainContainer.validate();
+		CircuitElm.cirSim.mainContainer.add(this.slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
+		CircuitElm.cirSim.mainContainer.validate();
 	}
 
 	@Override
@@ -59,8 +59,8 @@ class VarRailElm extends RailElm
 	@Override
 	void delete()
 	{
-		CircuitElm.sim.mainContainer.remove(this.label);
-		CircuitElm.sim.mainContainer.remove(this.slider);
+		CircuitElm.cirSim.mainContainer.remove(this.label);
+		CircuitElm.cirSim.mainContainer.remove(this.slider);
 	}
 
 	@Override

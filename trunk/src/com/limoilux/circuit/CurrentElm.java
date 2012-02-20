@@ -68,7 +68,7 @@ class CurrentElm extends CircuitElm
 		g.fillPolygon(this.arrow);
 		this.setBbox(this.point1, this.point2, cr);
 		this.doDots(g);
-		if (CircuitElm.sim.showValuesCheckItem.getState())
+		if (CircuitElm.cirSim.showValuesCheckItem.getState())
 		{
 			String s = CircuitElm.getShortUnitText(this.currentValue, "A");
 			if (this.dx == 0 || this.dy == 0)
@@ -83,7 +83,7 @@ class CurrentElm extends CircuitElm
 	void stamp()
 	{
 		this.current = this.currentValue;
-		CircuitElm.sim.stampCurrentSource(this.nodes[0], this.nodes[1], this.current);
+		CircuitElm.cirSim.stampCurrentSource(this.nodes[0], this.nodes[1], this.current);
 	}
 
 	@Override

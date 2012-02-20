@@ -40,10 +40,10 @@ class PhaseCompElm extends ChipElm
 	@Override
 	void stamp()
 	{
-		int vn = CircuitElm.sim.nodeList.size() + this.pins[2].voltSource;
-		CircuitElm.sim.stampNonLinear(vn);
-		CircuitElm.sim.stampNonLinear(0);
-		CircuitElm.sim.stampNonLinear(this.nodes[2]);
+		int vn = CircuitElm.cirSim.nodeList.size() + this.pins[2].voltSource;
+		CircuitElm.cirSim.stampNonLinear(vn);
+		CircuitElm.cirSim.stampNonLinear(0);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[2]);
 	}
 
 	boolean ff1, ff2;
@@ -69,13 +69,13 @@ class PhaseCompElm extends ChipElm
 		// System.out.println(out + " " + v1 + " " + v2);
 		if (out != -1)
 		{
-			CircuitElm.sim.stampVoltageSource(0, this.nodes[2], this.pins[2].voltSource, out);
+			CircuitElm.cirSim.stampVoltageSource(0, this.nodes[2], this.pins[2].voltSource, out);
 		}
 		else
 		{
 			// tie current through output pin to 0
-			int vn = CircuitElm.sim.nodeList.size() + this.pins[2].voltSource;
-			CircuitElm.sim.stampMatrix(vn, vn, 1);
+			int vn = CircuitElm.cirSim.nodeList.size() + this.pins[2].voltSource;
+			CircuitElm.cirSim.stampMatrix(vn, vn, 1);
 		}
 		this.pins[0].value = v1;
 		this.pins[1].value = v2;

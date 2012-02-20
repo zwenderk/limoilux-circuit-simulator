@@ -24,7 +24,7 @@ abstract class ChipElm extends CircuitElm
 		}
 		this.noDiagonal = true;
 		this.setupPins();
-		this.setSize(CircuitElm.sim.smallGridCheckItem.getState() ? 1 : 2);
+		this.setSize(CircuitElm.cirSim.smallGridCheckItem.getState() ? 1 : 2);
 	}
 
 	public ChipElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
@@ -87,7 +87,7 @@ abstract class ChipElm extends CircuitElm
 			this.drawDots(g, b, a, p.curcount);
 			if (p.bubble)
 			{
-				g.setColor(CircuitElm.sim.printableCheckItem.getState() ? Color.white : Color.black);
+				g.setColor(CircuitElm.cirSim.printableCheckItem.getState() ? Color.white : Color.black);
 				CircuitElm.drawThickCircle(g, p.bubbleX, p.bubbleY, 1);
 				g.setColor(CircuitElm.lightGrayColor);
 				CircuitElm.drawThickCircle(g, p.bubbleX, p.bubbleY, 3);
@@ -122,7 +122,7 @@ abstract class ChipElm extends CircuitElm
 	@Override
 	void drag(int xx, int yy)
 	{
-		yy = CircuitElm.sim.snapGrid(yy);
+		yy = CircuitElm.cirSim.snapGrid(yy);
 		if (xx < this.x)
 		{
 			xx = this.x;
@@ -131,7 +131,7 @@ abstract class ChipElm extends CircuitElm
 		else
 		{
 			this.y = this.y2 = yy;
-			this.x2 = CircuitElm.sim.snapGrid(xx);
+			this.x2 = CircuitElm.cirSim.snapGrid(xx);
 		}
 		this.setPoints();
 	}
@@ -139,7 +139,7 @@ abstract class ChipElm extends CircuitElm
 	@Override
 	void setPoints()
 	{
-		if (this.x2 - this.x > this.sizeX * this.cspc2 && this == CircuitElm.sim.dragElm)
+		if (this.x2 - this.x > this.sizeX * this.cspc2 && this == CircuitElm.cirSim.dragElm)
 		{
 			this.setSize(2);
 		}
@@ -211,7 +211,7 @@ abstract class ChipElm extends CircuitElm
 			Pin p = this.pins[i];
 			if (p.output)
 			{
-				CircuitElm.sim.stampVoltageSource(0, this.nodes[i], p.voltSource);
+				CircuitElm.cirSim.stampVoltageSource(0, this.nodes[i], p.voltSource);
 			}
 		}
 	}
@@ -238,7 +238,7 @@ abstract class ChipElm extends CircuitElm
 			Pin p = this.pins[i];
 			if (p.output)
 			{
-				CircuitElm.sim.updateVoltageSource(0, this.nodes[i], p.voltSource, p.value ? 5 : 0);
+				CircuitElm.cirSim.updateVoltageSource(0, this.nodes[i], p.voltSource, p.value ? 5 : 0);
 			}
 		}
 	}

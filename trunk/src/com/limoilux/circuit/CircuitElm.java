@@ -10,16 +10,22 @@ import java.text.NumberFormat;
 
 public abstract class CircuitElm implements Editable
 {
+	private static final int COLOR_SCALE_COUNT = 32;
+	public static final Font unitsFont = new Font("SansSerif", 0, 10);
+	
 	static double voltageRange = 5;
-	static int colorScaleCount = 32;
+	
 	static Color colorScale[];
 	static double currentMult, powerMult;
 	static Point ps1, ps2;
-	static CirSim sim;
+	static CirSim cirSim;
 	static Color whiteColor, selectColor, lightGrayColor;
-	static Font unitsFont;
 
-	public static NumberFormat showFormat, shortFormat, noCommaFormat;
+
+	public static NumberFormat showFormat;
+	public static NumberFormat shortFormat;
+	public static NumberFormat noCommaFormat;
+
 	static final double pi = 3.14159265358979323846;
 
 	int x, y, x2, y2, flags, nodes[], voltSource;
@@ -46,17 +52,18 @@ public abstract class CircuitElm implements Editable
 	{
 		return 0;
 	}
+	
+	
 
-	static void initClass(CirSim s)
+	public static void initClass(CirSim cirSim)
 	{
-		CircuitElm.unitsFont = new Font("SansSerif", 0, 10);
-		CircuitElm.sim = s;
+		CircuitElm.cirSim = cirSim;
 
-		CircuitElm.colorScale = new Color[CircuitElm.colorScaleCount];
-		int i;
-		for (i = 0; i != CircuitElm.colorScaleCount; i++)
+		CircuitElm.colorScale = new Color[CircuitElm.COLOR_SCALE_COUNT];
+
+		for (int i = 0; i < colorScale.length; i++)
 		{
-			double v = i * 2. / CircuitElm.colorScaleCount - 1;
+			double v = i * 2. / CircuitElm.COLOR_SCALE_COUNT - 1;
 			if (v < 0)
 			{
 				int n1 = (int) (128 * -v) + 127;
@@ -269,7 +276,7 @@ public abstract class CircuitElm implements Editable
 
 	void drawDots(Graphics g, Point pa, Point pb, double pos)
 	{
-		if (CircuitElm.sim.stoppedCheck.getState() || pos == 0 || !CircuitElm.sim.dotsCheckItem.getState())
+		if (CircuitElm.cirSim.stoppedCheck.getState() || pos == 0 || !CircuitElm.cirSim.dotsCheckItem.getState())
 		{
 			return;
 		}
@@ -339,8 +346,8 @@ public abstract class CircuitElm implements Editable
 
 	void drag(int xx, int yy)
 	{
-		xx = CircuitElm.sim.snapGrid(xx);
-		yy = CircuitElm.sim.snapGrid(yy);
+		xx = CircuitElm.cirSim.snapGrid(xx);
+		yy = CircuitElm.cirSim.snapGrid(yy);
 		if (this.noDiagonal)
 		{
 			if (Math.abs(this.x - xx) < Math.abs(this.y - yy))
@@ -376,9 +383,9 @@ public abstract class CircuitElm implements Editable
 		int nx2 = this.x2 + dx;
 		int ny2 = this.y2 + dy;
 		int i;
-		for (i = 0; i != CircuitElm.sim.elmList.size(); i++)
+		for (i = 0; i != CircuitElm.cirSim.elmList.size(); i++)
 		{
-			CircuitElm ce = CircuitElm.sim.getElm(i);
+			CircuitElm ce = CircuitElm.cirSim.getElm(i);
 			if (ce.x == nx && ce.y == ny && ce.x2 == nx2 && ce.y2 == ny2)
 			{
 				return false;
@@ -472,11 +479,11 @@ public abstract class CircuitElm implements Editable
 
 	void drawPost(Graphics g, int x0, int y0, int n)
 	{
-		if (CircuitElm.sim.dragElm == null && !this.needsHighlight() && CircuitElm.sim.getCircuitNode(n).links.size() == 2)
+		if (CircuitElm.cirSim.dragElm == null && !this.needsHighlight() && CircuitElm.cirSim.getCircuitNode(n).links.size() == 2)
 		{
 			return;
 		}
-		if (CircuitElm.sim.mouseMode == CirSim.MODE_DRAG_ROW || CircuitElm.sim.mouseMode == CirSim.MODE_DRAG_COLUMN)
+		if (CircuitElm.cirSim.mouseMode == CirSim.MODE_DRAG_ROW || CircuitElm.cirSim.mouseMode == CirSim.MODE_DRAG_COLUMN)
 		{
 			return;
 		}
@@ -771,7 +778,7 @@ public abstract class CircuitElm implements Editable
 
 	double updateDotCount(double cur, double cc)
 	{
-		if (CircuitElm.sim.stoppedCheck.getState())
+		if (CircuitElm.cirSim.stoppedCheck.getState())
 		{
 			return cc;
 		}
@@ -790,7 +797,7 @@ public abstract class CircuitElm implements Editable
 	void doDots(Graphics g)
 	{
 		this.updateDotCount();
-		if (CircuitElm.sim.dragElm != this)
+		if (CircuitElm.cirSim.dragElm != this)
 		{
 			this.drawDots(g, this.point1, this.point2, this.curcount);
 		}
@@ -822,23 +829,23 @@ public abstract class CircuitElm implements Editable
 			g.setColor(CircuitElm.selectColor);
 			return;
 		}
-		if (!CircuitElm.sim.voltsCheckItem.getState())
+		if (!CircuitElm.cirSim.voltsCheckItem.getState())
 		{
-			if (!CircuitElm.sim.powerCheckItem.getState())
+			if (!CircuitElm.cirSim.powerCheckItem.getState())
 			{
 				// !conductanceCheckItem.getState())
 				g.setColor(CircuitElm.whiteColor);
 			}
 			return;
 		}
-		int c = (int) ((volts + CircuitElm.voltageRange) * (CircuitElm.colorScaleCount - 1) / (CircuitElm.voltageRange * 2));
+		int c = (int) ((volts + CircuitElm.voltageRange) * (CircuitElm.COLOR_SCALE_COUNT - 1) / (CircuitElm.voltageRange * 2));
 		if (c < 0)
 		{
 			c = 0;
 		}
-		if (c >= CircuitElm.colorScaleCount)
+		if (c >= CircuitElm.COLOR_SCALE_COUNT)
 		{
-			c = CircuitElm.colorScaleCount - 1;
+			c = CircuitElm.COLOR_SCALE_COUNT - 1;
 		}
 		g.setColor(CircuitElm.colorScale[c]);
 	}
@@ -849,7 +856,7 @@ public abstract class CircuitElm implements Editable
 		 * if (conductanceCheckItem.getState()) { setConductanceColor(g,
 		 * current/getVoltageDiff()); return; }
 		 */
-		if (!CircuitElm.sim.powerCheckItem.getState())
+		if (!CircuitElm.cirSim.powerCheckItem.getState())
 		{
 			return;
 		}
@@ -946,7 +953,7 @@ public abstract class CircuitElm implements Editable
 
 	boolean needsHighlight()
 	{
-		return CircuitElm.sim.mouseElm == this || this.selected;
+		return CircuitElm.cirSim.mouseElm == this || this.selected;
 	}
 
 	boolean isSelected()

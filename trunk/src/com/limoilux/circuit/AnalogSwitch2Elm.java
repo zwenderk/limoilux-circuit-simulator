@@ -92,9 +92,9 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 	@Override
 	void stamp()
 	{
-		CircuitElm.sim.stampNonLinear(this.nodes[0]);
-		CircuitElm.sim.stampNonLinear(this.nodes[1]);
-		CircuitElm.sim.stampNonLinear(this.nodes[2]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[2]);
 	}
 
 	@Override
@@ -107,13 +107,13 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 		}
 		if (this.open)
 		{
-			CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[2], this.r_on);
-			CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[1], this.r_off);
+			CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[2], this.r_on);
+			CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.r_off);
 		}
 		else
 		{
-			CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[1], this.r_on);
-			CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[2], this.r_off);
+			CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.r_on);
+			CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[2], this.r_off);
 		}
 	}
 

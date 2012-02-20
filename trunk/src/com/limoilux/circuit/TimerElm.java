@@ -66,12 +66,12 @@ class TimerElm extends ChipElm
 	void stamp()
 	{
 		// stamp voltage divider to put ctl pin at 2/3 V
-		CircuitElm.sim.stampResistor(this.nodes[this.N_VIN], this.nodes[this.N_CTL], 5000);
-		CircuitElm.sim.stampResistor(this.nodes[this.N_CTL], 0, 10000);
+		CircuitElm.cirSim.stampResistor(this.nodes[this.N_VIN], this.nodes[this.N_CTL], 5000);
+		CircuitElm.cirSim.stampResistor(this.nodes[this.N_CTL], 0, 10000);
 		// output pin
-		CircuitElm.sim.stampVoltageSource(0, this.nodes[this.N_OUT], this.pins[this.N_OUT].voltSource);
+		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[this.N_OUT], this.pins[this.N_OUT].voltSource);
 		// discharge pin
-		CircuitElm.sim.stampNonLinear(this.nodes[this.N_DIS]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[this.N_DIS]);
 	}
 
 	@Override
@@ -112,10 +112,10 @@ class TimerElm extends ChipElm
 		// trigger is low and threshold is high.
 		if (!this.out && !this.setOut)
 		{
-			CircuitElm.sim.stampResistor(this.nodes[this.N_DIS], 0, 10);
+			CircuitElm.cirSim.stampResistor(this.nodes[this.N_DIS], 0, 10);
 		}
 		// output
-		CircuitElm.sim.updateVoltageSource(0, this.nodes[this.N_OUT], this.pins[this.N_OUT].voltSource, this.out ? this.volts[this.N_VIN] : 0);
+		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[this.N_OUT], this.pins[this.N_OUT].voltSource, this.out ? this.volts[this.N_VIN] : 0);
 	}
 
 	@Override

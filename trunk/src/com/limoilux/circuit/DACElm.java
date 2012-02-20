@@ -56,7 +56,7 @@ class DACElm extends ChipElm
 		}
 		int ivalmax = (1 << this.bits) - 1;
 		double v = ival * this.volts[this.bits + 1] / ivalmax;
-		CircuitElm.sim.updateVoltageSource(0, this.nodes[this.bits], this.pins[this.bits].voltSource, v);
+		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[this.bits], this.pins[this.bits].voltSource, v);
 	}
 
 	@Override

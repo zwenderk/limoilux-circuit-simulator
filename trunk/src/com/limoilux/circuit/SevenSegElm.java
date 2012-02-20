@@ -64,7 +64,7 @@ class SevenSegElm extends ChipElm
 
 	void setColor(Graphics g, int p)
 	{
-		g.setColor(this.pins[p].value ? Color.red : CircuitElm.sim.printableCheckItem.getState() ? Color.white : this.darkred);
+		g.setColor(this.pins[p].value ? Color.red : CircuitElm.cirSim.printableCheckItem.getState() ? Color.white : this.darkred);
 	}
 
 	@Override

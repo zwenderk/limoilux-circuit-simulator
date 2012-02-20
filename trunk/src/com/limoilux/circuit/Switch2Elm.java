@@ -117,7 +117,7 @@ class Switch2Elm extends SwitchElm
 		{
 			return;
 		}
-		CircuitElm.sim.stampVoltageSource(this.nodes[0], this.nodes[this.position + 1], this.voltSource, 0);
+		CircuitElm.cirSim.stampVoltageSource(this.nodes[0], this.nodes[this.position + 1], this.voltSource, 0);
 	}
 
 	@Override
@@ -133,9 +133,9 @@ class Switch2Elm extends SwitchElm
 		if (this.link != 0)
 		{
 			int i;
-			for (i = 0; i != CircuitElm.sim.elmList.size(); i++)
+			for (i = 0; i != CircuitElm.cirSim.elmList.size(); i++)
 			{
-				Object o = CircuitElm.sim.elmList.elementAt(i);
+				Object o = CircuitElm.cirSim.elmList.elementAt(i);
 				if (o instanceof Switch2Elm)
 				{
 					Switch2Elm s2 = (Switch2Elm) o;
