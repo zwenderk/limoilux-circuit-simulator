@@ -11,7 +11,7 @@ import java.awt.Rectangle;
 import java.text.NumberFormat;
 
 import com.limoilux.circuit.core.CoreUtil;
-import com.limoilux.circuit.core.DrawUtil;
+import com.limoilux.circuit.ui.DrawUtil;
 
 public abstract class CircuitElm implements Editable
 {

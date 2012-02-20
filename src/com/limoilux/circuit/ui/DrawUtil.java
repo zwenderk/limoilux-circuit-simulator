@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.core;
+package com.limoilux.circuit.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
