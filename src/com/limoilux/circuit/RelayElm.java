@@ -136,7 +136,7 @@ class RelayElm extends CircuitElm
 			// setVoltageColor(g, volts[nSwitch0]);
 			g.setColor(Color.lightGray);
 			CircuitElm.drawThickLine(g, this.swpoles[p][0], this.ptSwitch[p]);
-			this.switchCurCount[p] = this.updateDotCount(this.switchCurrent[p], this.switchCurCount[p]);
+			this.switchCurCount[p] = CircuitElm.updateDotCount(this.switchCurrent[p], this.switchCurCount[p]);
 			CircuitElm.drawDots(g, this.swposts[p][0], this.swpoles[p][0], this.switchCurCount[p]);
 
 			if (this.i_position != 2)
@@ -146,7 +146,7 @@ class RelayElm extends CircuitElm
 			}
 		}
 
-		this.coilCurCount = this.updateDotCount(this.coilCurrent, this.coilCurCount);
+		this.coilCurCount = CircuitElm.updateDotCount(this.coilCurrent, this.coilCurCount);
 
 		CircuitElm.drawDots(g, this.coilPosts[0], this.coilLeads[0], this.coilCurCount);
 		CircuitElm.drawDots(g, this.coilLeads[0], this.coilLeads[1], this.coilCurCount);
@@ -217,7 +217,7 @@ class RelayElm extends CircuitElm
 	}
 
 	@Override
-	int getInternalNodeCount()
+	public int getInternalNodeCount()
 	{
 		return 1;
 	}

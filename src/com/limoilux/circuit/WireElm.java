@@ -77,7 +77,7 @@ class WireElm extends CircuitElm
 	}
 
 	@Override
-	double getPower()
+	public double getPower()
 	{
 		return 0;
 	}
@@ -89,7 +89,7 @@ class WireElm extends CircuitElm
 	}
 
 	@Override
-	boolean isWire()
+	public boolean isWire()
 	{
 		return true;
 	}

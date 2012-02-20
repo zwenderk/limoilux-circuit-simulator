@@ -68,7 +68,7 @@ class TappedTransformerElm extends CircuitElm
 			{
 				continue;
 			}
-			this.setPowerColor(g, this.current[i] * (this.volts[i] - this.volts[i + 1]));
+			CircuitElm.setPowerColor(g, this.current[i] * (this.volts[i] - this.volts[i + 1]));
 			this.drawCoil(g, i > 1 ? -6 : 6, this.ptCoil[i], this.ptCoil[i + 1], this.volts[i], this.volts[i + 1]);
 		}
 		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
@@ -80,7 +80,7 @@ class TappedTransformerElm extends CircuitElm
 		this.current[3] = this.current[1] - this.current[2];
 		for (i = 0; i != 4; i++)
 		{
-			this.curcount[i] = this.updateDotCount(this.current[i], this.curcount[i]);
+			this.curcount[i] = CircuitElm.updateDotCount(this.current[i], this.curcount[i]);
 		}
 
 		// primary dots
@@ -273,19 +273,19 @@ class TappedTransformerElm extends CircuitElm
 	@Override
 	public boolean getConnection(int n1, int n2)
 	{
-		if (this.comparePair(n1, n2, 0, 1))
+		if (CircuitElm.comparePair(n1, n2, 0, 1))
 		{
 			return true;
 		}
-		if (this.comparePair(n1, n2, 2, 3))
+		if (CircuitElm.comparePair(n1, n2, 2, 3))
 		{
 			return true;
 		}
-		if (this.comparePair(n1, n2, 3, 4))
+		if (CircuitElm.comparePair(n1, n2, 3, 4))
 		{
 			return true;
 		}
-		if (this.comparePair(n1, n2, 2, 4))
+		if (CircuitElm.comparePair(n1, n2, 2, 4))
 		{
 			return true;
 		}

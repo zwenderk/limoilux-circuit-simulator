@@ -81,7 +81,7 @@ class RailElm extends VoltageElm
 			this.drawWaveform(g, this.point2);
 		}
 		this.drawPosts(g);
-		this.curcount = this.updateDotCount(-this.current, this.curcount);
+		this.curcount = CircuitElm.updateDotCount(-this.current, this.curcount);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
 			CircuitElm.drawDots(g, this.point1, this.lead1, this.curcount);

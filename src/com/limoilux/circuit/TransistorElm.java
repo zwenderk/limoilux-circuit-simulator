@@ -102,11 +102,11 @@ class TransistorElm extends CircuitElm
 		}
 		CircuitElm.drawThickLine(g, this.point1, this.base);
 		// draw dots
-		this.curcount_b = this.updateDotCount(-this.ib, this.curcount_b);
+		this.curcount_b = CircuitElm.updateDotCount(-this.ib, this.curcount_b);
 		CircuitElm.drawDots(g, this.base, this.point1, this.curcount_b);
-		this.curcount_c = this.updateDotCount(-this.ic, this.curcount_c);
+		this.curcount_c = CircuitElm.updateDotCount(-this.ic, this.curcount_c);
 		CircuitElm.drawDots(g, this.coll[1], this.coll[0], this.curcount_c);
-		this.curcount_e = this.updateDotCount(-this.ie, this.curcount_e);
+		this.curcount_e = CircuitElm.updateDotCount(-this.ie, this.curcount_e);
 		CircuitElm.drawDots(g, this.emit[1], this.emit[0], this.curcount_e);
 		// draw base rectangle
 		this.setVoltageColor(g, this.volts[0]);
@@ -142,7 +142,7 @@ class TransistorElm extends CircuitElm
 	}
 
 	@Override
-	double getPower()
+	public double getPower()
 	{
 		return (this.volts[0] - this.volts[2]) * this.ib + (this.volts[1] - this.volts[2]) * this.ic;
 	}
@@ -336,7 +336,7 @@ class TransistorElm extends CircuitElm
 	}
 
 	@Override
-	double getScopeValue(int x)
+	public double getScopeValue(int x)
 	{
 		switch (x)
 		{
@@ -357,7 +357,7 @@ class TransistorElm extends CircuitElm
 	}
 
 	@Override
-	String getScopeUnits(int x)
+	public String getScopeUnits(int x)
 	{
 		switch (x)
 		{
@@ -409,7 +409,7 @@ class TransistorElm extends CircuitElm
 	}
 
 	@Override
-	boolean canViewInScope()
+	public boolean canViewInScope()
 	{
 		return true;
 	}

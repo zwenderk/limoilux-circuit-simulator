@@ -85,13 +85,13 @@ class OpAmpElm extends CircuitElm
 		this.drawCenteredText(g, "+", this.textp[1].x, this.textp[1].y, true);
 		this.setVoltageColor(g, this.volts[2]);
 		CircuitElm.drawThickLine(g, this.lead2, this.point2);
-		this.curcount = this.updateDotCount(this.current, this.curcount);
+		this.curcount = CircuitElm.updateDotCount(this.current, this.curcount);
 		CircuitElm.drawDots(g, this.point2, this.lead2, this.curcount);
 		this.drawPosts(g);
 	}
 
 	@Override
-	double getPower()
+	public double getPower()
 	{
 		return this.volts[2] * this.current;
 	}

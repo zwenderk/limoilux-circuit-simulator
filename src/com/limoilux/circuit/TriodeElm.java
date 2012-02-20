@@ -119,9 +119,9 @@ class TriodeElm extends CircuitElm
 			CircuitElm.drawThickLine(g, this.cath[i], this.cath[i + 1]);
 		}
 		// draw dots
-		this.curcountp = this.updateDotCount(this.currentp, this.curcountp);
-		this.curcountc = this.updateDotCount(this.currentc, this.curcountc);
-		this.curcountg = this.updateDotCount(this.currentg, this.curcountg);
+		this.curcountp = CircuitElm.updateDotCount(this.currentp, this.curcountp);
+		this.curcountc = CircuitElm.updateDotCount(this.currentc, this.curcountc);
+		this.curcountg = CircuitElm.updateDotCount(this.currentg, this.curcountg);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
 			CircuitElm.drawDots(g, this.plate[0], this.midgrid, this.curcountp);
@@ -146,7 +146,7 @@ class TriodeElm extends CircuitElm
 	}
 
 	@Override
-	double getPower()
+	public double getPower()
 	{
 		return (this.volts[0] - this.volts[2]) * this.current;
 	}

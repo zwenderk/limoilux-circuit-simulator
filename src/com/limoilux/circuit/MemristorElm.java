@@ -152,13 +152,13 @@ class MemristorElm extends CircuitElm
 	}
 
 	@Override
-	double getScopeValue(int x)
+	public double getScopeValue(int x)
 	{
 		return x == 2 ? this.resistance : x == 1 ? this.getPower() : this.getVoltageDiff();
 	}
 
 	@Override
-	String getScopeUnits(int x)
+	public String getScopeUnits(int x)
 	{
 		return x == 2 ? CirSim.ohmString : x == 1 ? "W" : "V";
 	}

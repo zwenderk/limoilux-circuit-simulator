@@ -51,7 +51,7 @@ class InverterElm extends CircuitElm
 		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
 		CircuitElm.drawThickPolygon(g, this.gatePoly);
 		CircuitElm.drawThickCircle(g, this.pcircle.x, this.pcircle.y, 3);
-		this.curcount = this.updateDotCount(this.current, this.curcount);
+		this.curcount = CircuitElm.updateDotCount(this.current, this.curcount);
 		CircuitElm.drawDots(g, this.lead2, this.point2, this.curcount);
 	}
 
