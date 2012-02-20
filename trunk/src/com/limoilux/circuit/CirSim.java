@@ -3386,6 +3386,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				CirSim.this.doPopupMenu(e);
 				return;
 			}
+			
 			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0)
 			{
 				// left mouse
@@ -3427,19 +3428,24 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 					return;
 				}
 			}
+			
+			System.out.println("mouseMode " + CirSim.this.tempMouseMode);
 
 			if (CirSim.this.tempMouseMode != CirSim.MODE_SELECT
 					&& CirSim.this.tempMouseMode != CirSim.MODE_DRAG_SELECTED)
 			{
 				CirSim.this.clearSelection();
 			}
+			
 			if (CirSim.this.doSwitch(e.getX(), e.getY()))
 			{
 				return;
 			}
+			
 			CirSim.this.pushUndo();
 			CirSim.this.initDragX = e.getX();
 			CirSim.this.initDragY = e.getY();
+			
 			if (CirSim.this.tempMouseMode != CirSim.MODE_ADD_ELM || CirSim.this.addingClass == null)
 			{
 				return;
