@@ -1299,18 +1299,14 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 					CircuitNode cn = new CircuitNode();
 					cn.x = pt.x;
 					cn.y = pt.y;
-					CircuitNodeLink cnl = new CircuitNodeLink();
-					cnl.num = j;
-					cnl.elm = ce;
+					CircuitNodeLink cnl = new CircuitNodeLink(j, ce);
 					cn.links.addElement(cnl);
 					ce.setNode(j, this.nodeList.size());
 					this.nodeList.addElement(cn);
 				}
 				else
 				{
-					CircuitNodeLink cnl = new CircuitNodeLink();
-					cnl.num = j;
-					cnl.elm = ce;
+					CircuitNodeLink cnl = new CircuitNodeLink(j, ce);
 					this.getCircuitNode(k).links.addElement(cnl);
 					ce.setNode(j, k);
 					// if it's the ground node, make sure the node voltage is 0,
@@ -1326,9 +1322,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				CircuitNode cn = new CircuitNode();
 				cn.x = cn.y = -1;
 				cn.internal = true;
-				CircuitNodeLink cnl = new CircuitNodeLink();
-				cnl.num = j + posts;
-				cnl.elm = ce;
+				CircuitNodeLink cnl = new CircuitNodeLink(j + posts, ce);
+
 				cn.links.addElement(cnl);
 				ce.setNode(cnl.num, this.nodeList.size());
 				this.nodeList.addElement(cn);
