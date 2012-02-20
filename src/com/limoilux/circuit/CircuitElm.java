@@ -133,7 +133,7 @@ public abstract class CircuitElm implements Editable
 
 	public abstract void draw(Graphics g);
 
-	void setCurrent(int x, double c)
+	public void setCurrent(int x, double c)
 	{
 		this.current = c;
 	}
@@ -381,7 +381,7 @@ public abstract class CircuitElm implements Editable
 		this.nodes[p] = n;
 	}
 
-	void setVoltageSource(int n, int v)
+	public void setVoltageSource(int n, int v)
 	{
 		this.voltSource = v;
 	}
@@ -428,13 +428,13 @@ public abstract class CircuitElm implements Editable
 		{
 			return;
 		}
-		this.drawPost(g, x0, y0);
+		DrawUtil.drawPost(g, x0, y0);
 	}
 
-	void drawPost(Graphics g, int x0, int y0)
+	@Deprecated
+	public static void drawPost(Graphics g, int x0, int y0)
 	{
-		g.setColor(CircuitElm.whiteColor);
-		g.fillOval(x0 - 3, y0 - 3, 7, 7);
+		DrawUtil.drawPost(g, x0, y0);
 	}
 
 	void setBbox(int x1, int y1, int x2, int y2)
