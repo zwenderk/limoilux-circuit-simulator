@@ -6,6 +6,8 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class InverterElm extends CircuitElm
 {
 	double slewRate; // V/ns

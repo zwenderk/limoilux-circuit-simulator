@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 // 0 = switch
 // 1 = switch end 1
 // 2 = switch end 2

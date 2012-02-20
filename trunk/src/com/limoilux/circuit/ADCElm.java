@@ -3,6 +3,8 @@ package com.limoilux.circuit;
 
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 public class ADCElm extends ChipElm
 {
 	public ADCElm(int xx, int yy)

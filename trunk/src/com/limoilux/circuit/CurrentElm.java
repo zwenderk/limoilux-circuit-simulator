@@ -6,6 +6,8 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 public class CurrentElm extends CircuitElm
 {
 	public double currentValue;

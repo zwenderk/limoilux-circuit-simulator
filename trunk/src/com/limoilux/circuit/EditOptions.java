@@ -1,6 +1,8 @@
 
 package com.limoilux.circuit;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class EditOptions implements Editable
 {
 	CirSim sim;

@@ -3,6 +3,8 @@ package com.limoilux.circuit;
 
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class TimerElm extends ChipElm
 {
 	final int FLAG_RESET = 2;

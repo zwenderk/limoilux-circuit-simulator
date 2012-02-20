@@ -6,6 +6,8 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class TunnelDiodeElm extends CircuitElm
 {
 	public TunnelDiodeElm(int xx, int yy)

@@ -50,6 +50,7 @@ import java.net.URLEncoder;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import com.limoilux.circuit.core.CircuitElm;
 import com.limoilux.circuit.core.CoreUtil;
 
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener, ItemListener

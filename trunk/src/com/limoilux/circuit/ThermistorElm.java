@@ -11,6 +11,8 @@ import java.awt.Point;
 import java.awt.Scrollbar;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class ThermistorElm extends CircuitElm
 {
 	double minresistance, maxresistance;

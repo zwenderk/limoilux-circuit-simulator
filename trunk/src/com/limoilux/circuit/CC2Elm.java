@@ -4,6 +4,8 @@ package com.limoilux.circuit;
 import java.awt.Graphics;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class CC2Elm extends ChipElm
 {
 	double gain;

@@ -9,6 +9,8 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class PotElm extends CircuitElm implements AdjustmentListener
 {
 	double position, maxResistance, resistance1, resistance2;

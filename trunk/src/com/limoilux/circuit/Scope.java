@@ -12,6 +12,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 public class Scope
 {
 	final int FLAG_YELM = 32;

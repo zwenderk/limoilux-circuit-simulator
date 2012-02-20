@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class AnalogSwitch2Elm extends AnalogSwitchElm
 {
 	public AnalogSwitch2Elm(int xx, int yy)

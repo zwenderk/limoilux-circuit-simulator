@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class TransLineElm extends CircuitElm
 {
 	double delay, imped;
