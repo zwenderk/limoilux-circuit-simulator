@@ -65,7 +65,7 @@ public class TimerElm extends ChipElm
 
 	public boolean hasReset()
 	{
-		return (this.flags & this.FLAG_RESET) != 0;
+		return (this.flags & TimerElm.FLAG_RESET) != 0;
 	}
 
 	@Override

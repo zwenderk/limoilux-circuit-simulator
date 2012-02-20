@@ -64,11 +64,11 @@ import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.RailElm;
 import com.limoilux.circuit.ResistorElm;
 import com.limoilux.circuit.RowInfo;
-import com.limoilux.circuit.Scope;
 import com.limoilux.circuit.SwitchElm;
 import com.limoilux.circuit.TextElm;
 import com.limoilux.circuit.VoltageElm;
 import com.limoilux.circuit.WireElm;
+import com.limoilux.circuit.ui.Scope;
 
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
 {
