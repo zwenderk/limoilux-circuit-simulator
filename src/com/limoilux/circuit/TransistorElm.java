@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -71,7 +73,8 @@ class TransistorElm extends CircuitElm
 	@Override
 	String dump()
 	{
-		return super.dump() + " " + this.pnp + " " + (this.volts[0] - this.volts[1]) + " " + (this.volts[0] - this.volts[2]) + " " + this.beta;
+		return super.dump() + " " + this.pnp + " " + (this.volts[0] - this.volts[1]) + " "
+				+ (this.volts[0] - this.volts[2]) + " " + this.beta;
 	}
 
 	double ic, ie, ib, curcount_c, curcount_e, curcount_b;
@@ -116,7 +119,8 @@ class TransistorElm extends CircuitElm
 			g.setFont(CircuitElm.unitsFont);
 			int ds = CircuitElm.sign(this.dx);
 			g.drawString("B", this.base.x - 10 * ds, this.base.y - 5);
-			g.drawString("C", this.coll[0].x - 3 + 9 * ds, this.coll[0].y + 4); // x+6 if
+			g.drawString("C", this.coll[0].x - 3 + 9 * ds, this.coll[0].y + 4); // x+6
+																				// if
 			// ds=1,
 			// -12
 			// if -1
@@ -164,7 +168,8 @@ class TransistorElm extends CircuitElm
 		this.interpPoint2(this.point1, this.point2, this.rect[0], this.rect[1], 1 - 16 / this.dn, hs);
 		this.interpPoint2(this.point1, this.point2, this.rect[2], this.rect[3], 1 - 13 / this.dn, hs);
 		// calc points where collector/emitter leads contact rectangle
-		this.interpPoint2(this.point1, this.point2, this.coll[1], this.emit[1], 1 - 13 / this.dn, 6 * this.dsign * this.pnp);
+		this.interpPoint2(this.point1, this.point2, this.coll[1], this.emit[1], 1 - 13 / this.dn, 6 * this.dsign
+				* this.pnp);
 		// calc point where base lead contacts rectangle
 		this.base = new Point();
 		this.interpPoint(this.point1, this.point2, this.base, 1 - 16 / this.dn);
@@ -310,7 +315,8 @@ class TransistorElm extends CircuitElm
 	@Override
 	void getInfo(String arr[])
 	{
-		arr[0] = "transistor (" + (this.pnp == -1 ? "PNP)" : "NPN)") + " beta=" + CircuitElm.showFormat.format(this.beta);
+		arr[0] = "transistor (" + (this.pnp == -1 ? "PNP)" : "NPN)") + " beta="
+				+ CircuitElm.showFormat.format(this.beta);
 		double vbc = this.volts[0] - this.volts[1];
 		double vbe = this.volts[0] - this.volts[2];
 		double vce = this.volts[1] - this.volts[2];

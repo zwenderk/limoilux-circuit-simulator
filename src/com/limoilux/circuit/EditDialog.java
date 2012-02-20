@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Button;
 import java.awt.Dialog;
 import java.awt.Dimension;
@@ -82,7 +84,8 @@ class EditDialog extends Dialog implements AdjustmentListener, ActionListener, I
 		this.okButton.addActionListener(this);
 		Point x = this.cframe.mainContainer.getLocationOnScreen();
 		Dimension d = this.getSize();
-		this.setLocation(x.x + (this.cframe.winSize.width - d.width) / 2, x.y + (this.cframe.winSize.height - d.height) / 2);
+		this.setLocation(x.x + (this.cframe.winSize.width - d.width) / 2, x.y + (this.cframe.winSize.height - d.height)
+				/ 2);
 	}
 
 	String unitString(EditInfo ei)
@@ -150,7 +153,7 @@ class EditDialog extends Dialog implements AdjustmentListener, ActionListener, I
 			mult = 1e-6;
 			break;
 
-			// for ohm values, we assume mega for lowercase m, otherwise milli
+		// for ohm values, we assume mega for lowercase m, otherwise milli
 		case 'm':
 			mult = ei.forceLargeM ? 1e6 : 1e-3;
 			break;

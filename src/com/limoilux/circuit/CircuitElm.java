@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -8,19 +10,20 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.text.NumberFormat;
 
+import com.limoilux.circuit.core.CoreUtil;
+
 public abstract class CircuitElm implements Editable
 {
 	private static final int COLOR_SCALE_COUNT = 32;
 	public static final Font unitsFont = new Font("SansSerif", 0, 10);
-	
+
 	static double voltageRange = 5;
-	
+
 	static Color colorScale[];
 	static double currentMult, powerMult;
 	static Point ps1, ps2;
 	static CirSim cirSim;
 	static Color whiteColor, selectColor, lightGrayColor;
-
 
 	public static NumberFormat showFormat;
 	public static NumberFormat shortFormat;
@@ -52,8 +55,6 @@ public abstract class CircuitElm implements Editable
 	{
 		return 0;
 	}
-	
-	
 
 	public static void initClass(CirSim cirSim)
 	{
@@ -83,14 +84,16 @@ public abstract class CircuitElm implements Editable
 
 		CircuitElm.showFormat = NumberFormat.getInstance();
 		CircuitElm.showFormat.setMaximumFractionDigits(2);
+
 		CircuitElm.shortFormat = NumberFormat.getInstance();
 		CircuitElm.shortFormat.setMaximumFractionDigits(1);
+
 		CircuitElm.noCommaFormat = NumberFormat.getInstance();
 		CircuitElm.noCommaFormat.setMaximumFractionDigits(10);
 		CircuitElm.noCommaFormat.setGroupingUsed(false);
 	}
 
-	CircuitElm(int xx, int yy)
+	public CircuitElm(int xx, int yy)
 	{
 		this.x = this.x2 = xx;
 		this.y = this.y2 = yy;
@@ -99,7 +102,7 @@ public abstract class CircuitElm implements Editable
 		this.initBoundingBox();
 	}
 
-	CircuitElm(int xa, int ya, int xb, int yb, int f)
+	public CircuitElm(int xa, int ya, int xb, int yb, int f)
 	{
 		this.x = xa;
 		this.y = ya;
@@ -113,7 +116,8 @@ public abstract class CircuitElm implements Editable
 	void initBoundingBox()
 	{
 		this.boundingBox = new Rectangle();
-		this.boundingBox.setBounds(CircuitElm.min(this.x, this.x2), CircuitElm.min(this.y, this.y2), CircuitElm.abs(this.x2 - this.x) + 1, CircuitElm.abs(this.y2 - this.y) + 1);
+		this.boundingBox.setBounds(CircuitElm.min(this.x, this.x2), CircuitElm.min(this.y, this.y2),
+				CircuitElm.abs(this.x2 - this.x) + 1, CircuitElm.abs(this.y2 - this.y) + 1);
 	}
 
 	void allocNodes()
@@ -125,7 +129,8 @@ public abstract class CircuitElm implements Editable
 	String dump()
 	{
 		int t = this.getDumpType();
-		return (t < 127 ? (char) t + " " : t + " ") + this.x + " " + this.y + " " + this.x2 + " " + this.y2 + " " + this.flags;
+		return (t < 127 ? (char) t + " " : t + " ") + this.x + " " + this.y + " " + this.x2 + " " + this.y2 + " "
+				+ this.flags;
 	}
 
 	void reset()
@@ -479,11 +484,13 @@ public abstract class CircuitElm implements Editable
 
 	void drawPost(Graphics g, int x0, int y0, int n)
 	{
-		if (CircuitElm.cirSim.dragElm == null && !this.needsHighlight() && CircuitElm.cirSim.getCircuitNode(n).links.size() == 2)
+		if (CircuitElm.cirSim.dragElm == null && !this.needsHighlight()
+				&& CircuitElm.cirSim.getCircuitNode(n).links.size() == 2)
 		{
 			return;
 		}
-		if (CircuitElm.cirSim.mouseMode == CirSim.MODE_DRAG_ROW || CircuitElm.cirSim.mouseMode == CirSim.MODE_DRAG_COLUMN)
+		if (CircuitElm.cirSim.mouseMode == CirSim.MODE_DRAG_ROW
+				|| CircuitElm.cirSim.mouseMode == CirSim.MODE_DRAG_COLUMN)
 		{
 			return;
 		}
@@ -971,9 +978,10 @@ public abstract class CircuitElm implements Editable
 		this.selected = r.intersects(this.boundingBox);
 	}
 
+	@Deprecated
 	static int abs(int x)
 	{
-		return x < 0 ? -x : x;
+		return Math.abs(x);
 	}
 
 	static int sign(int x)
@@ -981,21 +989,22 @@ public abstract class CircuitElm implements Editable
 		return x < 0 ? -1 : x == 0 ? 0 : 1;
 	}
 
+	@Deprecated
 	static int min(int a, int b)
 	{
-		return a < b ? a : b;
+		return Math.min(a, b);
 	}
 
+	@Deprecated
 	static int max(int a, int b)
 	{
-		return a > b ? a : b;
+		return Math.max(a, b);
 	}
 
-	static double distance(Point p1, Point p2)
+	@Deprecated
+	public static double distance(Point p1, Point p2)
 	{
-		double x = p1.x - p2.x;
-		double y = p1.y - p2.y;
-		return Math.sqrt(x * x + y * y);
+		return CoreUtil.distance(p1, p2);
 	}
 
 	Rectangle getBoundingBox()
@@ -1003,7 +1012,7 @@ public abstract class CircuitElm implements Editable
 		return this.boundingBox;
 	}
 
-	boolean needsShortcut()
+	public boolean needsShortcut()
 	{
 		return false;
 	}

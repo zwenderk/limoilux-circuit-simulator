@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 // info about each row/column of the matrix for simplification purposes
 class RowInfo
 {

@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -84,8 +86,8 @@ class RelayElm extends CircuitElm
 	@Override
 	String dump()
 	{
-		return super.dump() + " " + this.poleCount + " " + this.inductance + " " + this.coilCurrent + " " + this.r_on + " " + this.r_off + " "
-				+ this.onCurrent + " " + this.coilR;
+		return super.dump() + " " + this.poleCount + " " + this.inductance + " " + this.coilCurrent + " " + this.r_on
+				+ " " + this.r_off + " " + this.onCurrent + " " + this.coilR;
 	}
 
 	@Override
@@ -98,7 +100,8 @@ class RelayElm extends CircuitElm
 			CircuitElm.drawThickLine(g, this.coilLeads[i], this.coilPosts[i]);
 		}
 		int x = (this.flags & this.FLAG_SWAP_COIL) != 0 ? 1 : 0;
-		this.drawCoil(g, this.dsign * 6, this.coilLeads[x], this.coilLeads[1 - x], this.volts[this.nCoil1 + x], this.volts[this.nCoil2 - x]);
+		this.drawCoil(g, this.dsign * 6, this.coilLeads[x], this.coilLeads[1 - x], this.volts[this.nCoil1 + x],
+				this.volts[this.nCoil2 - x]);
 
 		// draw lines
 		g.setColor(Color.darkGray);
@@ -106,14 +109,16 @@ class RelayElm extends CircuitElm
 		{
 			if (i == 0)
 			{
-				this.interpPoint(this.point1, this.point2, this.lines[i * 2], .5, this.openhs * 2 + 5 * this.dsign - i * this.openhs * 3);
+				this.interpPoint(this.point1, this.point2, this.lines[i * 2], .5, this.openhs * 2 + 5 * this.dsign - i
+						* this.openhs * 3);
 			}
 			else
 			{
-				this.interpPoint(this.point1, this.point2, this.lines[i * 2], .5, (int) (this.openhs * (-i * 3 + 3 - .5 + this.d_position)) + 5
-						* this.dsign);
+				this.interpPoint(this.point1, this.point2, this.lines[i * 2], .5,
+						(int) (this.openhs * (-i * 3 + 3 - .5 + this.d_position)) + 5 * this.dsign);
 			}
-			this.interpPoint(this.point1, this.point2, this.lines[i * 2 + 1], .5, (int) (this.openhs * (-i * 3 - .5 + this.d_position)) - 5 * this.dsign);
+			this.interpPoint(this.point1, this.point2, this.lines[i * 2 + 1], .5,
+					(int) (this.openhs * (-i * 3 - .5 + this.d_position)) - 5 * this.dsign);
 			g.drawLine(this.lines[i * 2].x, this.lines[i * 2].y, this.lines[i * 2 + 1].x, this.lines[i * 2 + 1].y);
 		}
 
@@ -136,7 +141,8 @@ class RelayElm extends CircuitElm
 
 			if (this.i_position != 2)
 			{
-				this.drawDots(g, this.swpoles[p][this.i_position + 1], this.swposts[p][this.i_position + 1], this.switchCurCount[p]);
+				this.drawDots(g, this.swpoles[p][this.i_position + 1], this.swposts[p][this.i_position + 1],
+						this.switchCurCount[p]);
 			}
 		}
 
@@ -273,9 +279,11 @@ class RelayElm extends CircuitElm
 		{
 			this.i_position = 1;
 		}
-		else {
+		else
+		{
 			this.i_position = 2;
-			// System.out.println("ind " + this + " " + current + " " + voltdiff);
+			// System.out.println("ind " + this + " " + current + " " +
+			// voltdiff);
 		}
 	}
 
@@ -294,8 +302,10 @@ class RelayElm extends CircuitElm
 		int p;
 		for (p = 0; p != this.poleCount * 3; p += 3)
 		{
-			CircuitElm.cirSim.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch1 + p], this.i_position == 0 ? this.r_on : this.r_off);
-			CircuitElm.cirSim.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch2 + p], this.i_position == 1 ? this.r_on : this.r_off);
+			CircuitElm.cirSim.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch1 + p],
+					this.i_position == 0 ? this.r_on : this.r_off);
+			CircuitElm.cirSim.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch2 + p],
+					this.i_position == 1 ? this.r_on : this.r_off);
 		}
 	}
 
@@ -316,7 +326,9 @@ class RelayElm extends CircuitElm
 			}
 			else
 			{
-				this.switchCurrent[p] = (this.volts[this.nSwitch0 + p * 3] - this.volts[this.nSwitch1 + p * 3 + this.i_position]) / this.r_on;
+				this.switchCurrent[p] = (this.volts[this.nSwitch0 + p * 3] - this.volts[this.nSwitch1 + p * 3
+						+ this.i_position])
+						/ this.r_on;
 			}
 		}
 	}

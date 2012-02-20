@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Graphics;
 import java.util.StringTokenizer;
 
@@ -102,7 +104,7 @@ class CC2NegElm extends CC2Elm
 	}
 
 	@Override
-	public  Class getDumpClass()
+	public Class getDumpClass()
 	{
 		return CC2Elm.class;
 	}

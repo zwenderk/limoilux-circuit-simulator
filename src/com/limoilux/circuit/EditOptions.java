@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 class EditOptions implements Editable
 {
 	CirSim sim;

@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -204,9 +206,11 @@ class OpAmpElm extends CircuitElm
 			dx = 1e-4;
 			x = this.minOut - dx * this.minOut / this.gain;
 		}
-		else {
+		else
+		{
 			dx = this.gain;
-			// System.out.println("opamp " + vd + " " + volts[2] + " " + dx + " " +
+			// System.out.println("opamp " + vd + " " + volts[2] + " " + dx +
+			// " " +
 			// x + " " + lastvd + " " + sim.converged);
 		}
 

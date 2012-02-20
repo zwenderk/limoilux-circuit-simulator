@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -43,7 +45,8 @@ class SparkGapElm extends CircuitElm
 	@Override
 	String dump()
 	{
-		return super.dump() + " " + this.onresistance + " " + this.offresistance + " " + this.breakdown + " " + this.holdcurrent;
+		return super.dump() + " " + this.onresistance + " " + this.offresistance + " " + this.breakdown + " "
+				+ this.holdcurrent;
 	}
 
 	Polygon arrow1, arrow2;
@@ -179,7 +182,7 @@ class SparkGapElm extends CircuitElm
 	}
 
 	@Override
-	boolean needsShortcut()
+	public boolean needsShortcut()
 	{
 		return false;
 	}

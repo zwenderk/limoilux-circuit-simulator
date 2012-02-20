@@ -1,3 +1,4 @@
+
 package com.limoilux.circuit;
 
 public interface Editable

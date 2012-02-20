@@ -1,3 +1,4 @@
+
 package com.limoilux.circuit;
 
 import java.util.StringTokenizer;
@@ -48,7 +49,8 @@ public class ADCElm extends ChipElm
 	{
 		int imax = (1 << this.bits) - 1;
 		// if we round, the half-flash doesn't work
-		double val = imax * this.volts[this.bits] / this.volts[this.bits + 1]; // + .5;
+		double val = imax * this.volts[this.bits] / this.volts[this.bits + 1]; // +
+																				// .5;
 		int ival = (int) val;
 		ival = CircuitElm.min(imax, CircuitElm.max(0, ival));
 		int i;

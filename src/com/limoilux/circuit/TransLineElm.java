@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -119,9 +121,9 @@ class TransLineElm extends CircuitElm
 		// (which is often true) then the bottom ones will get automatically
 		// attached to ground.
 		this.posts = new Point[]
-				{ p3, p4, this.point1, this.point2 };
+		{ p3, p4, this.point1, this.point2 };
 		this.inner = new Point[]
-				{ p7, p8, p5, p6 };
+		{ p7, p8, p5, p6 };
 	}
 
 	@Override
@@ -133,7 +135,8 @@ class TransLineElm extends CircuitElm
 		double segf = 1. / segments;
 		int i;
 		g.setColor(Color.darkGray);
-		g.fillRect(this.inner[2].x, this.inner[2].y, this.inner[1].x - this.inner[2].x + 2, this.inner[1].y - this.inner[2].y + 2);
+		g.fillRect(this.inner[2].x, this.inner[2].y, this.inner[1].x - this.inner[2].x + 2, this.inner[1].y
+				- this.inner[2].y + 2);
 		for (i = 0; i != 4; i++)
 		{
 			this.setVoltageColor(g, this.volts[i]);

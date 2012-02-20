@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 class Diode
 {
 	int nodes[];
@@ -153,9 +155,11 @@ class Diode
 			 * geq is I'(Vd) nc is I(Vd) + I'(Vd)*(-Vd)
 			 */
 
-			double geq = this.leakage * this.vdcoef * (Math.exp(voltdiff * this.vdcoef) + Math.exp((-voltdiff - this.zoffset) * this.vdcoef));
+			double geq = this.leakage * this.vdcoef
+					* (Math.exp(voltdiff * this.vdcoef) + Math.exp((-voltdiff - this.zoffset) * this.vdcoef));
 
-			double nc = this.leakage * (Math.exp(voltdiff * this.vdcoef) - Math.exp((-voltdiff - this.zoffset) * this.vdcoef) - 1) + geq
+			double nc = this.leakage
+					* (Math.exp(voltdiff * this.vdcoef) - Math.exp((-voltdiff - this.zoffset) * this.vdcoef) - 1) + geq
 					* -voltdiff;
 
 			this.sim.stampConductance(this.nodes[0], this.nodes[1], geq);
@@ -169,6 +173,7 @@ class Diode
 		{
 			return this.leakage * (Math.exp(voltdiff * this.vdcoef) - 1);
 		}
-		return this.leakage * (Math.exp(voltdiff * this.vdcoef) - Math.exp((-voltdiff - this.zoffset) * this.vdcoef) - 1);
+		return this.leakage
+				* (Math.exp(voltdiff * this.vdcoef) - Math.exp((-voltdiff - this.zoffset) * this.vdcoef) - 1);
 	}
 }

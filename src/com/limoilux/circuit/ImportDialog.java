@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Button;
 import java.awt.Dialog;
 import java.awt.Dimension;
@@ -37,7 +39,8 @@ class ImportDialog extends Dialog implements ActionListener
 		Point x = this.cframe.mainContainer.getLocationOnScreen();
 		this.resize(400, 300);
 		Dimension d = this.getSize();
-		this.setLocation(x.x + (this.cframe.winSize.width - d.width) / 2, x.y + (this.cframe.winSize.height - d.height) / 2);
+		this.setLocation(x.x + (this.cframe.winSize.width - d.width) / 2, x.y + (this.cframe.winSize.height - d.height)
+				/ 2);
 		this.show();
 		if (str.length() > 0)
 		{

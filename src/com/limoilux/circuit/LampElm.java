@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -33,7 +35,8 @@ class LampElm extends CircuitElm
 	@Override
 	String dump()
 	{
-		return super.dump() + " " + this.temp + " " + this.nom_pow + " " + this.nom_v + " " + this.warmTime + " " + this.coolTime;
+		return super.dump() + " " + this.temp + " " + this.nom_pow + " " + this.nom_v + " " + this.warmTime + " "
+				+ this.coolTime;
 	}
 
 	@Override
@@ -109,7 +112,8 @@ class LampElm extends CircuitElm
 		double v1 = this.volts[0];
 		double v2 = this.volts[1];
 		this.setBbox(this.point1, this.point2, 4);
-		this.adjustBbox(this.bulb.x - this.bulbR, this.bulb.y - this.bulbR, this.bulb.x + this.bulbR, this.bulb.y + this.bulbR);
+		this.adjustBbox(this.bulb.x - this.bulbR, this.bulb.y - this.bulbR, this.bulb.x + this.bulbR, this.bulb.y
+				+ this.bulbR);
 		// adjustbbox
 		this.draw2Leads(g);
 		this.setPowerColor(g, true);

@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
@@ -151,7 +153,7 @@ class ResistorElm extends CircuitElm
 	}
 
 	@Override
-	boolean needsShortcut()
+	public boolean needsShortcut()
 	{
 		return true;
 	}

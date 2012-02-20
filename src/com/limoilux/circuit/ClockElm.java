@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 class ClockElm extends RailElm
 {
 	public ClockElm(int xx, int yy)

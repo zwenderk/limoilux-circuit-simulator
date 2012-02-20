@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 public class ACVoltageElm extends VoltageElm
 {
 	public ACVoltageElm(int xx, int yy)

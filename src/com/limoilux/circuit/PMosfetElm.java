@@ -1,4 +1,6 @@
+
 package com.limoilux.circuit;
+
 class PMosfetElm extends MosfetElm
 {
 	public PMosfetElm(int xx, int yy)
