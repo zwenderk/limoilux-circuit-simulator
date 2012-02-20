@@ -59,7 +59,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	 */
 	private static final long serialVersionUID = -1165604792341204140L;
 	@Deprecated
-	private static final double PI = 3.14159265358979323846;
+	private static final double PI = Math.PI;
+
 	private static final int MODE_ADD_ELM = 0;
 	private static final int MODE_DRAG_ALL = 1;
 
@@ -801,6 +802,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			 */
 			this.getElm(i).draw(g);
 		}
+		
 		if (this.tempMouseMode == CirSim.MODE_DRAG_ROW || this.tempMouseMode == CirSim.MODE_DRAG_COLUMN
 				|| this.tempMouseMode == CirSim.MODE_DRAG_POST || this.tempMouseMode == CirSim.MODE_DRAG_SELECTED)
 		{
@@ -811,6 +813,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				ce.drawPost(g, ce.x2, ce.y2);
 			}
 		}
+		
 		int badnodes = 0;
 		// find bad connections, nodes not connected to other elements which
 		// intersect other elements' bounding boxes
@@ -2808,12 +2811,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	private void doMainMenuChecks(Menu m)
 	{
-		int i;
 		if (m == this.optionsMenu)
 		{
 			return;
 		}
-		for (i = 0; i != m.getItemCount(); i++)
+
+		for (int i = 0; i != m.getItemCount(); i++)
 		{
 			MenuItem mc = m.getItem(i);
 			if (mc instanceof Menu)
@@ -3299,10 +3302,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			MenuItem mmi = (MenuItem) mi;
 			this.mouseMode = CirSim.MODE_ADD_ELM;
 			String s = mmi.getActionCommand();
+			
 			if (s.length() > 0)
 			{
 				this.mouseModeStr = s;
 			}
+			
 			if (s.compareTo("DragAll") == 0)
 			{
 				this.mouseMode = CirSim.MODE_DRAG_ALL;
@@ -3346,166 +3351,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	public void adjustmentValueChanged(AdjustmentEvent e)
 	{
 		System.out.print(((Scrollbar) e.getSource()).getValue() + "\n");
-	}
-
-	private class MyMouseListener implements MouseListener
-	{
-
-		@Override
-		public void mouseClicked(MouseEvent e)
-		{
-			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0)
-			{
-				if (CirSim.this.mouseMode == CirSim.MODE_SELECT || CirSim.this.mouseMode == CirSim.MODE_DRAG_SELECTED)
-				{
-					CirSim.this.clearSelection();
-				}
-			}
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e)
-		{
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e)
-		{
-			CirSim.this.scopeSelected = -1;
-			CirSim.this.mouseElm = CirSim.this.plotXElm = CirSim.this.plotYElm = null;
-			CirSim.this.circuitCanvas.repaint();
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e)
-		{
-			System.out.println(e.getModifiers());
-			int ex = e.getModifiersEx();
-			if ((ex & (InputEvent.META_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)) == 0 && e.isPopupTrigger())
-			{
-				CirSim.this.doPopupMenu(e);
-				return;
-			}
-			
-			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0)
-			{
-				// left mouse
-				CirSim.this.tempMouseMode = CirSim.this.mouseMode;
-				if ((ex & InputEvent.ALT_DOWN_MASK) != 0 && (ex & InputEvent.META_DOWN_MASK) != 0)
-				{
-					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_COLUMN;
-				}
-				else if ((ex & InputEvent.ALT_DOWN_MASK) != 0 && (ex & InputEvent.SHIFT_DOWN_MASK) != 0)
-				{
-					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_ROW;
-				}
-				else if ((ex & InputEvent.SHIFT_DOWN_MASK) != 0)
-				{
-					CirSim.this.tempMouseMode = CirSim.MODE_SELECT;
-				}
-				else if ((ex & InputEvent.ALT_DOWN_MASK) != 0)
-				{
-					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_ALL;
-				}
-				else if ((ex & (InputEvent.CTRL_DOWN_MASK | InputEvent.META_DOWN_MASK)) != 0)
-				{
-					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_POST;
-				}
-			}
-			else if ((e.getModifiers() & InputEvent.BUTTON3_MASK) != 0)
-			{
-				// right mouse
-				if ((ex & InputEvent.SHIFT_DOWN_MASK) != 0)
-				{
-					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_ROW;
-				}
-				else if ((ex & (InputEvent.CTRL_DOWN_MASK | InputEvent.META_DOWN_MASK)) != 0)
-				{
-					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_COLUMN;
-				}
-				else
-				{
-					return;
-				}
-			}
-			
-			System.out.println("mouseMode " + CirSim.this.tempMouseMode);
-
-			if (CirSim.this.tempMouseMode != CirSim.MODE_SELECT
-					&& CirSim.this.tempMouseMode != CirSim.MODE_DRAG_SELECTED)
-			{
-				CirSim.this.clearSelection();
-			}
-			
-			if (CirSim.this.doSwitch(e.getX(), e.getY()))
-			{
-				return;
-			}
-			
-			CirSim.this.pushUndo();
-			CirSim.this.initDragX = e.getX();
-			CirSim.this.initDragY = e.getY();
-			
-			if (CirSim.this.tempMouseMode != CirSim.MODE_ADD_ELM || CirSim.this.addingClass == null)
-			{
-				return;
-			}
-
-			int x0 = CirSim.this.snapGrid(e.getX());
-			int y0 = CirSim.this.snapGrid(e.getY());
-			if (!CirSim.this.circuitArea.contains(x0, y0))
-			{
-				return;
-			}
-
-			CirSim.this.dragElm = CirSim.this.constructElement(CirSim.this.addingClass, x0, y0);
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e)
-		{
-			int ex = e.getModifiersEx();
-			if ((ex & (InputEvent.SHIFT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK | InputEvent.META_DOWN_MASK)) == 0
-					&& e.isPopupTrigger())
-			{
-				CirSim.this.doPopupMenu(e);
-				return;
-			}
-			CirSim.this.tempMouseMode = CirSim.this.mouseMode;
-			CirSim.this.selectedArea = null;
-			boolean circuitChanged = false;
-			if (CirSim.this.heldSwitchElm != null)
-			{
-				CirSim.this.heldSwitchElm.mouseUp();
-				CirSim.this.heldSwitchElm = null;
-				circuitChanged = true;
-			}
-			if (CirSim.this.dragElm != null)
-			{
-				// if the element is zero size then don't create it
-				if (CirSim.this.dragElm.x == CirSim.this.dragElm.x2 && CirSim.this.dragElm.y == CirSim.this.dragElm.y2)
-				{
-					CirSim.this.dragElm.delete();
-				}
-				else
-				{
-					CirSim.this.elmList.addElement(CirSim.this.dragElm);
-					circuitChanged = true;
-				}
-				CirSim.this.dragElm = null;
-			}
-			if (circuitChanged)
-			{
-				CirSim.this.needAnalyze();
-			}
-			if (CirSim.this.dragElm != null)
-			{
-				CirSim.this.dragElm.delete();
-			}
-			CirSim.this.dragElm = null;
-			CirSim.this.circuitCanvas.repaint();
-		}
-
 	}
 
 	private class MyKeyListener implements KeyListener
@@ -3554,6 +3399,179 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		}
 	}
 
+	private class MyMouseListener implements MouseListener
+	{
+
+		@Override
+		public void mouseClicked(MouseEvent e)
+		{
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0)
+			{
+				if (CirSim.this.mouseMode == CirSim.MODE_SELECT || CirSim.this.mouseMode == CirSim.MODE_DRAG_SELECTED)
+				{
+					CirSim.this.clearSelection();
+				}
+			}
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e)
+		{
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e)
+		{
+			CirSim.this.scopeSelected = -1;
+			CirSim.this.mouseElm = CirSim.this.plotXElm = CirSim.this.plotYElm = null;
+			CirSim.this.circuitCanvas.repaint();
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e)
+		{
+			int x = e.getX();
+			int y = e.getY();
+			int modif = e.getModifiers();
+			int ex = e.getModifiersEx();
+
+			if ((ex & (InputEvent.META_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)) == 0 && e.isPopupTrigger())
+			{
+				CirSim.this.doPopupMenu(e);
+				return;
+			}
+
+			if ((modif & InputEvent.BUTTON1_MASK) != 0)
+			{
+				// left mouse
+				CirSim.this.tempMouseMode = CirSim.this.mouseMode;
+				if ((ex & InputEvent.ALT_DOWN_MASK) != 0 && (ex & InputEvent.META_DOWN_MASK) != 0)
+				{
+					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_COLUMN;
+				}
+				else if ((ex & InputEvent.ALT_DOWN_MASK) != 0 && (ex & InputEvent.SHIFT_DOWN_MASK) != 0)
+				{
+					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_ROW;
+				}
+				else if ((ex & InputEvent.SHIFT_DOWN_MASK) != 0)
+				{
+					CirSim.this.tempMouseMode = CirSim.MODE_SELECT;
+				}
+				else if ((ex & InputEvent.ALT_DOWN_MASK) != 0)
+				{
+					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_ALL;
+				}
+				else if ((ex & (InputEvent.CTRL_DOWN_MASK | InputEvent.META_DOWN_MASK)) != 0)
+				{
+					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_POST;
+				}
+			}
+			else if ((e.getModifiers() & InputEvent.BUTTON3_MASK) != 0)
+			{
+				// right mouse
+				if ((ex & InputEvent.SHIFT_DOWN_MASK) != 0)
+				{
+					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_ROW;
+				}
+				else if ((ex & (InputEvent.CTRL_DOWN_MASK | InputEvent.META_DOWN_MASK)) != 0)
+				{
+					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_COLUMN;
+				}
+				else
+				{
+					return;
+				}
+			}
+
+			if (CirSim.this.tempMouseMode != CirSim.MODE_SELECT
+					&& CirSim.this.tempMouseMode != CirSim.MODE_DRAG_SELECTED)
+			{
+				System.out.println("clear selection");
+				CirSim.this.clearSelection();
+			}
+
+			if (CirSim.this.doSwitch(x, y))
+			{
+				return;
+			}
+
+			CirSim.this.pushUndo();
+			
+			CirSim.this.initDragX = x;
+			CirSim.this.initDragY = y;
+
+			if (CirSim.this.tempMouseMode != CirSim.MODE_ADD_ELM || CirSim.this.addingClass == null)
+			{
+				return;
+			}
+
+			int x0 = CirSim.this.snapGrid(x);
+			int y0 = CirSim.this.snapGrid(y);
+			
+			if (!CirSim.this.circuitArea.contains(x0, y0))
+			{
+				return;
+			}
+
+			CirSim.this.dragElm = CirSim.this.constructElement(CirSim.this.addingClass, x0, y0);
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e)
+		{
+			int ex = e.getModifiersEx();
+			boolean circuitChanged = false;
+			
+			if ((ex & (InputEvent.SHIFT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK | InputEvent.META_DOWN_MASK)) == 0
+					&& e.isPopupTrigger())
+			{
+				CirSim.this.doPopupMenu(e);
+				return;
+			}
+			
+			CirSim.this.tempMouseMode = CirSim.this.mouseMode;
+			CirSim.this.selectedArea = null;
+			
+			
+			if (CirSim.this.heldSwitchElm != null)
+			{
+				CirSim.this.heldSwitchElm.mouseUp();
+				CirSim.this.heldSwitchElm = null;
+				circuitChanged = true;
+			}
+			
+			if (CirSim.this.dragElm != null)
+			{
+				// if the element is zero size then don't create it
+				if (CirSim.this.dragElm.x == CirSim.this.dragElm.x2 && CirSim.this.dragElm.y == CirSim.this.dragElm.y2)
+				{
+					CirSim.this.dragElm.delete();
+				}
+				else
+				{
+					CirSim.this.elmList.addElement(CirSim.this.dragElm);
+					circuitChanged = true;
+				}
+				
+				CirSim.this.dragElm = null;
+			}
+			
+			if (circuitChanged)
+			{
+				CirSim.this.needAnalyze();
+			}
+			
+			if (CirSim.this.dragElm != null)
+			{
+				CirSim.this.dragElm.delete();
+			}
+			
+			CirSim.this.dragElm = null;
+			CirSim.this.circuitCanvas.repaint();
+		}
+
+	}
+
 	private class MyMouseMotionListener implements MouseMotionListener
 	{
 		@Override
@@ -3576,7 +3594,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			{
 				CirSim.this.dragElm.drag(e.getX(), e.getY());
 			}
+			
 			boolean success = true;
+			
 			switch (CirSim.this.tempMouseMode)
 			{
 			case MODE_DRAG_ALL:
@@ -3680,6 +3700,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 					}
 				}
 			}
+			
 			CirSim.this.scopeSelected = -1;
 			if (CirSim.this.mouseElm == null)
 			{
@@ -3774,7 +3795,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 			if (this.used[n1])
 			{
-				// System.out.println("used " + n1);
 				return false;
 			}
 
