@@ -57,7 +57,7 @@ class WireElm extends CircuitElm
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return 1;
 	}

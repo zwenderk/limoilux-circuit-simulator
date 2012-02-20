@@ -3,7 +3,7 @@ package com.limoilux.circuit;
 
 import java.util.StringTokenizer;
 
-class DecadeElm extends ChipElm
+public class DecadeElm extends ChipElm
 {
 	public DecadeElm(int xx, int yy)
 	{
@@ -22,13 +22,14 @@ class DecadeElm extends ChipElm
 	}
 
 	@Override
-	boolean needsBits()
+	public boolean needsBits()
 	{
 		return true;
+
 	}
 
 	@Override
-	void setupPins()
+	public void setupPins()
 	{
 		this.sizeX = this.bits > 2 ? this.bits : 2;
 		this.sizeY = 2;
@@ -48,19 +49,19 @@ class DecadeElm extends ChipElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return this.bits + 2;
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return this.bits;
 	}
 
 	@Override
-	void execute()
+	public void execute()
 	{
 		int i;
 		if (this.pins[0].value && !this.lastClock)
@@ -76,9 +77,9 @@ class DecadeElm extends ChipElm
 			{
 				this.pins[i++ + 2].value = false;
 			}
-			
+
 			i %= this.bits;
-			
+
 			this.pins[i + 2].value = true;
 		}
 		if (!this.pins[1].value)

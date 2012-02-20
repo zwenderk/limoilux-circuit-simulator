@@ -61,7 +61,7 @@ class LogicInputElm extends SwitchElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 1;
 	}
@@ -111,7 +111,7 @@ class LogicInputElm extends SwitchElm
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return 1;
 	}

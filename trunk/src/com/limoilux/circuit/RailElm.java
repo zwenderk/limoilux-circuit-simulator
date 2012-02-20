@@ -31,7 +31,7 @@ class RailElm extends VoltageElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 1;
 	}

@@ -211,7 +211,7 @@ class RelayElm extends CircuitElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 2 + this.poleCount * 3;
 	}

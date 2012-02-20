@@ -18,7 +18,7 @@ class CounterElm extends ChipElm
 	}
 
 	@Override
-	boolean needsBits()
+	public boolean needsBits()
 	{
 		return true;
 	}
@@ -30,7 +30,7 @@ class CounterElm extends ChipElm
 	}
 
 	@Override
-	void setupPins()
+	public void setupPins()
 	{
 		this.sizeX = 2;
 		this.sizeY = this.bits > 2 ? this.bits : 2;
@@ -54,7 +54,7 @@ class CounterElm extends ChipElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		if (this.hasEnable())
 		{
@@ -69,13 +69,13 @@ class CounterElm extends ChipElm
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return this.bits;
 	}
 
 	@Override
-	void execute()
+	public void execute()
 	{
 		boolean en = true;
 		if (this.hasEnable())

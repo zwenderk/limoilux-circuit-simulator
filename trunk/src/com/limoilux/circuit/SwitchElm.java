@@ -116,7 +116,7 @@ class SwitchElm extends CircuitElm
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return this.position == 1 ? 0 : 1;
 	}

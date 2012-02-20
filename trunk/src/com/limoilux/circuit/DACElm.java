@@ -22,13 +22,13 @@ class DACElm extends ChipElm
 	}
 
 	@Override
-	boolean needsBits()
+	public boolean needsBits()
 	{
 		return true;
 	}
 
 	@Override
-	void setupPins()
+	public void setupPins()
 	{
 		this.sizeX = 2;
 		this.sizeY = this.bits > 2 ? this.bits : 2;
@@ -62,13 +62,13 @@ class DACElm extends ChipElm
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return 1;
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return this.bits + 2;
 	}

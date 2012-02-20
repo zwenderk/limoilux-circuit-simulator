@@ -140,7 +140,7 @@ class OpAmpElm extends CircuitElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 3;
 	}
@@ -152,7 +152,7 @@ class OpAmpElm extends CircuitElm
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return 1;
 	}

@@ -40,7 +40,7 @@ class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 4;
 	}
@@ -256,7 +256,7 @@ class TransLineElm extends CircuitElm
 
 	// double getVoltageDiff() { return volts[0]; }
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return 2;
 	}

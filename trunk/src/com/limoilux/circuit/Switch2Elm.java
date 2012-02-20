@@ -98,7 +98,7 @@ class Switch2Elm extends SwitchElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 3;
 	}
@@ -123,7 +123,7 @@ class Switch2Elm extends SwitchElm
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return this.position == 2 ? 0 : 1;
 	}
