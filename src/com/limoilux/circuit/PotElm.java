@@ -125,14 +125,15 @@ class PotElm extends CircuitElm implements AdjustmentListener
 		this.position = this.slider.getValue() * .0099 + .005;
 		int soff = (int) ((this.position - .5) * bodyLen);
 		// int offset2 = offset - sign(offset)*4;
-		this.post3 = this.interpPoint(this.point1, this.point2, .5, offset);
-		this.corner2 = this.interpPoint(this.point1, this.point2, soff / this.dn + .5, offset);
-		this.arrowPoint = this.interpPoint(this.point1, this.point2, soff / this.dn + .5, 8 * CircuitElm.sign(offset));
-		this.midpoint = this.interpPoint(this.point1, this.point2, soff / this.dn + .5);
+		this.post3 = CircuitElm.interpPoint(this.point1, this.point2, .5, offset);
+		this.corner2 = CircuitElm.interpPoint(this.point1, this.point2, soff / this.dn + .5, offset);
+		this.arrowPoint = CircuitElm.interpPoint(this.point1, this.point2, soff / this.dn + .5,
+				8 * CircuitElm.sign(offset));
+		this.midpoint = CircuitElm.interpPoint(this.point1, this.point2, soff / this.dn + .5);
 		this.arrow1 = new Point();
 		this.arrow2 = new Point();
 		double clen = CircuitElm.abs(offset) - 8;
-		this.interpPoint2(this.corner2, this.arrowPoint, this.arrow1, this.arrow2, (clen - 8) / clen, 8);
+		CircuitElm.interpPoint2(this.corner2, this.arrowPoint, this.arrow1, this.arrow2, (clen - 8) / clen, 8);
 		this.ps3 = new Point();
 		this.ps4 = new Point();
 	}
@@ -176,8 +177,8 @@ class PotElm extends CircuitElm implements AdjustmentListener
 					v = v3 + (v2 - v3) * (i - divide) / (segments - divide);
 				}
 				this.setVoltageColor(g, v);
-				this.interpPoint(this.lead1, this.lead2, CircuitElm.ps1, i * segf, hs * ox);
-				this.interpPoint(this.lead1, this.lead2, CircuitElm.ps2, (i + 1) * segf, hs * nx);
+				CircuitElm.interpPoint(this.lead1, this.lead2, CircuitElm.ps1, i * segf, hs * ox);
+				CircuitElm.interpPoint(this.lead1, this.lead2, CircuitElm.ps2, (i + 1) * segf, hs * nx);
 				CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 				ox = nx;
 			}
@@ -186,7 +187,7 @@ class PotElm extends CircuitElm implements AdjustmentListener
 		{
 			// draw rectangle
 			this.setVoltageColor(g, v1);
-			this.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 0, hs);
+			CircuitElm.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 0, hs);
 			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 			for (i = 0; i != segments; i++)
 			{
@@ -196,12 +197,12 @@ class PotElm extends CircuitElm implements AdjustmentListener
 					v = v3 + (v2 - v3) * (i - divide) / (segments - divide);
 				}
 				this.setVoltageColor(g, v);
-				this.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, i * segf, hs);
-				this.interpPoint2(this.lead1, this.lead2, this.ps3, this.ps4, (i + 1) * segf, hs);
+				CircuitElm.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, i * segf, hs);
+				CircuitElm.interpPoint2(this.lead1, this.lead2, this.ps3, this.ps4, (i + 1) * segf, hs);
 				CircuitElm.drawThickLine(g, CircuitElm.ps1, this.ps3);
 				CircuitElm.drawThickLine(g, CircuitElm.ps2, this.ps4);
 			}
-			this.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 1, hs);
+			CircuitElm.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 1, hs);
 			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 		}
 		this.setVoltageColor(g, v3);
@@ -214,10 +215,10 @@ class PotElm extends CircuitElm implements AdjustmentListener
 		this.curcount3 = this.updateDotCount(this.current3, this.curcount3);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
-			this.drawDots(g, this.point1, this.midpoint, this.curcount1);
-			this.drawDots(g, this.point2, this.midpoint, this.curcount2);
-			this.drawDots(g, this.post3, this.corner2, this.curcount3);
-			this.drawDots(g, this.corner2, this.midpoint,
+			CircuitElm.drawDots(g, this.point1, this.midpoint, this.curcount1);
+			CircuitElm.drawDots(g, this.point2, this.midpoint, this.curcount2);
+			CircuitElm.drawDots(g, this.post3, this.corner2, this.curcount3);
+			CircuitElm.drawDots(g, this.corner2, this.midpoint,
 					this.curcount3 + CircuitElm.distance(this.post3, this.corner2));
 		}
 		this.drawPosts(g);

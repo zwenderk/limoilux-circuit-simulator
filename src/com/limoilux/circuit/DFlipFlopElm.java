@@ -8,7 +8,7 @@ public class DFlipFlopElm extends ChipElm
 {
 	final int FLAG_RESET = 2;
 
-	boolean hasReset()
+	public boolean hasReset()
 	{
 		return (this.flags & this.FLAG_RESET) != 0;
 	}

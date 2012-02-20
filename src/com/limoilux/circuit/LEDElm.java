@@ -51,9 +51,9 @@ class LEDElm extends DiodeElm
 	{
 		super.setPoints();
 		int cr = 12;
-		this.ledLead1 = this.interpPoint(this.point1, this.point2, .5 - cr / this.dn);
-		this.ledLead2 = this.interpPoint(this.point1, this.point2, .5 + cr / this.dn);
-		this.ledCenter = this.interpPoint(this.point1, this.point2, .5);
+		this.ledLead1 = CircuitElm.interpPoint(this.point1, this.point2, .5 - cr / this.dn);
+		this.ledLead2 = CircuitElm.interpPoint(this.point1, this.point2, .5 + cr / this.dn);
+		this.ledCenter = CircuitElm.interpPoint(this.point1, this.point2, .5);
 	}
 
 	@Override
@@ -83,8 +83,8 @@ class LEDElm extends DiodeElm
 		g.fillOval(this.ledCenter.x - cr, this.ledCenter.y - cr, cr * 2, cr * 2);
 		this.setBbox(this.point1, this.point2, cr);
 		this.updateDotCount();
-		this.drawDots(g, this.point1, this.ledLead1, this.curcount);
-		this.drawDots(g, this.point2, this.ledLead2, -this.curcount);
+		CircuitElm.drawDots(g, this.point1, this.ledLead1, this.curcount);
+		CircuitElm.drawDots(g, this.point2, this.ledLead2, -this.curcount);
 		this.drawPosts(g);
 	}
 

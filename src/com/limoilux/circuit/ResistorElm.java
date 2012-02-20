@@ -77,8 +77,8 @@ class ResistorElm extends CircuitElm
 				}
 				double v = v1 + (v2 - v1) * i / segments;
 				this.setVoltageColor(g, v);
-				this.interpPoint(this.lead1, this.lead2, CircuitElm.ps1, i * segf, hs * ox);
-				this.interpPoint(this.lead1, this.lead2, CircuitElm.ps2, (i + 1) * segf, hs * nx);
+				CircuitElm.interpPoint(this.lead1, this.lead2, CircuitElm.ps1, i * segf, hs * ox);
+				CircuitElm.interpPoint(this.lead1, this.lead2, CircuitElm.ps2, (i + 1) * segf, hs * nx);
 				CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 				ox = nx;
 			}
@@ -87,18 +87,18 @@ class ResistorElm extends CircuitElm
 		{
 			// draw rectangle
 			this.setVoltageColor(g, v1);
-			this.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 0, hs);
+			CircuitElm.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 0, hs);
 			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 			for (i = 0; i != segments; i++)
 			{
 				double v = v1 + (v2 - v1) * i / segments;
 				this.setVoltageColor(g, v);
-				this.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, i * segf, hs);
-				this.interpPoint2(this.lead1, this.lead2, this.ps3, this.ps4, (i + 1) * segf, hs);
+				CircuitElm.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, i * segf, hs);
+				CircuitElm.interpPoint2(this.lead1, this.lead2, this.ps3, this.ps4, (i + 1) * segf, hs);
 				CircuitElm.drawThickLine(g, CircuitElm.ps1, this.ps3);
 				CircuitElm.drawThickLine(g, CircuitElm.ps2, this.ps4);
 			}
-			this.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 1, hs);
+			CircuitElm.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 1, hs);
 			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 		}
 		if (CircuitElm.cirSim.showValuesCheckItem.getState())

@@ -90,8 +90,8 @@ class SwitchElm extends CircuitElm
 		{
 			g.setColor(CircuitElm.whiteColor);
 		}
-		this.interpPoint(this.lead1, this.lead2, this.ps, 0, hs1);
-		this.interpPoint(this.lead1, this.lead2, this.ps2, 1, hs2);
+		CircuitElm.interpPoint(this.lead1, this.lead2, this.ps, 0, hs1);
+		CircuitElm.interpPoint(this.lead1, this.lead2, this.ps2, 1, hs2);
 
 		CircuitElm.drawThickLine(g, this.ps, this.ps2);
 		this.drawPosts(g);

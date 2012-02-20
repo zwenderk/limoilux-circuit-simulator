@@ -84,16 +84,16 @@ class TappedTransformerElm extends CircuitElm
 		}
 
 		// primary dots
-		this.drawDots(g, this.ptEnds[0], this.ptCoil[0], this.curcount[0]);
-		this.drawDots(g, this.ptCoil[0], this.ptCoil[1], this.curcount[0]);
-		this.drawDots(g, this.ptCoil[1], this.ptEnds[1], this.curcount[0]);
+		CircuitElm.drawDots(g, this.ptEnds[0], this.ptCoil[0], this.curcount[0]);
+		CircuitElm.drawDots(g, this.ptCoil[0], this.ptCoil[1], this.curcount[0]);
+		CircuitElm.drawDots(g, this.ptCoil[1], this.ptEnds[1], this.curcount[0]);
 
 		// secondary dots
-		this.drawDots(g, this.ptEnds[2], this.ptCoil[2], this.curcount[1]);
-		this.drawDots(g, this.ptCoil[2], this.ptCoil[3], this.curcount[1]);
-		this.drawDots(g, this.ptCoil[3], this.ptEnds[3], this.curcount[3]);
-		this.drawDots(g, this.ptCoil[3], this.ptCoil[4], this.curcount[2]);
-		this.drawDots(g, this.ptCoil[4], this.ptEnds[4], this.curcount[2]);
+		CircuitElm.drawDots(g, this.ptEnds[2], this.ptCoil[2], this.curcount[1]);
+		CircuitElm.drawDots(g, this.ptCoil[2], this.ptCoil[3], this.curcount[1]);
+		CircuitElm.drawDots(g, this.ptCoil[3], this.ptEnds[3], this.curcount[3]);
+		CircuitElm.drawDots(g, this.ptCoil[3], this.ptCoil[4], this.curcount[2]);
+		CircuitElm.drawDots(g, this.ptCoil[4], this.ptEnds[4], this.curcount[2]);
 
 		this.drawPosts(g);
 		this.setBbox(this.ptEnds[0], this.ptEnds[4], 0);
@@ -104,27 +104,27 @@ class TappedTransformerElm extends CircuitElm
 	{
 		super.setPoints();
 		int hs = 32;
-		this.ptEnds = this.newPointArray(5);
-		this.ptCoil = this.newPointArray(5);
-		this.ptCore = this.newPointArray(4);
+		this.ptEnds = CircuitElm.newPointArray(5);
+		this.ptCoil = CircuitElm.newPointArray(5);
+		this.ptCore = CircuitElm.newPointArray(4);
 		this.ptEnds[0] = this.point1;
 		this.ptEnds[2] = this.point2;
-		this.interpPoint(this.point1, this.point2, this.ptEnds[1], 0, -hs * 2);
-		this.interpPoint(this.point1, this.point2, this.ptEnds[3], 1, -hs);
-		this.interpPoint(this.point1, this.point2, this.ptEnds[4], 1, -hs * 2);
+		CircuitElm.interpPoint(this.point1, this.point2, this.ptEnds[1], 0, -hs * 2);
+		CircuitElm.interpPoint(this.point1, this.point2, this.ptEnds[3], 1, -hs);
+		CircuitElm.interpPoint(this.point1, this.point2, this.ptEnds[4], 1, -hs * 2);
 		double ce = .5 - 12 / this.dn;
 		double cd = .5 - 2 / this.dn;
 		int i;
-		this.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[0], ce);
-		this.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[1], ce, -hs * 2);
-		this.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[2], 1 - ce);
-		this.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[3], 1 - ce, -hs);
-		this.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[4], 1 - ce, -hs * 2);
+		CircuitElm.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[0], ce);
+		CircuitElm.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[1], ce, -hs * 2);
+		CircuitElm.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[2], 1 - ce);
+		CircuitElm.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[3], 1 - ce, -hs);
+		CircuitElm.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[4], 1 - ce, -hs * 2);
 		for (i = 0; i != 2; i++)
 		{
 			int b = -hs * i * 2;
-			this.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCore[i], cd, b);
-			this.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCore[i + 2], 1 - cd, b);
+			CircuitElm.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCore[i], cd, b);
+			CircuitElm.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCore[i + 2], 1 - cd, b);
 		}
 	}
 

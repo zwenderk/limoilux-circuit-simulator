@@ -97,8 +97,8 @@ class MosfetElm extends CircuitElm
 		{
 			double v = this.volts[1] + (this.volts[2] - this.volts[1]) * i / segments;
 			this.setVoltageColor(g, v);
-			this.interpPoint(this.src[1], this.drn[1], CircuitElm.ps1, i * segf);
-			this.interpPoint(this.src[1], this.drn[1], CircuitElm.ps2, (i + 1) * segf);
+			CircuitElm.interpPoint(this.src[1], this.drn[1], CircuitElm.ps1, i * segf);
+			CircuitElm.interpPoint(this.src[1], this.drn[1], CircuitElm.ps2, (i + 1) * segf);
 			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 		}
 		this.setVoltageColor(g, this.volts[1]);
@@ -143,9 +143,9 @@ class MosfetElm extends CircuitElm
 			g.drawString(this.pnp == -1 ? "S" : "D", this.drn[0].x - 3 + 9 * ds, this.drn[0].y + 4);
 		}
 		this.curcount = this.updateDotCount(-this.ids, this.curcount);
-		this.drawDots(g, this.src[0], this.src[1], this.curcount);
-		this.drawDots(g, this.src[1], this.drn[1], this.curcount);
-		this.drawDots(g, this.drn[1], this.drn[0], this.curcount);
+		CircuitElm.drawDots(g, this.src[0], this.src[1], this.curcount);
+		CircuitElm.drawDots(g, this.src[1], this.drn[1], this.curcount);
+		CircuitElm.drawDots(g, this.drn[1], this.drn[0], this.curcount);
 		this.drawPosts(g);
 	}
 
@@ -185,33 +185,33 @@ class MosfetElm extends CircuitElm
 		// find the coordinates of the various points we need to draw
 		// the MOSFET.
 		int hs2 = this.hs * this.dsign;
-		this.src = this.newPointArray(3);
-		this.drn = this.newPointArray(3);
-		this.interpPoint2(this.point1, this.point2, this.src[0], this.drn[0], 1, -hs2);
-		this.interpPoint2(this.point1, this.point2, this.src[1], this.drn[1], 1 - 22 / this.dn, -hs2);
-		this.interpPoint2(this.point1, this.point2, this.src[2], this.drn[2], 1 - 22 / this.dn, -hs2 * 4 / 3);
+		this.src = CircuitElm.newPointArray(3);
+		this.drn = CircuitElm.newPointArray(3);
+		CircuitElm.interpPoint2(this.point1, this.point2, this.src[0], this.drn[0], 1, -hs2);
+		CircuitElm.interpPoint2(this.point1, this.point2, this.src[1], this.drn[1], 1 - 22 / this.dn, -hs2);
+		CircuitElm.interpPoint2(this.point1, this.point2, this.src[2], this.drn[2], 1 - 22 / this.dn, -hs2 * 4 / 3);
 
-		this.gate = this.newPointArray(3);
-		this.interpPoint2(this.point1, this.point2, this.gate[0], this.gate[2], 1 - 28 / this.dn, hs2 / 2); // was
+		this.gate = CircuitElm.newPointArray(3);
+		CircuitElm.interpPoint2(this.point1, this.point2, this.gate[0], this.gate[2], 1 - 28 / this.dn, hs2 / 2); // was
 		// 1-20/dn
-		this.interpPoint(this.gate[0], this.gate[2], this.gate[1], .5);
+		CircuitElm.interpPoint(this.gate[0], this.gate[2], this.gate[1], .5);
 
 		if (!this.drawDigital())
 		{
 			if (this.pnp == 1)
 			{
-				this.arrowPoly = this.calcArrow(this.src[1], this.src[0], 10, 4);
+				this.arrowPoly = CircuitElm.calcArrow(this.src[1], this.src[0], 10, 4);
 			}
 			else
 			{
-				this.arrowPoly = this.calcArrow(this.drn[0], this.drn[1], 12, 5);
+				this.arrowPoly = CircuitElm.calcArrow(this.drn[0], this.drn[1], 12, 5);
 			}
 		}
 		else if (this.pnp == -1)
 		{
-			this.interpPoint(this.point1, this.point2, this.gate[1], 1 - 36 / this.dn);
+			CircuitElm.interpPoint(this.point1, this.point2, this.gate[1], 1 - 36 / this.dn);
 			int dist = this.dsign < 0 ? 32 : 31;
-			this.pcircle = this.interpPoint(this.point1, this.point2, 1 - dist / this.dn);
+			this.pcircle = CircuitElm.interpPoint(this.point1, this.point2, 1 - dist / this.dn);
 			this.pcircler = 3;
 		}
 	}

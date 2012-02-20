@@ -45,12 +45,12 @@ class TunnelDiodeElm extends CircuitElm
 	{
 		super.setPoints();
 		this.calcLeads(16);
-		this.cathode = this.newPointArray(4);
-		Point pa[] = this.newPointArray(2);
-		this.interpPoint2(this.lead1, this.lead2, pa[0], pa[1], 0, this.hs);
-		this.interpPoint2(this.lead1, this.lead2, this.cathode[0], this.cathode[1], 1, this.hs);
-		this.interpPoint2(this.lead1, this.lead2, this.cathode[2], this.cathode[3], .8, this.hs);
-		this.poly = this.createPolygon(pa[0], pa[1], this.lead2);
+		this.cathode = CircuitElm.newPointArray(4);
+		Point pa[] = CircuitElm.newPointArray(2);
+		CircuitElm.interpPoint2(this.lead1, this.lead2, pa[0], pa[1], 0, this.hs);
+		CircuitElm.interpPoint2(this.lead1, this.lead2, this.cathode[0], this.cathode[1], 1, this.hs);
+		CircuitElm.interpPoint2(this.lead1, this.lead2, this.cathode[2], this.cathode[3], .8, this.hs);
+		this.poly = CircuitElm.createPolygon(pa[0], pa[1], this.lead2);
 	}
 
 	@Override

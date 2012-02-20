@@ -108,13 +108,13 @@ class TransLineElm extends CircuitElm
 	{
 		super.setPoints();
 		int ds = this.dy == 0 ? CircuitElm.sign(this.dx) : -CircuitElm.sign(this.dy);
-		Point p3 = this.interpPoint(this.point1, this.point2, 0, -this.width * ds);
-		Point p4 = this.interpPoint(this.point1, this.point2, 1, -this.width * ds);
+		Point p3 = CircuitElm.interpPoint(this.point1, this.point2, 0, -this.width * ds);
+		Point p4 = CircuitElm.interpPoint(this.point1, this.point2, 1, -this.width * ds);
 		int sep = CircuitElm.cirSim.gridSize / 2;
-		Point p5 = this.interpPoint(this.point1, this.point2, 0, -(this.width / 2 - sep) * ds);
-		Point p6 = this.interpPoint(this.point1, this.point2, 1, -(this.width / 2 - sep) * ds);
-		Point p7 = this.interpPoint(this.point1, this.point2, 0, -(this.width / 2 + sep) * ds);
-		Point p8 = this.interpPoint(this.point1, this.point2, 1, -(this.width / 2 + sep) * ds);
+		Point p5 = CircuitElm.interpPoint(this.point1, this.point2, 0, -(this.width / 2 - sep) * ds);
+		Point p6 = CircuitElm.interpPoint(this.point1, this.point2, 1, -(this.width / 2 - sep) * ds);
+		Point p7 = CircuitElm.interpPoint(this.point1, this.point2, 0, -(this.width / 2 + sep) * ds);
+		Point p8 = CircuitElm.interpPoint(this.point1, this.point2, 1, -(this.width / 2 + sep) * ds);
 
 		// we number the posts like this because we want the lower-numbered
 		// points to be on the bottom, so that if some of them are unconnected
@@ -150,10 +150,10 @@ class TransLineElm extends CircuitElm
 				int ix2 = (ix0 - this.lenSteps * (segments - 1 - i) / segments) % this.lenSteps;
 				double v = (this.voltageL[ix1] + this.voltageR[ix2]) / 2;
 				this.setVoltageColor(g, v);
-				this.interpPoint(this.inner[0], this.inner[1], CircuitElm.ps1, i * segf);
-				this.interpPoint(this.inner[2], this.inner[3], CircuitElm.ps2, i * segf);
+				CircuitElm.interpPoint(this.inner[0], this.inner[1], CircuitElm.ps1, i * segf);
+				CircuitElm.interpPoint(this.inner[2], this.inner[3], CircuitElm.ps2, i * segf);
 				g.drawLine(CircuitElm.ps1.x, CircuitElm.ps1.y, CircuitElm.ps2.x, CircuitElm.ps2.y);
-				this.interpPoint(this.inner[2], this.inner[3], CircuitElm.ps1, (i + 1) * segf);
+				CircuitElm.interpPoint(this.inner[2], this.inner[3], CircuitElm.ps1, (i + 1) * segf);
 				CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 			}
 		}
@@ -165,10 +165,10 @@ class TransLineElm extends CircuitElm
 		this.curCount2 = this.updateDotCount(this.current2, this.curCount2);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
-			this.drawDots(g, this.posts[0], this.inner[0], this.curCount1);
-			this.drawDots(g, this.posts[2], this.inner[2], -this.curCount1);
-			this.drawDots(g, this.posts[1], this.inner[1], -this.curCount2);
-			this.drawDots(g, this.posts[3], this.inner[3], this.curCount2);
+			CircuitElm.drawDots(g, this.posts[0], this.inner[0], this.curCount1);
+			CircuitElm.drawDots(g, this.posts[2], this.inner[2], -this.curCount1);
+			CircuitElm.drawDots(g, this.posts[1], this.inner[1], -this.curCount2);
+			CircuitElm.drawDots(g, this.posts[3], this.inner[3], this.curCount2);
 		}
 	}
 

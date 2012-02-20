@@ -25,11 +25,11 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 	{
 		super.setPoints();
 		this.calcLeads(32);
-		this.swposts = this.newPointArray(2);
-		this.swpoles = this.newPointArray(2);
-		this.interpPoint2(this.lead1, this.lead2, this.swpoles[0], this.swpoles[1], 1, this.openhs);
-		this.interpPoint2(this.point1, this.point2, this.swposts[0], this.swposts[1], 1, this.openhs);
-		this.ctlPoint = this.interpPoint(this.point1, this.point2, .5, this.openhs);
+		this.swposts = CircuitElm.newPointArray(2);
+		this.swpoles = CircuitElm.newPointArray(2);
+		CircuitElm.interpPoint2(this.lead1, this.lead2, this.swpoles[0], this.swpoles[1], 1, this.openhs);
+		CircuitElm.interpPoint2(this.point1, this.point2, this.swposts[0], this.swposts[1], 1, this.openhs);
+		this.ctlPoint = CircuitElm.interpPoint(this.point1, this.point2, .5, this.openhs);
 	}
 
 	@Override
@@ -61,8 +61,8 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 		CircuitElm.drawThickLine(g, this.lead1, this.swpoles[position]);
 
 		this.updateDotCount();
-		this.drawDots(g, this.point1, this.lead1, this.curcount);
-		this.drawDots(g, this.swpoles[position], this.swposts[position], this.curcount);
+		CircuitElm.drawDots(g, this.point1, this.lead1, this.curcount);
+		CircuitElm.drawDots(g, this.swpoles[position], this.swposts[position], this.curcount);
 		this.drawPosts(g);
 	}
 

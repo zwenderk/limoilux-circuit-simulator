@@ -2,6 +2,7 @@
 package com.limoilux.circuit.core;
 
 import java.awt.Point;
+import java.awt.Polygon;
 import java.util.Random;
 
 public class CoreUtil
@@ -252,4 +253,37 @@ public class CoreUtil
 		}
 		return a;
 	}
+	
+
+	public static Polygon createPolygon(Point a, Point b, Point c)
+	{
+		Polygon p = new Polygon();
+		p.addPoint(a.x, a.y);
+		p.addPoint(b.x, b.y);
+		p.addPoint(c.x, c.y);
+		return p;
+		
+	}
+
+	public static Polygon createPolygon(Point a, Point b, Point c, Point d)
+	{
+		Polygon p = new Polygon();
+		p.addPoint(a.x, a.y);
+		p.addPoint(b.x, b.y);
+		p.addPoint(c.x, c.y);
+		p.addPoint(d.x, d.y);
+		return p;
+	}
+	
+	public static Polygon createPolygon(Point a[])
+	{
+		Polygon p = new Polygon();
+		int i;
+		for (i = 0; i != a.length; i++)
+		{
+			p.addPoint(a[i].x, a[i].y);
+		}
+		return p;
+	}
+
 }

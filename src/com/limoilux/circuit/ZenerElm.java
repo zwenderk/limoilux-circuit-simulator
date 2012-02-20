@@ -66,7 +66,7 @@ public class ZenerElm extends DiodeElm
 		CoreUtil.interpPoint2(this.lead1, this.lead2, this.cathode[0], this.cathode[1], 1, ZenerElm.HS);
 		CoreUtil.interpPoint(this.cathode[0], this.cathode[1], this.wing[0], -0.2, -ZenerElm.HS);
 		CoreUtil.interpPoint(this.cathode[1], this.cathode[0], this.wing[1], -0.2, -ZenerElm.HS);
-		this.poly = this.createPolygon(pa[0], pa[1], this.lead2);
+		this.poly = CircuitElm.createPolygon(pa[0], pa[1], this.lead2);
 	}
 
 	@Override

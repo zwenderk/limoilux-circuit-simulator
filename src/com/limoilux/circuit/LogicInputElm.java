@@ -70,7 +70,7 @@ class LogicInputElm extends SwitchElm
 	public void setPoints()
 	{
 		super.setPoints();
-		this.lead1 = this.interpPoint(this.point1, this.point2, 1 - 12 / this.dn);
+		this.lead1 = CircuitElm.interpPoint(this.point1, this.point2, 1 - 12 / this.dn);
 	}
 
 	@Override
@@ -89,7 +89,7 @@ class LogicInputElm extends SwitchElm
 		this.setVoltageColor(g, this.volts[0]);
 		CircuitElm.drawThickLine(g, this.point1, this.lead1);
 		this.updateDotCount();
-		this.drawDots(g, this.point1, this.lead1, this.curcount);
+		CircuitElm.drawDots(g, this.point1, this.lead1, this.curcount);
 		this.drawPosts(g);
 	}
 

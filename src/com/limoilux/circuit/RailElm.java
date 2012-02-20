@@ -40,7 +40,7 @@ class RailElm extends VoltageElm
 	public void setPoints()
 	{
 		super.setPoints();
-		this.lead1 = this.interpPoint(this.point1, this.point2, 1 - this.circleSize / this.dn);
+		this.lead1 = CircuitElm.interpPoint(this.point1, this.point2, 1 - this.circleSize / this.dn);
 	}
 
 	@Override
@@ -84,7 +84,7 @@ class RailElm extends VoltageElm
 		this.curcount = this.updateDotCount(-this.current, this.curcount);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
-			this.drawDots(g, this.point1, this.lead1, this.curcount);
+			CircuitElm.drawDots(g, this.point1, this.lead1, this.curcount);
 		}
 	}
 

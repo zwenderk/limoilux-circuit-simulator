@@ -57,8 +57,8 @@ class AnalogSwitchElm extends CircuitElm
 		this.calcLeads(32);
 		this.ps = new Point();
 		int openhs = 16;
-		this.point3 = this.interpPoint(this.point1, this.point2, .5, -openhs);
-		this.lead3 = this.interpPoint(this.point1, this.point2, .5, -openhs / 2);
+		this.point3 = CircuitElm.interpPoint(this.point1, this.point2, .5, -openhs);
+		this.lead3 = CircuitElm.interpPoint(this.point1, this.point2, .5, -openhs / 2);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ class AnalogSwitchElm extends CircuitElm
 		this.draw2Leads(g);
 
 		g.setColor(CircuitElm.lightGrayColor);
-		this.interpPoint(this.lead1, this.lead2, this.ps, 1, hs);
+		CircuitElm.interpPoint(this.lead1, this.lead2, this.ps, 1, hs);
 		CircuitElm.drawThickLine(g, this.lead1, this.ps);
 
 		this.setVoltageColor(g, this.volts[2]);

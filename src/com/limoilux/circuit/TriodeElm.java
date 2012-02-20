@@ -65,32 +65,32 @@ class TriodeElm extends CircuitElm
 	public void setPoints()
 	{
 		super.setPoints();
-		this.plate = this.newPointArray(4);
-		this.grid = this.newPointArray(8);
-		this.cath = this.newPointArray(4);
+		this.plate = CircuitElm.newPointArray(4);
+		this.grid = CircuitElm.newPointArray(8);
+		this.cath = CircuitElm.newPointArray(4);
 		this.grid[0] = this.point1;
 		int nearw = 8;
-		this.interpPoint(this.point1, this.point2, this.plate[1], 1, nearw);
+		CircuitElm.interpPoint(this.point1, this.point2, this.plate[1], 1, nearw);
 		int farw = 32;
-		this.interpPoint(this.point1, this.point2, this.plate[0], 1, farw);
+		CircuitElm.interpPoint(this.point1, this.point2, this.plate[0], 1, farw);
 		int platew = 18;
-		this.interpPoint2(this.point2, this.plate[1], this.plate[2], this.plate[3], 1, platew);
+		CircuitElm.interpPoint2(this.point2, this.plate[1], this.plate[2], this.plate[3], 1, platew);
 
 		this.circler = 24;
-		this.interpPoint(this.point1, this.point2, this.grid[1], (this.dn - this.circler) / this.dn, 0);
+		CircuitElm.interpPoint(this.point1, this.point2, this.grid[1], (this.dn - this.circler) / this.dn, 0);
 		int i;
 		for (i = 0; i != 3; i++)
 		{
-			this.interpPoint(this.grid[1], this.point2, this.grid[2 + i * 2], (i * 3 + 1) / 4.5, 0);
-			this.interpPoint(this.grid[1], this.point2, this.grid[3 + i * 2], (i * 3 + 2) / 4.5, 0);
+			CircuitElm.interpPoint(this.grid[1], this.point2, this.grid[2 + i * 2], (i * 3 + 1) / 4.5, 0);
+			CircuitElm.interpPoint(this.grid[1], this.point2, this.grid[3 + i * 2], (i * 3 + 2) / 4.5, 0);
 		}
 		this.midgrid = this.point2;
 
 		int cathw = 16;
-		this.midcath = this.interpPoint(this.point1, this.point2, 1, -nearw);
-		this.interpPoint2(this.point2, this.plate[1], this.cath[1], this.cath[2], -1, cathw);
-		this.interpPoint(this.point2, this.plate[1], this.cath[3], -1.2, -cathw);
-		this.interpPoint(this.point2, this.plate[1], this.cath[0], -farw / (double) nearw, cathw);
+		this.midcath = CircuitElm.interpPoint(this.point1, this.point2, 1, -nearw);
+		CircuitElm.interpPoint2(this.point2, this.plate[1], this.cath[1], this.cath[2], -1, cathw);
+		CircuitElm.interpPoint(this.point2, this.plate[1], this.cath[3], -1.2, -cathw);
+		CircuitElm.interpPoint(this.point2, this.plate[1], this.cath[0], -farw / (double) nearw, cathw);
 	}
 
 	@Override
@@ -124,11 +124,11 @@ class TriodeElm extends CircuitElm
 		this.curcountg = this.updateDotCount(this.currentg, this.curcountg);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
-			this.drawDots(g, this.plate[0], this.midgrid, this.curcountp);
-			this.drawDots(g, this.midgrid, this.midcath, this.curcountc);
-			this.drawDots(g, this.midcath, this.cath[1], this.curcountc + 8);
-			this.drawDots(g, this.cath[1], this.cath[0], this.curcountc + 8);
-			this.drawDots(g, this.point1, this.midgrid, this.curcountg);
+			CircuitElm.drawDots(g, this.plate[0], this.midgrid, this.curcountp);
+			CircuitElm.drawDots(g, this.midgrid, this.midcath, this.curcountc);
+			CircuitElm.drawDots(g, this.midcath, this.cath[1], this.curcountc + 8);
+			CircuitElm.drawDots(g, this.cath[1], this.cath[0], this.curcountc + 8);
+			CircuitElm.drawDots(g, this.point1, this.midgrid, this.curcountg);
 		}
 		this.drawPosts(g);
 	}

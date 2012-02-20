@@ -103,11 +103,11 @@ class TransistorElm extends CircuitElm
 		CircuitElm.drawThickLine(g, this.point1, this.base);
 		// draw dots
 		this.curcount_b = this.updateDotCount(-this.ib, this.curcount_b);
-		this.drawDots(g, this.base, this.point1, this.curcount_b);
+		CircuitElm.drawDots(g, this.base, this.point1, this.curcount_b);
 		this.curcount_c = this.updateDotCount(-this.ic, this.curcount_c);
-		this.drawDots(g, this.coll[1], this.coll[0], this.curcount_c);
+		CircuitElm.drawDots(g, this.coll[1], this.coll[0], this.curcount_c);
 		this.curcount_e = this.updateDotCount(-this.ie, this.curcount_e);
-		this.drawDots(g, this.emit[1], this.emit[0], this.curcount_e);
+		CircuitElm.drawDots(g, this.emit[1], this.emit[0], this.curcount_e);
 		// draw base rectangle
 		this.setVoltageColor(g, this.volts[0]);
 		this.setPowerColor(g, true);
@@ -120,7 +120,7 @@ class TransistorElm extends CircuitElm
 			int ds = CircuitElm.sign(this.dx);
 			g.drawString("B", this.base.x - 10 * ds, this.base.y - 5);
 			g.drawString("C", this.coll[0].x - 3 + 9 * ds, this.coll[0].y + 4); // x+6
-																				// if
+			// if
 			// ds=1,
 			// -12
 			// if -1
@@ -160,32 +160,32 @@ class TransistorElm extends CircuitElm
 		}
 		int hs2 = hs * this.dsign * this.pnp;
 		// calc collector, emitter posts
-		this.coll = this.newPointArray(2);
-		this.emit = this.newPointArray(2);
-		this.interpPoint2(this.point1, this.point2, this.coll[0], this.emit[0], 1, hs2);
+		this.coll = CircuitElm.newPointArray(2);
+		this.emit = CircuitElm.newPointArray(2);
+		CircuitElm.interpPoint2(this.point1, this.point2, this.coll[0], this.emit[0], 1, hs2);
 		// calc rectangle edges
-		this.rect = this.newPointArray(4);
-		this.interpPoint2(this.point1, this.point2, this.rect[0], this.rect[1], 1 - 16 / this.dn, hs);
-		this.interpPoint2(this.point1, this.point2, this.rect[2], this.rect[3], 1 - 13 / this.dn, hs);
+		this.rect = CircuitElm.newPointArray(4);
+		CircuitElm.interpPoint2(this.point1, this.point2, this.rect[0], this.rect[1], 1 - 16 / this.dn, hs);
+		CircuitElm.interpPoint2(this.point1, this.point2, this.rect[2], this.rect[3], 1 - 13 / this.dn, hs);
 		// calc points where collector/emitter leads contact rectangle
-		this.interpPoint2(this.point1, this.point2, this.coll[1], this.emit[1], 1 - 13 / this.dn, 6 * this.dsign
+		CircuitElm.interpPoint2(this.point1, this.point2, this.coll[1], this.emit[1], 1 - 13 / this.dn, 6 * this.dsign
 				* this.pnp);
 		// calc point where base lead contacts rectangle
 		this.base = new Point();
-		this.interpPoint(this.point1, this.point2, this.base, 1 - 16 / this.dn);
+		CircuitElm.interpPoint(this.point1, this.point2, this.base, 1 - 16 / this.dn);
 
 		// rectangle
-		this.rectPoly = this.createPolygon(this.rect[0], this.rect[2], this.rect[3], this.rect[1]);
+		this.rectPoly = CircuitElm.createPolygon(this.rect[0], this.rect[2], this.rect[3], this.rect[1]);
 
 		// arrow
 		if (this.pnp == 1)
 		{
-			this.arrowPoly = this.calcArrow(this.emit[1], this.emit[0], 8, 4);
+			this.arrowPoly = CircuitElm.calcArrow(this.emit[1], this.emit[0], 8, 4);
 		}
 		else
 		{
-			Point pt = this.interpPoint(this.point1, this.point2, 1 - 11 / this.dn, -5 * this.dsign * this.pnp);
-			this.arrowPoly = this.calcArrow(this.emit[0], pt, 8, 4);
+			Point pt = CircuitElm.interpPoint(this.point1, this.point2, 1 - 11 / this.dn, -5 * this.dsign * this.pnp);
+			this.arrowPoly = CircuitElm.calcArrow(this.emit[0], pt, 8, 4);
 		}
 	}
 
