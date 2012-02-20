@@ -246,8 +246,8 @@ class PotElm extends CircuitElm implements AdjustmentListener
 	{
 		arr[0] = "potentiometer";
 		arr[1] = "Vd = " + CircuitElm.getVoltageDText(this.getVoltageDiff());
-		arr[2] = "R1 = " + CircuitElm.getUnitText(this.resistance1, CircuitElm.cirSim.ohmString);
-		arr[3] = "R2 = " + CircuitElm.getUnitText(this.resistance2, CircuitElm.cirSim.ohmString);
+		arr[2] = "R1 = " + CircuitElm.getUnitText(this.resistance1, CirSim.ohmString);
+		arr[3] = "R2 = " + CircuitElm.getUnitText(this.resistance2, CirSim.ohmString);
 		arr[4] = "I1 = " + CircuitElm.getCurrentDText(this.current1);
 		arr[5] = "I2 = " + CircuitElm.getCurrentDText(this.current2);
 	}

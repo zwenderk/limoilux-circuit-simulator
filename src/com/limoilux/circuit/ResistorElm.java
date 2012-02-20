@@ -128,7 +128,7 @@ class ResistorElm extends CircuitElm
 	{
 		arr[0] = "resistor";
 		this.getBasicInfo(arr);
-		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CircuitElm.cirSim.ohmString);
+		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CirSim.ohmString);
 		arr[4] = "P = " + CircuitElm.getUnitText(this.getPower(), "W");
 	}
 

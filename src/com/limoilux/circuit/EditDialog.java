@@ -71,7 +71,7 @@ public class EditDialog extends Dialog implements AdjustmentListener, ActionList
 				ei.textf.addActionListener(this);
 				if (ei.text == null)
 				{
-					this.add(ei.bar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 10, 0, this.barmax + 2));
+					this.add(ei.bar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 10, 0, EditDialog.barmax + 2));
 					this.setBar(ei);
 					ei.bar.addAdjustmentListener(this);
 				}
@@ -241,7 +241,7 @@ public class EditDialog extends Dialog implements AdjustmentListener, ActionList
 			this.apply();
 			this.cframe.mainContainer.requestFocus();
 			this.setVisible(false);
-			this.cframe.editDialog = null;
+			CirSim.editDialog = null;
 		}
 		if (e.getSource() == this.applyButton)
 		{
@@ -304,8 +304,8 @@ public class EditDialog extends Dialog implements AdjustmentListener, ActionList
 		if (changed)
 		{
 			this.setVisible(false);
-			this.cframe.editDialog = new EditDialog(this.elm, this.cframe);
-			this.cframe.editDialog.show();
+			CirSim.editDialog = new EditDialog(this.elm, this.cframe);
+			CirSim.editDialog.show();
 		}
 	}
 
@@ -316,7 +316,7 @@ public class EditDialog extends Dialog implements AdjustmentListener, ActionList
 		{
 			this.cframe.mainContainer.requestFocus();
 			this.setVisible(false);
-			this.cframe.editDialog = null;
+			CirSim.editDialog = null;
 			return true;
 		}
 		return super.handleEvent(ev);
@@ -324,7 +324,7 @@ public class EditDialog extends Dialog implements AdjustmentListener, ActionList
 
 	public void setBar(EditInfo ei)
 	{
-		int x = (int) (this.barmax * (ei.value - ei.minval) / (ei.maxval - ei.minval));
+		int x = (int) (EditDialog.barmax * (ei.value - ei.minval) / (ei.maxval - ei.minval));
 		ei.bar.setValue(x);
 	}
 }

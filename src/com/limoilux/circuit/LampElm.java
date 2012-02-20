@@ -192,7 +192,7 @@ class LampElm extends CircuitElm
 	{
 		arr[0] = "lamp";
 		this.getBasicInfo(arr);
-		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CircuitElm.cirSim.ohmString);
+		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CirSim.ohmString);
 		arr[4] = "P = " + CircuitElm.getUnitText(this.getPower(), "W");
 		arr[5] = "T = " + (int) this.temp + " K";
 	}

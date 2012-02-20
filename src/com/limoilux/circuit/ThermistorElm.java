@@ -127,9 +127,9 @@ class ThermistorElm extends CircuitElm
 		// FIXME
 		arr[0] = "spark gap";
 		this.getBasicInfo(arr);
-		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CircuitElm.cirSim.ohmString);
-		arr[4] = "Ron = " + CircuitElm.getUnitText(this.minresistance, CircuitElm.cirSim.ohmString);
-		arr[5] = "Roff = " + CircuitElm.getUnitText(this.maxresistance, CircuitElm.cirSim.ohmString);
+		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CirSim.ohmString);
+		arr[4] = "Ron = " + CircuitElm.getUnitText(this.minresistance, CirSim.ohmString);
+		arr[5] = "Roff = " + CircuitElm.getUnitText(this.maxresistance, CirSim.ohmString);
 	}
 
 	@Override

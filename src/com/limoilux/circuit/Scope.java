@@ -299,7 +299,7 @@ public class Scope
 			this.dpixels[i] *= .997;
 		}
 		g.drawImage(this.image, this.rect.x, this.rect.y, null);
-		g.setColor(this.elm.whiteColor);
+		g.setColor(CircuitElm.whiteColor);
 		g.fillOval(this.rect.x + this.draw_ox - 2, this.rect.y + this.draw_oy - 2, 5, 5);
 		int yt = this.rect.y + 10;
 		int x = this.rect.x;
@@ -625,22 +625,22 @@ public class Scope
 			}
 		}
 		g.drawImage(this.image, this.rect.x, this.rect.y, null);
-		g.setColor(this.elm.whiteColor);
+		g.setColor(CircuitElm.whiteColor);
 		int yt = this.rect.y + 10;
 		x += this.rect.x;
 		if (this.showMax)
 		{
 			if (this.value != 0)
 			{
-				g.drawString(this.elm.getUnitText(realMaxV, this.elm.getScopeUnits(this.value)), x, yt);
+				g.drawString(CircuitElm.getUnitText(realMaxV, this.elm.getScopeUnits(this.value)), x, yt);
 			}
 			else if (this.showV)
 			{
-				g.drawString(this.elm.getVoltageText(realMaxV), x, yt);
+				g.drawString(CircuitElm.getVoltageText(realMaxV), x, yt);
 			}
 			else if (this.showI)
 			{
-				g.drawString(this.elm.getCurrentText(realMaxI), x, yt);
+				g.drawString(CircuitElm.getCurrentText(realMaxI), x, yt);
 			}
 			yt += 15;
 		}
@@ -649,15 +649,15 @@ public class Scope
 			int ym = this.rect.y + this.rect.height - 5;
 			if (this.value != 0)
 			{
-				g.drawString(this.elm.getUnitText(realMinV, this.elm.getScopeUnits(this.value)), x, ym);
+				g.drawString(CircuitElm.getUnitText(realMinV, this.elm.getScopeUnits(this.value)), x, ym);
 			}
 			else if (this.showV)
 			{
-				g.drawString(this.elm.getVoltageText(realMinV), x, ym);
+				g.drawString(CircuitElm.getVoltageText(realMinV), x, ym);
 			}
 			else if (this.showI)
 			{
-				g.drawString(this.elm.getCurrentText(realMinI), x, ym);
+				g.drawString(CircuitElm.getCurrentText(realMinI), x, ym);
 			}
 		}
 		if (this.text != null && this.rect.y + this.rect.height > yt + 5)
@@ -667,7 +667,7 @@ public class Scope
 		}
 		if (this.showFreq && freq != 0 && this.rect.y + this.rect.height > yt + 5)
 		{
-			g.drawString(this.elm.getUnitText(freq, "Hz"), x, yt);
+			g.drawString(CircuitElm.getUnitText(freq, "Hz"), x, yt);
 		}
 		if (this.ptr > 5 && !this.lockScale)
 		{

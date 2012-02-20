@@ -147,7 +147,7 @@ class MemristorElm extends CircuitElm
 	{
 		arr[0] = "memristor";
 		this.getBasicInfo(arr);
-		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CircuitElm.cirSim.ohmString);
+		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CirSim.ohmString);
 		arr[4] = "P = " + CircuitElm.getUnitText(this.getPower(), "W");
 	}
 
@@ -160,7 +160,7 @@ class MemristorElm extends CircuitElm
 	@Override
 	String getScopeUnits(int x)
 	{
-		return x == 2 ? CircuitElm.cirSim.ohmString : x == 1 ? "W" : "V";
+		return x == 2 ? CirSim.ohmString : x == 1 ? "W" : "V";
 	}
 
 	@Override
