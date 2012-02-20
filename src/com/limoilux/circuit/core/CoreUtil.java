@@ -15,7 +15,7 @@ public class CoreUtil
 
 	public static int getRandomInt(int max)
 	{
-		return CoreUtil.RANDOM_GENERATOR.nextInt(0) % Math.abs(max);
+		return CoreUtil.RANDOM_GENERATOR.nextInt(0 + 1) % Math.abs(max);
 	}
 
 	/**
@@ -191,5 +191,65 @@ public class CoreUtil
 	public static int sign(int x)
 	{
 		return x < 0 ? -1 : x == 0 ? 0 : 1;
+	}
+	
+	public static void interpPoint(Point a, Point b, Point c, double f)
+	{
+		int xpd = b.x - a.x;
+		int ypd = b.y - a.y;
+		/*
+		 * double q = (a.x*(1-f)+b.x*f+.48); System.out.println(q + " " + (int)
+		 * q);
+		 */
+		c.x = (int) Math.floor(a.x * (1 - f) + b.x * f + .48);
+		c.y = (int) Math.floor(a.y * (1 - f) + b.y * f + .48);
+	}
+	
+	public static Point interpPoint(Point a, Point b, double f)
+	{
+		Point p = new Point();
+		CoreUtil.interpPoint(a, b, p, f);
+		return p;
+	}
+	
+	public static void interpPoint(Point a, Point b, Point c, double f, double g)
+	{
+		int xpd = b.x - a.x;
+		int ypd = b.y - a.y;
+		int gx = b.y - a.y;
+		int gy = a.x - b.x;
+		g /= Math.sqrt(gx * gx + gy * gy);
+		c.x = (int) Math.floor(a.x * (1 - f) + b.x * f + g * gx + .48);
+		c.y = (int) Math.floor(a.y * (1 - f) + b.y * f + g * gy + .48);
+	}
+
+	public static Point interpPoint(Point a, Point b, double f, double g)
+	{
+		Point p = new Point();
+		CoreUtil.interpPoint(a, b, p, f, g);
+		return p;
+	}
+
+	public static void interpPoint2(Point a, Point b, Point c, Point d, double f, double g)
+	{
+		int xpd = b.x - a.x;
+		int ypd = b.y - a.y;
+		int gx = b.y - a.y;
+		int gy = a.x - b.x;
+		g /= Math.sqrt(gx * gx + gy * gy);
+		c.x = (int) Math.floor(a.x * (1 - f) + b.x * f + g * gx + .48);
+		c.y = (int) Math.floor(a.y * (1 - f) + b.y * f + g * gy + .48);
+		d.x = (int) Math.floor(a.x * (1 - f) + b.x * f - g * gx + .48);
+		d.y = (int) Math.floor(a.y * (1 - f) + b.y * f - g * gy + .48);
+	}
+	
+	public static Point[] newPointArray(int n)
+	{
+		Point a[] = new Point[n];
+		while (n > 0)
+		{
+			a[--n] = new Point();
+		}
+		return a;
 	}
 }

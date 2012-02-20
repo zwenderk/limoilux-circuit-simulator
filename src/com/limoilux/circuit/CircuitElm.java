@@ -193,104 +193,61 @@ public abstract class CircuitElm implements Editable
 			this.lead2 = this.point2;
 			return;
 		}
-		this.lead1 = this.interpPoint(this.point1, this.point2, (this.dn - len) / (2 * this.dn));
-		this.lead2 = this.interpPoint(this.point1, this.point2, (this.dn + len) / (2 * this.dn));
+		this.lead1 = CoreUtil.interpPoint(this.point1, this.point2, (this.dn - len) / (2 * this.dn));
+		this.lead2 = CoreUtil.interpPoint(this.point1, this.point2, (this.dn + len) / (2 * this.dn));
 	}
 
-	Point interpPoint(Point a, Point b, double f)
+	@Deprecated
+	public static Point interpPoint(Point a, Point b, double f)
 	{
-		Point p = new Point();
-		this.interpPoint(a, b, p, f);
-		return p;
+		return CoreUtil.interpPoint(a, b, f);
 	}
 
-	void interpPoint(Point a, Point b, Point c, double f)
+	@Deprecated
+	public static void interpPoint(Point a, Point b, Point c, double f)
 	{
-		int xpd = b.x - a.x;
-		int ypd = b.y - a.y;
-		/*
-		 * double q = (a.x*(1-f)+b.x*f+.48); System.out.println(q + " " + (int)
-		 * q);
-		 */
-		c.x = (int) Math.floor(a.x * (1 - f) + b.x * f + .48);
-		c.y = (int) Math.floor(a.y * (1 - f) + b.y * f + .48);
+		CoreUtil.interpPoint(a, b, c, f);
 	}
 
-	void interpPoint(Point a, Point b, Point c, double f, double g)
+	@Deprecated
+	public static void interpPoint(Point a, Point b, Point c, double f, double g)
 	{
-		int xpd = b.x - a.x;
-		int ypd = b.y - a.y;
-		int gx = b.y - a.y;
-		int gy = a.x - b.x;
-		g /= Math.sqrt(gx * gx + gy * gy);
-		c.x = (int) Math.floor(a.x * (1 - f) + b.x * f + g * gx + .48);
-		c.y = (int) Math.floor(a.y * (1 - f) + b.y * f + g * gy + .48);
+		CoreUtil.interpPoint(a, b, c,f,g);
 	}
 
-	Point interpPoint(Point a, Point b, double f, double g)
+	@Deprecated
+	public static Point interpPoint(Point a, Point b, double f, double g)
 	{
-		Point p = new Point();
-		this.interpPoint(a, b, p, f, g);
-		return p;
+		return CoreUtil.interpPoint(a, b, f, g);
 	}
 
-	void interpPoint2(Point a, Point b, Point c, Point d, double f, double g)
+	@Deprecated
+	public static void interpPoint2(Point a, Point b, Point c, Point d, double f, double g)
 	{
-		int xpd = b.x - a.x;
-		int ypd = b.y - a.y;
-		int gx = b.y - a.y;
-		int gy = a.x - b.x;
-		g /= Math.sqrt(gx * gx + gy * gy);
-		c.x = (int) Math.floor(a.x * (1 - f) + b.x * f + g * gx + .48);
-		c.y = (int) Math.floor(a.y * (1 - f) + b.y * f + g * gy + .48);
-		d.x = (int) Math.floor(a.x * (1 - f) + b.x * f - g * gx + .48);
-		d.y = (int) Math.floor(a.y * (1 - f) + b.y * f - g * gy + .48);
+		CoreUtil.interpPoint2(a, b, c, d, f, g);
 	}
 
 	void draw2Leads(Graphics g)
 	{
 		// draw first lead
 		this.setVoltageColor(g, this.volts[0]);
-		CircuitElm.drawThickLine(g, this.point1, this.lead1);
+		DrawUtil.drawThickLine(g, this.point1, this.lead1);
 
 		// draw second lead
 		this.setVoltageColor(g, this.volts[1]);
-		CircuitElm.drawThickLine(g, this.lead2, this.point2);
+		DrawUtil.drawThickLine(g, this.lead2, this.point2);
 	}
 
-	Point[] newPointArray(int n)
+	@Deprecated
+	public static Point[] newPointArray(int n)
 	{
-		Point a[] = new Point[n];
-		while (n > 0)
-		{
-			a[--n] = new Point();
-		}
-		return a;
+		return CoreUtil.newPointArray(n);
 	}
 
-	void drawDots(Graphics g, Point pa, Point pb, double pos)
+	@Deprecated
+	public static void drawDots(Graphics g, Point pa, Point pb, double pos)
 	{
-		if (CircuitElm.cirSim.stoppedCheck.getState() || pos == 0 || !CircuitElm.cirSim.dotsCheckItem.getState())
-		{
-			return;
-		}
-		int dx = pb.x - pa.x;
-		int dy = pb.y - pa.y;
-		double dn = Math.sqrt(dx * dx + dy * dy);
-		g.setColor(Color.yellow);
-		int ds = 16;
-		pos %= ds;
-		if (pos < 0)
-		{
-			pos += ds;
-		}
-		double di = 0;
-		for (di = pos; di < dn; di += ds)
-		{
-			int x0 = (int) (pa.x + di * dx / dn);
-			int y0 = (int) (pa.y + di * dy / dn);
-			g.fillRect(x0 - 1, y0 - 1, 4, 4);
-		}
+		DrawUtil.drawDots(g, pa, pb, pos);
 	}
 
 	Polygon calcArrow(Point a, Point b, double al, double aw)
