@@ -259,7 +259,7 @@ public abstract class CircuitElm implements Editable
 		int ady = b.y - a.y;
 		double l = Math.sqrt(adx * adx + ady * ady);
 		poly.addPoint(b.x, b.y);
-		this.interpPoint2(a, b, p1, p2, 1 - al / l, aw);
+		CoreUtil.interpPoint2(a, b, p1, p2, 1 - al / l, aw);
 		poly.addPoint(p1.x, p1.y);
 		poly.addPoint(p2.x, p2.y);
 		return poly;
@@ -560,7 +560,7 @@ public abstract class CircuitElm implements Editable
 
 	void drawCoil(Graphics g, int hs, Point p1, Point p2, double v1, double v2)
 	{
-		double len = CircuitElm.distance(p1, p2);
+		double len = CoreUtil.distance(p1, p2);
 		int segments = 30; // 10*(int) (len/10);
 		int i;
 		double segf = 1. / segments;
@@ -574,10 +574,10 @@ public abstract class CircuitElm implements Editable
 			{
 				hsx = -hsx;
 			}
-			this.interpPoint(p1, p2, CircuitElm.ps2, i * segf, hsx * hs);
+			CoreUtil.interpPoint(p1, p2, CircuitElm.ps2, i * segf, hsx * hs);
 			double v = v1 + (v2 - v1) * i / segments;
 			this.setVoltageColor(g, v);
-			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
+			DrawUtil.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 			CircuitElm.ps1.setLocation(CircuitElm.ps2);
 		}
 	}
@@ -737,7 +737,7 @@ public abstract class CircuitElm implements Editable
 		this.updateDotCount();
 		if (CircuitElm.cirSim.dragElm != this)
 		{
-			this.drawDots(g, this.point1, this.point2, this.curcount);
+			DrawUtil.drawDots(g, this.point1, this.point2, this.curcount);
 		}
 	}
 
