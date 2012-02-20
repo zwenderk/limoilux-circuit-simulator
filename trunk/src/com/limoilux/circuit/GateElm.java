@@ -30,7 +30,7 @@ public abstract class GateElm extends CircuitElm
 		this.inputCount = new Integer(st.nextToken()).intValue();
 		this.lastOutput = new Double(st.nextToken()).doubleValue() > 2.5;
 		this.noDiagonal = true;
-		this.setSize((f & this.FLAG_SMALL) != 0 ? 1 : 2);
+		this.setSize((f & GateElm.FLAG_SMALL) != 0 ? 1 : 2);
 	}
 
 	public boolean isInverting()
@@ -44,7 +44,7 @@ public abstract class GateElm extends CircuitElm
 		this.gwidth = 7 * s;
 		this.gwidth2 = 14 * s;
 		this.gheight = 8 * s;
-		this.flags = s == 1 ? this.FLAG_SMALL : 0;
+		this.flags = s == 1 ? GateElm.FLAG_SMALL : 0;
 	}
 
 	Point inPosts[], inGates[];

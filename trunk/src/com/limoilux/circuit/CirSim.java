@@ -809,8 +809,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			for (i = 0; i != this.elmList.size(); i++)
 			{
 				CircuitElm ce = this.getElm(i);
-				ce.drawPost(g, ce.x, ce.y);
-				ce.drawPost(g, ce.x2, ce.y2);
+				CircuitElm.drawPost(g, ce.x, ce.y);
+				CircuitElm.drawPost(g, ce.x2, ce.y2);
 			}
 		}
 

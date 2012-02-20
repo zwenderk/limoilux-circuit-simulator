@@ -48,7 +48,7 @@ public abstract class ChipElm extends CircuitElm
 		}
 		this.noDiagonal = true;
 		this.setupPins();
-		this.setSize((f & this.FLAG_SMALL) != 0 ? 1 : 2);
+		this.setSize((f & ChipElm.FLAG_SMALL) != 0 ? 1 : 2);
 		int i;
 		for (i = 0; i != this.getPostCount(); i++)
 		{
@@ -70,8 +70,8 @@ public abstract class ChipElm extends CircuitElm
 		this.csize = s;
 		this.cspc = 8 * s;
 		this.cspc2 = this.cspc * 2;
-		this.flags &= ~this.FLAG_SMALL;
-		this.flags |= s == 1 ? this.FLAG_SMALL : 0;
+		this.flags &= ~ChipElm.FLAG_SMALL;
+		this.flags |= s == 1 ? ChipElm.FLAG_SMALL : 0;
 	}
 
 	public abstract void setupPins();
@@ -351,13 +351,13 @@ public abstract class ChipElm extends CircuitElm
 		if (n == 0)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Flip X", (this.flags & this.FLAG_FLIP_X) != 0);
+			ei.checkbox = new Checkbox("Flip X", (this.flags & ChipElm.FLAG_FLIP_X) != 0);
 			return ei;
 		}
 		if (n == 1)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Flip Y", (this.flags & this.FLAG_FLIP_Y) != 0);
+			ei.checkbox = new Checkbox("Flip Y", (this.flags & ChipElm.FLAG_FLIP_Y) != 0);
 			return ei;
 		}
 		return null;
@@ -370,11 +370,11 @@ public abstract class ChipElm extends CircuitElm
 		{
 			if (ei.checkbox.getState())
 			{
-				this.flags |= this.FLAG_FLIP_X;
+				this.flags |= ChipElm.FLAG_FLIP_X;
 			}
 			else
 			{
-				this.flags &= ~this.FLAG_FLIP_X;
+				this.flags &= ~ChipElm.FLAG_FLIP_X;
 			}
 			this.setPoints();
 		}
@@ -382,11 +382,11 @@ public abstract class ChipElm extends CircuitElm
 		{
 			if (ei.checkbox.getState())
 			{
-				this.flags |= this.FLAG_FLIP_Y;
+				this.flags |= ChipElm.FLAG_FLIP_Y;
 			}
 			else
 			{
-				this.flags &= ~this.FLAG_FLIP_Y;
+				this.flags &= ~ChipElm.FLAG_FLIP_Y;
 			}
 			this.setPoints();
 		}
@@ -422,7 +422,7 @@ public abstract class ChipElm extends CircuitElm
 				px += ChipElm.this.cspc2 * (ChipElm.this.sizeX - 1);
 				sx = -sx;
 			}
-			if ((ChipElm.this.flags & ChipElm.this.FLAG_FLIP_Y) != 0)
+			if ((ChipElm.this.flags & ChipElm.FLAG_FLIP_Y) != 0)
 			{
 				dy = -dy;
 				day = -day;

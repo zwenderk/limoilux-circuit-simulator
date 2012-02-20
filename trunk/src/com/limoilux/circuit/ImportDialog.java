@@ -71,7 +71,7 @@ class ImportDialog extends Dialog implements ActionListener
 		{
 			this.cframe.mainContainer.requestFocus();
 			this.setVisible(false);
-			this.cframe.impDialog = null;
+			CirSim.impDialog = null;
 			return true;
 		}
 		return super.handleEvent(ev);
