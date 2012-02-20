@@ -12,10 +12,12 @@ import com.limoilux.circuit.ui.DrawUtil;
 
 public class CapacitorElm extends CircuitElm
 {
-	double capacitance;
-	double compResistance, voltdiff;
-	Point plate1[], plate2[];
+	public double capacitance;
+	public double compResistance, voltdiff;
+	public Point plate1[], plate2[];
 	public static final int FLAG_BACK_EULER = 2;
+	public double curSourceValue;
+
 
 	public CapacitorElm(int xx, int yy)
 	{
@@ -163,7 +165,6 @@ public class CapacitorElm extends CircuitElm
 		}
 	}
 
-	public double curSourceValue;
 
 	@Override
 	public void doStep()
