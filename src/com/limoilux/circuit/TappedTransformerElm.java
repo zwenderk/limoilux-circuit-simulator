@@ -7,11 +7,11 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class TappedTransformerElm extends CircuitElm
+public class TappedTransformerElm extends CircuitElm
 {
-	double inductance, ratio;
-	Point ptEnds[], ptCoil[], ptCore[];
-	double current[], curcount[];
+	private double inductance, ratio;
+	private Point ptEnds[], ptCoil[], ptCore[];
+	private double current[], curcount[];
 
 	public TappedTransformerElm(int xx, int yy)
 	{

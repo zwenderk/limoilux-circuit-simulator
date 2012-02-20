@@ -52,6 +52,7 @@ import java.util.Vector;
 
 import com.limoilux.circuit.core.CircuitElm;
 import com.limoilux.circuit.core.CoreUtil;
+import com.limoilux.circuit.core.Editable;
 
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
 {

@@ -12,13 +12,15 @@ import java.awt.Scrollbar;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.core.CoreUtil;
 
-class ThermistorElm extends CircuitElm
+public class ThermistorElm extends CircuitElm
 {
-	double minresistance, maxresistance;
-	double resistance;
-	Scrollbar slider;
-	Label label;
+	public double minresistance, maxresistance;
+	public double resistance;
+	public Scrollbar slider;
+	public Label label;
+	public Point ps3, ps4;
 
 	public ThermistorElm(int xx, int yy)
 	{
@@ -54,9 +56,9 @@ class ThermistorElm extends CircuitElm
 		return super.dump() + " " + this.minresistance + " " + this.maxresistance;
 	}
 
-	Point ps3, ps4;
 
-	void createSlider()
+
+	public void createSlider()
 	{
 		CircuitElm.cirSim.mainContainer.add(this.label = new Label("Temperature", Label.CENTER));
 		int value = 50;
@@ -129,9 +131,9 @@ class ThermistorElm extends CircuitElm
 		// FIXME
 		arr[0] = "spark gap";
 		this.getBasicInfo(arr);
-		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CirSim.ohmString);
-		arr[4] = "Ron = " + CircuitElm.getUnitText(this.minresistance, CirSim.ohmString);
-		arr[5] = "Roff = " + CircuitElm.getUnitText(this.maxresistance, CirSim.ohmString);
+		arr[3] = "R = " + CoreUtil.getUnitText(this.resistance, CirSim.ohmString);
+		arr[4] = "Ron = " + CoreUtil.getUnitText(this.minresistance, CirSim.ohmString);
+		arr[5] = "Roff = " + CoreUtil.getUnitText(this.maxresistance, CirSim.ohmString);
 	}
 
 	@Override
