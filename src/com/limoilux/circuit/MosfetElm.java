@@ -40,12 +40,12 @@ class MosfetElm extends CircuitElm
 		}
 	}
 
-	double getDefaultThreshold()
+	public double getDefaultThreshold()
 	{
 		return 1.5;
 	}
 
-	double getBeta()
+	public double getBeta()
 	{
 		return .02;
 	}
