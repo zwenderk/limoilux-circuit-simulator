@@ -223,7 +223,7 @@ class RelayElm extends CircuitElm
 	}
 
 	@Override
-	void reset()
+	public void reset()
 	{
 		super.reset();
 		this.ind.reset();
@@ -238,7 +238,7 @@ class RelayElm extends CircuitElm
 	double a1, a2, a3, a4;
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		// inductor from coil post 1 to internal node
 		this.ind.stamp(this.nodes[this.nCoil1], this.nodes[this.nCoil3]);
@@ -310,7 +310,7 @@ class RelayElm extends CircuitElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		double voltdiff = this.volts[this.nCoil1] - this.volts[this.nCoil3];
 		this.coilCurrent = this.ind.calculateCurrent(voltdiff);

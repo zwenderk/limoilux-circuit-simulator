@@ -61,7 +61,7 @@ class CC2Elm extends ChipElm
 
 	// boolean nonLinear() { return true; }
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		// X voltage = Y voltage
 		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[0], this.pins[0].voltSource);

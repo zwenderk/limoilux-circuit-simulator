@@ -40,7 +40,7 @@ class PhaseCompElm extends ChipElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		int vn = CircuitElm.cirSim.nodeList.size() + this.pins[2].voltSource;
 		CircuitElm.cirSim.stampNonLinear(vn);

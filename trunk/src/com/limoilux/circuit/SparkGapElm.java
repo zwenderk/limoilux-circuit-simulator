@@ -85,14 +85,14 @@ class SparkGapElm extends CircuitElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		double vd = this.volts[0] - this.volts[1];
 		this.current = vd / this.resistance;
 	}
 
 	@Override
-	void reset()
+	public void reset()
 	{
 		super.reset();
 		this.state = false;
@@ -120,7 +120,7 @@ class SparkGapElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
 		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);

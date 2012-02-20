@@ -27,20 +27,20 @@ class CapacitorElm extends CircuitElm
 		this.voltdiff = new Double(st.nextToken()).doubleValue();
 	}
 
-	boolean isTrapezoidal()
+	public boolean isTrapezoidal()
 	{
 		return (this.flags & CapacitorElm.FLAG_BACK_EULER) == 0;
 	}
 
 	@Override
-	void setNodeVoltage(int n, double c)
+	public void setNodeVoltage(int n, double c)
 	{
 		super.setNodeVoltage(n, c);
 		this.voltdiff = this.volts[0] - this.volts[1];
 	}
 
 	@Override
-	void reset()
+	public void reset()
 	{
 		this.current = this.curcount = 0;
 		// put small charge on caps when reset to start oscillators
@@ -111,7 +111,7 @@ class CapacitorElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		// capacitor companion model using trapezoidal approximation
 		// (Norton equivalent) consists of a current source in
@@ -148,7 +148,7 @@ class CapacitorElm extends CircuitElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		double voltdiff = this.volts[0] - this.volts[1];
 		// we check compResistance because this might get called

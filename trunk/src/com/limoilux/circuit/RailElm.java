@@ -95,7 +95,7 @@ class RailElm extends VoltageElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		if (this.waveform == VoltageElm.WF_DC)
 		{

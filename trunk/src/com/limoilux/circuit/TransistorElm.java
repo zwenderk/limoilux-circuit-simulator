@@ -58,7 +58,7 @@ class TransistorElm extends CircuitElm
 	}
 
 	@Override
-	void reset()
+	public void reset()
 	{
 		this.volts[0] = this.volts[1] = this.volts[2] = 0;
 		this.lastvbc = this.lastvbe = this.curcount_c = this.curcount_e = this.curcount_b = 0;
@@ -226,7 +226,7 @@ class TransistorElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
 		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);

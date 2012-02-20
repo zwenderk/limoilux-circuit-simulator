@@ -79,7 +79,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		if (this.open)
 		{
@@ -92,7 +92,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
 		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);

@@ -82,7 +82,7 @@ class CurrentElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		this.current = this.currentValue;
 		CircuitElm.cirSim.stampCurrentSource(this.nodes[0], this.nodes[1], this.current);

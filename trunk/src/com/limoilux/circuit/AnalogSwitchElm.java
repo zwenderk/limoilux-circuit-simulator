@@ -85,7 +85,7 @@ class AnalogSwitchElm extends CircuitElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		this.current = (this.volts[0] - this.volts[1]) / this.resistance;
 	}
@@ -98,7 +98,7 @@ class AnalogSwitchElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
 		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);

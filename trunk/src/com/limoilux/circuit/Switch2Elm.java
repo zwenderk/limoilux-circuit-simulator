@@ -104,7 +104,7 @@ class Switch2Elm extends SwitchElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		if (this.position == 2)
 		{
@@ -113,7 +113,7 @@ class Switch2Elm extends SwitchElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		if (this.position == 2)
 		{

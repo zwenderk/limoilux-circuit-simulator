@@ -76,7 +76,7 @@ class VoltageElm extends CircuitElm
 	 */
 
 	@Override
-	void reset()
+	public void reset()
 	{
 		this.freqTimeZero = 0;
 		this.curcount = 0;
@@ -92,7 +92,7 @@ class VoltageElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		if (this.waveform == VoltageElm.WF_DC)
 		{

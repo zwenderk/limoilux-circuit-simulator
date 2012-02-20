@@ -79,7 +79,7 @@ class TunnelDiodeElm extends CircuitElm
 	}
 
 	@Override
-	void reset()
+	public void reset()
 	{
 		this.lastvoltdiff = this.volts[0] = this.volts[1] = this.curcount = 0;
 	}
@@ -103,7 +103,7 @@ class TunnelDiodeElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
 		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);
@@ -146,7 +146,7 @@ class TunnelDiodeElm extends CircuitElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		double voltdiff = this.volts[0] - this.volts[1];
 		this.current = TunnelDiodeElm.pip * Math.exp(-TunnelDiodeElm.pvpp / TunnelDiodeElm.pvt)

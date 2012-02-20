@@ -49,7 +49,7 @@ class LampElm extends CircuitElm
 	int bulbR;
 
 	@Override
-	void reset()
+	public void reset()
 	{
 		super.reset();
 		this.temp = this.roomTemp;
@@ -144,14 +144,14 @@ class LampElm extends CircuitElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		this.current = (this.volts[0] - this.volts[1]) / this.resistance;
 		// System.out.print(this + " res current set to " + current + "\n");
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
 		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);

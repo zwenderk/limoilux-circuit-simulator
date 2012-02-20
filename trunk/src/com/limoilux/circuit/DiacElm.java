@@ -79,7 +79,7 @@ class DiacElm extends CircuitElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		double vd = this.volts[0] - this.volts[1];
 		if (this.state)
@@ -121,7 +121,7 @@ class DiacElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
 		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);

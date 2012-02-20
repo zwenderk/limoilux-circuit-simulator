@@ -224,7 +224,7 @@ class PotElm extends CircuitElm implements AdjustmentListener
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		this.current1 = (this.volts[0] - this.volts[2]) / this.resistance1;
 		this.current2 = (this.volts[1] - this.volts[2]) / this.resistance2;
@@ -232,7 +232,7 @@ class PotElm extends CircuitElm implements AdjustmentListener
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		this.resistance1 = this.maxResistance * this.position;
 		this.resistance2 = this.maxResistance * (1 - this.position);
