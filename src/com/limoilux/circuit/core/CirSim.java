@@ -66,6 +66,7 @@ import com.limoilux.circuit.ui.CircuitCanvas;
 import com.limoilux.circuit.ui.CircuitLayout;
 import com.limoilux.circuit.ui.CircuitNode;
 import com.limoilux.circuit.ui.CircuitNodeLink;
+import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.ImportDialog;
 import com.limoilux.circuit.ui.RowInfo;
 import com.limoilux.circuit.ui.Scope;
@@ -671,8 +672,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			// so we special-case it here
 			if (!ce.isCenteredText())
 			{
-				minx = CirSim.min(ce.x, CirSim.min(ce.x2, minx));
-				maxx = CirSim.max(ce.x, CirSim.max(ce.x2, maxx));
+				minx = CirSim.min(ce.x, Math.min(ce.x2, minx));
+				maxx = CirSim.max(ce.x, Math.max(ce.x2, maxx));
 			}
 			miny = CirSim.min(ce.y, CirSim.min(ce.y2, miny));
 			maxy = CirSim.max(ce.y, CirSim.max(ce.y2, maxy));
@@ -738,10 +739,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			this.analyzeCircuit();
 			this.analyzeFlag = false;
 		}
+		
 		if (CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElm)
 		{
 			this.mouseElm = (CircuitElm) CirSim.editDialog.elm;
 		}
+		
 		realMouseElm = this.mouseElm;
 		if (this.mouseElm == null)
 		{
@@ -827,8 +830,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			for (i = 0; i != this.elmList.size(); i++)
 			{
 				CircuitElm ce = this.getElm(i);
-				CircuitElm.drawPost(g, ce.x, ce.y);
-				CircuitElm.drawPost(g, ce.x2, ce.y2);
+				DrawUtil.drawPost(g, ce.x, ce.y);
+				DrawUtil.drawPost(g, ce.x2, ce.y2);
 			}
 		}
 
@@ -895,7 +898,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				}
 				else
 				{
-					info[0] = "V = " + CircuitElm.getUnitText(this.mouseElm.getPostVoltage(this.mousePost), "V");
+					info[0] = "V = " + CoreUtil.getUnitText(this.mouseElm.getPostVoltage(this.mousePost), "V");
 					/*
 					 * //shownodes for (i = 0; i != mouseElm.getPostCount();
 					 * i++) info[0] += " " + mouseElm.nodes[i]; if
@@ -908,7 +911,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			else
 			{
 				CircuitElm.showFormat.setMinimumFractionDigits(2);
-				info[0] = "t = " + CircuitElm.getUnitText(this.t, "s");
+				info[0] = "t = " + CoreUtil.getUnitText(this.t, "s");
 				CircuitElm.showFormat.setMinimumFractionDigits(0);
 			}
 			if (this.hintType != -1)
@@ -1111,7 +1114,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			InductorElm ie = (InductorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
 			return "res.f = "
-					+ CircuitElm.getUnitText(1 / (2 * CirSim.PI * Math.sqrt(ie.inductance * ce.capacitance)), "Hz");
+					+ CoreUtil.getUnitText(1 / (2 * CirSim.PI * Math.sqrt(ie.inductance * ce.capacitance)), "Hz");
 		}
 		if (this.hintType == CirSim.HINT_RC)
 		{
@@ -1125,7 +1128,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 			ResistorElm re = (ResistorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
-			return "RC = " + CircuitElm.getUnitText(re.resistance * ce.capacitance, "s");
+			return "RC = " + CoreUtil.getUnitText(re.resistance * ce.capacitance, "s");
 		}
 		if (this.hintType == CirSim.HINT_3DB_C)
 		{
@@ -1139,7 +1142,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 			ResistorElm re = (ResistorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
-			return "f.3db = " + CircuitElm.getUnitText(1 / (2 * CirSim.PI * re.resistance * ce.capacitance), "Hz");
+			return "f.3db = " + CoreUtil.getUnitText(1 / (2 * CirSim.PI * re.resistance * ce.capacitance), "Hz");
 		}
 		if (this.hintType == CirSim.HINT_3DB_L)
 		{
@@ -1153,7 +1156,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 			ResistorElm re = (ResistorElm) c1;
 			InductorElm ie = (InductorElm) c2;
-			return "f.3db = " + CircuitElm.getUnitText(re.resistance / (2 * CirSim.PI * ie.inductance), "Hz");
+			return "f.3db = " + CoreUtil.getUnitText(re.resistance / (2 * CirSim.PI * ie.inductance), "Hz");
 		}
 		if (this.hintType == CirSim.HINT_TWINT)
 		{
@@ -1167,7 +1170,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 			ResistorElm re = (ResistorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
-			return "fc = " + CircuitElm.getUnitText(1 / (2 * CirSim.PI * re.resistance * ce.capacitance), "Hz");
+			return "fc = " + CoreUtil.getUnitText(1 / (2 * CirSim.PI * re.resistance * ce.capacitance), "Hz");
 		}
 		return null;
 	}
@@ -1219,6 +1222,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	private void analyzeCircuit()
 	{
+		CircuitNode cn;
+		
 		this.calcCircuitBottom();
 		if (this.elmList.isEmpty())
 		{
@@ -1258,7 +1263,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		// is ground
 		if (!gotGround && volt != null && !gotRail)
 		{
-			CircuitNode cn = new CircuitNode(false);
+			cn = new CircuitNode(false);
 			Point pt = volt.getPost(0);
 			cn.x = pt.x;
 			cn.y = pt.y;
@@ -1267,7 +1272,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		else
 		{
 			// otherwise allocate extra node for ground
-			CircuitNode cn = new CircuitNode(false);
+			cn = new CircuitNode(false);
 			cn.x = cn.y = -1;
 			this.nodeList.addElement(cn);
 		}
@@ -1288,7 +1293,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				int k;
 				for (k = 0; k != this.nodeList.size(); k++)
 				{
-					CircuitNode cn = this.getCircuitNode(k);
+					cn = this.getCircuitNode(k);
 					if (pt.x == cn.x && pt.y == cn.y)
 					{
 						break;
@@ -1296,7 +1301,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				}
 				if (k == this.nodeList.size())
 				{
-					CircuitNode cn = new CircuitNode(false);
+					cn = new CircuitNode(false);
 					cn.x = pt.x;
 					cn.y = pt.y;
 					CircuitNodeLink cnl = new CircuitNodeLink(j, ce);
@@ -1319,7 +1324,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 			for (j = 0; j != inodes; j++)
 			{
-				CircuitNode cn = new CircuitNode(true);
+				cn = new CircuitNode(true);
 				cn.x = cn.y = -1;
 				CircuitNodeLink cnl = new CircuitNodeLink(j + posts, ce);
 

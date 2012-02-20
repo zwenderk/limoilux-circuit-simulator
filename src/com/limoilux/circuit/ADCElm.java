@@ -3,8 +3,6 @@ package com.limoilux.circuit;
 
 import java.util.StringTokenizer;
 
-import com.limoilux.circuit.core.CircuitElm;
-
 public class ADCElm extends ChipElm
 {
 	public ADCElm(int xx, int yy)
@@ -54,7 +52,7 @@ public class ADCElm extends ChipElm
 		double val = imax * this.volts[this.bits] / this.volts[this.bits + 1]; // +
 		// .5;
 		int ival = (int) val;
-		ival = CircuitElm.min(imax, CircuitElm.max(0, ival));
+		ival = Math.min(imax, Math.max(0, ival));
 		int i;
 		for (i = 0; i != this.bits; i++)
 		{
