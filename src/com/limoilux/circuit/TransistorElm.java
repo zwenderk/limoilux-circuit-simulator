@@ -65,7 +65,7 @@ class TransistorElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 't';
 	}
@@ -150,7 +150,7 @@ class TransistorElm extends CircuitElm
 	Point rect[], coll[], emit[], base;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		int hs = 16;
@@ -313,7 +313,7 @@ class TransistorElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "transistor (" + (this.pnp == -1 ? "PNP)" : "NPN)") + " beta="
 				+ CircuitElm.showFormat.format(this.beta);

@@ -81,7 +81,7 @@ class TriacElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 183;
 	}
@@ -103,7 +103,7 @@ class TriacElm extends CircuitElm
 	Point cathode[], gate[];
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		int dir = 0;
@@ -242,7 +242,7 @@ class TriacElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "SCR";
 		double vac = this.volts[this.anode] - this.volts[this.cnode];

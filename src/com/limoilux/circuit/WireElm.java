@@ -63,7 +63,7 @@ class WireElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "wire";
 		arr[1] = "I = " + CircuitElm.getCurrentDText(this.getCurrent());
@@ -71,7 +71,7 @@ class WireElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'w';
 	}

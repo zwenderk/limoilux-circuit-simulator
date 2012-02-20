@@ -51,7 +51,7 @@ class JfetElm extends MosfetElm
 	}
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 
@@ -82,7 +82,7 @@ class JfetElm extends MosfetElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'j';
 	}
@@ -101,7 +101,7 @@ class JfetElm extends MosfetElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		this.getFetInfo(arr, "JFET");
 	}

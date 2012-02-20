@@ -37,7 +37,7 @@ class SparkGapElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 187;
 	}
@@ -52,7 +52,7 @@ class SparkGapElm extends CircuitElm
 	Polygon arrow1, arrow2;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		int dist = 16;
@@ -127,7 +127,7 @@ class SparkGapElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "spark gap";
 		this.getBasicInfo(arr);

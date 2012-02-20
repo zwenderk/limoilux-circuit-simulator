@@ -33,7 +33,7 @@ class LEDElm extends DiodeElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 162;
 	}
@@ -47,7 +47,7 @@ class LEDElm extends DiodeElm
 	Point ledLead1, ledLead2, ledCenter;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		int cr = 12;
@@ -89,7 +89,7 @@ class LEDElm extends DiodeElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		super.getInfo(arr);
 		arr[0] = "LED";

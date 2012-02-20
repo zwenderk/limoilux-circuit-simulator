@@ -49,7 +49,7 @@ class LogicInputElm extends SwitchElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'L';
 	}
@@ -67,7 +67,7 @@ class LogicInputElm extends SwitchElm
 	}
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.lead1 = this.interpPoint(this.point1, this.point2, 1 - 12 / this.dn);
@@ -123,7 +123,7 @@ class LogicInputElm extends SwitchElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "logic input";
 		arr[1] = this.position == 0 ? "low" : "high";

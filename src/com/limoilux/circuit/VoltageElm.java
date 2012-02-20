@@ -58,7 +58,7 @@ class VoltageElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'v';
 	}
@@ -140,7 +140,7 @@ class VoltageElm extends CircuitElm
 	final int circleSize = 17;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.calcLeads(this.waveform == VoltageElm.WF_DC || this.waveform == VoltageElm.WF_VAR ? 8
@@ -279,7 +279,7 @@ class VoltageElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		switch (this.waveform)
 		{

@@ -139,7 +139,7 @@ abstract class ChipElm extends CircuitElm
 	}
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		if (this.x2 - this.x > this.sizeX * this.cspc2 && this == CircuitElm.cirSim.dragElm)
 		{
@@ -279,7 +279,7 @@ abstract class ChipElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = this.getChipName();
 		int i, a = 1;

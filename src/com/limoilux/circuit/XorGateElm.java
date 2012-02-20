@@ -34,7 +34,7 @@ class XorGateElm extends OrGateElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 154;
 	}

@@ -40,7 +40,7 @@ class LogicOutputElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'M';
 	}
@@ -67,7 +67,7 @@ class LogicOutputElm extends CircuitElm
 	}
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.lead1 = this.interpPoint(this.point1, this.point2, 1 - 12 / this.dn);
@@ -124,7 +124,7 @@ class LogicOutputElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "logic output";
 		arr[1] = this.volts[0] < this.threshold ? "low" : "high";

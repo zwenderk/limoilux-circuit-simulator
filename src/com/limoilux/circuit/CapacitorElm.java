@@ -48,7 +48,7 @@ class CapacitorElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'c';
 	}
@@ -60,7 +60,7 @@ class CapacitorElm extends CircuitElm
 	}
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		double f = (this.dn / 2 - 4) / this.dn;
@@ -169,7 +169,7 @@ class CapacitorElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "capacitor";
 		this.getBasicInfo(arr);

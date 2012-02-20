@@ -63,7 +63,7 @@ class TransformerElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'T';
 	}
@@ -113,7 +113,7 @@ class TransformerElm extends CircuitElm
 	}
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.point2.y = this.point1.y;
@@ -242,7 +242,7 @@ class TransformerElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "transformer";
 		arr[1] = "L = " + CircuitElm.getUnitText(this.inductance, "H");

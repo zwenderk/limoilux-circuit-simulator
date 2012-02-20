@@ -51,7 +51,7 @@ class CC2Elm extends ChipElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = this.gain == 1 ? "CCII+" : "CCII-";
 		arr[1] = "X,Y = " + CircuitElm.getVoltageText(this.volts[0]);
@@ -90,7 +90,7 @@ class CC2Elm extends ChipElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 179;
 	}

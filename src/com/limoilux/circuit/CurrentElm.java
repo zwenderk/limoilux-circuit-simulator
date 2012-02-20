@@ -36,7 +36,7 @@ class CurrentElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'i';
 	}
@@ -45,7 +45,7 @@ class CurrentElm extends CircuitElm
 	Point ashaft1, ashaft2, center;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.calcLeads(26);
@@ -105,7 +105,7 @@ class CurrentElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "current source";
 		this.getBasicInfo(arr);

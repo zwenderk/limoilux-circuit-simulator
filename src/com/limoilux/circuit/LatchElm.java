@@ -78,7 +78,7 @@ class LatchElm extends ChipElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 168;
 	}

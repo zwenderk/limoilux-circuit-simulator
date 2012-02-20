@@ -40,7 +40,7 @@ class LampElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 181;
 	}
@@ -58,7 +58,7 @@ class LampElm extends CircuitElm
 	final int filament_len = 24;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		int llen = 16;
@@ -188,7 +188,7 @@ class LampElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "lamp";
 		this.getBasicInfo(arr);

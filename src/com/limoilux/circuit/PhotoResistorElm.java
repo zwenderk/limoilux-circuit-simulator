@@ -41,7 +41,7 @@ class PhotoResistorElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 186;
 	}
@@ -63,7 +63,7 @@ class PhotoResistorElm extends CircuitElm
 	}
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.calcLeads(32);
@@ -122,7 +122,7 @@ class PhotoResistorElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		// FIXME
 		arr[0] = "spark gap";

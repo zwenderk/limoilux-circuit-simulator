@@ -134,7 +134,7 @@ class TimerElm extends ChipElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 165;
 	}

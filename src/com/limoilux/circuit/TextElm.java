@@ -68,7 +68,7 @@ class TextElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'x';
 	}
@@ -192,7 +192,7 @@ class TextElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = this.text;
 	}

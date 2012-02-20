@@ -31,7 +31,7 @@ class Switch2Elm extends SwitchElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'S';
 	}
@@ -46,7 +46,7 @@ class Switch2Elm extends SwitchElm
 	Point swposts[], swpoles[];
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.calcLeads(32);
@@ -161,7 +161,7 @@ class Switch2Elm extends SwitchElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = this.link == 0 ? "switch (SPDT)" : "switch (DPDT)";
 		arr[1] = "I = " + CircuitElm.getCurrentDText(this.getCurrent());

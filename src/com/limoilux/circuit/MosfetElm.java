@@ -74,7 +74,7 @@ class MosfetElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'f';
 	}
@@ -178,7 +178,7 @@ class MosfetElm extends CircuitElm
 	Polygon arrowPoly;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 
@@ -337,7 +337,7 @@ class MosfetElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		this.getFetInfo(arr, "MOSFET");
 	}
