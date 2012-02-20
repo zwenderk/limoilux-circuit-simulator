@@ -9,6 +9,7 @@ import java.awt.Polygon;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.ui.EditInfo;
 
 public class MosfetElm extends CircuitElm
 {

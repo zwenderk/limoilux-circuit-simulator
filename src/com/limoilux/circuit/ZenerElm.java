@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 import com.limoilux.circuit.core.CircuitElm;
 import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.ui.DrawUtil;
+import com.limoilux.circuit.ui.EditInfo;
 
 // Zener code contributed by J. Mike Rollins
 // http://www.camotruck.net/rollins/simulator.html

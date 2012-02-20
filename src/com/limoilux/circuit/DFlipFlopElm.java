@@ -4,6 +4,8 @@ package com.limoilux.circuit;
 import java.awt.Checkbox;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.ui.EditInfo;
+
 public class DFlipFlopElm extends ChipElm
 {
 	final int FLAG_RESET = 2;

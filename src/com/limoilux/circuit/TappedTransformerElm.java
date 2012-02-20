@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.ui.EditInfo;
 
 public class TappedTransformerElm extends CircuitElm
 {
