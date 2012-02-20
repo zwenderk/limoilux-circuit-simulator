@@ -121,7 +121,7 @@ public abstract class CircuitElm implements Editable
 				+ this.flags;
 	}
 
-	void reset()
+	public void reset()
 	{
 		int i;
 		for (i = 0; i != this.getPostCount() + this.getInternalNodeCount(); i++)
@@ -163,13 +163,13 @@ public abstract class CircuitElm implements Editable
 		return this.volts[x];
 	}
 
-	void setNodeVoltage(int n, double c)
+	public void setNodeVoltage(int n, double c)
 	{
 		this.volts[n] = c;
 		this.calculateCurrent();
 	}
 
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 	}
 
@@ -374,7 +374,7 @@ public abstract class CircuitElm implements Editable
 		}
 	}
 
-	void stamp()
+	public void stamp()
 	{
 	}
 

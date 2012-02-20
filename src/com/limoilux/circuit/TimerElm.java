@@ -65,7 +65,7 @@ class TimerElm extends ChipElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		// stamp voltage divider to put ctl pin at 2/3 V
 		CircuitElm.cirSim.stampResistor(this.nodes[this.N_VIN], this.nodes[this.N_CTL], 5000);
@@ -77,7 +77,7 @@ class TimerElm extends ChipElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		// need current for V, discharge, control; output current is
 		// calculated for us, and other pins have no current

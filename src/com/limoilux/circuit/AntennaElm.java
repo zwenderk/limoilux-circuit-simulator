@@ -19,7 +19,7 @@ class AntennaElm extends RailElm
 	double fmphase;
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[0], this.voltSource);
 	}

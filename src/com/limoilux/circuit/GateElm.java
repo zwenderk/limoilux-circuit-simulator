@@ -157,7 +157,7 @@ abstract class GateElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[this.inputCount], this.voltSource);
 	}

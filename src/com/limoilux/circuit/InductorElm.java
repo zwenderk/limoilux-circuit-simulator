@@ -67,14 +67,14 @@ class InductorElm extends CircuitElm
 	}
 
 	@Override
-	void reset()
+	public void reset()
 	{
 		this.current = this.volts[0] = this.volts[1] = this.curcount = 0;
 		this.ind.reset();
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		this.ind.stamp(this.nodes[0], this.nodes[1]);
 	}
@@ -92,7 +92,7 @@ class InductorElm extends CircuitElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		double voltdiff = this.volts[0] - this.volts[1];
 		this.current = this.ind.calculateCurrent(voltdiff);

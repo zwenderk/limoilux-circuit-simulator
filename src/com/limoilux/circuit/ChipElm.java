@@ -205,7 +205,7 @@ abstract class ChipElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		int i;
 		for (i = 0; i != this.getPostCount(); i++)
@@ -246,7 +246,7 @@ abstract class ChipElm extends CircuitElm
 	}
 
 	@Override
-	void reset()
+	public void reset()
 	{
 		int i;
 		for (i = 0; i != this.getPostCount(); i++)

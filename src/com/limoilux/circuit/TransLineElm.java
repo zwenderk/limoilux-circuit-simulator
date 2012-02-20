@@ -82,7 +82,7 @@ class TransLineElm extends CircuitElm
 	Point posts[], inner[];
 
 	@Override
-	void reset()
+	public void reset()
 	{
 		if (CircuitElm.cirSim.timeStep == 0)
 		{
@@ -202,7 +202,7 @@ class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		CircuitElm.cirSim.stampVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1);
 		CircuitElm.cirSim.stampVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2);

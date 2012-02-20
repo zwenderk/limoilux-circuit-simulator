@@ -85,7 +85,7 @@ class InverterElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[1], this.voltSource);
 	}

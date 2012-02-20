@@ -40,7 +40,7 @@ class TriodeElm extends CircuitElm
 	}
 
 	@Override
-	void reset()
+	public void reset()
 	{
 		this.volts[0] = this.volts[1] = this.volts[2] = 0;
 		this.curcount = 0;
@@ -231,7 +231,7 @@ class TriodeElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
 		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);

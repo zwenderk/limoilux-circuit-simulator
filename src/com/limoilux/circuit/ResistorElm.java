@@ -111,14 +111,14 @@ class ResistorElm extends CircuitElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		this.current = (this.volts[0] - this.volts[1]) / this.resistance;
 		// System.out.print(this + " res current set to " + current + "\n");
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
 	}

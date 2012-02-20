@@ -149,7 +149,7 @@ class TransformerElm extends CircuitElm
 	}
 
 	@Override
-	void reset()
+	public void reset()
 	{
 		this.current[0] = this.current[1] = this.volts[0] = this.volts[1] = this.volts[2] = this.volts[3] = this.curcount[0] = this.curcount[1] = 0;
 	}
@@ -157,7 +157,7 @@ class TransformerElm extends CircuitElm
 	double a1, a2, a3, a4;
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		// equations for transformer:
 		// v1 = L1 di1/dt + M di2/dt
@@ -233,7 +233,7 @@ class TransformerElm extends CircuitElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		double voltdiff1 = this.volts[0] - this.volts[2];
 		double voltdiff2 = this.volts[1] - this.volts[3];

@@ -62,7 +62,7 @@ class MosfetElm extends CircuitElm
 	}
 
 	@Override
-	void reset()
+	public void reset()
 	{
 		this.lastv1 = this.lastv2 = this.volts[0] = this.volts[1] = this.volts[2] = this.curcount = 0;
 	}
@@ -222,7 +222,7 @@ class MosfetElm extends CircuitElm
 	double gm = 0;
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);
 		CircuitElm.cirSim.stampNonLinear(this.nodes[2]);

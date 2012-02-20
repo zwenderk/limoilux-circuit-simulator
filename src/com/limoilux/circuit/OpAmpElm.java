@@ -174,7 +174,7 @@ class OpAmpElm extends CircuitElm
 	double lastvd;
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		int vn = CircuitElm.cirSim.nodeList.size() + this.voltSource;
 		CircuitElm.cirSim.stampNonLinear(vn);

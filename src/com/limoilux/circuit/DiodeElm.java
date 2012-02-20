@@ -90,7 +90,7 @@ class DiodeElm extends CircuitElm
 	}
 
 	@Override
-	void reset()
+	public void reset()
 	{
 		this.diode.reset();
 		this.volts[0] = this.volts[1] = this.curcount = 0;
@@ -116,7 +116,7 @@ class DiodeElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		this.diode.stamp(this.nodes[0], this.nodes[1]);
 	}
@@ -128,7 +128,7 @@ class DiodeElm extends CircuitElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		this.current = this.diode.calculateCurrent(this.volts[0] - this.volts[1]);
 	}

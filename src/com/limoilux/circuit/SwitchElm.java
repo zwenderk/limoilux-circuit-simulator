@@ -98,7 +98,7 @@ class SwitchElm extends CircuitElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		if (this.position == 1)
 		{
@@ -107,7 +107,7 @@ class SwitchElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		if (this.position == 0)
 		{

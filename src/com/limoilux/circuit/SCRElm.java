@@ -69,7 +69,7 @@ class SCRElm extends CircuitElm
 	}
 
 	@Override
-	void reset()
+	public void reset()
 	{
 		this.volts[this.anode] = this.volts[this.cnode] = this.volts[this.gnode] = 0;
 		this.diode.reset();
@@ -203,7 +203,7 @@ class SCRElm extends CircuitElm
 	double aresistance;
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		CircuitElm.cirSim.stampNonLinear(this.nodes[this.anode]);
 		CircuitElm.cirSim.stampNonLinear(this.nodes[this.cnode]);
@@ -252,7 +252,7 @@ class SCRElm extends CircuitElm
 	}
 
 	@Override
-	void calculateCurrent()
+	public void calculateCurrent()
 	{
 		this.ic = (this.volts[this.cnode] - this.volts[this.gnode]) / this.cresistance;
 		this.ia = (this.volts[this.anode] - this.volts[this.inode]) / this.aresistance;

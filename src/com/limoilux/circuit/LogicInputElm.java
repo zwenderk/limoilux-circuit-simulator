@@ -100,7 +100,7 @@ class LogicInputElm extends SwitchElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		double v = this.position == 0 ? this.loV : this.hiV;
 		if (this.isTernary())

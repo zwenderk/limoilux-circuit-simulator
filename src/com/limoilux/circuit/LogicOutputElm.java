@@ -109,7 +109,7 @@ class LogicOutputElm extends CircuitElm
 	}
 
 	@Override
-	void stamp()
+	public void stamp()
 	{
 		if (this.needsPullDown())
 		{
