@@ -16,13 +16,13 @@ class XorGateElm extends OrGateElm
 	}
 
 	@Override
-	String getGateName()
+	public String getGateName()
 	{
 		return "XOR gate";
 	}
 
 	@Override
-	boolean calcFunction()
+	public boolean calcFunction()
 	{
 		int i;
 		boolean f = false;

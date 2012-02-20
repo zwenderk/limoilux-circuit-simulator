@@ -16,13 +16,13 @@ class NorGateElm extends OrGateElm
 	}
 
 	@Override
-	String getGateName()
+	public String getGateName()
 	{
 		return "NOR gate";
 	}
 
 	@Override
-	boolean isInverting()
+	public boolean isInverting()
 	{
 		return true;
 	}

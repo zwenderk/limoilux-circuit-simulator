@@ -58,7 +58,7 @@ class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	void drag(int xx, int yy)
+	public void drag(int xx, int yy)
 	{
 		xx = CircuitElm.cirSim.snapGrid(xx);
 		yy = CircuitElm.cirSim.snapGrid(yy);
@@ -249,7 +249,7 @@ class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	Point getPost(int n)
+	public Point getPost(int n)
 	{
 		return this.posts[n];
 	}
@@ -262,13 +262,13 @@ class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	boolean hasGroundConnection(int n1)
+	public boolean hasGroundConnection(int n1)
 	{
 		return false;
 	}
 
 	@Override
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		return false;
 		/*

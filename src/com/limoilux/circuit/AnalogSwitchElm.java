@@ -92,7 +92,7 @@ class AnalogSwitchElm extends CircuitElm
 
 	// we need this to be able to change the matrix for each step
 	@Override
-	boolean nonLinear()
+	public boolean nonLinear()
 	{
 		return true;
 	}
@@ -117,7 +117,7 @@ class AnalogSwitchElm extends CircuitElm
 	}
 
 	@Override
-	void drag(int xx, int yy)
+	public void drag(int xx, int yy)
 	{
 		xx = CircuitElm.cirSim.snapGrid(xx);
 		yy = CircuitElm.cirSim.snapGrid(yy);
@@ -147,7 +147,7 @@ class AnalogSwitchElm extends CircuitElm
 	}
 
 	@Override
-	Point getPost(int n)
+	public Point getPost(int n)
 	{
 		return n == 0 ? this.point1 : n == 1 ? this.point2 : this.point3;
 	}
@@ -165,7 +165,7 @@ class AnalogSwitchElm extends CircuitElm
 	// we have to just assume current will flow either way, even though that
 	// might cause singular matrix errors
 	@Override
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		if (n1 == 2 || n2 == 2)
 		{

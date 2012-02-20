@@ -11,7 +11,7 @@ import java.awt.Label;
 import java.awt.LayoutManager;
 import java.awt.Scrollbar;
 
-class EditDialogLayout implements LayoutManager
+public class EditDialogLayout implements LayoutManager
 {
 	public EditDialogLayout()
 	{

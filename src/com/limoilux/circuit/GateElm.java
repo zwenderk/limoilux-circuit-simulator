@@ -6,11 +6,15 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.util.StringTokenizer;
 
-abstract class GateElm extends CircuitElm
+import com.limoilux.circuit.core.CoreUtil;
+import com.limoilux.circuit.ui.DrawUtil;
+
+public abstract class GateElm extends CircuitElm
 {
-	final int FLAG_SMALL = 1;
-	int inputCount = 2;
-	boolean lastOutput;
+	public static final int FLAG_SMALL = 1;
+	public int inputCount = 2;
+	public boolean lastOutput;
+	public int gsize, gwidth, gwidth2, gheight, hs2;
 
 	public GateElm(int xx, int yy)
 	{
@@ -29,14 +33,12 @@ abstract class GateElm extends CircuitElm
 		this.setSize((f & this.FLAG_SMALL) != 0 ? 1 : 2);
 	}
 
-	boolean isInverting()
+	public boolean isInverting()
 	{
 		return false;
 	}
 
-	int gsize, gwidth, gwidth2, gheight, hs2;
-
-	void setSize(int s)
+	public void setSize(int s)
 	{
 		this.gsize = s;
 		this.gwidth = 7 * s;
@@ -45,14 +47,22 @@ abstract class GateElm extends CircuitElm
 		this.flags = s == 1 ? this.FLAG_SMALL : 0;
 	}
 
+	Point inPosts[], inGates[];
+	int ww;
+
+	Polygon gatePoly;
+	Point pcircle, linePoints[];
+
+	public boolean getInput(int x)
+	{
+		return this.volts[x] > 2.5;
+	}
+
 	@Override
 	public String dump()
 	{
 		return super.dump() + " " + this.inputCount + " " + this.volts[this.inputCount];
 	}
-
-	Point inPosts[], inGates[];
-	int ww;
 
 	@Override
 	public void setPoints()
@@ -84,8 +94,8 @@ abstract class GateElm extends CircuitElm
 			{
 				i0++;
 			}
-			this.inPosts[i] = this.interpPoint(this.point1, this.point2, 0, hs * i0);
-			this.inGates[i] = this.interpPoint(this.lead1, this.lead2, 0, hs * i0);
+			this.inPosts[i] = CoreUtil.interpPoint(this.point1, this.point2, 0, hs * i0);
+			this.inGates[i] = CoreUtil.interpPoint(this.lead1, this.lead2, 0, hs * i0);
 			this.volts[i] = this.lastOutput ^ this.isInverting() ? 5 : 0;
 		}
 		this.hs2 = this.gwidth * (this.inputCount / 2 + 1);
@@ -99,30 +109,27 @@ abstract class GateElm extends CircuitElm
 		for (i = 0; i != this.inputCount; i++)
 		{
 			this.setVoltageColor(g, this.volts[i]);
-			CircuitElm.drawThickLine(g, this.inPosts[i], this.inGates[i]);
+			DrawUtil.drawThickLine(g, this.inPosts[i], this.inGates[i]);
 		}
 		this.setVoltageColor(g, this.volts[this.inputCount]);
-		CircuitElm.drawThickLine(g, this.lead2, this.point2);
+		DrawUtil.drawThickLine(g, this.lead2, this.point2);
 		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
-		CircuitElm.drawThickPolygon(g, this.gatePoly);
+		DrawUtil.drawThickPolygon(g, this.gatePoly);
 		if (this.linePoints != null)
 		{
 			for (i = 0; i != this.linePoints.length - 1; i++)
 			{
-				CircuitElm.drawThickLine(g, this.linePoints[i], this.linePoints[i + 1]);
+				DrawUtil.drawThickLine(g, this.linePoints[i], this.linePoints[i + 1]);
 			}
 		}
 		if (this.isInverting())
 		{
-			CircuitElm.drawThickCircle(g, this.pcircle.x, this.pcircle.y, 3);
+			DrawUtil.drawThickCircle(g, this.pcircle.x, this.pcircle.y, 3);
 		}
 		this.curcount = this.updateDotCount(this.current, this.curcount);
-		this.drawDots(g, this.lead2, this.point2, this.curcount);
+		DrawUtil.drawDots(g, this.lead2, this.point2, this.curcount);
 		this.drawPosts(g);
 	}
-
-	Polygon gatePoly;
-	Point pcircle, linePoints[];
 
 	@Override
 	public int getPostCount()
@@ -131,7 +138,7 @@ abstract class GateElm extends CircuitElm
 	}
 
 	@Override
-	Point getPost(int n)
+	public Point getPost(int n)
 	{
 		if (n == this.inputCount)
 		{
@@ -146,8 +153,6 @@ abstract class GateElm extends CircuitElm
 		return 1;
 	}
 
-	abstract String getGateName();
-
 	@Override
 	public void getInfo(String arr[])
 	{
@@ -161,13 +166,6 @@ abstract class GateElm extends CircuitElm
 	{
 		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[this.inputCount], this.voltSource);
 	}
-
-	boolean getInput(int x)
-	{
-		return this.volts[x] > 2.5;
-	}
-
-	abstract boolean calcFunction();
 
 	@Override
 	public void doStep()
@@ -203,14 +201,18 @@ abstract class GateElm extends CircuitElm
 	// there is no current path through the gate inputs, but there
 	// is an indirect path through the output to ground.
 	@Override
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		return false;
 	}
 
 	@Override
-	boolean hasGroundConnection(int n1)
+	public boolean hasGroundConnection(int n1)
 	{
 		return n1 == this.inputCount;
 	}
+
+	public abstract boolean calcFunction();
+
+	public abstract String getGateName();
 }

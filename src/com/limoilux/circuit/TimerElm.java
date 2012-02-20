@@ -54,7 +54,7 @@ class TimerElm extends ChipElm
 	}
 
 	@Override
-	boolean nonLinear()
+	public boolean nonLinear()
 	{
 		return true;
 	}

@@ -5,8 +5,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.StringTokenizer;
 
-class SevenSegElm extends ChipElm
+import com.limoilux.circuit.ui.DrawUtil;
+
+public class SevenSegElm extends ChipElm
 {
+	public Color darkred;
+
 	public SevenSegElm(int xx, int yy)
 	{
 		super(xx, yy);
@@ -22,8 +26,6 @@ class SevenSegElm extends ChipElm
 	{
 		return "7-segment driver/display";
 	}
-
-	Color darkred;
 
 	@Override
 	public void setupPins()
@@ -49,22 +51,22 @@ class SevenSegElm extends ChipElm
 		int xl = this.x + this.cspc * 5;
 		int yl = this.y + this.cspc;
 		this.setColor(g, 0);
-		CircuitElm.drawThickLine(g, xl, yl, xl + this.cspc, yl);
+		DrawUtil.drawThickLine(g, xl, yl, xl + this.cspc, yl);
 		this.setColor(g, 1);
-		CircuitElm.drawThickLine(g, xl + this.cspc, yl, xl + this.cspc, yl + this.cspc);
+		DrawUtil.drawThickLine(g, xl + this.cspc, yl, xl + this.cspc, yl + this.cspc);
 		this.setColor(g, 2);
-		CircuitElm.drawThickLine(g, xl + this.cspc, yl + this.cspc, xl + this.cspc, yl + this.cspc2);
+		DrawUtil.drawThickLine(g, xl + this.cspc, yl + this.cspc, xl + this.cspc, yl + this.cspc2);
 		this.setColor(g, 3);
-		CircuitElm.drawThickLine(g, xl, yl + this.cspc2, xl + this.cspc, yl + this.cspc2);
+		DrawUtil.drawThickLine(g, xl, yl + this.cspc2, xl + this.cspc, yl + this.cspc2);
 		this.setColor(g, 4);
-		CircuitElm.drawThickLine(g, xl, yl + this.cspc, xl, yl + this.cspc2);
+		DrawUtil.drawThickLine(g, xl, yl + this.cspc, xl, yl + this.cspc2);
 		this.setColor(g, 5);
-		CircuitElm.drawThickLine(g, xl, yl, xl, yl + this.cspc);
+		DrawUtil.drawThickLine(g, xl, yl, xl, yl + this.cspc);
 		this.setColor(g, 6);
-		CircuitElm.drawThickLine(g, xl, yl + this.cspc, xl + this.cspc, yl + this.cspc);
+		DrawUtil.drawThickLine(g, xl, yl + this.cspc, xl + this.cspc, yl + this.cspc);
 	}
 
-	void setColor(Graphics g, int p)
+	public void setColor(Graphics g, int p)
 	{
 		g.setColor(this.pins[p].value ? Color.red : CircuitElm.cirSim.printableCheckItem.getState() ? Color.white
 				: this.darkred);

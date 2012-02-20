@@ -92,7 +92,7 @@ class Switch2Elm extends SwitchElm
 	}
 
 	@Override
-	Point getPost(int n)
+	public Point getPost(int n)
 	{
 		return n == 0 ? this.point1 : this.swposts[n - 1];
 	}
@@ -151,7 +151,7 @@ class Switch2Elm extends SwitchElm
 	}
 
 	@Override
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		if (this.position == 2)
 		{

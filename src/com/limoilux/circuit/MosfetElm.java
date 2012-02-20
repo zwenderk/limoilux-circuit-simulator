@@ -51,7 +51,7 @@ class MosfetElm extends CircuitElm
 	}
 
 	@Override
-	boolean nonLinear()
+	public boolean nonLinear()
 	{
 		return true;
 	}
@@ -150,7 +150,7 @@ class MosfetElm extends CircuitElm
 	}
 
 	@Override
-	Point getPost(int n)
+	public Point getPost(int n)
 	{
 		return n == 0 ? this.point1 : n == 1 ? this.src[0] : this.drn[0];
 	}
@@ -355,7 +355,7 @@ class MosfetElm extends CircuitElm
 	}
 
 	@Override
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		return !(n1 == 0 || n2 == 0);
 	}

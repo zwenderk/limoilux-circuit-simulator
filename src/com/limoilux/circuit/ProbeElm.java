@@ -94,7 +94,7 @@ class ProbeElm extends CircuitElm
 	}
 
 	@Override
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		return false;
 	}

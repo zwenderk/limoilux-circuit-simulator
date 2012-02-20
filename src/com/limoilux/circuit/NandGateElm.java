@@ -16,13 +16,13 @@ class NandGateElm extends AndGateElm
 	}
 
 	@Override
-	boolean isInverting()
+	public boolean isInverting()
 	{
 		return true;
 	}
 
 	@Override
-	String getGateName()
+	public String getGateName()
 	{
 		return "NAND gate";
 	}

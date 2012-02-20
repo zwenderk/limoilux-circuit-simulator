@@ -1,7 +1,7 @@
 
 package com.limoilux.circuit;
 
-class SquareRailElm extends RailElm
+public class SquareRailElm extends RailElm
 {
 	public SquareRailElm(int xx, int yy)
 	{

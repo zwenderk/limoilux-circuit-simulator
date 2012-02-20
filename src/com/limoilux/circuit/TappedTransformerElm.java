@@ -129,7 +129,7 @@ class TappedTransformerElm extends CircuitElm
 	}
 
 	@Override
-	Point getPost(int n)
+	public Point getPost(int n)
 	{
 		return this.ptEnds[n];
 	}
@@ -271,7 +271,7 @@ class TappedTransformerElm extends CircuitElm
 	}
 
 	@Override
-	boolean getConnection(int n1, int n2)
+	public boolean getConnection(int n1, int n2)
 	{
 		if (this.comparePair(n1, n2, 0, 1))
 		{

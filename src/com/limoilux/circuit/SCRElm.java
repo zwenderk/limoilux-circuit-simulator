@@ -63,7 +63,7 @@ class SCRElm extends CircuitElm
 	}
 
 	@Override
-	boolean nonLinear()
+	public boolean nonLinear()
 	{
 		return true;
 	}
@@ -176,7 +176,7 @@ class SCRElm extends CircuitElm
 	}
 
 	@Override
-	Point getPost(int n)
+	public Point getPost(int n)
 	{
 		return n == 0 ? this.point1 : n == 1 ? this.point2 : this.gate[1];
 	}
