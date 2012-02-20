@@ -96,7 +96,7 @@ public abstract class CircuitElm implements Editable
 		return this.getClass();
 	}
 
-	int getDefaultFlags()
+	public int getDefaultFlags()
 	{
 		return 0;
 	}
@@ -158,7 +158,7 @@ public abstract class CircuitElm implements Editable
 
 	}
 
-	double getPostVoltage(int x)
+	public double getPostVoltage(int x)
 	{
 		return this.volts[x];
 	}
@@ -185,7 +185,7 @@ public abstract class CircuitElm implements Editable
 		this.point2 = new Point(this.x2, this.y2);
 	}
 
-	void calcLeads(int len)
+	public void calcLeads(int len)
 	{
 		if (this.dn < len || len == 0)
 		{
@@ -250,7 +250,7 @@ public abstract class CircuitElm implements Editable
 		DrawUtil.drawDots(g, pa, pb, pos);
 	}
 
-	Polygon calcArrow(Point a, Point b, double al, double aw)
+	public static Polygon calcArrow(Point a, Point b, double al, double aw)
 	{
 		Polygon poly = new Polygon();
 		Point p1 = new Point();
@@ -265,34 +265,22 @@ public abstract class CircuitElm implements Editable
 		return poly;
 	}
 
-	Polygon createPolygon(Point a, Point b, Point c)
+	@Deprecated
+	public static Polygon createPolygon(Point a, Point b, Point c)
 	{
-		Polygon p = new Polygon();
-		p.addPoint(a.x, a.y);
-		p.addPoint(b.x, b.y);
-		p.addPoint(c.x, c.y);
-		return p;
+		return CoreUtil.createPolygon(a, b, c);
 	}
 
-	Polygon createPolygon(Point a, Point b, Point c, Point d)
+	@Deprecated
+	public static Polygon createPolygon(Point a, Point b, Point c, Point d)
 	{
-		Polygon p = new Polygon();
-		p.addPoint(a.x, a.y);
-		p.addPoint(b.x, b.y);
-		p.addPoint(c.x, c.y);
-		p.addPoint(d.x, d.y);
-		return p;
+		return CoreUtil.createPolygon(a, b, c, d);
 	}
 
-	Polygon createPolygon(Point a[])
+	@Deprecated
+	public static Polygon createPolygon(Point a[])
 	{
-		Polygon p = new Polygon();
-		int i;
-		for (i = 0; i != a.length; i++)
-		{
-			p.addPoint(a[i].x, a[i].y);
-		}
-		return p;
+		return CoreUtil.createPolygon(a);
 	}
 
 	public void drag(int xx, int yy)
@@ -315,7 +303,7 @@ public abstract class CircuitElm implements Editable
 		this.setPoints();
 	}
 
-	void move(int dx, int dy)
+	public void move(int dx, int dy)
 	{
 		this.x += dx;
 		this.y += dy;
@@ -950,7 +938,7 @@ public abstract class CircuitElm implements Editable
 
 		CircuitElm.colorScale = new Color[CircuitElm.COLOR_SCALE_COUNT];
 
-		for (int i = 0; i < colorScale.length; i++)
+		for (int i = 0; i < CircuitElm.colorScale.length; i++)
 		{
 			double v = i * 2. / CircuitElm.COLOR_SCALE_COUNT - 1;
 			if (v < 0)

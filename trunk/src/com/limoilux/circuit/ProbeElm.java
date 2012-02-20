@@ -40,7 +40,7 @@ class ProbeElm extends CircuitElm
 			this.point1 = this.point2;
 			this.point2 = x;
 		}
-		this.center = this.interpPoint(this.point1, this.point2, .5);
+		this.center = CircuitElm.interpPoint(this.point1, this.point2, .5);
 	}
 
 	@Override

@@ -86,7 +86,7 @@ class OpAmpElm extends CircuitElm
 		this.setVoltageColor(g, this.volts[2]);
 		CircuitElm.drawThickLine(g, this.lead2, this.point2);
 		this.curcount = this.updateDotCount(this.current, this.curcount);
-		this.drawDots(g, this.point2, this.lead2, this.curcount);
+		CircuitElm.drawDots(g, this.point2, this.lead2, this.curcount);
 		this.drawPosts(g);
 	}
 
@@ -127,15 +127,15 @@ class OpAmpElm extends CircuitElm
 		{
 			hs = -hs;
 		}
-		this.in1p = this.newPointArray(2);
-		this.in2p = this.newPointArray(2);
-		this.textp = this.newPointArray(2);
-		this.interpPoint2(this.point1, this.point2, this.in1p[0], this.in2p[0], 0, hs);
-		this.interpPoint2(this.lead1, this.lead2, this.in1p[1], this.in2p[1], 0, hs);
-		this.interpPoint2(this.lead1, this.lead2, this.textp[0], this.textp[1], .2, hs);
-		Point tris[] = this.newPointArray(2);
-		this.interpPoint2(this.lead1, this.lead2, tris[0], tris[1], 0, hs * 2);
-		this.triangle = this.createPolygon(tris[0], tris[1], this.lead2);
+		this.in1p = CircuitElm.newPointArray(2);
+		this.in2p = CircuitElm.newPointArray(2);
+		this.textp = CircuitElm.newPointArray(2);
+		CircuitElm.interpPoint2(this.point1, this.point2, this.in1p[0], this.in2p[0], 0, hs);
+		CircuitElm.interpPoint2(this.lead1, this.lead2, this.in1p[1], this.in2p[1], 0, hs);
+		CircuitElm.interpPoint2(this.lead1, this.lead2, this.textp[0], this.textp[1], .2, hs);
+		Point tris[] = CircuitElm.newPointArray(2);
+		CircuitElm.interpPoint2(this.lead1, this.lead2, tris[0], tris[1], 0, hs * 2);
+		this.triangle = CircuitElm.createPolygon(tris[0], tris[1], this.lead2);
 		this.plusFont = new Font("SansSerif", 0, this.opsize == 2 ? 14 : 10);
 	}
 

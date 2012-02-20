@@ -15,7 +15,7 @@ class TimerElm extends ChipElm
 	final int N_RST = 6;
 
 	@Override
-	int getDefaultFlags()
+	public int getDefaultFlags()
 	{
 		return this.FLAG_RESET;
 	}

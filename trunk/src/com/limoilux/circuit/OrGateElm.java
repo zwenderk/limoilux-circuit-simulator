@@ -29,7 +29,7 @@ class OrGateElm extends GateElm
 
 		// 0-15 = top curve, 16 = right, 17-32=bottom curve,
 		// 33-37 = left curve
-		Point triPoints[] = this.newPointArray(38);
+		Point triPoints[] = CircuitElm.newPointArray(38);
 		if (this instanceof XorGateElm)
 		{
 			this.linePoints = new Point[5];
@@ -39,26 +39,26 @@ class OrGateElm extends GateElm
 		{
 			double a = i / 16.;
 			double b = 1 - a * a;
-			this.interpPoint2(this.lead1, this.lead2, triPoints[i], triPoints[32 - i], .5 + a / 2, b * this.hs2);
+			CircuitElm.interpPoint2(this.lead1, this.lead2, triPoints[i], triPoints[32 - i], .5 + a / 2, b * this.hs2);
 		}
 		double ww2 = this.ww == 0 ? this.dn * 2 : this.ww * 2;
 		for (i = 0; i != 5; i++)
 		{
 			double a = (i - 2) / 2.;
 			double b = 4 * (1 - a * a) - 2;
-			this.interpPoint(this.lead1, this.lead2, triPoints[33 + i], b / ww2, a * this.hs2);
+			CircuitElm.interpPoint(this.lead1, this.lead2, triPoints[33 + i], b / ww2, a * this.hs2);
 			if (this instanceof XorGateElm)
 			{
-				this.linePoints[i] = this.interpPoint(this.lead1, this.lead2, (b - 5) / ww2, a * this.hs2);
+				this.linePoints[i] = CircuitElm.interpPoint(this.lead1, this.lead2, (b - 5) / ww2, a * this.hs2);
 			}
 		}
 		triPoints[16] = new Point(this.lead2);
 		if (this.isInverting())
 		{
-			this.pcircle = this.interpPoint(this.point1, this.point2, .5 + (this.ww + 4) / this.dn);
-			this.lead2 = this.interpPoint(this.point1, this.point2, .5 + (this.ww + 8) / this.dn);
+			this.pcircle = CircuitElm.interpPoint(this.point1, this.point2, .5 + (this.ww + 4) / this.dn);
+			this.lead2 = CircuitElm.interpPoint(this.point1, this.point2, .5 + (this.ww + 8) / this.dn);
 		}
-		this.gatePoly = this.createPolygon(triPoints);
+		this.gatePoly = CircuitElm.createPolygon(triPoints);
 	}
 
 	@Override

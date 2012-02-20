@@ -79,14 +79,14 @@ class MemristorElm extends CircuitElm
 			}
 			double v = v1 + (v2 - v1) * i / segments;
 			this.setVoltageColor(g, v);
-			this.interpPoint(this.lead1, this.lead2, CircuitElm.ps1, i * segf, hs * ox);
-			this.interpPoint(this.lead1, this.lead2, CircuitElm.ps2, i * segf, hs * nx);
+			CircuitElm.interpPoint(this.lead1, this.lead2, CircuitElm.ps1, i * segf, hs * ox);
+			CircuitElm.interpPoint(this.lead1, this.lead2, CircuitElm.ps2, i * segf, hs * nx);
 			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 			if (i == segments)
 			{
 				break;
 			}
-			this.interpPoint(this.lead1, this.lead2, CircuitElm.ps1, (i + 1) * segf, hs * nx);
+			CircuitElm.interpPoint(this.lead1, this.lead2, CircuitElm.ps1, (i + 1) * segf, hs * nx);
 			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 			ox = nx;
 		}

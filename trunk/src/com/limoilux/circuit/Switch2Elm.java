@@ -50,11 +50,11 @@ class Switch2Elm extends SwitchElm
 	{
 		super.setPoints();
 		this.calcLeads(32);
-		this.swposts = this.newPointArray(2);
-		this.swpoles = this.newPointArray(3);
-		this.interpPoint2(this.lead1, this.lead2, this.swpoles[0], this.swpoles[1], 1, this.openhs);
+		this.swposts = CircuitElm.newPointArray(2);
+		this.swpoles = CircuitElm.newPointArray(3);
+		CircuitElm.interpPoint2(this.lead1, this.lead2, this.swpoles[0], this.swpoles[1], 1, this.openhs);
 		this.swpoles[2] = this.lead2;
-		this.interpPoint2(this.point1, this.point2, this.swposts[0], this.swposts[1], 1, this.openhs);
+		CircuitElm.interpPoint2(this.point1, this.point2, this.swposts[0], this.swposts[1], 1, this.openhs);
 		this.posCount = this.hasCenterOff() ? 3 : 2;
 	}
 
@@ -83,10 +83,10 @@ class Switch2Elm extends SwitchElm
 		CircuitElm.drawThickLine(g, this.lead1, this.swpoles[this.position]);
 
 		this.updateDotCount();
-		this.drawDots(g, this.point1, this.lead1, this.curcount);
+		CircuitElm.drawDots(g, this.point1, this.lead1, this.curcount);
 		if (this.position != 2)
 		{
-			this.drawDots(g, this.swpoles[this.position], this.swposts[this.position], this.curcount);
+			CircuitElm.drawDots(g, this.swpoles[this.position], this.swposts[this.position], this.curcount);
 		}
 		this.drawPosts(g);
 	}

@@ -122,13 +122,13 @@ class TriacElm extends CircuitElm
 			dir = 1;
 		}
 		this.calcLeads(16);
-		this.cathode = this.newPointArray(2);
-		Point pa[] = this.newPointArray(2);
-		this.interpPoint2(this.lead1, this.lead2, pa[0], pa[1], 0, this.hs);
-		this.interpPoint2(this.lead1, this.lead2, this.cathode[0], this.cathode[1], 1, this.hs);
-		this.poly = this.createPolygon(pa[0], pa[1], this.lead2);
+		this.cathode = CircuitElm.newPointArray(2);
+		Point pa[] = CircuitElm.newPointArray(2);
+		CircuitElm.interpPoint2(this.lead1, this.lead2, pa[0], pa[1], 0, this.hs);
+		CircuitElm.interpPoint2(this.lead1, this.lead2, this.cathode[0], this.cathode[1], 1, this.hs);
+		this.poly = CircuitElm.createPolygon(pa[0], pa[1], this.lead2);
 
-		this.gate = this.newPointArray(2);
+		this.gate = CircuitElm.newPointArray(2);
 		double leadlen = (this.dn - 16) / 2;
 		int gatelen = CircuitElm.cirSim.gridSize;
 		gatelen += leadlen % CircuitElm.cirSim.gridSize;
@@ -138,8 +138,9 @@ class TriacElm extends CircuitElm
 			this.y2 = this.y;
 			return;
 		}
-		this.interpPoint(this.lead2, this.point2, this.gate[0], gatelen / leadlen, gatelen * dir);
-		this.interpPoint(this.lead2, this.point2, this.gate[1], gatelen / leadlen, CircuitElm.cirSim.gridSize * 2 * dir);
+		CircuitElm.interpPoint(this.lead2, this.point2, this.gate[0], gatelen / leadlen, gatelen * dir);
+		CircuitElm.interpPoint(this.lead2, this.point2, this.gate[1], gatelen / leadlen, CircuitElm.cirSim.gridSize * 2
+				* dir);
 	}
 
 	@Override
@@ -170,10 +171,10 @@ class TriacElm extends CircuitElm
 		this.curcount_g = this.updateDotCount(this.ig, this.curcount_g);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
-			this.drawDots(g, this.point1, this.lead2, this.curcount_a);
-			this.drawDots(g, this.point2, this.lead2, this.curcount_c);
-			this.drawDots(g, this.gate[1], this.gate[0], this.curcount_g);
-			this.drawDots(g, this.gate[0], this.lead2,
+			CircuitElm.drawDots(g, this.point1, this.lead2, this.curcount_a);
+			CircuitElm.drawDots(g, this.point2, this.lead2, this.curcount_c);
+			CircuitElm.drawDots(g, this.gate[1], this.gate[0], this.curcount_g);
+			CircuitElm.drawDots(g, this.gate[0], this.lead2,
 					this.curcount_g + CircuitElm.distance(this.gate[1], this.gate[0]));
 		}
 		this.drawPosts(g);
@@ -221,9 +222,9 @@ class TriacElm extends CircuitElm
 	public void doStep()
 	{
 		double vac = this.volts[this.anode] - this.volts[this.cnode]; // typically
-																		// negative
+		// negative
 		double vag = this.volts[this.anode] - this.volts[this.gnode]; // typically
-																		// positive
+		// positive
 		if (Math.abs(vac - this.lastvac) > .01 || Math.abs(vag - this.lastvag) > .01)
 		{
 			CircuitElm.cirSim.converged = false;

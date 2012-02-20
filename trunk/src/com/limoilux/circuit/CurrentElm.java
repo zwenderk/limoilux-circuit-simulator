@@ -49,11 +49,11 @@ public class CurrentElm extends CircuitElm
 	{
 		super.setPoints();
 		this.calcLeads(26);
-		this.ashaft1 = this.interpPoint(this.lead1, this.lead2, .25);
-		this.ashaft2 = this.interpPoint(this.lead1, this.lead2, .6);
-		this.center = this.interpPoint(this.lead1, this.lead2, .5);
-		Point p2 = this.interpPoint(this.lead1, this.lead2, .75);
-		this.arrow = this.calcArrow(this.center, p2, 4, 4);
+		this.ashaft1 = CircuitElm.interpPoint(this.lead1, this.lead2, .25);
+		this.ashaft2 = CircuitElm.interpPoint(this.lead1, this.lead2, .6);
+		this.center = CircuitElm.interpPoint(this.lead1, this.lead2, .5);
+		Point p2 = CircuitElm.interpPoint(this.lead1, this.lead2, .75);
+		this.arrow = CircuitElm.calcArrow(this.center, p2, 4, 4);
 	}
 
 	@Override

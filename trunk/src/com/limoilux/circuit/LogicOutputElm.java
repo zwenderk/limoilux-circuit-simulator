@@ -70,7 +70,7 @@ class LogicOutputElm extends CircuitElm
 	public void setPoints()
 	{
 		super.setPoints();
-		this.lead1 = this.interpPoint(this.point1, this.point2, 1 - 12 / this.dn);
+		this.lead1 = CircuitElm.interpPoint(this.point1, this.point2, 1 - 12 / this.dn);
 	}
 
 	@Override

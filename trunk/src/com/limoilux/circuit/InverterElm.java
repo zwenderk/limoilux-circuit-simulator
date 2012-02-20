@@ -52,7 +52,7 @@ class InverterElm extends CircuitElm
 		CircuitElm.drawThickPolygon(g, this.gatePoly);
 		CircuitElm.drawThickCircle(g, this.pcircle.x, this.pcircle.y, 3);
 		this.curcount = this.updateDotCount(this.current, this.curcount);
-		this.drawDots(g, this.lead2, this.point2, this.curcount);
+		CircuitElm.drawDots(g, this.lead2, this.point2, this.curcount);
 	}
 
 	Polygon gatePoly;
@@ -68,13 +68,13 @@ class InverterElm extends CircuitElm
 		{
 			ww = (int) (this.dn / 2);
 		}
-		this.lead1 = this.interpPoint(this.point1, this.point2, .5 - ww / this.dn);
-		this.lead2 = this.interpPoint(this.point1, this.point2, .5 + (ww + 2) / this.dn);
-		this.pcircle = this.interpPoint(this.point1, this.point2, .5 + (ww - 2) / this.dn);
-		Point triPoints[] = this.newPointArray(3);
-		this.interpPoint2(this.lead1, this.lead2, triPoints[0], triPoints[1], 0, hs);
-		triPoints[2] = this.interpPoint(this.point1, this.point2, .5 + (ww - 5) / this.dn);
-		this.gatePoly = this.createPolygon(triPoints);
+		this.lead1 = CircuitElm.interpPoint(this.point1, this.point2, .5 - ww / this.dn);
+		this.lead2 = CircuitElm.interpPoint(this.point1, this.point2, .5 + (ww + 2) / this.dn);
+		this.pcircle = CircuitElm.interpPoint(this.point1, this.point2, .5 + (ww - 2) / this.dn);
+		Point triPoints[] = CircuitElm.newPointArray(3);
+		CircuitElm.interpPoint2(this.lead1, this.lead2, triPoints[0], triPoints[1], 0, hs);
+		triPoints[2] = CircuitElm.interpPoint(this.point1, this.point2, .5 + (ww - 5) / this.dn);
+		this.gatePoly = CircuitElm.createPolygon(triPoints);
 		this.setBbox(this.point1, this.point2, hs);
 	}
 

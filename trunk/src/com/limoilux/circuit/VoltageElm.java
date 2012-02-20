@@ -156,18 +156,18 @@ class VoltageElm extends CircuitElm
 		{
 			this.setPowerColor(g, false);
 			this.setVoltageColor(g, this.volts[0]);
-			this.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 0, 10);
+			CircuitElm.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 0, 10);
 			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 			this.setVoltageColor(g, this.volts[1]);
 			int hs = 16;
 			this.setBbox(this.point1, this.point2, hs);
-			this.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 1, hs);
+			CircuitElm.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 1, hs);
 			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 		}
 		else
 		{
 			this.setBbox(this.point1, this.point2, this.circleSize);
-			this.interpPoint(this.lead1, this.lead2, CircuitElm.ps1, .5);
+			CircuitElm.interpPoint(this.lead1, this.lead2, CircuitElm.ps1, .5);
 			this.drawWaveform(g, CircuitElm.ps1);
 		}
 		this.updateDotCount();
@@ -175,12 +175,12 @@ class VoltageElm extends CircuitElm
 		{
 			if (this.waveform == VoltageElm.WF_DC)
 			{
-				this.drawDots(g, this.point1, this.point2, this.curcount);
+				CircuitElm.drawDots(g, this.point1, this.point2, this.curcount);
 			}
 			else
 			{
-				this.drawDots(g, this.point1, this.lead1, this.curcount);
-				this.drawDots(g, this.point2, this.lead2, -this.curcount);
+				CircuitElm.drawDots(g, this.point1, this.lead1, this.curcount);
+				CircuitElm.drawDots(g, this.point2, this.lead2, -this.curcount);
 			}
 		}
 		this.drawPosts(g);

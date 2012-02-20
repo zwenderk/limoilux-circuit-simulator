@@ -63,15 +63,15 @@ class LampElm extends CircuitElm
 		super.setPoints();
 		int llen = 16;
 		this.calcLeads(llen);
-		this.bulbLead = this.newPointArray(2);
-		this.filament = this.newPointArray(2);
+		this.bulbLead = CircuitElm.newPointArray(2);
+		this.filament = CircuitElm.newPointArray(2);
 		this.bulbR = 20;
-		this.filament[0] = this.interpPoint(this.lead1, this.lead2, 0, this.filament_len);
-		this.filament[1] = this.interpPoint(this.lead1, this.lead2, 1, this.filament_len);
+		this.filament[0] = CircuitElm.interpPoint(this.lead1, this.lead2, 0, this.filament_len);
+		this.filament[1] = CircuitElm.interpPoint(this.lead1, this.lead2, 1, this.filament_len);
 		double br = this.filament_len - Math.sqrt(this.bulbR * this.bulbR - llen * llen);
-		this.bulbLead[0] = this.interpPoint(this.lead1, this.lead2, 0, br);
-		this.bulbLead[1] = this.interpPoint(this.lead1, this.lead2, 1, br);
-		this.bulb = this.interpPoint(this.filament[0], this.filament[1], .5);
+		this.bulbLead[0] = CircuitElm.interpPoint(this.lead1, this.lead2, 0, br);
+		this.bulbLead[1] = CircuitElm.interpPoint(this.lead1, this.lead2, 1, br);
+		this.bulb = CircuitElm.interpPoint(this.filament[0], this.filament[1], .5);
 	}
 
 	Color getTempColor()
@@ -130,15 +130,15 @@ class LampElm extends CircuitElm
 		this.updateDotCount();
 		if (CircuitElm.cirSim.dragElm != this)
 		{
-			this.drawDots(g, this.point1, this.lead1, this.curcount);
+			CircuitElm.drawDots(g, this.point1, this.lead1, this.curcount);
 			double cc = this.curcount + (this.dn - 16) / 2;
-			this.drawDots(g, this.lead1, this.filament[0], cc);
+			CircuitElm.drawDots(g, this.lead1, this.filament[0], cc);
 			cc += this.filament_len;
-			this.drawDots(g, this.filament[0], this.filament[1], cc);
+			CircuitElm.drawDots(g, this.filament[0], this.filament[1], cc);
 			cc += 16;
-			this.drawDots(g, this.filament[1], this.lead2, cc);
+			CircuitElm.drawDots(g, this.filament[1], this.lead2, cc);
 			cc += this.filament_len;
-			this.drawDots(g, this.lead2, this.point2, this.curcount);
+			CircuitElm.drawDots(g, this.lead2, this.point2, this.curcount);
 		}
 		this.drawPosts(g);
 	}

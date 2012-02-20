@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CoreUtil;
 
-class SparkGapElm extends CircuitElm
+public class SparkGapElm extends CircuitElm
 {
 	double resistance, onresistance, offresistance, breakdown, holdcurrent;
 	boolean state;
@@ -61,9 +61,9 @@ class SparkGapElm extends CircuitElm
 		int alen = 8;
 		this.calcLeads(dist + alen);
 		Point p1 = CoreUtil.interpPoint(this.point1, this.point2, (this.dn - alen) / (2 * this.dn));
-		this.arrow1 = this.calcArrow(this.point1, p1, alen, alen);
+		this.arrow1 = CircuitElm.calcArrow(this.point1, p1, alen, alen);
 		p1 = CoreUtil.interpPoint(this.point1, this.point2, (this.dn + alen) / (2 * this.dn));
-		this.arrow2 = this.calcArrow(this.point2, p1, alen, alen);
+		this.arrow2 = CircuitElm.calcArrow(this.point2, p1, alen, alen);
 	}
 
 	@Override

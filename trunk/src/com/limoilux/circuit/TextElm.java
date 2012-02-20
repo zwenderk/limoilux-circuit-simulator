@@ -94,7 +94,7 @@ public class TextElm extends CircuitElm
 		int maxw = -1;
 		for (i = 0; i != this.lines.size(); i++)
 		{
-			int w = fm.stringWidth((String) this.lines.elementAt(i));
+			int w = fm.stringWidth(this.lines.elementAt(i));
 			if (w > maxw)
 			{
 				maxw = w;
@@ -104,7 +104,7 @@ public class TextElm extends CircuitElm
 		this.setBbox(this.x, this.y, this.x, this.y);
 		for (i = 0; i != this.lines.size(); i++)
 		{
-			String s = (String) this.lines.elementAt(i);
+			String s = this.lines.elementAt(i);
 			if ((this.flags & TextElm.FLAG_CENTER) != 0)
 			{
 				this.x = (CircuitElm.cirSim.winSize.width - fm.stringWidth(s)) / 2;

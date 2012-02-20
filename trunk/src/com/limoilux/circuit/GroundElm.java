@@ -38,11 +38,11 @@ class GroundElm extends CircuitElm
 		{
 			int a = 10 - i * 4;
 			int b = i * 5; // -10;
-			this.interpPoint2(this.point1, this.point2, CircuitElm.ps1, CircuitElm.ps2, 1 + b / this.dn, a);
+			CircuitElm.interpPoint2(this.point1, this.point2, CircuitElm.ps1, CircuitElm.ps2, 1 + b / this.dn, a);
 			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 		}
 		this.doDots(g);
-		this.interpPoint(this.point1, this.point2, CircuitElm.ps2, 1 + 11. / this.dn);
+		CircuitElm.interpPoint(this.point1, this.point2, CircuitElm.ps2, 1 + 11. / this.dn);
 		this.setBbox(this.point1, CircuitElm.ps2, 11);
 		this.drawPost(g, this.x, this.y, this.nodes[0]);
 	}

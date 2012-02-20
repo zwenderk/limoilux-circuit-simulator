@@ -86,7 +86,7 @@ abstract class ChipElm extends CircuitElm
 			Point b = p.stub;
 			CircuitElm.drawThickLine(g, a, b);
 			p.curcount = this.updateDotCount(p.current, p.curcount);
-			this.drawDots(g, b, a, p.curcount);
+			CircuitElm.drawDots(g, b, a, p.curcount);
 			if (p.bubble)
 			{
 				g.setColor(CircuitElm.cirSim.printableCheckItem.getState() ? Color.white : Color.black);

@@ -109,15 +109,15 @@ class RelayElm extends CircuitElm
 		{
 			if (i == 0)
 			{
-				this.interpPoint(this.point1, this.point2, this.lines[i * 2], .5, this.openhs * 2 + 5 * this.dsign - i
-						* this.openhs * 3);
+				CircuitElm.interpPoint(this.point1, this.point2, this.lines[i * 2], .5, this.openhs * 2 + 5
+						* this.dsign - i * this.openhs * 3);
 			}
 			else
 			{
-				this.interpPoint(this.point1, this.point2, this.lines[i * 2], .5,
+				CircuitElm.interpPoint(this.point1, this.point2, this.lines[i * 2], .5,
 						(int) (this.openhs * (-i * 3 + 3 - .5 + this.d_position)) + 5 * this.dsign);
 			}
-			this.interpPoint(this.point1, this.point2, this.lines[i * 2 + 1], .5,
+			CircuitElm.interpPoint(this.point1, this.point2, this.lines[i * 2 + 1], .5,
 					(int) (this.openhs * (-i * 3 - .5 + this.d_position)) - 5 * this.dsign);
 			g.drawLine(this.lines[i * 2].x, this.lines[i * 2].y, this.lines[i * 2 + 1].x, this.lines[i * 2 + 1].y);
 		}
@@ -132,25 +132,25 @@ class RelayElm extends CircuitElm
 				CircuitElm.drawThickLine(g, this.swposts[p][i], this.swpoles[p][i]);
 			}
 
-			this.interpPoint(this.swpoles[p][1], this.swpoles[p][2], this.ptSwitch[p], this.d_position);
+			CircuitElm.interpPoint(this.swpoles[p][1], this.swpoles[p][2], this.ptSwitch[p], this.d_position);
 			// setVoltageColor(g, volts[nSwitch0]);
 			g.setColor(Color.lightGray);
 			CircuitElm.drawThickLine(g, this.swpoles[p][0], this.ptSwitch[p]);
 			this.switchCurCount[p] = this.updateDotCount(this.switchCurrent[p], this.switchCurCount[p]);
-			this.drawDots(g, this.swposts[p][0], this.swpoles[p][0], this.switchCurCount[p]);
+			CircuitElm.drawDots(g, this.swposts[p][0], this.swpoles[p][0], this.switchCurCount[p]);
 
 			if (this.i_position != 2)
 			{
-				this.drawDots(g, this.swpoles[p][this.i_position + 1], this.swposts[p][this.i_position + 1],
+				CircuitElm.drawDots(g, this.swpoles[p][this.i_position + 1], this.swposts[p][this.i_position + 1],
 						this.switchCurCount[p]);
 			}
 		}
 
 		this.coilCurCount = this.updateDotCount(this.coilCurrent, this.coilCurCount);
 
-		this.drawDots(g, this.coilPosts[0], this.coilLeads[0], this.coilCurCount);
-		this.drawDots(g, this.coilLeads[0], this.coilLeads[1], this.coilCurCount);
-		this.drawDots(g, this.coilLeads[1], this.coilPosts[1], this.coilCurCount);
+		CircuitElm.drawDots(g, this.coilPosts[0], this.coilLeads[0], this.coilCurCount);
+		CircuitElm.drawDots(g, this.coilLeads[0], this.coilLeads[1], this.coilCurCount);
+		CircuitElm.drawDots(g, this.coilLeads[1], this.coilPosts[1], this.coilCurCount);
 
 		this.drawPosts(g);
 		this.setBbox(this.coilPosts[0], this.coilLeads[1], 0);
@@ -177,27 +177,27 @@ class RelayElm extends CircuitElm
 				this.swposts[i][j] = new Point();
 				this.swpoles[i][j] = new Point();
 			}
-			this.interpPoint(this.lead1, this.lead2, this.swpoles[i][0], 0, -this.openhs * 3 * i);
-			this.interpPoint(this.lead1, this.lead2, this.swpoles[i][1], 1, -this.openhs * 3 * i - this.openhs);
-			this.interpPoint(this.lead1, this.lead2, this.swpoles[i][2], 1, -this.openhs * 3 * i + this.openhs);
-			this.interpPoint(this.point1, this.point2, this.swposts[i][0], 0, -this.openhs * 3 * i);
-			this.interpPoint(this.point1, this.point2, this.swposts[i][1], 1, -this.openhs * 3 * i - this.openhs);
-			this.interpPoint(this.point1, this.point2, this.swposts[i][2], 1, -this.openhs * 3 * i + this.openhs);
+			CircuitElm.interpPoint(this.lead1, this.lead2, this.swpoles[i][0], 0, -this.openhs * 3 * i);
+			CircuitElm.interpPoint(this.lead1, this.lead2, this.swpoles[i][1], 1, -this.openhs * 3 * i - this.openhs);
+			CircuitElm.interpPoint(this.lead1, this.lead2, this.swpoles[i][2], 1, -this.openhs * 3 * i + this.openhs);
+			CircuitElm.interpPoint(this.point1, this.point2, this.swposts[i][0], 0, -this.openhs * 3 * i);
+			CircuitElm.interpPoint(this.point1, this.point2, this.swposts[i][1], 1, -this.openhs * 3 * i - this.openhs);
+			CircuitElm.interpPoint(this.point1, this.point2, this.swposts[i][2], 1, -this.openhs * 3 * i + this.openhs);
 		}
 
 		// coil
-		this.coilPosts = this.newPointArray(2);
-		this.coilLeads = this.newPointArray(2);
-		this.ptSwitch = this.newPointArray(this.poleCount);
+		this.coilPosts = CircuitElm.newPointArray(2);
+		this.coilLeads = CircuitElm.newPointArray(2);
+		this.ptSwitch = CircuitElm.newPointArray(this.poleCount);
 
 		int x = (this.flags & this.FLAG_SWAP_COIL) != 0 ? 1 : 0;
-		this.interpPoint(this.point1, this.point2, this.coilPosts[0], x, this.openhs * 2);
-		this.interpPoint(this.point1, this.point2, this.coilPosts[1], x, this.openhs * 3);
-		this.interpPoint(this.point1, this.point2, this.coilLeads[0], .5, this.openhs * 2);
-		this.interpPoint(this.point1, this.point2, this.coilLeads[1], .5, this.openhs * 3);
+		CircuitElm.interpPoint(this.point1, this.point2, this.coilPosts[0], x, this.openhs * 2);
+		CircuitElm.interpPoint(this.point1, this.point2, this.coilPosts[1], x, this.openhs * 3);
+		CircuitElm.interpPoint(this.point1, this.point2, this.coilLeads[0], .5, this.openhs * 2);
+		CircuitElm.interpPoint(this.point1, this.point2, this.coilLeads[1], .5, this.openhs * 3);
 
 		// lines
-		this.lines = this.newPointArray(this.poleCount * 2);
+		this.lines = CircuitElm.newPointArray(this.poleCount * 2);
 	}
 
 	@Override

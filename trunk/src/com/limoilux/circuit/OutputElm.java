@@ -58,7 +58,7 @@ class OutputElm extends CircuitElm
 		{
 			s = "Y";
 		}
-		this.interpPoint(this.point1, this.point2, this.lead1, 1 - (fm.stringWidth(s) / 2 + 8) / this.dn);
+		CircuitElm.interpPoint(this.point1, this.point2, this.lead1, 1 - (fm.stringWidth(s) / 2 + 8) / this.dn);
 		this.setBbox(this.point1, this.lead1, 0);
 		this.drawCenteredText(g, s, this.x2, this.y2, true);
 		this.setVoltageColor(g, this.volts[0]);
