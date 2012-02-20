@@ -16,7 +16,7 @@ class PhaseCompElm extends ChipElm
 	}
 
 	@Override
-	String getChipName()
+	public String getChipName()
 	{
 		return "phase comparator";
 	}

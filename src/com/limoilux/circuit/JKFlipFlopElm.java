@@ -17,7 +17,7 @@ class JKFlipFlopElm extends ChipElm
 	}
 
 	@Override
-	String getChipName()
+	public String getChipName()
 	{
 		return "JK flip-flop";
 	}

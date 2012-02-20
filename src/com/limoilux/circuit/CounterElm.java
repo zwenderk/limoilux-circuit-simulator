@@ -24,7 +24,7 @@ class CounterElm extends ChipElm
 	}
 
 	@Override
-	String getChipName()
+	public String getChipName()
 	{
 		return "Counter";
 	}

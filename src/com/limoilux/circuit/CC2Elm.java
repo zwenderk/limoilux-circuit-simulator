@@ -33,7 +33,7 @@ class CC2Elm extends ChipElm
 	}
 
 	@Override
-	String getChipName()
+	public String getChipName()
 	{
 		return "CC2";
 	}

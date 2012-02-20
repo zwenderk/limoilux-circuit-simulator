@@ -25,7 +25,7 @@ class DFlipFlopElm extends ChipElm
 	}
 
 	@Override
-	String getChipName()
+	public String getChipName()
 	{
 		return "D flip-flop";
 	}
