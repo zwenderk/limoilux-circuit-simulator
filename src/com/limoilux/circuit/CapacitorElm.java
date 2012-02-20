@@ -7,7 +7,10 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
-class CapacitorElm extends CircuitElm
+import com.limoilux.circuit.core.CoreUtil;
+import com.limoilux.circuit.ui.DrawUtil;
+
+public class CapacitorElm extends CircuitElm
 {
 	double capacitance;
 	double compResistance, voltdiff;
@@ -65,13 +68,13 @@ class CapacitorElm extends CircuitElm
 		super.setPoints();
 		double f = (this.dn / 2 - 4) / this.dn;
 		// calc leads
-		this.lead1 = this.interpPoint(this.point1, this.point2, f);
-		this.lead2 = this.interpPoint(this.point1, this.point2, 1 - f);
+		this.lead1 = CoreUtil.interpPoint(this.point1, this.point2, f);
+		this.lead2 = CoreUtil.interpPoint(this.point1, this.point2, 1 - f);
 		// calc plates
-		this.plate1 = this.newPointArray(2);
-		this.plate2 = this.newPointArray(2);
-		this.interpPoint2(this.point1, this.point2, this.plate1[0], this.plate1[1], f, 12);
-		this.interpPoint2(this.point1, this.point2, this.plate2[0], this.plate2[1], 1 - f, 12);
+		this.plate1 = CoreUtil.newPointArray(2);
+		this.plate2 = CoreUtil.newPointArray(2);
+		CoreUtil.interpPoint2(this.point1, this.point2, this.plate1[0], this.plate1[1], f, 12);
+		CoreUtil.interpPoint2(this.point1, this.point2, this.plate2[0], this.plate2[1], 1 - f, 12);
 	}
 
 	@Override
@@ -82,9 +85,9 @@ class CapacitorElm extends CircuitElm
 
 		// draw first lead and plate
 		this.setVoltageColor(g, this.volts[0]);
-		CircuitElm.drawThickLine(g, this.point1, this.lead1);
+	    DrawUtil.drawThickLine(g, this.point1, this.lead1);
 		this.setPowerColor(g, false);
-		CircuitElm.drawThickLine(g, this.plate1[0], this.plate1[1]);
+		DrawUtil.drawThickLine(g, this.plate1[0], this.plate1[1]);
 		if (CircuitElm.cirSim.powerCheckItem.getState())
 		{
 			g.setColor(Color.gray);
@@ -92,15 +95,15 @@ class CapacitorElm extends CircuitElm
 
 		// draw second lead and plate
 		this.setVoltageColor(g, this.volts[1]);
-		CircuitElm.drawThickLine(g, this.point2, this.lead2);
+		DrawUtil.drawThickLine(g, this.point2, this.lead2);
 		this.setPowerColor(g, false);
-		CircuitElm.drawThickLine(g, this.plate2[0], this.plate2[1]);
+		DrawUtil.drawThickLine(g, this.plate2[0], this.plate2[1]);
 
 		this.updateDotCount();
 		if (CircuitElm.cirSim.dragElm != this)
 		{
-			this.drawDots(g, this.point1, this.lead1, this.curcount);
-			this.drawDots(g, this.point2, this.lead2, -this.curcount);
+			DrawUtil.drawDots(g, this.point1, this.lead1, this.curcount);
+			DrawUtil.drawDots(g, this.point2, this.lead2, -this.curcount);
 		}
 		this.drawPosts(g);
 		if (CircuitElm.cirSim.showValuesCheckItem.getState())
@@ -160,7 +163,7 @@ class CapacitorElm extends CircuitElm
 		}
 	}
 
-	double curSourceValue;
+	public double curSourceValue;
 
 	@Override
 	public void doStep()
