@@ -52,8 +52,6 @@ import java.util.Vector;
 
 import com.limoilux.circuit.CapacitorElm;
 import com.limoilux.circuit.CurrentElm;
-import com.limoilux.circuit.EditDialog;
-import com.limoilux.circuit.EditOptions;
 import com.limoilux.circuit.GroundElm;
 import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.RailElm;
@@ -67,6 +65,8 @@ import com.limoilux.circuit.ui.CircuitLayout;
 import com.limoilux.circuit.ui.CircuitNode;
 import com.limoilux.circuit.ui.CircuitNodeLink;
 import com.limoilux.circuit.ui.DrawUtil;
+import com.limoilux.circuit.ui.EditDialog;
+import com.limoilux.circuit.ui.EditOptions;
 import com.limoilux.circuit.ui.ImportDialog;
 import com.limoilux.circuit.ui.RowInfo;
 import com.limoilux.circuit.ui.Scope;

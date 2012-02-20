@@ -11,6 +11,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
+import com.limoilux.circuit.ui.EditInfo;
 
 public abstract class ChipElm extends CircuitElm
 {

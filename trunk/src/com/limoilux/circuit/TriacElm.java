@@ -11,6 +11,7 @@ import java.awt.Polygon;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.ui.EditInfo;
 
 // Silicon-Controlled Rectifier
 // 3 nodes, 1 internal node
