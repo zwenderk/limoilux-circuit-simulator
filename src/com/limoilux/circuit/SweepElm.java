@@ -82,7 +82,7 @@ class SweepElm extends CircuitElm
 			tm = 2000 - tm;
 		}
 		double w = 1 + tm * .002;
-		if (!CircuitElm.sim.stoppedCheck.getState())
+		if (!CircuitElm.cirSim.stoppedCheck.getState())
 		{
 			w = 1 + 2 * (this.frequency - this.minF) / (this.maxF - this.minF);
 		}
@@ -96,7 +96,7 @@ class SweepElm extends CircuitElm
 			ox = xc + i;
 			oy = yy;
 		}
-		if (CircuitElm.sim.showValuesCheckItem.getState())
+		if (CircuitElm.cirSim.showValuesCheckItem.getState())
 		{
 			String s = CircuitElm.getShortUnitText(this.frequency, "Hz");
 			if (this.dx == 0 || this.dy == 0)
@@ -107,7 +107,7 @@ class SweepElm extends CircuitElm
 
 		this.drawPosts(g);
 		this.curcount = this.updateDotCount(-this.current, this.curcount);
-		if (CircuitElm.sim.dragElm != this)
+		if (CircuitElm.cirSim.dragElm != this)
 		{
 			this.drawDots(g, this.point1, this.lead1, this.curcount);
 		}
@@ -116,7 +116,7 @@ class SweepElm extends CircuitElm
 	@Override
 	void stamp()
 	{
-		CircuitElm.sim.stampVoltageSource(0, this.nodes[0], this.voltSource);
+		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[0], this.voltSource);
 	}
 
 	double fadd, fmul, freqTime, savedTimeStep;
@@ -132,15 +132,15 @@ class SweepElm extends CircuitElm
 		}
 		if ((this.flags & this.FLAG_LOG) == 0)
 		{
-			this.fadd = this.dir * CircuitElm.sim.timeStep * (this.maxF - this.minF) / this.sweepTime;
+			this.fadd = this.dir * CircuitElm.cirSim.timeStep * (this.maxF - this.minF) / this.sweepTime;
 			this.fmul = 1;
 		}
 		else
 		{
 			this.fadd = 0;
-			this.fmul = Math.pow(this.maxF / this.minF, this.dir * CircuitElm.sim.timeStep / this.sweepTime);
+			this.fmul = Math.pow(this.maxF / this.minF, this.dir * CircuitElm.cirSim.timeStep / this.sweepTime);
 		}
-		this.savedTimeStep = CircuitElm.sim.timeStep;
+		this.savedTimeStep = CircuitElm.cirSim.timeStep;
 	}
 
 	@Override
@@ -158,12 +158,12 @@ class SweepElm extends CircuitElm
 	void startIteration()
 	{
 		// has timestep been changed?
-		if (CircuitElm.sim.timeStep != this.savedTimeStep)
+		if (CircuitElm.cirSim.timeStep != this.savedTimeStep)
 		{
 			this.setParams();
 		}
 		this.v = Math.sin(this.freqTime) * this.maxV;
-		this.freqTime += this.frequency * 2 * CircuitElm.pi * CircuitElm.sim.timeStep;
+		this.freqTime += this.frequency * 2 * CircuitElm.pi * CircuitElm.cirSim.timeStep;
 		this.frequency = this.frequency * this.fmul + this.fadd;
 		if (this.frequency >= this.maxF && this.dir == 1)
 		{
@@ -189,7 +189,7 @@ class SweepElm extends CircuitElm
 	@Override
 	void doStep()
 	{
-		CircuitElm.sim.updateVoltageSource(0, this.nodes[0], this.voltSource, this.v);
+		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[0], this.voltSource, this.v);
 	}
 
 	@Override
@@ -258,7 +258,7 @@ class SweepElm extends CircuitElm
 	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
-		double maxfreq = 1 / (8 * CircuitElm.sim.timeStep);
+		double maxfreq = 1 / (8 * CircuitElm.cirSim.timeStep);
 		if (n == 0)
 		{
 			this.minF = ei.value;

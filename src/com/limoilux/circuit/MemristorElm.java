@@ -114,7 +114,7 @@ class MemristorElm extends CircuitElm
 	void startIteration()
 	{
 		double wd = this.dopeWidth / this.totalWidth;
-		this.dopeWidth += CircuitElm.sim.timeStep * this.mobility * this.r_on * this.current / this.totalWidth;
+		this.dopeWidth += CircuitElm.cirSim.timeStep * this.mobility * this.r_on * this.current / this.totalWidth;
 		if (this.dopeWidth < 0)
 		{
 			this.dopeWidth = 0;
@@ -129,14 +129,14 @@ class MemristorElm extends CircuitElm
 	@Override
 	void stamp()
 	{
-		CircuitElm.sim.stampNonLinear(this.nodes[0]);
-		CircuitElm.sim.stampNonLinear(this.nodes[1]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);
 	}
 
 	@Override
 	void doStep()
 	{
-		CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
+		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
 	}
 
 	@Override
@@ -144,7 +144,7 @@ class MemristorElm extends CircuitElm
 	{
 		arr[0] = "memristor";
 		this.getBasicInfo(arr);
-		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CircuitElm.sim.ohmString);
+		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CircuitElm.cirSim.ohmString);
 		arr[4] = "P = " + CircuitElm.getUnitText(this.getPower(), "W");
 	}
 
@@ -157,7 +157,7 @@ class MemristorElm extends CircuitElm
 	@Override
 	String getScopeUnits(int x)
 	{
-		return x == 2 ? CircuitElm.sim.ohmString : x == 1 ? "W" : "V";
+		return x == 2 ? CircuitElm.cirSim.ohmString : x == 1 ? "W" : "V";
 	}
 
 	@Override

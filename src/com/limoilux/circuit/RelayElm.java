@@ -34,7 +34,7 @@ class RelayElm extends CircuitElm
 	public RelayElm(int xx, int yy)
 	{
 		super(xx, yy);
-		this.ind = new Inductor(CircuitElm.sim);
+		this.ind = new Inductor(CircuitElm.cirSim);
 		this.inductance = .2;
 		this.ind.setup(this.inductance, 0, Inductor.FLAG_BACK_EULER);
 		this.noDiagonal = true;
@@ -58,7 +58,7 @@ class RelayElm extends CircuitElm
 		this.onCurrent = new Double(st.nextToken()).doubleValue();
 		this.coilR = new Double(st.nextToken()).doubleValue();
 		this.noDiagonal = true;
-		this.ind = new Inductor(CircuitElm.sim);
+		this.ind = new Inductor(CircuitElm.cirSim);
 		this.ind.setup(this.inductance, this.coilCurrent, Inductor.FLAG_BACK_EULER);
 		this.setupPoles();
 	}
@@ -237,12 +237,12 @@ class RelayElm extends CircuitElm
 		// inductor from coil post 1 to internal node
 		this.ind.stamp(this.nodes[this.nCoil1], this.nodes[this.nCoil3]);
 		// resistor from internal node to coil post 2
-		CircuitElm.sim.stampResistor(this.nodes[this.nCoil3], this.nodes[this.nCoil2], this.coilR);
+		CircuitElm.cirSim.stampResistor(this.nodes[this.nCoil3], this.nodes[this.nCoil2], this.coilR);
 
 		int i;
 		for (i = 0; i != this.poleCount * 3; i++)
 		{
-			CircuitElm.sim.stampNonLinear(this.nodes[this.nSwitch0 + i]);
+			CircuitElm.cirSim.stampNonLinear(this.nodes[this.nSwitch0 + i]);
 		}
 	}
 
@@ -294,8 +294,8 @@ class RelayElm extends CircuitElm
 		int p;
 		for (p = 0; p != this.poleCount * 3; p += 3)
 		{
-			CircuitElm.sim.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch1 + p], this.i_position == 0 ? this.r_on : this.r_off);
-			CircuitElm.sim.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch2 + p], this.i_position == 1 ? this.r_on : this.r_off);
+			CircuitElm.cirSim.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch1 + p], this.i_position == 0 ? this.r_on : this.r_off);
+			CircuitElm.cirSim.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch2 + p], this.i_position == 1 ? this.r_on : this.r_off);
 		}
 	}
 

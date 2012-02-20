@@ -104,7 +104,7 @@ class TextElm extends CircuitElm
 			String s = (String) this.lines.elementAt(i);
 			if ((this.flags & this.FLAG_CENTER) != 0)
 			{
-				this.x = (CircuitElm.sim.winSize.width - fm.stringWidth(s)) / 2;
+				this.x = (CircuitElm.cirSim.winSize.width - fm.stringWidth(s)) / 2;
 			}
 			g.drawString(s, this.x, cury);
 			if ((this.flags & this.FLAG_BAR) != 0)

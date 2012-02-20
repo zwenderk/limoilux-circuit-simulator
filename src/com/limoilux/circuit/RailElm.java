@@ -80,7 +80,7 @@ class RailElm extends VoltageElm
 		}
 		this.drawPosts(g);
 		this.curcount = this.updateDotCount(-this.current, this.curcount);
-		if (CircuitElm.sim.dragElm != this)
+		if (CircuitElm.cirSim.dragElm != this)
 		{
 			this.drawDots(g, this.point1, this.lead1, this.curcount);
 		}
@@ -97,11 +97,11 @@ class RailElm extends VoltageElm
 	{
 		if (this.waveform == VoltageElm.WF_DC)
 		{
-			CircuitElm.sim.stampVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
+			CircuitElm.cirSim.stampVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
 		}
 		else
 		{
-			CircuitElm.sim.stampVoltageSource(0, this.nodes[0], this.voltSource);
+			CircuitElm.cirSim.stampVoltageSource(0, this.nodes[0], this.voltSource);
 		}
 	}
 
@@ -110,7 +110,7 @@ class RailElm extends VoltageElm
 	{
 		if (this.waveform != VoltageElm.WF_DC)
 		{
-			CircuitElm.sim.updateVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
+			CircuitElm.cirSim.updateVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
 		}
 	}
 

@@ -11,7 +11,7 @@ class InductorElm extends CircuitElm
 	public InductorElm(int xx, int yy)
 	{
 		super(xx, yy);
-		this.ind = new Inductor(CircuitElm.sim);
+		this.ind = new Inductor(CircuitElm.cirSim);
 		this.inductance = 1;
 		this.ind.setup(this.inductance, this.current, this.flags);
 	}
@@ -19,7 +19,7 @@ class InductorElm extends CircuitElm
 	public InductorElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		this.ind = new Inductor(CircuitElm.sim);
+		this.ind = new Inductor(CircuitElm.cirSim);
 		this.inductance = new Double(st.nextToken()).doubleValue();
 		this.current = new Double(st.nextToken()).doubleValue();
 		this.ind.setup(this.inductance, this.current, this.flags);
@@ -55,7 +55,7 @@ class InductorElm extends CircuitElm
 		this.draw2Leads(g);
 		this.setPowerColor(g, false);
 		this.drawCoil(g, 8, this.lead1, this.lead2, v1, v2);
-		if (CircuitElm.sim.showValuesCheckItem.getState())
+		if (CircuitElm.cirSim.showValuesCheckItem.getState())
 		{
 			String s = CircuitElm.getShortUnitText(this.inductance, "H");
 			this.drawValues(g, s, hs);

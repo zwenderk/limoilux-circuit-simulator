@@ -83,7 +83,7 @@ class CapacitorElm extends CircuitElm
 		CircuitElm.drawThickLine(g, this.point1, this.lead1);
 		this.setPowerColor(g, false);
 		CircuitElm.drawThickLine(g, this.plate1[0], this.plate1[1]);
-		if (CircuitElm.sim.powerCheckItem.getState())
+		if (CircuitElm.cirSim.powerCheckItem.getState())
 		{
 			g.setColor(Color.gray);
 		}
@@ -95,13 +95,13 @@ class CapacitorElm extends CircuitElm
 		CircuitElm.drawThickLine(g, this.plate2[0], this.plate2[1]);
 
 		this.updateDotCount();
-		if (CircuitElm.sim.dragElm != this)
+		if (CircuitElm.cirSim.dragElm != this)
 		{
 			this.drawDots(g, this.point1, this.lead1, this.curcount);
 			this.drawDots(g, this.point2, this.lead2, -this.curcount);
 		}
 		this.drawPosts(g);
-		if (CircuitElm.sim.showValuesCheckItem.getState())
+		if (CircuitElm.cirSim.showValuesCheckItem.getState())
 		{
 			String s = CircuitElm.getShortUnitText(this.capacitance, "F");
 			this.drawValues(g, s, hs);
@@ -118,15 +118,15 @@ class CapacitorElm extends CircuitElm
 		// if RC is small relative to the timestep.
 		if (this.isTrapezoidal())
 		{
-			this.compResistance = CircuitElm.sim.timeStep / (2 * this.capacitance);
+			this.compResistance = CircuitElm.cirSim.timeStep / (2 * this.capacitance);
 		}
 		else
 		{
-			this.compResistance = CircuitElm.sim.timeStep / this.capacitance;
+			this.compResistance = CircuitElm.cirSim.timeStep / this.capacitance;
 		}
-		CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[1], this.compResistance);
-		CircuitElm.sim.stampRightSide(this.nodes[0]);
-		CircuitElm.sim.stampRightSide(this.nodes[1]);
+		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.compResistance);
+		CircuitElm.cirSim.stampRightSide(this.nodes[0]);
+		CircuitElm.cirSim.stampRightSide(this.nodes[1]);
 	}
 
 	@Override
@@ -161,7 +161,7 @@ class CapacitorElm extends CircuitElm
 	@Override
 	void doStep()
 	{
-		CircuitElm.sim.stampCurrentSource(this.nodes[0], this.nodes[1], this.curSourceValue);
+		CircuitElm.cirSim.stampCurrentSource(this.nodes[0], this.nodes[1], this.curSourceValue);
 	}
 
 	@Override

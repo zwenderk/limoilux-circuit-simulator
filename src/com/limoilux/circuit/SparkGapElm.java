@@ -113,14 +113,14 @@ class SparkGapElm extends CircuitElm
 	void doStep()
 	{
 		this.resistance = this.state ? this.onresistance : this.offresistance;
-		CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
+		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
 	}
 
 	@Override
 	void stamp()
 	{
-		CircuitElm.sim.stampNonLinear(this.nodes[0]);
-		CircuitElm.sim.stampNonLinear(this.nodes[1]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);
 	}
 
 	@Override
@@ -129,8 +129,8 @@ class SparkGapElm extends CircuitElm
 		arr[0] = "spark gap";
 		this.getBasicInfo(arr);
 		arr[3] = this.state ? "on" : "off";
-		arr[4] = "Ron = " + CircuitElm.getUnitText(this.onresistance, CircuitElm.sim.ohmString);
-		arr[5] = "Roff = " + CircuitElm.getUnitText(this.offresistance, CircuitElm.sim.ohmString);
+		arr[4] = "Ron = " + CircuitElm.getUnitText(this.onresistance, CircuitElm.cirSim.ohmString);
+		arr[5] = "Roff = " + CircuitElm.getUnitText(this.offresistance, CircuitElm.cirSim.ohmString);
 		arr[6] = "Vbreakdown = " + CircuitElm.getUnitText(this.breakdown, "V");
 	}
 

@@ -54,10 +54,10 @@ class ThermistorElm extends CircuitElm
 
 	void createSlider()
 	{
-		CircuitElm.sim.mainContainer.add(this.label = new Label("Temperature", Label.CENTER));
+		CircuitElm.cirSim.mainContainer.add(this.label = new Label("Temperature", Label.CENTER));
 		int value = 50;
-		CircuitElm.sim.mainContainer.add(this.slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
-		CircuitElm.sim.mainContainer.validate();
+		CircuitElm.cirSim.mainContainer.add(this.slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
+		CircuitElm.cirSim.mainContainer.validate();
 	}
 
 	@Override
@@ -72,8 +72,8 @@ class ThermistorElm extends CircuitElm
 	@Override
 	void delete()
 	{
-		CircuitElm.sim.mainContainer.remove(this.label);
-		CircuitElm.sim.mainContainer.remove(this.slider);
+		CircuitElm.cirSim.mainContainer.remove(this.label);
+		CircuitElm.cirSim.mainContainer.remove(this.slider);
 	}
 
 	@Override
@@ -109,14 +109,14 @@ class ThermistorElm extends CircuitElm
 	@Override
 	void doStep()
 	{
-		CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
+		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
 	}
 
 	@Override
 	void stamp()
 	{
-		CircuitElm.sim.stampNonLinear(this.nodes[0]);
-		CircuitElm.sim.stampNonLinear(this.nodes[1]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);
 	}
 
 	@Override
@@ -125,9 +125,9 @@ class ThermistorElm extends CircuitElm
 		// FIXME
 		arr[0] = "spark gap";
 		this.getBasicInfo(arr);
-		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CircuitElm.sim.ohmString);
-		arr[4] = "Ron = " + CircuitElm.getUnitText(this.minresistance, CircuitElm.sim.ohmString);
-		arr[5] = "Roff = " + CircuitElm.getUnitText(this.maxresistance, CircuitElm.sim.ohmString);
+		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CircuitElm.cirSim.ohmString);
+		arr[4] = "Ron = " + CircuitElm.getUnitText(this.minresistance, CircuitElm.cirSim.ohmString);
+		arr[5] = "Roff = " + CircuitElm.getUnitText(this.maxresistance, CircuitElm.cirSim.ohmString);
 	}
 
 	@Override

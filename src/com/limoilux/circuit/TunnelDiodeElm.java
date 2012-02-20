@@ -103,8 +103,8 @@ class TunnelDiodeElm extends CircuitElm
 	@Override
 	void stamp()
 	{
-		CircuitElm.sim.stampNonLinear(this.nodes[0]);
-		CircuitElm.sim.stampNonLinear(this.nodes[1]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);
 	}
 
 	static final double pvp = .1;
@@ -120,7 +120,7 @@ class TunnelDiodeElm extends CircuitElm
 		double voltdiff = this.volts[0] - this.volts[1];
 		if (Math.abs(voltdiff - this.lastvoltdiff) > .01)
 		{
-			CircuitElm.sim.converged = false;
+			CircuitElm.cirSim.converged = false;
 		}
 		// System.out.println(voltdiff + " " + lastvoltdiff + " " +
 		// Math.abs(voltdiff-lastvoltdiff));
@@ -133,8 +133,8 @@ class TunnelDiodeElm extends CircuitElm
 		double geq = TunnelDiodeElm.pip * Math.exp(-TunnelDiodeElm.pvpp / TunnelDiodeElm.pvt) * Math.exp(voltdiff / TunnelDiodeElm.pvt) / TunnelDiodeElm.pvt + TunnelDiodeElm.pip * Math.exp(1 - voltdiff / TunnelDiodeElm.pvp)
 				/ TunnelDiodeElm.pvp - Math.exp(1 - voltdiff / TunnelDiodeElm.pvp) * TunnelDiodeElm.pip * voltdiff / (TunnelDiodeElm.pvp * TunnelDiodeElm.pvp) + Math.exp(voltdiff - TunnelDiodeElm.pvv) * TunnelDiodeElm.piv;
 		double nc = i - geq * voltdiff;
-		CircuitElm.sim.stampConductance(this.nodes[0], this.nodes[1], geq);
-		CircuitElm.sim.stampCurrentSource(this.nodes[0], this.nodes[1], nc);
+		CircuitElm.cirSim.stampConductance(this.nodes[0], this.nodes[1], geq);
+		CircuitElm.cirSim.stampCurrentSource(this.nodes[0], this.nodes[1], nc);
 	}
 
 	@Override

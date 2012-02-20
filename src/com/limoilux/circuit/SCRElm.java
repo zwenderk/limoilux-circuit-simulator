@@ -56,7 +56,7 @@ class SCRElm extends CircuitElm
 
 	void setup()
 	{
-		this.diode = new Diode(CircuitElm.sim);
+		this.diode = new Diode(CircuitElm.cirSim);
 		this.diode.setup(.8, 0);
 	}
 
@@ -123,8 +123,8 @@ class SCRElm extends CircuitElm
 
 		this.gate = this.newPointArray(2);
 		double leadlen = (this.dn - 16) / 2;
-		int gatelen = CircuitElm.sim.gridSize;
-		gatelen += leadlen % CircuitElm.sim.gridSize;
+		int gatelen = CircuitElm.cirSim.gridSize;
+		gatelen += leadlen % CircuitElm.cirSim.gridSize;
 		if (leadlen < gatelen)
 		{
 			this.x2 = this.x;
@@ -132,7 +132,7 @@ class SCRElm extends CircuitElm
 			return;
 		}
 		this.interpPoint(this.lead2, this.point2, this.gate[0], gatelen / leadlen, gatelen * dir);
-		this.interpPoint(this.lead2, this.point2, this.gate[1], gatelen / leadlen, CircuitElm.sim.gridSize * 2 * dir);
+		this.interpPoint(this.lead2, this.point2, this.gate[1], gatelen / leadlen, CircuitElm.cirSim.gridSize * 2 * dir);
 	}
 
 	@Override
@@ -161,7 +161,7 @@ class SCRElm extends CircuitElm
 		this.curcount_a = this.updateDotCount(this.ia, this.curcount_a);
 		this.curcount_c = this.updateDotCount(this.ic, this.curcount_c);
 		this.curcount_g = this.updateDotCount(this.ig, this.curcount_g);
-		if (CircuitElm.sim.dragElm != this)
+		if (CircuitElm.cirSim.dragElm != this)
 		{
 			this.drawDots(g, this.point1, this.lead2, this.curcount_a);
 			this.drawDots(g, this.point2, this.lead2, this.curcount_c);
@@ -200,11 +200,11 @@ class SCRElm extends CircuitElm
 	@Override
 	void stamp()
 	{
-		CircuitElm.sim.stampNonLinear(this.nodes[this.anode]);
-		CircuitElm.sim.stampNonLinear(this.nodes[this.cnode]);
-		CircuitElm.sim.stampNonLinear(this.nodes[this.gnode]);
-		CircuitElm.sim.stampNonLinear(this.nodes[this.inode]);
-		CircuitElm.sim.stampResistor(this.nodes[this.gnode], this.nodes[this.cnode], this.cresistance);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[this.anode]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[this.cnode]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[this.gnode]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[this.inode]);
+		CircuitElm.cirSim.stampResistor(this.nodes[this.gnode], this.nodes[this.cnode], this.cresistance);
 		this.diode.stamp(this.nodes[this.inode], this.nodes[this.gnode]);
 	}
 
@@ -215,7 +215,7 @@ class SCRElm extends CircuitElm
 		double vag = this.volts[this.anode] - this.volts[this.gnode]; // typically positive
 		if (Math.abs(vac - this.lastvac) > .01 || Math.abs(vag - this.lastvag) > .01)
 		{
-			CircuitElm.sim.converged = false;
+			CircuitElm.cirSim.converged = false;
 		}
 		this.lastvac = vac;
 		this.lastvag = vag;
@@ -227,7 +227,7 @@ class SCRElm extends CircuitElm
 		// System.out.println(vac + " " + vag + " " + sim.converged + " " + ic +
 		// " " + ia + " " + aresistance + " " + volts[inode] + " " +
 		// volts[gnode] + " " + volts[anode]);
-		CircuitElm.sim.stampResistor(this.nodes[this.anode], this.nodes[this.inode], this.aresistance);
+		CircuitElm.cirSim.stampResistor(this.nodes[this.anode], this.nodes[this.inode], this.aresistance);
 	}
 
 	@Override

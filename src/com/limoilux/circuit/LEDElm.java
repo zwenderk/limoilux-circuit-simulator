@@ -57,7 +57,7 @@ class LEDElm extends DiodeElm
 	@Override
 	void draw(Graphics g)
 	{
-		if (this.needsHighlight() || this == CircuitElm.sim.dragElm)
+		if (this.needsHighlight() || this == CircuitElm.cirSim.dragElm)
 		{
 			super.draw(g);
 			return;

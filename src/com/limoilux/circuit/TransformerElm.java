@@ -48,8 +48,8 @@ class TransformerElm extends CircuitElm
 	@Override
 	void drag(int xx, int yy)
 	{
-		xx = CircuitElm.sim.snapGrid(xx);
-		yy = CircuitElm.sim.snapGrid(yy);
+		xx = CircuitElm.cirSim.snapGrid(xx);
+		yy = CircuitElm.cirSim.snapGrid(yy);
 		this.width = CircuitElm.max(32, CircuitElm.abs(yy - this.y));
 		if (xx == this.x)
 		{
@@ -187,19 +187,19 @@ class TransformerElm extends CircuitElm
 		double m = this.couplingCoef * Math.sqrt(l1 * l2);
 		// build inverted matrix
 		double deti = 1 / (l1 * l2 - m * m);
-		double ts = this.isTrapezoidal() ? CircuitElm.sim.timeStep / 2 : CircuitElm.sim.timeStep;
+		double ts = this.isTrapezoidal() ? CircuitElm.cirSim.timeStep / 2 : CircuitElm.cirSim.timeStep;
 		this.a1 = l2 * deti * ts; // we multiply dt/2 into a1..a4 here
 		this.a2 = -m * deti * ts;
 		this.a3 = -m * deti * ts;
 		this.a4 = l1 * deti * ts;
-		CircuitElm.sim.stampConductance(this.nodes[0], this.nodes[2], this.a1);
-		CircuitElm.sim.stampVCCurrentSource(this.nodes[0], this.nodes[2], this.nodes[1], this.nodes[3], this.a2);
-		CircuitElm.sim.stampVCCurrentSource(this.nodes[1], this.nodes[3], this.nodes[0], this.nodes[2], this.a3);
-		CircuitElm.sim.stampConductance(this.nodes[1], this.nodes[3], this.a4);
-		CircuitElm.sim.stampRightSide(this.nodes[0]);
-		CircuitElm.sim.stampRightSide(this.nodes[1]);
-		CircuitElm.sim.stampRightSide(this.nodes[2]);
-		CircuitElm.sim.stampRightSide(this.nodes[3]);
+		CircuitElm.cirSim.stampConductance(this.nodes[0], this.nodes[2], this.a1);
+		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[0], this.nodes[2], this.nodes[1], this.nodes[3], this.a2);
+		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[1], this.nodes[3], this.nodes[0], this.nodes[2], this.a3);
+		CircuitElm.cirSim.stampConductance(this.nodes[1], this.nodes[3], this.a4);
+		CircuitElm.cirSim.stampRightSide(this.nodes[0]);
+		CircuitElm.cirSim.stampRightSide(this.nodes[1]);
+		CircuitElm.cirSim.stampRightSide(this.nodes[2]);
+		CircuitElm.cirSim.stampRightSide(this.nodes[3]);
 	}
 
 	@Override
@@ -224,8 +224,8 @@ class TransformerElm extends CircuitElm
 	@Override
 	void doStep()
 	{
-		CircuitElm.sim.stampCurrentSource(this.nodes[0], this.nodes[2], this.curSourceValue1);
-		CircuitElm.sim.stampCurrentSource(this.nodes[1], this.nodes[3], this.curSourceValue2);
+		CircuitElm.cirSim.stampCurrentSource(this.nodes[0], this.nodes[2], this.curSourceValue1);
+		CircuitElm.cirSim.stampCurrentSource(this.nodes[1], this.nodes[3], this.curSourceValue2);
 	}
 
 	@Override

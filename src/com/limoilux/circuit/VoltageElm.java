@@ -94,11 +94,11 @@ class VoltageElm extends CircuitElm
 	{
 		if (this.waveform == VoltageElm.WF_DC)
 		{
-			CircuitElm.sim.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
+			CircuitElm.cirSim.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
 		}
 		else
 		{
-			CircuitElm.sim.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource);
+			CircuitElm.cirSim.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource);
 		}
 	}
 
@@ -107,13 +107,13 @@ class VoltageElm extends CircuitElm
 	{
 		if (this.waveform != VoltageElm.WF_DC)
 		{
-			CircuitElm.sim.updateVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
+			CircuitElm.cirSim.updateVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
 		}
 	}
 
 	double getVoltage()
 	{
-		double w = 2 * CircuitElm.pi * (CircuitElm.sim.t - this.freqTimeZero) * this.frequency + this.phaseShift;
+		double w = 2 * CircuitElm.pi * (CircuitElm.cirSim.t - this.freqTimeZero) * this.frequency + this.phaseShift;
 		switch (this.waveform)
 		{
 		case WF_DC:
@@ -166,7 +166,7 @@ class VoltageElm extends CircuitElm
 			this.drawWaveform(g, CircuitElm.ps1);
 		}
 		this.updateDotCount();
-		if (CircuitElm.sim.dragElm != this)
+		if (CircuitElm.cirSim.dragElm != this)
 		{
 			if (this.waveform == VoltageElm.WF_DC)
 			{
@@ -245,7 +245,7 @@ class VoltageElm extends CircuitElm
 			break;
 		}
 		}
-		if (CircuitElm.sim.showValuesCheckItem.getState())
+		if (CircuitElm.cirSim.showValuesCheckItem.getState())
 		{
 			String s = CircuitElm.getShortUnitText(this.frequency, "Hz");
 			if (this.dx == 0 || this.dy == 0)
@@ -377,13 +377,13 @@ class VoltageElm extends CircuitElm
 			// even though the frequency has changed.
 			double oldfreq = this.frequency;
 			this.frequency = ei.value;
-			double maxfreq = 1 / (8 * CircuitElm.sim.timeStep);
+			double maxfreq = 1 / (8 * CircuitElm.cirSim.timeStep);
 			if (this.frequency > maxfreq)
 			{
 				this.frequency = maxfreq;
 			}
 			double adj = this.frequency - oldfreq;
-			this.freqTimeZero = CircuitElm.sim.t - oldfreq * (CircuitElm.sim.t - this.freqTimeZero) / this.frequency;
+			this.freqTimeZero = CircuitElm.cirSim.t - oldfreq * (CircuitElm.cirSim.t - this.freqTimeZero) / this.frequency;
 		}
 		if (n == 1)
 		{

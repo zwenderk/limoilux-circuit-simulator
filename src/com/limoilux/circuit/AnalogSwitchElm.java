@@ -98,8 +98,8 @@ class AnalogSwitchElm extends CircuitElm
 	@Override
 	void stamp()
 	{
-		CircuitElm.sim.stampNonLinear(this.nodes[0]);
-		CircuitElm.sim.stampNonLinear(this.nodes[1]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);
 	}
 
 	@Override
@@ -111,14 +111,14 @@ class AnalogSwitchElm extends CircuitElm
 			this.open = !this.open;
 		}
 		this.resistance = this.open ? this.r_off : this.r_on;
-		CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
+		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
 	}
 
 	@Override
 	void drag(int xx, int yy)
 	{
-		xx = CircuitElm.sim.snapGrid(xx);
-		yy = CircuitElm.sim.snapGrid(yy);
+		xx = CircuitElm.cirSim.snapGrid(xx);
+		yy = CircuitElm.cirSim.snapGrid(yy);
 		if (CircuitElm.abs(this.x - xx) < CircuitElm.abs(this.y - yy))
 		{
 			xx = this.x;
@@ -128,7 +128,7 @@ class AnalogSwitchElm extends CircuitElm
 			yy = this.y;
 		}
 		int q1 = CircuitElm.abs(this.x - xx) + CircuitElm.abs(this.y - yy);
-		int q2 = q1 / 2 % CircuitElm.sim.gridSize;
+		int q2 = q1 / 2 % CircuitElm.cirSim.gridSize;
 		if (q2 != 0)
 		{
 			return;

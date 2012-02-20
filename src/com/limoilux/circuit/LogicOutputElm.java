@@ -111,7 +111,7 @@ class LogicOutputElm extends CircuitElm
 	{
 		if (this.needsPullDown())
 		{
-			CircuitElm.sim.stampResistor(this.nodes[0], 0, 1e6);
+			CircuitElm.cirSim.stampResistor(this.nodes[0], 0, 1e6);
 		}
 	}
 
