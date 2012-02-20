@@ -739,12 +739,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			this.analyzeCircuit();
 			this.analyzeFlag = false;
 		}
-		
+
 		if (CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElm)
 		{
 			this.mouseElm = (CircuitElm) CirSim.editDialog.elm;
 		}
-		
+
 		realMouseElm = this.mouseElm;
 		if (this.mouseElm == null)
 		{
@@ -1223,7 +1223,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private void analyzeCircuit()
 	{
 		CircuitNode cn;
-		
+
 		this.calcCircuitBottom();
 		if (this.elmList.isEmpty())
 		{
@@ -2178,19 +2178,27 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 	private void doImport(boolean imp, boolean url)
 	{
+		String dump = "";
+
 		if (CirSim.impDialog != null)
 		{
 			this.requestFocus();
 			CirSim.impDialog.setVisible(false);
 			CirSim.impDialog = null;
 		}
-		String dump = imp ? "" : this.dumpCircuit();
+
+		if (!imp)
+		{
+			dump = this.dumpCircuit();
+		}
+
 		if (url)
 		{
 			dump = this.baseURL + "#" + URLEncoder.encode(dump);
 		}
+		
 		CirSim.impDialog = new ImportDialog(this, dump, url);
-		CirSim.impDialog.show();
+		CirSim.impDialog.setVisible(true);
 		this.pushUndo();
 	}
 
