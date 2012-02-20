@@ -52,7 +52,7 @@ class VoltageElm extends CircuitElm
 		if ((this.flags & VoltageElm.FLAG_COS) != 0)
 		{
 			this.flags &= ~VoltageElm.FLAG_COS;
-			this.phaseShift = CircuitElm.pi / 2;
+			this.phaseShift = CircuitElm.PI / 2;
 		}
 		this.reset();
 	}
@@ -84,11 +84,11 @@ class VoltageElm extends CircuitElm
 
 	double triangleFunc(double x)
 	{
-		if (x < CircuitElm.pi)
+		if (x < CircuitElm.PI)
 		{
-			return x * (2 / CircuitElm.pi) - 1;
+			return x * (2 / CircuitElm.PI) - 1;
 		}
-		return 1 - (x - CircuitElm.pi) * (2 / CircuitElm.pi);
+		return 1 - (x - CircuitElm.PI) * (2 / CircuitElm.PI);
 	}
 
 	@Override
@@ -115,7 +115,7 @@ class VoltageElm extends CircuitElm
 
 	double getVoltage()
 	{
-		double w = 2 * CircuitElm.pi * (CircuitElm.cirSim.t - this.freqTimeZero) * this.frequency + this.phaseShift;
+		double w = 2 * CircuitElm.PI * (CircuitElm.cirSim.t - this.freqTimeZero) * this.frequency + this.phaseShift;
 		switch (this.waveform)
 		{
 		case WF_DC:
@@ -124,14 +124,14 @@ class VoltageElm extends CircuitElm
 			return Math.sin(w) * this.maxVoltage + this.bias;
 		case WF_SQUARE:
 			return this.bias
-					+ (w % (2 * CircuitElm.pi) > 2 * CircuitElm.pi * this.dutyCycle ? -this.maxVoltage
+					+ (w % (2 * CircuitElm.PI) > 2 * CircuitElm.PI * this.dutyCycle ? -this.maxVoltage
 							: this.maxVoltage);
 		case WF_TRIANGLE:
-			return this.bias + this.triangleFunc(w % (2 * CircuitElm.pi)) * this.maxVoltage;
+			return this.bias + this.triangleFunc(w % (2 * CircuitElm.PI)) * this.maxVoltage;
 		case WF_SAWTOOTH:
-			return this.bias + w % (2 * CircuitElm.pi) * (this.maxVoltage / CircuitElm.pi) - this.maxVoltage;
+			return this.bias + w % (2 * CircuitElm.PI) * (this.maxVoltage / CircuitElm.PI) - this.maxVoltage;
 		case WF_PULSE:
-			return w % (2 * CircuitElm.pi) < 1 ? this.maxVoltage + this.bias : this.bias;
+			return w % (2 * CircuitElm.PI) < 1 ? this.maxVoltage + this.bias : this.bias;
 		default:
 			return 0;
 		}
@@ -239,7 +239,7 @@ class VoltageElm extends CircuitElm
 			int ox = -1, oy = -1;
 			for (i = -xl; i <= xl; i++)
 			{
-				int yy = yc + (int) (.95 * Math.sin(i * CircuitElm.pi / xl) * wl);
+				int yy = yc + (int) (.95 * Math.sin(i * CircuitElm.PI / xl) * wl);
 				if (ox != -1)
 				{
 					CircuitElm.drawThickLine(g, ox, oy, xc + i, yy);
@@ -356,7 +356,7 @@ class VoltageElm extends CircuitElm
 		}
 		if (n == 4)
 		{
-			return new EditInfo("Phase Offset (degrees)", this.phaseShift * 180 / CircuitElm.pi, -180, 180)
+			return new EditInfo("Phase Offset (degrees)", this.phaseShift * 180 / CircuitElm.PI, -180, 180)
 					.setDimensionless();
 		}
 		if (n == 5 && this.waveform == VoltageElm.WF_SQUARE)
@@ -413,7 +413,7 @@ class VoltageElm extends CircuitElm
 		}
 		if (n == 4)
 		{
-			this.phaseShift = ei.value * CircuitElm.pi / 180;
+			this.phaseShift = ei.value * CircuitElm.PI / 180;
 		}
 		if (n == 5)
 		{
