@@ -242,7 +242,7 @@ class OpAmpElm extends CircuitElm
 	}
 
 	@Override
-	double getVoltageDiff()
+	public double getVoltageDiff()
 	{
 		return this.volts[2] - this.volts[1];
 	}

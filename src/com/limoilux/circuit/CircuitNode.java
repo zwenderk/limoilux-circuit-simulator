@@ -3,13 +3,13 @@ package com.limoilux.circuit;
 
 import java.util.Vector;
 
-class CircuitNode
+public class CircuitNode
 {
-	int x, y;
-	Vector links;
-	boolean internal;
+	public int x, y;
+	public Vector links;
+	public boolean internal;
 
-	CircuitNode()
+	public CircuitNode()
 	{
 		this.links = new Vector();
 	}

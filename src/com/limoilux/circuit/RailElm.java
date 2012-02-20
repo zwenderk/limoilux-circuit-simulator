@@ -89,7 +89,7 @@ class RailElm extends VoltageElm
 	}
 
 	@Override
-	double getVoltageDiff()
+	public double getVoltageDiff()
 	{
 		return this.volts[0];
 	}

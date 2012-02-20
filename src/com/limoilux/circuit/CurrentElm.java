@@ -6,9 +6,9 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.util.StringTokenizer;
 
-class CurrentElm extends CircuitElm
+public class CurrentElm extends CircuitElm
 {
-	double currentValue;
+	public double currentValue;
 
 	public CurrentElm(int xx, int yy)
 	{
@@ -112,7 +112,7 @@ class CurrentElm extends CircuitElm
 	}
 
 	@Override
-	double getVoltageDiff()
+	public double getVoltageDiff()
 	{
 		return this.volts[1] - this.volts[0];
 	}

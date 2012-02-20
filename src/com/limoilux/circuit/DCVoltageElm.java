@@ -1,7 +1,7 @@
 
 package com.limoilux.circuit;
 
-class DCVoltageElm extends VoltageElm
+public class DCVoltageElm extends VoltageElm
 {
 	public DCVoltageElm(int xx, int yy)
 	{

@@ -3,7 +3,7 @@ package com.limoilux.circuit;
 
 import java.util.StringTokenizer;
 
-class DACElm extends ChipElm
+public class DACElm extends ChipElm
 {
 	public DACElm(int xx, int yy)
 	{

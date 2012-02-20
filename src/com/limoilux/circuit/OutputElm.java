@@ -71,7 +71,7 @@ class OutputElm extends CircuitElm
 	}
 
 	@Override
-	double getVoltageDiff()
+	public double getVoltageDiff()
 	{
 		return this.volts[0];
 	}
