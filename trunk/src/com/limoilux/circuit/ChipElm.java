@@ -324,7 +324,7 @@ abstract class ChipElm extends CircuitElm
 		}
 	}
 
-	String getChipName()
+	public String getChipName()
 	{
 		return "chip";
 	}

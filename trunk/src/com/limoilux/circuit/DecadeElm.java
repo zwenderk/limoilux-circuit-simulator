@@ -16,7 +16,7 @@ class DecadeElm extends ChipElm
 	}
 
 	@Override
-	String getChipName()
+	public String getChipName()
 	{
 		return "decade counter";
 	}
@@ -76,7 +76,9 @@ class DecadeElm extends ChipElm
 			{
 				this.pins[i++ + 2].value = false;
 			}
+			
 			i %= this.bits;
+			
 			this.pins[i + 2].value = true;
 		}
 		if (!this.pins[1].value)

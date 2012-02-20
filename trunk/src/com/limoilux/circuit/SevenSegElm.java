@@ -18,7 +18,7 @@ class SevenSegElm extends ChipElm
 	}
 
 	@Override
-	String getChipName()
+	public String getChipName()
 	{
 		return "7-segment driver/display";
 	}

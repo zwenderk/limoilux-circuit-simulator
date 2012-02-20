@@ -31,7 +31,7 @@ class TimerElm extends ChipElm
 	}
 
 	@Override
-	String getChipName()
+	public String getChipName()
 	{
 		return "555 Timer";
 	}

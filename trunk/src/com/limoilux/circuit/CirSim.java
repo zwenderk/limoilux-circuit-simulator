@@ -802,7 +802,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			 */
 			this.getElm(i).draw(g);
 		}
-		
+
 		if (this.tempMouseMode == CirSim.MODE_DRAG_ROW || this.tempMouseMode == CirSim.MODE_DRAG_COLUMN
 				|| this.tempMouseMode == CirSim.MODE_DRAG_POST || this.tempMouseMode == CirSim.MODE_DRAG_SELECTED)
 		{
@@ -813,7 +813,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				ce.drawPost(g, ce.x2, ce.y2);
 			}
 		}
-		
+
 		int badnodes = 0;
 		// find bad connections, nodes not connected to other elements which
 		// intersect other elements' bounding boxes
@@ -3302,12 +3302,12 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			MenuItem mmi = (MenuItem) mi;
 			this.mouseMode = CirSim.MODE_ADD_ELM;
 			String s = mmi.getActionCommand();
-			
+
 			if (s.length() > 0)
 			{
 				this.mouseModeStr = s;
 			}
-			
+
 			if (s.compareTo("DragAll") == 0)
 			{
 				this.mouseMode = CirSim.MODE_DRAG_ALL;
@@ -3496,7 +3496,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 
 			CirSim.this.pushUndo();
-			
+
 			CirSim.this.initDragX = x;
 			CirSim.this.initDragY = y;
 
@@ -3507,7 +3507,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 
 			int x0 = CirSim.this.snapGrid(x);
 			int y0 = CirSim.this.snapGrid(y);
-			
+
 			if (!CirSim.this.circuitArea.contains(x0, y0))
 			{
 				return;
@@ -3521,25 +3521,24 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		{
 			int ex = e.getModifiersEx();
 			boolean circuitChanged = false;
-			
+
 			if ((ex & (InputEvent.SHIFT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK | InputEvent.META_DOWN_MASK)) == 0
 					&& e.isPopupTrigger())
 			{
 				CirSim.this.doPopupMenu(e);
 				return;
 			}
-			
+
 			CirSim.this.tempMouseMode = CirSim.this.mouseMode;
 			CirSim.this.selectedArea = null;
-			
-			
+
 			if (CirSim.this.heldSwitchElm != null)
 			{
 				CirSim.this.heldSwitchElm.mouseUp();
 				CirSim.this.heldSwitchElm = null;
 				circuitChanged = true;
 			}
-			
+
 			if (CirSim.this.dragElm != null)
 			{
 				// if the element is zero size then don't create it
@@ -3552,20 +3551,20 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 					CirSim.this.elmList.addElement(CirSim.this.dragElm);
 					circuitChanged = true;
 				}
-				
+
 				CirSim.this.dragElm = null;
 			}
-			
+
 			if (circuitChanged)
 			{
 				CirSim.this.needAnalyze();
 			}
-			
+
 			if (CirSim.this.dragElm != null)
 			{
 				CirSim.this.dragElm.delete();
 			}
-			
+
 			CirSim.this.dragElm = null;
 			CirSim.this.circuitCanvas.repaint();
 		}
@@ -3594,9 +3593,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			{
 				CirSim.this.dragElm.drag(e.getX(), e.getY());
 			}
-			
+
 			boolean success = true;
-			
+
 			switch (CirSim.this.tempMouseMode)
 			{
 			case MODE_DRAG_ALL:
@@ -3700,7 +3699,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 					}
 				}
 			}
-			
+
 			CirSim.this.scopeSelected = -1;
 			if (CirSim.this.mouseElm == null)
 			{
