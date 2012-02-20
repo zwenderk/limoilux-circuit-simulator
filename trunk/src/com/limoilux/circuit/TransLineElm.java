@@ -1,5 +1,7 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.StringTokenizer;
 
 class TransLineElm extends CircuitElm
@@ -11,187 +13,211 @@ class TransLineElm extends CircuitElm
 	public TransLineElm(int xx, int yy)
 	{
 		super(xx, yy);
-		delay = 1000 * sim.timeStep;
-		imped = 75;
-		noDiagonal = true;
-		reset();
+		this.delay = 1000 * CircuitElm.sim.timeStep;
+		this.imped = 75;
+		this.noDiagonal = true;
+		this.reset();
 	}
 
 	public TransLineElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		delay = new Double(st.nextToken()).doubleValue();
-		imped = new Double(st.nextToken()).doubleValue();
-		width = new Integer(st.nextToken()).intValue();
+		this.delay = new Double(st.nextToken()).doubleValue();
+		this.imped = new Double(st.nextToken()).doubleValue();
+		this.width = new Integer(st.nextToken()).intValue();
 		// next slot is for resistance (losses), which is not implemented
 		st.nextToken();
-		noDiagonal = true;
-		reset();
+		this.noDiagonal = true;
+		this.reset();
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 171;
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 4;
 	}
 
+	@Override
 	int getInternalNodeCount()
 	{
 		return 2;
 	}
 
+	@Override
 	String dump()
 	{
-		return super.dump() + " " + delay + " " + imped + " " + width + " " + 0.;
+		return super.dump() + " " + this.delay + " " + this.imped + " " + this.width + " " + 0.;
 	}
 
+	@Override
 	void drag(int xx, int yy)
 	{
-		xx = sim.snapGrid(xx);
-		yy = sim.snapGrid(yy);
-		int w1 = max(sim.gridSize, abs(yy - y));
-		int w2 = max(sim.gridSize, abs(xx - x));
+		xx = CircuitElm.sim.snapGrid(xx);
+		yy = CircuitElm.sim.snapGrid(yy);
+		int w1 = CircuitElm.max(CircuitElm.sim.gridSize, CircuitElm.abs(yy - this.y));
+		int w2 = CircuitElm.max(CircuitElm.sim.gridSize, CircuitElm.abs(xx - this.x));
 		if (w1 > w2)
 		{
-			xx = x;
-			width = w2;
+			xx = this.x;
+			this.width = w2;
 		}
 		else
 		{
-			yy = y;
-			width = w1;
+			yy = this.y;
+			this.width = w1;
 		}
-		x2 = xx;
-		y2 = yy;
-		setPoints();
+		this.x2 = xx;
+		this.y2 = yy;
+		this.setPoints();
 	}
 
 	Point posts[], inner[];
 
+	@Override
 	void reset()
 	{
-		if (sim.timeStep == 0)
+		if (CircuitElm.sim.timeStep == 0)
+		{
 			return;
-		lenSteps = (int) (delay / sim.timeStep);
-		System.out.println(lenSteps + " steps");
-		if (lenSteps > 100000)
-			voltageL = voltageR = null;
+		}
+		this.lenSteps = (int) (this.delay / CircuitElm.sim.timeStep);
+		System.out.println(this.lenSteps + " steps");
+		if (this.lenSteps > 100000)
+		{
+			this.voltageL = this.voltageR = null;
+		}
 		else
 		{
-			voltageL = new double[lenSteps];
-			voltageR = new double[lenSteps];
+			this.voltageL = new double[this.lenSteps];
+			this.voltageR = new double[this.lenSteps];
 		}
-		ptr = 0;
+		this.ptr = 0;
 		super.reset();
 	}
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
-		int ds = (dy == 0) ? sign(dx) : -sign(dy);
-		Point p3 = interpPoint(point1, point2, 0, -width * ds);
-		Point p4 = interpPoint(point1, point2, 1, -width * ds);
-		int sep = sim.gridSize / 2;
-		Point p5 = interpPoint(point1, point2, 0, -(width / 2 - sep) * ds);
-		Point p6 = interpPoint(point1, point2, 1, -(width / 2 - sep) * ds);
-		Point p7 = interpPoint(point1, point2, 0, -(width / 2 + sep) * ds);
-		Point p8 = interpPoint(point1, point2, 1, -(width / 2 + sep) * ds);
+		int ds = this.dy == 0 ? CircuitElm.sign(this.dx) : -CircuitElm.sign(this.dy);
+		Point p3 = this.interpPoint(this.point1, this.point2, 0, -this.width * ds);
+		Point p4 = this.interpPoint(this.point1, this.point2, 1, -this.width * ds);
+		int sep = CircuitElm.sim.gridSize / 2;
+		Point p5 = this.interpPoint(this.point1, this.point2, 0, -(this.width / 2 - sep) * ds);
+		Point p6 = this.interpPoint(this.point1, this.point2, 1, -(this.width / 2 - sep) * ds);
+		Point p7 = this.interpPoint(this.point1, this.point2, 0, -(this.width / 2 + sep) * ds);
+		Point p8 = this.interpPoint(this.point1, this.point2, 1, -(this.width / 2 + sep) * ds);
 
 		// we number the posts like this because we want the lower-numbered
 		// points to be on the bottom, so that if some of them are unconnected
 		// (which is often true) then the bottom ones will get automatically
 		// attached to ground.
-		posts = new Point[]
-		{ p3, p4, point1, point2 };
-		inner = new Point[]
-		{ p7, p8, p5, p6 };
+		this.posts = new Point[]
+				{ p3, p4, this.point1, this.point2 };
+		this.inner = new Point[]
+				{ p7, p8, p5, p6 };
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
-		setBbox(posts[0], posts[3], 0);
-		int segments = (int) (dn / 2);
-		int ix0 = ptr - 1 + lenSteps;
+		this.setBbox(this.posts[0], this.posts[3], 0);
+		int segments = (int) (this.dn / 2);
+		int ix0 = this.ptr - 1 + this.lenSteps;
 		double segf = 1. / segments;
 		int i;
 		g.setColor(Color.darkGray);
-		g.fillRect(inner[2].x, inner[2].y, inner[1].x - inner[2].x + 2, inner[1].y - inner[2].y + 2);
+		g.fillRect(this.inner[2].x, this.inner[2].y, this.inner[1].x - this.inner[2].x + 2, this.inner[1].y - this.inner[2].y + 2);
 		for (i = 0; i != 4; i++)
 		{
-			setVoltageColor(g, volts[i]);
-			drawThickLine(g, posts[i], inner[i]);
+			this.setVoltageColor(g, this.volts[i]);
+			CircuitElm.drawThickLine(g, this.posts[i], this.inner[i]);
 		}
-		if (voltageL != null)
+		if (this.voltageL != null)
 		{
 			for (i = 0; i != segments; i++)
 			{
-				int ix1 = (ix0 - lenSteps * i / segments) % lenSteps;
-				int ix2 = (ix0 - lenSteps * (segments - 1 - i) / segments) % lenSteps;
-				double v = (voltageL[ix1] + voltageR[ix2]) / 2;
-				setVoltageColor(g, v);
-				interpPoint(inner[0], inner[1], ps1, i * segf);
-				interpPoint(inner[2], inner[3], ps2, i * segf);
-				g.drawLine(ps1.x, ps1.y, ps2.x, ps2.y);
-				interpPoint(inner[2], inner[3], ps1, (i + 1) * segf);
-				drawThickLine(g, ps1, ps2);
+				int ix1 = (ix0 - this.lenSteps * i / segments) % this.lenSteps;
+				int ix2 = (ix0 - this.lenSteps * (segments - 1 - i) / segments) % this.lenSteps;
+				double v = (this.voltageL[ix1] + this.voltageR[ix2]) / 2;
+				this.setVoltageColor(g, v);
+				this.interpPoint(this.inner[0], this.inner[1], CircuitElm.ps1, i * segf);
+				this.interpPoint(this.inner[2], this.inner[3], CircuitElm.ps2, i * segf);
+				g.drawLine(CircuitElm.ps1.x, CircuitElm.ps1.y, CircuitElm.ps2.x, CircuitElm.ps2.y);
+				this.interpPoint(this.inner[2], this.inner[3], CircuitElm.ps1, (i + 1) * segf);
+				CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 			}
 		}
-		setVoltageColor(g, volts[0]);
-		drawThickLine(g, inner[0], inner[1]);
-		drawPosts(g);
+		this.setVoltageColor(g, this.volts[0]);
+		CircuitElm.drawThickLine(g, this.inner[0], this.inner[1]);
+		this.drawPosts(g);
 
-		curCount1 = updateDotCount(-current1, curCount1);
-		curCount2 = updateDotCount(current2, curCount2);
-		if (sim.dragElm != this)
+		this.curCount1 = this.updateDotCount(-this.current1, this.curCount1);
+		this.curCount2 = this.updateDotCount(this.current2, this.curCount2);
+		if (CircuitElm.sim.dragElm != this)
 		{
-			drawDots(g, posts[0], inner[0], curCount1);
-			drawDots(g, posts[2], inner[2], -curCount1);
-			drawDots(g, posts[1], inner[1], -curCount2);
-			drawDots(g, posts[3], inner[3], curCount2);
+			this.drawDots(g, this.posts[0], this.inner[0], this.curCount1);
+			this.drawDots(g, this.posts[2], this.inner[2], -this.curCount1);
+			this.drawDots(g, this.posts[1], this.inner[1], -this.curCount2);
+			this.drawDots(g, this.posts[3], this.inner[3], this.curCount2);
 		}
 	}
 
 	int voltSource1, voltSource2;
 	double current1, current2, curCount1, curCount2;
 
+	@Override
 	void setVoltageSource(int n, int v)
 	{
 		if (n == 0)
-			voltSource1 = v;
+		{
+			this.voltSource1 = v;
+		}
 		else
-			voltSource2 = v;
+		{
+			this.voltSource2 = v;
+		}
 	}
 
+	@Override
 	void setCurrent(int v, double c)
 	{
-		if (v == voltSource1)
-			current1 = c;
+		if (v == this.voltSource1)
+		{
+			this.current1 = c;
+		}
 		else
-			current2 = c;
+		{
+			this.current2 = c;
+		}
 	}
 
+	@Override
 	void stamp()
 	{
-		sim.stampVoltageSource(nodes[4], nodes[0], voltSource1);
-		sim.stampVoltageSource(nodes[5], nodes[1], voltSource2);
-		sim.stampResistor(nodes[2], nodes[4], imped);
-		sim.stampResistor(nodes[3], nodes[5], imped);
+		CircuitElm.sim.stampVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1);
+		CircuitElm.sim.stampVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2);
+		CircuitElm.sim.stampResistor(this.nodes[2], this.nodes[4], this.imped);
+		CircuitElm.sim.stampResistor(this.nodes[3], this.nodes[5], this.imped);
 	}
 
+	@Override
 	void startIteration()
 	{
 		// calculate voltages, currents sent over wire
-		if (voltageL == null)
+		if (this.voltageL == null)
 		{
-			sim.stop("Transmission line delay too large!", this);
+			CircuitElm.sim.stop("Transmission line delay too large!", this);
 			return;
 		}
-		voltageL[ptr] = volts[2] - volts[0] + volts[2] - volts[4];
-		voltageR[ptr] = volts[3] - volts[1] + volts[3] - volts[5];
+		this.voltageL[this.ptr] = this.volts[2] - this.volts[0] + this.volts[2] - this.volts[4];
+		this.voltageR[this.ptr] = this.volts[3] - this.volts[1] + this.volts[3] - this.volts[5];
 		// System.out.println(volts[2] + " " + volts[0] + " " +
 		// (volts[2]-volts[0]) + " " + (imped*current1) + " " + voltageL[ptr]);
 		/*
@@ -199,41 +225,46 @@ class TransLineElm extends CircuitElm
 		 * System.out.println("sending back " + currentR[ptr] + " " + current2);
 		 */
 		// System.out.println("sending back " + voltageR[ptr]);
-		ptr = (ptr + 1) % lenSteps;
+		this.ptr = (this.ptr + 1) % this.lenSteps;
 	}
 
+	@Override
 	void doStep()
 	{
-		if (voltageL == null)
+		if (this.voltageL == null)
 		{
-			sim.stop("Transmission line delay too large!", this);
+			CircuitElm.sim.stop("Transmission line delay too large!", this);
 			return;
 		}
-		sim.updateVoltageSource(nodes[4], nodes[0], voltSource1, -voltageR[ptr]);
-		sim.updateVoltageSource(nodes[5], nodes[1], voltSource2, -voltageL[ptr]);
-		if (Math.abs(volts[0]) > 1e-5 || Math.abs(volts[1]) > 1e-5)
+		CircuitElm.sim.updateVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1, -this.voltageR[this.ptr]);
+		CircuitElm.sim.updateVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2, -this.voltageL[this.ptr]);
+		if (Math.abs(this.volts[0]) > 1e-5 || Math.abs(this.volts[1]) > 1e-5)
 		{
-			sim.stop("Need to ground transmission line!", this);
+			CircuitElm.sim.stop("Need to ground transmission line!", this);
 			return;
 		}
 	}
 
+	@Override
 	Point getPost(int n)
 	{
-		return posts[n];
+		return this.posts[n];
 	}
 
 	// double getVoltageDiff() { return volts[0]; }
+	@Override
 	int getVoltageSourceCount()
 	{
 		return 2;
 	}
 
+	@Override
 	boolean hasGroundConnection(int n1)
 	{
 		return false;
 	}
 
+	@Override
 	boolean getConnection(int n1, int n2)
 	{
 		return false;
@@ -243,34 +274,41 @@ class TransLineElm extends CircuitElm
 		 */
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
 		arr[0] = "transmission line";
-		arr[1] = getUnitText(imped, sim.ohmString);
-		arr[2] = "length = " + getUnitText(2.9979e8 * delay, "m");
-		arr[3] = "delay = " + getUnitText(delay, "s");
+		arr[1] = CircuitElm.getUnitText(this.imped, CircuitElm.sim.ohmString);
+		arr[2] = "length = " + CircuitElm.getUnitText(2.9979e8 * this.delay, "m");
+		arr[3] = "delay = " + CircuitElm.getUnitText(this.delay, "s");
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
-			return new EditInfo("Delay (s)", delay, 0, 0);
+		{
+			return new EditInfo("Delay (s)", this.delay, 0, 0);
+		}
 		if (n == 1)
-			return new EditInfo("Impedance (ohms)", imped, 0, 0);
+		{
+			return new EditInfo("Impedance (ohms)", this.imped, 0, 0);
+		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (n == 0)
 		{
-			delay = ei.value;
-			reset();
+			this.delay = ei.value;
+			this.reset();
 		}
 		if (n == 1)
 		{
-			imped = ei.value;
-			reset();
+			this.imped = ei.value;
+			this.reset();
 		}
 	}
 }

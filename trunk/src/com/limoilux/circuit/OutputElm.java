@@ -1,5 +1,9 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Checkbox;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.StringTokenizer;
 
 class OutputElm extends CircuitElm
@@ -16,69 +20,85 @@ class OutputElm extends CircuitElm
 		super(xa, ya, xb, yb, f);
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 'O';
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 1;
 	}
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
-		lead1 = new Point();
+		this.lead1 = new Point();
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
-		boolean selected = (needsHighlight() || sim.plotYElm == this);
+		boolean selected = this.needsHighlight() || CircuitElm.sim.plotYElm == this;
 		Font f = new Font("SansSerif", selected ? Font.BOLD : 0, 14);
 		g.setFont(f);
-		g.setColor(selected ? selectColor : whiteColor);
-		String s = (flags & FLAG_VALUE) != 0 ? getVoltageText(volts[0]) : "out";
+		g.setColor(selected ? CircuitElm.selectColor : CircuitElm.whiteColor);
+		String s = (this.flags & this.FLAG_VALUE) != 0 ? CircuitElm.getVoltageText(this.volts[0]) : "out";
 		FontMetrics fm = g.getFontMetrics();
-		if (this == sim.plotXElm)
+		if (this == CircuitElm.sim.plotXElm)
+		{
 			s = "X";
-		if (this == sim.plotYElm)
+		}
+		if (this == CircuitElm.sim.plotYElm)
+		{
 			s = "Y";
-		interpPoint(point1, point2, lead1, 1 - (fm.stringWidth(s) / 2 + 8) / dn);
-		setBbox(point1, lead1, 0);
-		drawCenteredText(g, s, x2, y2, true);
-		setVoltageColor(g, volts[0]);
+		}
+		this.interpPoint(this.point1, this.point2, this.lead1, 1 - (fm.stringWidth(s) / 2 + 8) / this.dn);
+		this.setBbox(this.point1, this.lead1, 0);
+		this.drawCenteredText(g, s, this.x2, this.y2, true);
+		this.setVoltageColor(g, this.volts[0]);
 		if (selected)
-			g.setColor(selectColor);
-		drawThickLine(g, point1, lead1);
-		drawPosts(g);
+		{
+			g.setColor(CircuitElm.selectColor);
+		}
+		CircuitElm.drawThickLine(g, this.point1, this.lead1);
+		this.drawPosts(g);
 	}
 
+	@Override
 	double getVoltageDiff()
 	{
-		return volts[0];
+		return this.volts[0];
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
 		arr[0] = "output";
-		arr[1] = "V = " + getVoltageText(volts[0]);
+		arr[1] = "V = " + CircuitElm.getVoltageText(this.volts[0]);
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Show Voltage", (flags & FLAG_VALUE) != 0);
+			ei.checkbox = new Checkbox("Show Voltage", (this.flags & this.FLAG_VALUE) != 0);
 			return ei;
 		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (n == 0)
-			flags = (ei.checkbox.getState()) ? (flags | FLAG_VALUE) : (flags & ~FLAG_VALUE);
+		{
+			this.flags = ei.checkbox.getState() ? this.flags | this.FLAG_VALUE : this.flags & ~this.FLAG_VALUE;
+		}
 	}
 }

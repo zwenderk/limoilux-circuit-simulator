@@ -1,5 +1,8 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Checkbox;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.StringTokenizer;
 
 // 0 = switch
@@ -31,321 +34,389 @@ class RelayElm extends CircuitElm
 	public RelayElm(int xx, int yy)
 	{
 		super(xx, yy);
-		ind = new Inductor(sim);
-		inductance = .2;
-		ind.setup(inductance, 0, Inductor.FLAG_BACK_EULER);
-		noDiagonal = true;
-		onCurrent = .02;
-		r_on = .05;
-		r_off = 1e6;
-		coilR = 20;
-		coilCurrent = coilCurCount = 0;
-		poleCount = 1;
-		setupPoles();
+		this.ind = new Inductor(CircuitElm.sim);
+		this.inductance = .2;
+		this.ind.setup(this.inductance, 0, Inductor.FLAG_BACK_EULER);
+		this.noDiagonal = true;
+		this.onCurrent = .02;
+		this.r_on = .05;
+		this.r_off = 1e6;
+		this.coilR = 20;
+		this.coilCurrent = this.coilCurCount = 0;
+		this.poleCount = 1;
+		this.setupPoles();
 	}
 
 	public RelayElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		poleCount = new Integer(st.nextToken()).intValue();
-		inductance = new Double(st.nextToken()).doubleValue();
-		coilCurrent = new Double(st.nextToken()).doubleValue();
-		r_on = new Double(st.nextToken()).doubleValue();
-		r_off = new Double(st.nextToken()).doubleValue();
-		onCurrent = new Double(st.nextToken()).doubleValue();
-		coilR = new Double(st.nextToken()).doubleValue();
-		noDiagonal = true;
-		ind = new Inductor(sim);
-		ind.setup(inductance, coilCurrent, Inductor.FLAG_BACK_EULER);
-		setupPoles();
+		this.poleCount = new Integer(st.nextToken()).intValue();
+		this.inductance = new Double(st.nextToken()).doubleValue();
+		this.coilCurrent = new Double(st.nextToken()).doubleValue();
+		this.r_on = new Double(st.nextToken()).doubleValue();
+		this.r_off = new Double(st.nextToken()).doubleValue();
+		this.onCurrent = new Double(st.nextToken()).doubleValue();
+		this.coilR = new Double(st.nextToken()).doubleValue();
+		this.noDiagonal = true;
+		this.ind = new Inductor(CircuitElm.sim);
+		this.ind.setup(this.inductance, this.coilCurrent, Inductor.FLAG_BACK_EULER);
+		this.setupPoles();
 	}
 
 	void setupPoles()
 	{
-		nCoil1 = 3 * poleCount;
-		nCoil2 = nCoil1 + 1;
-		nCoil3 = nCoil1 + 2;
-		if (switchCurrent == null || switchCurrent.length != poleCount)
+		this.nCoil1 = 3 * this.poleCount;
+		this.nCoil2 = this.nCoil1 + 1;
+		this.nCoil3 = this.nCoil1 + 2;
+		if (this.switchCurrent == null || this.switchCurrent.length != this.poleCount)
 		{
-			switchCurrent = new double[poleCount];
-			switchCurCount = new double[poleCount];
+			this.switchCurrent = new double[this.poleCount];
+			this.switchCurCount = new double[this.poleCount];
 		}
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 178;
 	}
 
+	@Override
 	String dump()
 	{
-		return super.dump() + " " + poleCount + " " + inductance + " " + coilCurrent + " " + r_on + " " + r_off + " "
-				+ onCurrent + " " + coilR;
+		return super.dump() + " " + this.poleCount + " " + this.inductance + " " + this.coilCurrent + " " + this.r_on + " " + this.r_off + " "
+				+ this.onCurrent + " " + this.coilR;
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
 		int i, p;
 		for (i = 0; i != 2; i++)
 		{
-			setVoltageColor(g, volts[nCoil1 + i]);
-			drawThickLine(g, coilLeads[i], coilPosts[i]);
+			this.setVoltageColor(g, this.volts[this.nCoil1 + i]);
+			CircuitElm.drawThickLine(g, this.coilLeads[i], this.coilPosts[i]);
 		}
-		int x = ((flags & FLAG_SWAP_COIL) != 0) ? 1 : 0;
-		drawCoil(g, dsign * 6, coilLeads[x], coilLeads[1 - x], volts[nCoil1 + x], volts[nCoil2 - x]);
+		int x = (this.flags & this.FLAG_SWAP_COIL) != 0 ? 1 : 0;
+		this.drawCoil(g, this.dsign * 6, this.coilLeads[x], this.coilLeads[1 - x], this.volts[this.nCoil1 + x], this.volts[this.nCoil2 - x]);
 
 		// draw lines
 		g.setColor(Color.darkGray);
-		for (i = 0; i != poleCount; i++)
+		for (i = 0; i != this.poleCount; i++)
 		{
 			if (i == 0)
-				interpPoint(point1, point2, lines[i * 2], .5, openhs * 2 + 5 * dsign - i * openhs * 3);
+			{
+				this.interpPoint(this.point1, this.point2, this.lines[i * 2], .5, this.openhs * 2 + 5 * this.dsign - i * this.openhs * 3);
+			}
 			else
-				interpPoint(point1, point2, lines[i * 2], .5, (int) (openhs * (-i * 3 + 3 - .5 + d_position)) + 5
-						* dsign);
-			interpPoint(point1, point2, lines[i * 2 + 1], .5, (int) (openhs * (-i * 3 - .5 + d_position)) - 5 * dsign);
-			g.drawLine(lines[i * 2].x, lines[i * 2].y, lines[i * 2 + 1].x, lines[i * 2 + 1].y);
+			{
+				this.interpPoint(this.point1, this.point2, this.lines[i * 2], .5, (int) (this.openhs * (-i * 3 + 3 - .5 + this.d_position)) + 5
+						* this.dsign);
+			}
+			this.interpPoint(this.point1, this.point2, this.lines[i * 2 + 1], .5, (int) (this.openhs * (-i * 3 - .5 + this.d_position)) - 5 * this.dsign);
+			g.drawLine(this.lines[i * 2].x, this.lines[i * 2].y, this.lines[i * 2 + 1].x, this.lines[i * 2 + 1].y);
 		}
 
-		for (p = 0; p != poleCount; p++)
+		for (p = 0; p != this.poleCount; p++)
 		{
 			int po = p * 3;
 			for (i = 0; i != 3; i++)
 			{
 				// draw lead
-				setVoltageColor(g, volts[nSwitch0 + po + i]);
-				drawThickLine(g, swposts[p][i], swpoles[p][i]);
+				this.setVoltageColor(g, this.volts[this.nSwitch0 + po + i]);
+				CircuitElm.drawThickLine(g, this.swposts[p][i], this.swpoles[p][i]);
 			}
 
-			interpPoint(swpoles[p][1], swpoles[p][2], ptSwitch[p], d_position);
+			this.interpPoint(this.swpoles[p][1], this.swpoles[p][2], this.ptSwitch[p], this.d_position);
 			// setVoltageColor(g, volts[nSwitch0]);
 			g.setColor(Color.lightGray);
-			drawThickLine(g, swpoles[p][0], ptSwitch[p]);
-			switchCurCount[p] = updateDotCount(switchCurrent[p], switchCurCount[p]);
-			drawDots(g, swposts[p][0], swpoles[p][0], switchCurCount[p]);
+			CircuitElm.drawThickLine(g, this.swpoles[p][0], this.ptSwitch[p]);
+			this.switchCurCount[p] = this.updateDotCount(this.switchCurrent[p], this.switchCurCount[p]);
+			this.drawDots(g, this.swposts[p][0], this.swpoles[p][0], this.switchCurCount[p]);
 
-			if (i_position != 2)
-				drawDots(g, swpoles[p][i_position + 1], swposts[p][i_position + 1], switchCurCount[p]);
+			if (this.i_position != 2)
+			{
+				this.drawDots(g, this.swpoles[p][this.i_position + 1], this.swposts[p][this.i_position + 1], this.switchCurCount[p]);
+			}
 		}
 
-		coilCurCount = updateDotCount(coilCurrent, coilCurCount);
+		this.coilCurCount = this.updateDotCount(this.coilCurrent, this.coilCurCount);
 
-		drawDots(g, coilPosts[0], coilLeads[0], coilCurCount);
-		drawDots(g, coilLeads[0], coilLeads[1], coilCurCount);
-		drawDots(g, coilLeads[1], coilPosts[1], coilCurCount);
+		this.drawDots(g, this.coilPosts[0], this.coilLeads[0], this.coilCurCount);
+		this.drawDots(g, this.coilLeads[0], this.coilLeads[1], this.coilCurCount);
+		this.drawDots(g, this.coilLeads[1], this.coilPosts[1], this.coilCurCount);
 
-		drawPosts(g);
-		setBbox(coilPosts[0], coilLeads[1], 0);
-		adjustBbox(swpoles[poleCount - 1][0], swposts[poleCount - 1][1]); // XXX
+		this.drawPosts(g);
+		this.setBbox(this.coilPosts[0], this.coilLeads[1], 0);
+		this.adjustBbox(this.swpoles[this.poleCount - 1][0], this.swposts[this.poleCount - 1][1]); // XXX
 	}
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
-		setupPoles();
-		allocNodes();
-		openhs = -dsign * 16;
+		this.setupPoles();
+		this.allocNodes();
+		this.openhs = -this.dsign * 16;
 
 		// switch
-		calcLeads(32);
-		swposts = new Point[poleCount][3];
-		swpoles = new Point[poleCount][3];
+		this.calcLeads(32);
+		this.swposts = new Point[this.poleCount][3];
+		this.swpoles = new Point[this.poleCount][3];
 		int i, j;
-		for (i = 0; i != poleCount; i++)
+		for (i = 0; i != this.poleCount; i++)
 		{
 			for (j = 0; j != 3; j++)
 			{
-				swposts[i][j] = new Point();
-				swpoles[i][j] = new Point();
+				this.swposts[i][j] = new Point();
+				this.swpoles[i][j] = new Point();
 			}
-			interpPoint(lead1, lead2, swpoles[i][0], 0, -openhs * 3 * i);
-			interpPoint(lead1, lead2, swpoles[i][1], 1, -openhs * 3 * i - openhs);
-			interpPoint(lead1, lead2, swpoles[i][2], 1, -openhs * 3 * i + openhs);
-			interpPoint(point1, point2, swposts[i][0], 0, -openhs * 3 * i);
-			interpPoint(point1, point2, swposts[i][1], 1, -openhs * 3 * i - openhs);
-			interpPoint(point1, point2, swposts[i][2], 1, -openhs * 3 * i + openhs);
+			this.interpPoint(this.lead1, this.lead2, this.swpoles[i][0], 0, -this.openhs * 3 * i);
+			this.interpPoint(this.lead1, this.lead2, this.swpoles[i][1], 1, -this.openhs * 3 * i - this.openhs);
+			this.interpPoint(this.lead1, this.lead2, this.swpoles[i][2], 1, -this.openhs * 3 * i + this.openhs);
+			this.interpPoint(this.point1, this.point2, this.swposts[i][0], 0, -this.openhs * 3 * i);
+			this.interpPoint(this.point1, this.point2, this.swposts[i][1], 1, -this.openhs * 3 * i - this.openhs);
+			this.interpPoint(this.point1, this.point2, this.swposts[i][2], 1, -this.openhs * 3 * i + this.openhs);
 		}
 
 		// coil
-		coilPosts = newPointArray(2);
-		coilLeads = newPointArray(2);
-		ptSwitch = newPointArray(poleCount);
+		this.coilPosts = this.newPointArray(2);
+		this.coilLeads = this.newPointArray(2);
+		this.ptSwitch = this.newPointArray(this.poleCount);
 
-		int x = ((flags & FLAG_SWAP_COIL) != 0) ? 1 : 0;
-		interpPoint(point1, point2, coilPosts[0], x, openhs * 2);
-		interpPoint(point1, point2, coilPosts[1], x, openhs * 3);
-		interpPoint(point1, point2, coilLeads[0], .5, openhs * 2);
-		interpPoint(point1, point2, coilLeads[1], .5, openhs * 3);
+		int x = (this.flags & this.FLAG_SWAP_COIL) != 0 ? 1 : 0;
+		this.interpPoint(this.point1, this.point2, this.coilPosts[0], x, this.openhs * 2);
+		this.interpPoint(this.point1, this.point2, this.coilPosts[1], x, this.openhs * 3);
+		this.interpPoint(this.point1, this.point2, this.coilLeads[0], .5, this.openhs * 2);
+		this.interpPoint(this.point1, this.point2, this.coilLeads[1], .5, this.openhs * 3);
 
 		// lines
-		lines = newPointArray(poleCount * 2);
+		this.lines = this.newPointArray(this.poleCount * 2);
 	}
 
+	@Override
 	Point getPost(int n)
 	{
-		if (n < 3 * poleCount)
-			return swposts[n / 3][n % 3];
-		return coilPosts[n - 3 * poleCount];
+		if (n < 3 * this.poleCount)
+		{
+			return this.swposts[n / 3][n % 3];
+		}
+		return this.coilPosts[n - 3 * this.poleCount];
 	}
 
+	@Override
 	int getPostCount()
 	{
-		return 2 + poleCount * 3;
+		return 2 + this.poleCount * 3;
 	}
 
+	@Override
 	int getInternalNodeCount()
 	{
 		return 1;
 	}
 
+	@Override
 	void reset()
 	{
 		super.reset();
-		ind.reset();
-		coilCurrent = coilCurCount = 0;
+		this.ind.reset();
+		this.coilCurrent = this.coilCurCount = 0;
 		int i;
-		for (i = 0; i != poleCount; i++)
-			switchCurrent[i] = switchCurCount[i] = 0;
+		for (i = 0; i != this.poleCount; i++)
+		{
+			this.switchCurrent[i] = this.switchCurCount[i] = 0;
+		}
 	}
 
 	double a1, a2, a3, a4;
 
+	@Override
 	void stamp()
 	{
 		// inductor from coil post 1 to internal node
-		ind.stamp(nodes[nCoil1], nodes[nCoil3]);
+		this.ind.stamp(this.nodes[this.nCoil1], this.nodes[this.nCoil3]);
 		// resistor from internal node to coil post 2
-		sim.stampResistor(nodes[nCoil3], nodes[nCoil2], coilR);
+		CircuitElm.sim.stampResistor(this.nodes[this.nCoil3], this.nodes[this.nCoil2], this.coilR);
 
 		int i;
-		for (i = 0; i != poleCount * 3; i++)
-			sim.stampNonLinear(nodes[nSwitch0 + i]);
+		for (i = 0; i != this.poleCount * 3; i++)
+		{
+			CircuitElm.sim.stampNonLinear(this.nodes[this.nSwitch0 + i]);
+		}
 	}
 
+	@Override
 	void startIteration()
 	{
-		ind.startIteration(volts[nCoil1] - volts[nCoil3]);
+		this.ind.startIteration(this.volts[this.nCoil1] - this.volts[this.nCoil3]);
 
 		// magic value to balance operate speed with reset speed
 		// semi-realistically
 		double magic = 1.3;
 		double pmult = Math.sqrt(magic + 1);
-		double p = coilCurrent * pmult / onCurrent;
-		d_position = Math.abs(p * p) - 1.3;
-		if (d_position < 0)
-			d_position = 0;
-		if (d_position > 1)
-			d_position = 1;
-		if (d_position < .1)
-			i_position = 0;
-		else if (d_position > .9)
-			i_position = 1;
-		else
-			i_position = 2;
-		// System.out.println("ind " + this + " " + current + " " + voltdiff);
+		double p = this.coilCurrent * pmult / this.onCurrent;
+		this.d_position = Math.abs(p * p) - 1.3;
+		if (this.d_position < 0)
+		{
+			this.d_position = 0;
+		}
+		if (this.d_position > 1)
+		{
+			this.d_position = 1;
+		}
+		if (this.d_position < .1)
+		{
+			this.i_position = 0;
+		}
+		else if (this.d_position > .9)
+		{
+			this.i_position = 1;
+		}
+		else {
+			this.i_position = 2;
+			// System.out.println("ind " + this + " " + current + " " + voltdiff);
+		}
 	}
 
 	// we need this to be able to change the matrix for each step
+	@Override
 	boolean nonLinear()
 	{
 		return true;
 	}
 
+	@Override
 	void doStep()
 	{
-		double voltdiff = volts[nCoil1] - volts[nCoil3];
-		ind.doStep(voltdiff);
+		double voltdiff = this.volts[this.nCoil1] - this.volts[this.nCoil3];
+		this.ind.doStep(voltdiff);
 		int p;
-		for (p = 0; p != poleCount * 3; p += 3)
+		for (p = 0; p != this.poleCount * 3; p += 3)
 		{
-			sim.stampResistor(nodes[nSwitch0 + p], nodes[nSwitch1 + p], i_position == 0 ? r_on : r_off);
-			sim.stampResistor(nodes[nSwitch0 + p], nodes[nSwitch2 + p], i_position == 1 ? r_on : r_off);
+			CircuitElm.sim.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch1 + p], this.i_position == 0 ? this.r_on : this.r_off);
+			CircuitElm.sim.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch2 + p], this.i_position == 1 ? this.r_on : this.r_off);
 		}
 	}
 
+	@Override
 	void calculateCurrent()
 	{
-		double voltdiff = volts[nCoil1] - volts[nCoil3];
-		coilCurrent = ind.calculateCurrent(voltdiff);
+		double voltdiff = this.volts[this.nCoil1] - this.volts[this.nCoil3];
+		this.coilCurrent = this.ind.calculateCurrent(voltdiff);
 
 		// actually this isn't correct, since there is a small amount
 		// of current through the switch when off
 		int p;
-		for (p = 0; p != poleCount; p++)
+		for (p = 0; p != this.poleCount; p++)
 		{
-			if (i_position == 2)
-				switchCurrent[p] = 0;
+			if (this.i_position == 2)
+			{
+				this.switchCurrent[p] = 0;
+			}
 			else
-				switchCurrent[p] = (volts[nSwitch0 + p * 3] - volts[nSwitch1 + p * 3 + i_position]) / r_on;
+			{
+				this.switchCurrent[p] = (this.volts[this.nSwitch0 + p * 3] - this.volts[this.nSwitch1 + p * 3 + this.i_position]) / this.r_on;
+			}
 		}
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
-		arr[0] = i_position == 0 ? "relay (off)" : i_position == 1 ? "relay (on)" : "relay";
+		arr[0] = this.i_position == 0 ? "relay (off)" : this.i_position == 1 ? "relay (on)" : "relay";
 		int i;
 		int ln = 1;
-		for (i = 0; i != poleCount; i++)
-			arr[ln++] = "I" + (i + 1) + " = " + getCurrentDText(switchCurrent[i]);
-		arr[ln++] = "coil I = " + getCurrentDText(coilCurrent);
-		arr[ln++] = "coil Vd = " + getVoltageDText(volts[nCoil1] - volts[nCoil2]);
+		for (i = 0; i != this.poleCount; i++)
+		{
+			arr[ln++] = "I" + (i + 1) + " = " + CircuitElm.getCurrentDText(this.switchCurrent[i]);
+		}
+		arr[ln++] = "coil I = " + CircuitElm.getCurrentDText(this.coilCurrent);
+		arr[ln++] = "coil Vd = " + CircuitElm.getVoltageDText(this.volts[this.nCoil1] - this.volts[this.nCoil2]);
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
-			return new EditInfo("Inductance (H)", inductance, 0, 0);
+		{
+			return new EditInfo("Inductance (H)", this.inductance, 0, 0);
+		}
 		if (n == 1)
-			return new EditInfo("On Resistance (ohms)", r_on, 0, 0);
+		{
+			return new EditInfo("On Resistance (ohms)", this.r_on, 0, 0);
+		}
 		if (n == 2)
-			return new EditInfo("Off Resistance (ohms)", r_off, 0, 0);
+		{
+			return new EditInfo("Off Resistance (ohms)", this.r_off, 0, 0);
+		}
 		if (n == 3)
-			return new EditInfo("On Current (A)", onCurrent, 0, 0);
+		{
+			return new EditInfo("On Current (A)", this.onCurrent, 0, 0);
+		}
 		if (n == 4)
-			return new EditInfo("Number of Poles", poleCount, 1, 4).setDimensionless();
+		{
+			return new EditInfo("Number of Poles", this.poleCount, 1, 4).setDimensionless();
+		}
 		if (n == 5)
-			return new EditInfo("Coil Resistance (ohms)", coilR, 0, 0);
+		{
+			return new EditInfo("Coil Resistance (ohms)", this.coilR, 0, 0);
+		}
 		if (n == 6)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Swap Coil Direction", (flags & FLAG_SWAP_COIL) != 0);
+			ei.checkbox = new Checkbox("Swap Coil Direction", (this.flags & this.FLAG_SWAP_COIL) != 0);
 			return ei;
 		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (n == 0 && ei.value > 0)
 		{
-			inductance = ei.value;
-			ind.setup(inductance, coilCurrent, Inductor.FLAG_BACK_EULER);
+			this.inductance = ei.value;
+			this.ind.setup(this.inductance, this.coilCurrent, Inductor.FLAG_BACK_EULER);
 		}
 		if (n == 1 && ei.value > 0)
-			r_on = ei.value;
+		{
+			this.r_on = ei.value;
+		}
 		if (n == 2 && ei.value > 0)
-			r_off = ei.value;
+		{
+			this.r_off = ei.value;
+		}
 		if (n == 3 && ei.value > 0)
-			onCurrent = ei.value;
+		{
+			this.onCurrent = ei.value;
+		}
 		if (n == 4 && ei.value >= 1)
 		{
-			poleCount = (int) ei.value;
-			setPoints();
+			this.poleCount = (int) ei.value;
+			this.setPoints();
 		}
 		if (n == 5 && ei.value > 0)
-			coilR = ei.value;
+		{
+			this.coilR = ei.value;
+		}
 		if (n == 6)
 		{
 			if (ei.checkbox.getState())
-				flags |= FLAG_SWAP_COIL;
+			{
+				this.flags |= this.FLAG_SWAP_COIL;
+			}
 			else
-				flags &= ~FLAG_SWAP_COIL;
-			setPoints();
+			{
+				this.flags &= ~this.FLAG_SWAP_COIL;
+			}
+			this.setPoints();
 		}
 	}
 
+	@Override
 	boolean getConnection(int n1, int n2)
 	{
-		return (n1 / 3 == n2 / 3);
+		return n1 / 3 == n2 / 3;
 	}
 }

@@ -1,5 +1,4 @@
 package com.limoilux.circuit;
-import java.awt.*;
 import java.util.StringTokenizer;
 
 class DecadeElm extends ChipElm
@@ -14,67 +13,82 @@ class DecadeElm extends ChipElm
 		super(xa, ya, xb, yb, f, st);
 	}
 
+	@Override
 	String getChipName()
 	{
 		return "decade counter";
 	}
 
+	@Override
 	boolean needsBits()
 	{
 		return true;
 	}
 
+	@Override
 	void setupPins()
 	{
-		sizeX = bits > 2 ? bits : 2;
-		sizeY = 2;
-		pins = new Pin[getPostCount()];
-		pins[0] = new Pin(1, SIDE_W, "");
-		pins[0].clock = true;
-		pins[1] = new Pin(sizeX - 1, SIDE_S, "R");
-		pins[1].bubble = true;
+		this.sizeX = this.bits > 2 ? this.bits : 2;
+		this.sizeY = 2;
+		this.pins = new Pin[this.getPostCount()];
+		this.pins[0] = new Pin(1, this.SIDE_W, "");
+		this.pins[0].clock = true;
+		this.pins[1] = new Pin(this.sizeX - 1, this.SIDE_S, "R");
+		this.pins[1].bubble = true;
 		int i;
-		for (i = 0; i != bits; i++)
+		for (i = 0; i != this.bits; i++)
 		{
 			int ii = i + 2;
-			pins[ii] = new Pin(i, SIDE_N, "Q" + i);
-			pins[ii].output = pins[ii].state = true;
+			this.pins[ii] = new Pin(i, this.SIDE_N, "Q" + i);
+			this.pins[ii].output = this.pins[ii].state = true;
 		}
-		allocNodes();
+		this.allocNodes();
 	}
 
+	@Override
 	int getPostCount()
 	{
-		return bits + 2;
+		return this.bits + 2;
 	}
 
+	@Override
 	int getVoltageSourceCount()
 	{
-		return bits;
+		return this.bits;
 	}
 
+	@Override
 	void execute()
 	{
 		int i;
-		if (pins[0].value && !lastClock)
+		if (this.pins[0].value && !this.lastClock)
 		{
-			for (i = 0; i != bits; i++)
-				if (pins[i + 2].value)
+			for (i = 0; i != this.bits; i++)
+			{
+				if (this.pins[i + 2].value)
+				{
 					break;
-			if (i < bits)
-				pins[i++ + 2].value = false;
-			i %= bits;
-			pins[i + 2].value = true;
+				}
+			}
+			if (i < this.bits)
+			{
+				this.pins[i++ + 2].value = false;
+			}
+			i %= this.bits;
+			this.pins[i + 2].value = true;
 		}
-		if (!pins[1].value)
+		if (!this.pins[1].value)
 		{
-			for (i = 1; i != bits; i++)
-				pins[i + 2].value = false;
-			pins[2].value = true;
+			for (i = 1; i != this.bits; i++)
+			{
+				this.pins[i + 2].value = false;
+			}
+			this.pins[2].value = true;
 		}
-		lastClock = pins[0].value;
+		this.lastClock = this.pins[0].value;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 163;

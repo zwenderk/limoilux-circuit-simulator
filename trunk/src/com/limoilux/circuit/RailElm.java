@@ -1,12 +1,13 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.util.StringTokenizer;
 
 class RailElm extends VoltageElm
 {
 	public RailElm(int xx, int yy)
 	{
-		super(xx, yy, WF_DC);
+		super(xx, yy, VoltageElm.WF_DC);
 	}
 
 	RailElm(int xx, int yy, int wf)
@@ -21,75 +22,99 @@ class RailElm extends VoltageElm
 
 	final int FLAG_CLOCK = 1;
 
+	@Override
 	int getDumpType()
 	{
 		return 'R';
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 1;
 	}
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
-		lead1 = interpPoint(point1, point2, 1 - circleSize / dn);
+		this.lead1 = this.interpPoint(this.point1, this.point2, 1 - this.circleSize / this.dn);
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
-		setBbox(point1, point2, circleSize);
-		setVoltageColor(g, volts[0]);
-		drawThickLine(g, point1, lead1);
-		boolean clock = waveform == WF_SQUARE && (flags & FLAG_CLOCK) != 0;
-		if (waveform == WF_DC || waveform == WF_VAR || clock)
+		this.setBbox(this.point1, this.point2, this.circleSize);
+		this.setVoltageColor(g, this.volts[0]);
+		CircuitElm.drawThickLine(g, this.point1, this.lead1);
+		boolean clock = this.waveform == VoltageElm.WF_SQUARE && (this.flags & this.FLAG_CLOCK) != 0;
+		if (this.waveform == VoltageElm.WF_DC || this.waveform == VoltageElm.WF_VAR || clock)
 		{
 			Font f = new Font("SansSerif", 0, 12);
 			g.setFont(f);
-			g.setColor(needsHighlight() ? selectColor : whiteColor);
-			setPowerColor(g, false);
-			double v = getVoltage();
-			String s = getShortUnitText(v, "V");
+			g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.whiteColor);
+			this.setPowerColor(g, false);
+			double v = this.getVoltage();
+			String s = CircuitElm.getShortUnitText(v, "V");
 			if (Math.abs(v) < 1)
-				s = showFormat.format(v) + "V";
-			if (getVoltage() > 0)
+			{
+				s = CircuitElm.showFormat.format(v) + "V";
+			}
+			if (this.getVoltage() > 0)
+			{
 				s = "+" + s;
+			}
 			if (this instanceof AntennaElm)
+			{
 				s = "Ant";
+			}
 			if (clock)
+			{
 				s = "CLK";
-			drawCenteredText(g, s, x2, y2, true);
+			}
+			this.drawCenteredText(g, s, this.x2, this.y2, true);
 		}
 		else
 		{
-			drawWaveform(g, point2);
+			this.drawWaveform(g, this.point2);
 		}
-		drawPosts(g);
-		curcount = updateDotCount(-current, curcount);
-		if (sim.dragElm != this)
-			drawDots(g, point1, lead1, curcount);
+		this.drawPosts(g);
+		this.curcount = this.updateDotCount(-this.current, this.curcount);
+		if (CircuitElm.sim.dragElm != this)
+		{
+			this.drawDots(g, this.point1, this.lead1, this.curcount);
+		}
 	}
 
+	@Override
 	double getVoltageDiff()
 	{
-		return volts[0];
+		return this.volts[0];
 	}
 
+	@Override
 	void stamp()
 	{
-		if (waveform == WF_DC)
-			sim.stampVoltageSource(0, nodes[0], voltSource, getVoltage());
+		if (this.waveform == VoltageElm.WF_DC)
+		{
+			CircuitElm.sim.stampVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
+		}
 		else
-			sim.stampVoltageSource(0, nodes[0], voltSource);
+		{
+			CircuitElm.sim.stampVoltageSource(0, this.nodes[0], this.voltSource);
+		}
 	}
 
+	@Override
 	void doStep()
 	{
-		if (waveform != WF_DC)
-			sim.updateVoltageSource(0, nodes[0], voltSource, getVoltage());
+		if (this.waveform != VoltageElm.WF_DC)
+		{
+			CircuitElm.sim.updateVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
+		}
 	}
 
+	@Override
 	boolean hasGroundConnection(int n1)
 	{
 		return true;

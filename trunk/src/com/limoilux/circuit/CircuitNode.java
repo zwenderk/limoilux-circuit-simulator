@@ -9,6 +9,6 @@ class CircuitNode
 
 	CircuitNode()
 	{
-		links = new Vector();
+		this.links = new Vector();
 	}
 }

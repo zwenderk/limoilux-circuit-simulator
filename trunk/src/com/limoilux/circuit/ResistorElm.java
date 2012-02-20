@@ -1,5 +1,6 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.StringTokenizer;
 
 class ResistorElm extends CircuitElm
@@ -9,48 +10,52 @@ class ResistorElm extends CircuitElm
 	public ResistorElm(int xx, int yy)
 	{
 		super(xx, yy);
-		resistance = 100;
+		this.resistance = 100;
 	}
 
 	public ResistorElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		resistance = new Double(st.nextToken()).doubleValue();
+		this.resistance = new Double(st.nextToken()).doubleValue();
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 'r';
 	}
 
+	@Override
 	String dump()
 	{
-		return super.dump() + " " + resistance;
+		return super.dump() + " " + this.resistance;
 	}
 
 	Point ps3, ps4;
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
-		calcLeads(32);
-		ps3 = new Point();
-		ps4 = new Point();
+		this.calcLeads(32);
+		this.ps3 = new Point();
+		this.ps4 = new Point();
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
 		int segments = 16;
 		int i;
 		int ox = 0;
-		int hs = sim.euroResistorCheckItem.getState() ? 6 : 8;
-		double v1 = volts[0];
-		double v2 = volts[1];
-		setBbox(point1, point2, hs);
-		draw2Leads(g);
-		setPowerColor(g, true);
+		int hs = CircuitElm.sim.euroResistorCheckItem.getState() ? 6 : 8;
+		double v1 = this.volts[0];
+		double v2 = this.volts[1];
+		this.setBbox(this.point1, this.point2, hs);
+		this.draw2Leads(g);
+		this.setPowerColor(g, true);
 		double segf = 1. / segments;
-		if (!sim.euroResistorCheckItem.getState())
+		if (!CircuitElm.sim.euroResistorCheckItem.getState())
 		{
 			// draw zigzag
 			for (i = 0; i != segments; i++)
@@ -69,73 +74,83 @@ class ResistorElm extends CircuitElm
 					break;
 				}
 				double v = v1 + (v2 - v1) * i / segments;
-				setVoltageColor(g, v);
-				interpPoint(lead1, lead2, ps1, i * segf, hs * ox);
-				interpPoint(lead1, lead2, ps2, (i + 1) * segf, hs * nx);
-				drawThickLine(g, ps1, ps2);
+				this.setVoltageColor(g, v);
+				this.interpPoint(this.lead1, this.lead2, CircuitElm.ps1, i * segf, hs * ox);
+				this.interpPoint(this.lead1, this.lead2, CircuitElm.ps2, (i + 1) * segf, hs * nx);
+				CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 				ox = nx;
 			}
 		}
 		else
 		{
 			// draw rectangle
-			setVoltageColor(g, v1);
-			interpPoint2(lead1, lead2, ps1, ps2, 0, hs);
-			drawThickLine(g, ps1, ps2);
+			this.setVoltageColor(g, v1);
+			this.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 0, hs);
+			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 			for (i = 0; i != segments; i++)
 			{
 				double v = v1 + (v2 - v1) * i / segments;
-				setVoltageColor(g, v);
-				interpPoint2(lead1, lead2, ps1, ps2, i * segf, hs);
-				interpPoint2(lead1, lead2, ps3, ps4, (i + 1) * segf, hs);
-				drawThickLine(g, ps1, ps3);
-				drawThickLine(g, ps2, ps4);
+				this.setVoltageColor(g, v);
+				this.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, i * segf, hs);
+				this.interpPoint2(this.lead1, this.lead2, this.ps3, this.ps4, (i + 1) * segf, hs);
+				CircuitElm.drawThickLine(g, CircuitElm.ps1, this.ps3);
+				CircuitElm.drawThickLine(g, CircuitElm.ps2, this.ps4);
 			}
-			interpPoint2(lead1, lead2, ps1, ps2, 1, hs);
-			drawThickLine(g, ps1, ps2);
+			this.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 1, hs);
+			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 		}
-		if (sim.showValuesCheckItem.getState())
+		if (CircuitElm.sim.showValuesCheckItem.getState())
 		{
-			String s = getShortUnitText(resistance, "");
-			drawValues(g, s, hs);
+			String s = CircuitElm.getShortUnitText(this.resistance, "");
+			this.drawValues(g, s, hs);
 		}
-		doDots(g);
-		drawPosts(g);
+		this.doDots(g);
+		this.drawPosts(g);
 	}
 
+	@Override
 	void calculateCurrent()
 	{
-		current = (volts[0] - volts[1]) / resistance;
+		this.current = (this.volts[0] - this.volts[1]) / this.resistance;
 		// System.out.print(this + " res current set to " + current + "\n");
 	}
 
+	@Override
 	void stamp()
 	{
-		sim.stampResistor(nodes[0], nodes[1], resistance);
+		CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
 		arr[0] = "resistor";
-		getBasicInfo(arr);
-		arr[3] = "R = " + getUnitText(resistance, sim.ohmString);
-		arr[4] = "P = " + getUnitText(getPower(), "W");
+		this.getBasicInfo(arr);
+		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CircuitElm.sim.ohmString);
+		arr[4] = "P = " + CircuitElm.getUnitText(this.getPower(), "W");
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		// ohmString doesn't work here on linux
 		if (n == 0)
-			return new EditInfo("Resistance (ohms)", resistance, 0, 0);
+		{
+			return new EditInfo("Resistance (ohms)", this.resistance, 0, 0);
+		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (ei.value > 0)
-			resistance = ei.value;
+		{
+			this.resistance = ei.value;
+		}
 	}
 
+	@Override
 	boolean needsShortcut()
 	{
 		return true;

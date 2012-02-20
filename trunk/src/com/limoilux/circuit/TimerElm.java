@@ -1,5 +1,4 @@
 package com.limoilux.circuit;
-import java.awt.*;
 import java.util.StringTokenizer;
 
 class TimerElm extends ChipElm
@@ -13,9 +12,10 @@ class TimerElm extends ChipElm
 	final int N_OUT = 5;
 	final int N_RST = 6;
 
+	@Override
 	int getDefaultFlags()
 	{
-		return FLAG_RESET;
+		return this.FLAG_RESET;
 	}
 
 	public TimerElm(int xx, int yy)
@@ -28,27 +28,30 @@ class TimerElm extends ChipElm
 		super(xa, ya, xb, yb, f, st);
 	}
 
+	@Override
 	String getChipName()
 	{
 		return "555 Timer";
 	}
 
+	@Override
 	void setupPins()
 	{
-		sizeX = 3;
-		sizeY = 5;
-		pins = new Pin[7];
-		pins[N_DIS] = new Pin(1, SIDE_W, "dis");
-		pins[N_TRIG] = new Pin(3, SIDE_W, "tr");
-		pins[N_TRIG].lineOver = true;
-		pins[N_THRES] = new Pin(4, SIDE_W, "th");
-		pins[N_VIN] = new Pin(1, SIDE_N, "Vin");
-		pins[N_CTL] = new Pin(1, SIDE_S, "ctl");
-		pins[N_OUT] = new Pin(2, SIDE_E, "out");
-		pins[N_OUT].output = pins[N_OUT].state = true;
-		pins[N_RST] = new Pin(1, SIDE_E, "rst");
+		this.sizeX = 3;
+		this.sizeY = 5;
+		this.pins = new Pin[7];
+		this.pins[this.N_DIS] = new Pin(1, this.SIDE_W, "dis");
+		this.pins[this.N_TRIG] = new Pin(3, this.SIDE_W, "tr");
+		this.pins[this.N_TRIG].lineOver = true;
+		this.pins[this.N_THRES] = new Pin(4, this.SIDE_W, "th");
+		this.pins[this.N_VIN] = new Pin(1, this.SIDE_N, "Vin");
+		this.pins[this.N_CTL] = new Pin(1, this.SIDE_S, "ctl");
+		this.pins[this.N_OUT] = new Pin(2, this.SIDE_E, "out");
+		this.pins[this.N_OUT].output = this.pins[this.N_OUT].state = true;
+		this.pins[this.N_RST] = new Pin(1, this.SIDE_E, "rst");
 	}
 
+	@Override
 	boolean nonLinear()
 	{
 		return true;
@@ -56,42 +59,50 @@ class TimerElm extends ChipElm
 
 	boolean hasReset()
 	{
-		return (flags & FLAG_RESET) != 0;
+		return (this.flags & this.FLAG_RESET) != 0;
 	}
 
+	@Override
 	void stamp()
 	{
 		// stamp voltage divider to put ctl pin at 2/3 V
-		sim.stampResistor(nodes[N_VIN], nodes[N_CTL], 5000);
-		sim.stampResistor(nodes[N_CTL], 0, 10000);
+		CircuitElm.sim.stampResistor(this.nodes[this.N_VIN], this.nodes[this.N_CTL], 5000);
+		CircuitElm.sim.stampResistor(this.nodes[this.N_CTL], 0, 10000);
 		// output pin
-		sim.stampVoltageSource(0, nodes[N_OUT], pins[N_OUT].voltSource);
+		CircuitElm.sim.stampVoltageSource(0, this.nodes[this.N_OUT], this.pins[this.N_OUT].voltSource);
 		// discharge pin
-		sim.stampNonLinear(nodes[N_DIS]);
+		CircuitElm.sim.stampNonLinear(this.nodes[this.N_DIS]);
 	}
 
+	@Override
 	void calculateCurrent()
 	{
 		// need current for V, discharge, control; output current is
 		// calculated for us, and other pins have no current
-		pins[N_VIN].current = (volts[N_CTL] - volts[N_VIN]) / 5000;
-		pins[N_CTL].current = -volts[N_CTL] / 10000 - pins[N_VIN].current;
-		pins[N_DIS].current = (!out && !setOut) ? -volts[N_DIS] / 10 : 0;
+		this.pins[this.N_VIN].current = (this.volts[this.N_CTL] - this.volts[this.N_VIN]) / 5000;
+		this.pins[this.N_CTL].current = -this.volts[this.N_CTL] / 10000 - this.pins[this.N_VIN].current;
+		this.pins[this.N_DIS].current = !this.out && !this.setOut ? -this.volts[this.N_DIS] / 10 : 0;
 	}
 
 	boolean setOut, out;
 
+	@Override
 	void startIteration()
 	{
-		out = volts[N_OUT] > volts[N_VIN] / 2;
-		setOut = false;
+		this.out = this.volts[this.N_OUT] > this.volts[this.N_VIN] / 2;
+		this.setOut = false;
 		// check comparators
-		if (volts[N_CTL] / 2 > volts[N_TRIG])
-			setOut = out = true;
-		if (volts[N_THRES] > volts[N_CTL] || (hasReset() && volts[N_RST] < .7))
-			out = false;
+		if (this.volts[this.N_CTL] / 2 > this.volts[this.N_TRIG])
+		{
+			this.setOut = this.out = true;
+		}
+		if (this.volts[this.N_THRES] > this.volts[this.N_CTL] || this.hasReset() && this.volts[this.N_RST] < .7)
+		{
+			this.out = false;
+		}
 	}
 
+	@Override
 	void doStep()
 	{
 		// if output is low, discharge pin 0. we use a small
@@ -99,22 +110,27 @@ class TimerElm extends ChipElm
 		// the discharge pin to the trigger and threshold pins.
 		// We check setOut to properly emulate the case where
 		// trigger is low and threshold is high.
-		if (!out && !setOut)
-			sim.stampResistor(nodes[N_DIS], 0, 10);
+		if (!this.out && !this.setOut)
+		{
+			CircuitElm.sim.stampResistor(this.nodes[this.N_DIS], 0, 10);
+		}
 		// output
-		sim.updateVoltageSource(0, nodes[N_OUT], pins[N_OUT].voltSource, out ? volts[N_VIN] : 0);
+		CircuitElm.sim.updateVoltageSource(0, this.nodes[this.N_OUT], this.pins[this.N_OUT].voltSource, this.out ? this.volts[this.N_VIN] : 0);
 	}
 
+	@Override
 	int getPostCount()
 	{
-		return hasReset() ? 7 : 6;
+		return this.hasReset() ? 7 : 6;
 	}
 
+	@Override
 	int getVoltageSourceCount()
 	{
 		return 1;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 165;

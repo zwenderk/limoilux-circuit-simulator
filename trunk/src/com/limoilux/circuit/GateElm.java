@@ -1,5 +1,7 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.util.StringTokenizer;
 
 abstract class GateElm extends CircuitElm
@@ -11,18 +13,18 @@ abstract class GateElm extends CircuitElm
 	public GateElm(int xx, int yy)
 	{
 		super(xx, yy);
-		noDiagonal = true;
-		inputCount = 2;
-		setSize(sim.smallGridCheckItem.getState() ? 1 : 2);
+		this.noDiagonal = true;
+		this.inputCount = 2;
+		this.setSize(CircuitElm.sim.smallGridCheckItem.getState() ? 1 : 2);
 	}
 
 	public GateElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		inputCount = new Integer(st.nextToken()).intValue();
-		lastOutput = new Double(st.nextToken()).doubleValue() > 2.5;
-		noDiagonal = true;
-		setSize((f & FLAG_SMALL) != 0 ? 1 : 2);
+		this.inputCount = new Integer(st.nextToken()).intValue();
+		this.lastOutput = new Double(st.nextToken()).doubleValue() > 2.5;
+		this.noDiagonal = true;
+		this.setSize((f & this.FLAG_SMALL) != 0 ? 1 : 2);
 	}
 
 	boolean isInverting()
@@ -34,87 +36,109 @@ abstract class GateElm extends CircuitElm
 
 	void setSize(int s)
 	{
-		gsize = s;
-		gwidth = 7 * s;
-		gwidth2 = 14 * s;
-		gheight = 8 * s;
-		flags = (s == 1) ? FLAG_SMALL : 0;
+		this.gsize = s;
+		this.gwidth = 7 * s;
+		this.gwidth2 = 14 * s;
+		this.gheight = 8 * s;
+		this.flags = s == 1 ? this.FLAG_SMALL : 0;
 	}
 
+	@Override
 	String dump()
 	{
-		return super.dump() + " " + inputCount + " " + volts[inputCount];
+		return super.dump() + " " + this.inputCount + " " + this.volts[this.inputCount];
 	}
 
 	Point inPosts[], inGates[];
 	int ww;
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
-		if (dn > 150 && this == sim.dragElm)
-			setSize(2);
-		int hs = gheight;
-		int i;
-		ww = gwidth2; // was 24
-		if (ww > dn / 2)
-			ww = (int) (dn / 2);
-		if (isInverting() && ww + 8 > dn / 2)
-			ww = (int) (dn / 2 - 8);
-		calcLeads(ww * 2);
-		inPosts = new Point[inputCount];
-		inGates = new Point[inputCount];
-		allocNodes();
-		int i0 = -inputCount / 2;
-		for (i = 0; i != inputCount; i++, i0++)
+		if (this.dn > 150 && this == CircuitElm.sim.dragElm)
 		{
-			if (i0 == 0 && (inputCount & 1) == 0)
-				i0++;
-			inPosts[i] = interpPoint(point1, point2, 0, hs * i0);
-			inGates[i] = interpPoint(lead1, lead2, 0, hs * i0);
-			volts[i] = (lastOutput ^ isInverting()) ? 5 : 0;
+			this.setSize(2);
 		}
-		hs2 = gwidth * (inputCount / 2 + 1);
-		setBbox(point1, point2, hs2);
+		int hs = this.gheight;
+		int i;
+		this.ww = this.gwidth2; // was 24
+		if (this.ww > this.dn / 2)
+		{
+			this.ww = (int) (this.dn / 2);
+		}
+		if (this.isInverting() && this.ww + 8 > this.dn / 2)
+		{
+			this.ww = (int) (this.dn / 2 - 8);
+		}
+		this.calcLeads(this.ww * 2);
+		this.inPosts = new Point[this.inputCount];
+		this.inGates = new Point[this.inputCount];
+		this.allocNodes();
+		int i0 = -this.inputCount / 2;
+		for (i = 0; i != this.inputCount; i++, i0++)
+		{
+			if (i0 == 0 && (this.inputCount & 1) == 0)
+			{
+				i0++;
+			}
+			this.inPosts[i] = this.interpPoint(this.point1, this.point2, 0, hs * i0);
+			this.inGates[i] = this.interpPoint(this.lead1, this.lead2, 0, hs * i0);
+			this.volts[i] = this.lastOutput ^ this.isInverting() ? 5 : 0;
+		}
+		this.hs2 = this.gwidth * (this.inputCount / 2 + 1);
+		this.setBbox(this.point1, this.point2, this.hs2);
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
 		int i;
-		for (i = 0; i != inputCount; i++)
+		for (i = 0; i != this.inputCount; i++)
 		{
-			setVoltageColor(g, volts[i]);
-			drawThickLine(g, inPosts[i], inGates[i]);
+			this.setVoltageColor(g, this.volts[i]);
+			CircuitElm.drawThickLine(g, this.inPosts[i], this.inGates[i]);
 		}
-		setVoltageColor(g, volts[inputCount]);
-		drawThickLine(g, lead2, point2);
-		g.setColor(needsHighlight() ? selectColor : lightGrayColor);
-		drawThickPolygon(g, gatePoly);
-		if (linePoints != null)
-			for (i = 0; i != linePoints.length - 1; i++)
-				drawThickLine(g, linePoints[i], linePoints[i + 1]);
-		if (isInverting())
-			drawThickCircle(g, pcircle.x, pcircle.y, 3);
-		curcount = updateDotCount(current, curcount);
-		drawDots(g, lead2, point2, curcount);
-		drawPosts(g);
+		this.setVoltageColor(g, this.volts[this.inputCount]);
+		CircuitElm.drawThickLine(g, this.lead2, this.point2);
+		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
+		CircuitElm.drawThickPolygon(g, this.gatePoly);
+		if (this.linePoints != null)
+		{
+			for (i = 0; i != this.linePoints.length - 1; i++)
+			{
+				CircuitElm.drawThickLine(g, this.linePoints[i], this.linePoints[i + 1]);
+			}
+		}
+		if (this.isInverting())
+		{
+			CircuitElm.drawThickCircle(g, this.pcircle.x, this.pcircle.y, 3);
+		}
+		this.curcount = this.updateDotCount(this.current, this.curcount);
+		this.drawDots(g, this.lead2, this.point2, this.curcount);
+		this.drawPosts(g);
 	}
 
 	Polygon gatePoly;
 	Point pcircle, linePoints[];
 
+	@Override
 	int getPostCount()
 	{
-		return inputCount + 1;
+		return this.inputCount + 1;
 	}
 
+	@Override
 	Point getPost(int n)
 	{
-		if (n == inputCount)
-			return point2;
-		return inPosts[n];
+		if (n == this.inputCount)
+		{
+			return this.point2;
+		}
+		return this.inPosts[n];
 	}
 
+	@Override
 	int getVoltageSourceCount()
 	{
 		return 1;
@@ -122,58 +146,69 @@ abstract class GateElm extends CircuitElm
 
 	abstract String getGateName();
 
+	@Override
 	void getInfo(String arr[])
 	{
-		arr[0] = getGateName();
-		arr[1] = "Vout = " + getVoltageText(volts[inputCount]);
-		arr[2] = "Iout = " + getCurrentText(getCurrent());
+		arr[0] = this.getGateName();
+		arr[1] = "Vout = " + CircuitElm.getVoltageText(this.volts[this.inputCount]);
+		arr[2] = "Iout = " + CircuitElm.getCurrentText(this.getCurrent());
 	}
 
+	@Override
 	void stamp()
 	{
-		sim.stampVoltageSource(0, nodes[inputCount], voltSource);
+		CircuitElm.sim.stampVoltageSource(0, this.nodes[this.inputCount], this.voltSource);
 	}
 
 	boolean getInput(int x)
 	{
-		return volts[x] > 2.5;
+		return this.volts[x] > 2.5;
 	}
 
 	abstract boolean calcFunction();
 
+	@Override
 	void doStep()
 	{
 		int i;
-		boolean f = calcFunction();
-		if (isInverting())
+		boolean f = this.calcFunction();
+		if (this.isInverting())
+		{
 			f = !f;
-		lastOutput = f;
+		}
+		this.lastOutput = f;
 		double res = f ? 5 : 0;
-		sim.updateVoltageSource(0, nodes[inputCount], voltSource, res);
+		CircuitElm.sim.updateVoltageSource(0, this.nodes[this.inputCount], this.voltSource, res);
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
-			return new EditInfo("# of Inputs", inputCount, 1, 8).setDimensionless();
+		{
+			return new EditInfo("# of Inputs", this.inputCount, 1, 8).setDimensionless();
+		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
-		inputCount = (int) ei.value;
-		setPoints();
+		this.inputCount = (int) ei.value;
+		this.setPoints();
 	}
 
 	// there is no current path through the gate inputs, but there
 	// is an indirect path through the output to ground.
+	@Override
 	boolean getConnection(int n1, int n2)
 	{
 		return false;
 	}
 
+	@Override
 	boolean hasGroundConnection(int n1)
 	{
-		return (n1 == inputCount);
+		return n1 == this.inputCount;
 	}
 }

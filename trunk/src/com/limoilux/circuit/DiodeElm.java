@@ -1,5 +1,7 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.util.StringTokenizer;
 
 class DiodeElm extends CircuitElm
@@ -12,31 +14,32 @@ class DiodeElm extends CircuitElm
 	public DiodeElm(int xx, int yy)
 	{
 		super(xx, yy);
-		diode = new Diode(sim);
-		fwdrop = defaultdrop;
-		zvoltage = 0;
-		setup();
+		this.diode = new Diode(CircuitElm.sim);
+		this.fwdrop = this.defaultdrop;
+		this.zvoltage = 0;
+		this.setup();
 	}
 
 	public DiodeElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		diode = new Diode(sim);
-		fwdrop = defaultdrop;
-		zvoltage = 0;
-		if ((f & FLAG_FWDROP) > 0)
+		this.diode = new Diode(CircuitElm.sim);
+		this.fwdrop = this.defaultdrop;
+		this.zvoltage = 0;
+		if ((f & DiodeElm.FLAG_FWDROP) > 0)
 		{
 			try
 			{
-				fwdrop = new Double(st.nextToken()).doubleValue();
+				this.fwdrop = new Double(st.nextToken()).doubleValue();
 			}
 			catch (Exception e)
 			{
 			}
 		}
-		setup();
+		this.setup();
 	}
 
+	@Override
 	boolean nonLinear()
 	{
 		return true;
@@ -44,106 +47,120 @@ class DiodeElm extends CircuitElm
 
 	void setup()
 	{
-		diode.setup(fwdrop, zvoltage);
+		this.diode.setup(this.fwdrop, this.zvoltage);
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 'd';
 	}
 
+	@Override
 	String dump()
 	{
-		flags |= FLAG_FWDROP;
-		return super.dump() + " " + fwdrop;
+		this.flags |= DiodeElm.FLAG_FWDROP;
+		return super.dump() + " " + this.fwdrop;
 	}
 
 	final int hs = 8;
 	Polygon poly;
 	Point cathode[];
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
-		calcLeads(16);
-		cathode = newPointArray(2);
-		Point pa[] = newPointArray(2);
-		interpPoint2(lead1, lead2, pa[0], pa[1], 0, hs);
-		interpPoint2(lead1, lead2, cathode[0], cathode[1], 1, hs);
-		poly = createPolygon(pa[0], pa[1], lead2);
+		this.calcLeads(16);
+		this.cathode = this.newPointArray(2);
+		Point pa[] = this.newPointArray(2);
+		this.interpPoint2(this.lead1, this.lead2, pa[0], pa[1], 0, this.hs);
+		this.interpPoint2(this.lead1, this.lead2, this.cathode[0], this.cathode[1], 1, this.hs);
+		this.poly = this.createPolygon(pa[0], pa[1], this.lead2);
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
-		drawDiode(g);
-		doDots(g);
-		drawPosts(g);
+		this.drawDiode(g);
+		this.doDots(g);
+		this.drawPosts(g);
 	}
 
+	@Override
 	void reset()
 	{
-		diode.reset();
-		volts[0] = volts[1] = curcount = 0;
+		this.diode.reset();
+		this.volts[0] = this.volts[1] = this.curcount = 0;
 	}
 
 	void drawDiode(Graphics g)
 	{
-		setBbox(point1, point2, hs);
+		this.setBbox(this.point1, this.point2, this.hs);
 
-		double v1 = volts[0];
-		double v2 = volts[1];
+		double v1 = this.volts[0];
+		double v2 = this.volts[1];
 
-		draw2Leads(g);
+		this.draw2Leads(g);
 
 		// draw arrow thingy
-		setPowerColor(g, true);
-		setVoltageColor(g, v1);
-		g.fillPolygon(poly);
+		this.setPowerColor(g, true);
+		this.setVoltageColor(g, v1);
+		g.fillPolygon(this.poly);
 
 		// draw thing arrow is pointing to
-		setVoltageColor(g, v2);
-		drawThickLine(g, cathode[0], cathode[1]);
+		this.setVoltageColor(g, v2);
+		CircuitElm.drawThickLine(g, this.cathode[0], this.cathode[1]);
 	}
 
+	@Override
 	void stamp()
 	{
-		diode.stamp(nodes[0], nodes[1]);
+		this.diode.stamp(this.nodes[0], this.nodes[1]);
 	}
 
+	@Override
 	void doStep()
 	{
-		diode.doStep(volts[0] - volts[1]);
+		this.diode.doStep(this.volts[0] - this.volts[1]);
 	}
 
+	@Override
 	void calculateCurrent()
 	{
-		current = diode.calculateCurrent(volts[0] - volts[1]);
+		this.current = this.diode.calculateCurrent(this.volts[0] - this.volts[1]);
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
 		arr[0] = "diode";
-		arr[1] = "I = " + getCurrentText(getCurrent());
-		arr[2] = "Vd = " + getVoltageText(getVoltageDiff());
-		arr[3] = "P = " + getUnitText(getPower(), "W");
-		arr[4] = "Vf = " + getVoltageText(fwdrop);
+		arr[1] = "I = " + CircuitElm.getCurrentText(this.getCurrent());
+		arr[2] = "Vd = " + CircuitElm.getVoltageText(this.getVoltageDiff());
+		arr[3] = "P = " + CircuitElm.getUnitText(this.getPower(), "W");
+		arr[4] = "Vf = " + CircuitElm.getVoltageText(this.fwdrop);
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
-			return new EditInfo("Fwd Voltage @ 1A", fwdrop, 10, 1000);
+		{
+			return new EditInfo("Fwd Voltage @ 1A", this.fwdrop, 10, 1000);
+		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
-		fwdrop = ei.value;
-		setup();
+		this.fwdrop = ei.value;
+		this.setup();
 	}
 
+	@Override
 	boolean needsShortcut()
 	{
-		return getClass() == DiodeElm.class;
+		return this.getClass() == DiodeElm.class;
 	}
 }

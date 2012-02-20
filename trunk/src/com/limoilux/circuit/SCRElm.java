@@ -1,5 +1,7 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.util.StringTokenizer;
 
 // Silicon-Controlled Rectifier
@@ -20,65 +22,69 @@ class SCRElm extends CircuitElm
 	public SCRElm(int xx, int yy)
 	{
 		super(xx, yy);
-		setDefaults();
-		setup();
+		this.setDefaults();
+		this.setup();
 	}
 
 	public SCRElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		setDefaults();
+		this.setDefaults();
 		try
 		{
-			lastvac = new Double(st.nextToken()).doubleValue();
-			lastvag = new Double(st.nextToken()).doubleValue();
-			volts[anode] = 0;
-			volts[cnode] = -lastvac;
-			volts[gnode] = -lastvag;
-			triggerI = new Double(st.nextToken()).doubleValue();
-			holdingI = new Double(st.nextToken()).doubleValue();
-			cresistance = new Double(st.nextToken()).doubleValue();
+			this.lastvac = new Double(st.nextToken()).doubleValue();
+			this.lastvag = new Double(st.nextToken()).doubleValue();
+			this.volts[this.anode] = 0;
+			this.volts[this.cnode] = -this.lastvac;
+			this.volts[this.gnode] = -this.lastvag;
+			this.triggerI = new Double(st.nextToken()).doubleValue();
+			this.holdingI = new Double(st.nextToken()).doubleValue();
+			this.cresistance = new Double(st.nextToken()).doubleValue();
 		}
 		catch (Exception e)
 		{
 		}
-		setup();
+		this.setup();
 	}
 
 	void setDefaults()
 	{
-		cresistance = 50;
-		holdingI = .0082;
-		triggerI = .01;
+		this.cresistance = 50;
+		this.holdingI = .0082;
+		this.triggerI = .01;
 	}
 
 	void setup()
 	{
-		diode = new Diode(sim);
-		diode.setup(.8, 0);
+		this.diode = new Diode(CircuitElm.sim);
+		this.diode.setup(.8, 0);
 	}
 
+	@Override
 	boolean nonLinear()
 	{
 		return true;
 	}
 
+	@Override
 	void reset()
 	{
-		volts[anode] = volts[cnode] = volts[gnode] = 0;
-		diode.reset();
-		lastvag = lastvac = curcount_a = curcount_c = curcount_g = 0;
+		this.volts[this.anode] = this.volts[this.cnode] = this.volts[this.gnode] = 0;
+		this.diode.reset();
+		this.lastvag = this.lastvac = this.curcount_a = this.curcount_c = this.curcount_g = 0;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 177;
 	}
 
+	@Override
 	String dump()
 	{
-		return super.dump() + " " + (volts[anode] - volts[cnode]) + " " + (volts[anode] - volts[gnode]) + " "
-				+ triggerI + " " + holdingI + " " + cresistance;
+		return super.dump() + " " + (this.volts[this.anode] - this.volts[this.cnode]) + " " + (this.volts[this.anode] - this.volts[this.gnode]) + " "
+				+ this.triggerI + " " + this.holdingI + " " + this.cresistance;
 	}
 
 	double ia, ic, ig, curcount_a, curcount_c, curcount_g;
@@ -89,168 +95,196 @@ class SCRElm extends CircuitElm
 	Polygon poly;
 	Point cathode[], gate[];
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
 		int dir = 0;
-		if (abs(dx) > abs(dy))
+		if (CircuitElm.abs(this.dx) > CircuitElm.abs(this.dy))
 		{
-			dir = -sign(dx) * sign(dy);
-			point2.y = point1.y;
+			dir = -CircuitElm.sign(this.dx) * CircuitElm.sign(this.dy);
+			this.point2.y = this.point1.y;
 		}
 		else
 		{
-			dir = sign(dy) * sign(dx);
-			point2.x = point1.x;
+			dir = CircuitElm.sign(this.dy) * CircuitElm.sign(this.dx);
+			this.point2.x = this.point1.x;
 		}
 		if (dir == 0)
+		{
 			dir = 1;
-		calcLeads(16);
-		cathode = newPointArray(2);
-		Point pa[] = newPointArray(2);
-		interpPoint2(lead1, lead2, pa[0], pa[1], 0, hs);
-		interpPoint2(lead1, lead2, cathode[0], cathode[1], 1, hs);
-		poly = createPolygon(pa[0], pa[1], lead2);
+		}
+		this.calcLeads(16);
+		this.cathode = this.newPointArray(2);
+		Point pa[] = this.newPointArray(2);
+		this.interpPoint2(this.lead1, this.lead2, pa[0], pa[1], 0, this.hs);
+		this.interpPoint2(this.lead1, this.lead2, this.cathode[0], this.cathode[1], 1, this.hs);
+		this.poly = this.createPolygon(pa[0], pa[1], this.lead2);
 
-		gate = newPointArray(2);
-		double leadlen = (dn - 16) / 2;
-		int gatelen = sim.gridSize;
-		gatelen += leadlen % sim.gridSize;
+		this.gate = this.newPointArray(2);
+		double leadlen = (this.dn - 16) / 2;
+		int gatelen = CircuitElm.sim.gridSize;
+		gatelen += leadlen % CircuitElm.sim.gridSize;
 		if (leadlen < gatelen)
 		{
-			x2 = x;
-			y2 = y;
+			this.x2 = this.x;
+			this.y2 = this.y;
 			return;
 		}
-		interpPoint(lead2, point2, gate[0], gatelen / leadlen, gatelen * dir);
-		interpPoint(lead2, point2, gate[1], gatelen / leadlen, sim.gridSize * 2 * dir);
+		this.interpPoint(this.lead2, this.point2, this.gate[0], gatelen / leadlen, gatelen * dir);
+		this.interpPoint(this.lead2, this.point2, this.gate[1], gatelen / leadlen, CircuitElm.sim.gridSize * 2 * dir);
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
-		setBbox(point1, point2, hs);
-		adjustBbox(gate[0], gate[1]);
+		this.setBbox(this.point1, this.point2, this.hs);
+		this.adjustBbox(this.gate[0], this.gate[1]);
 
-		double v1 = volts[anode];
-		double v2 = volts[cnode];
+		double v1 = this.volts[this.anode];
+		double v2 = this.volts[this.cnode];
 
-		draw2Leads(g);
+		this.draw2Leads(g);
 
 		// draw arrow thingy
-		setPowerColor(g, true);
-		setVoltageColor(g, v1);
-		g.fillPolygon(poly);
+		this.setPowerColor(g, true);
+		this.setVoltageColor(g, v1);
+		g.fillPolygon(this.poly);
 
 		// draw thing arrow is pointing to
-		setVoltageColor(g, v2);
-		drawThickLine(g, cathode[0], cathode[1]);
+		this.setVoltageColor(g, v2);
+		CircuitElm.drawThickLine(g, this.cathode[0], this.cathode[1]);
 
-		drawThickLine(g, lead2, gate[0]);
-		drawThickLine(g, gate[0], gate[1]);
+		CircuitElm.drawThickLine(g, this.lead2, this.gate[0]);
+		CircuitElm.drawThickLine(g, this.gate[0], this.gate[1]);
 
-		curcount_a = updateDotCount(ia, curcount_a);
-		curcount_c = updateDotCount(ic, curcount_c);
-		curcount_g = updateDotCount(ig, curcount_g);
-		if (sim.dragElm != this)
+		this.curcount_a = this.updateDotCount(this.ia, this.curcount_a);
+		this.curcount_c = this.updateDotCount(this.ic, this.curcount_c);
+		this.curcount_g = this.updateDotCount(this.ig, this.curcount_g);
+		if (CircuitElm.sim.dragElm != this)
 		{
-			drawDots(g, point1, lead2, curcount_a);
-			drawDots(g, point2, lead2, curcount_c);
-			drawDots(g, gate[1], gate[0], curcount_g);
-			drawDots(g, gate[0], lead2, curcount_g + distance(gate[1], gate[0]));
+			this.drawDots(g, this.point1, this.lead2, this.curcount_a);
+			this.drawDots(g, this.point2, this.lead2, this.curcount_c);
+			this.drawDots(g, this.gate[1], this.gate[0], this.curcount_g);
+			this.drawDots(g, this.gate[0], this.lead2, this.curcount_g + CircuitElm.distance(this.gate[1], this.gate[0]));
 		}
-		drawPosts(g);
+		this.drawPosts(g);
 	}
 
+	@Override
 	Point getPost(int n)
 	{
-		return (n == 0) ? point1 : (n == 1) ? point2 : gate[1];
+		return n == 0 ? this.point1 : n == 1 ? this.point2 : this.gate[1];
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 3;
 	}
 
+	@Override
 	int getInternalNodeCount()
 	{
 		return 1;
 	}
 
+	@Override
 	double getPower()
 	{
-		return (volts[anode] - volts[gnode]) * ia + (volts[cnode] - volts[gnode]) * ic;
+		return (this.volts[this.anode] - this.volts[this.gnode]) * this.ia + (this.volts[this.cnode] - this.volts[this.gnode]) * this.ic;
 	}
 
 	double aresistance;
 
+	@Override
 	void stamp()
 	{
-		sim.stampNonLinear(nodes[anode]);
-		sim.stampNonLinear(nodes[cnode]);
-		sim.stampNonLinear(nodes[gnode]);
-		sim.stampNonLinear(nodes[inode]);
-		sim.stampResistor(nodes[gnode], nodes[cnode], cresistance);
-		diode.stamp(nodes[inode], nodes[gnode]);
+		CircuitElm.sim.stampNonLinear(this.nodes[this.anode]);
+		CircuitElm.sim.stampNonLinear(this.nodes[this.cnode]);
+		CircuitElm.sim.stampNonLinear(this.nodes[this.gnode]);
+		CircuitElm.sim.stampNonLinear(this.nodes[this.inode]);
+		CircuitElm.sim.stampResistor(this.nodes[this.gnode], this.nodes[this.cnode], this.cresistance);
+		this.diode.stamp(this.nodes[this.inode], this.nodes[this.gnode]);
 	}
 
+	@Override
 	void doStep()
 	{
-		double vac = volts[anode] - volts[cnode]; // typically negative
-		double vag = volts[anode] - volts[gnode]; // typically positive
-		if (Math.abs(vac - lastvac) > .01 || Math.abs(vag - lastvag) > .01)
-			sim.converged = false;
-		lastvac = vac;
-		lastvag = vag;
-		diode.doStep(volts[inode] - volts[gnode]);
-		double icmult = 1 / triggerI;
-		double iamult = 1 / holdingI - icmult;
+		double vac = this.volts[this.anode] - this.volts[this.cnode]; // typically negative
+		double vag = this.volts[this.anode] - this.volts[this.gnode]; // typically positive
+		if (Math.abs(vac - this.lastvac) > .01 || Math.abs(vag - this.lastvag) > .01)
+		{
+			CircuitElm.sim.converged = false;
+		}
+		this.lastvac = vac;
+		this.lastvag = vag;
+		this.diode.doStep(this.volts[this.inode] - this.volts[this.gnode]);
+		double icmult = 1 / this.triggerI;
+		double iamult = 1 / this.holdingI - icmult;
 		// System.out.println(icmult + " " + iamult);
-		aresistance = (-icmult * ic + ia * iamult > 1) ? .0105 : 10e5;
+		this.aresistance = -icmult * this.ic + this.ia * iamult > 1 ? .0105 : 10e5;
 		// System.out.println(vac + " " + vag + " " + sim.converged + " " + ic +
 		// " " + ia + " " + aresistance + " " + volts[inode] + " " +
 		// volts[gnode] + " " + volts[anode]);
-		sim.stampResistor(nodes[anode], nodes[inode], aresistance);
+		CircuitElm.sim.stampResistor(this.nodes[this.anode], this.nodes[this.inode], this.aresistance);
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
 		arr[0] = "SCR";
-		double vac = volts[anode] - volts[cnode];
-		double vag = volts[anode] - volts[gnode];
-		double vgc = volts[gnode] - volts[cnode];
-		arr[1] = "Ia = " + getCurrentText(ia);
-		arr[2] = "Ig = " + getCurrentText(ig);
-		arr[3] = "Vac = " + getVoltageText(vac);
-		arr[4] = "Vag = " + getVoltageText(vag);
-		arr[5] = "Vgc = " + getVoltageText(vgc);
+		double vac = this.volts[this.anode] - this.volts[this.cnode];
+		double vag = this.volts[this.anode] - this.volts[this.gnode];
+		double vgc = this.volts[this.gnode] - this.volts[this.cnode];
+		arr[1] = "Ia = " + CircuitElm.getCurrentText(this.ia);
+		arr[2] = "Ig = " + CircuitElm.getCurrentText(this.ig);
+		arr[3] = "Vac = " + CircuitElm.getVoltageText(vac);
+		arr[4] = "Vag = " + CircuitElm.getVoltageText(vag);
+		arr[5] = "Vgc = " + CircuitElm.getVoltageText(vgc);
 	}
 
+	@Override
 	void calculateCurrent()
 	{
-		ic = (volts[cnode] - volts[gnode]) / cresistance;
-		ia = (volts[anode] - volts[inode]) / aresistance;
-		ig = -ic - ia;
+		this.ic = (this.volts[this.cnode] - this.volts[this.gnode]) / this.cresistance;
+		this.ia = (this.volts[this.anode] - this.volts[this.inode]) / this.aresistance;
+		this.ig = -this.ic - this.ia;
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		// ohmString doesn't work here on linux
 		if (n == 0)
-			return new EditInfo("Trigger Current (A)", triggerI, 0, 0);
+		{
+			return new EditInfo("Trigger Current (A)", this.triggerI, 0, 0);
+		}
 		if (n == 1)
-			return new EditInfo("Holding Current (A)", holdingI, 0, 0);
+		{
+			return new EditInfo("Holding Current (A)", this.holdingI, 0, 0);
+		}
 		if (n == 2)
-			return new EditInfo("Gate-Cathode Resistance (ohms)", cresistance, 0, 0);
+		{
+			return new EditInfo("Gate-Cathode Resistance (ohms)", this.cresistance, 0, 0);
+		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (n == 0 && ei.value > 0)
-			triggerI = ei.value;
+		{
+			this.triggerI = ei.value;
+		}
 		if (n == 1 && ei.value > 0)
-			holdingI = ei.value;
+		{
+			this.holdingI = ei.value;
+		}
 		if (n == 2 && ei.value > 0)
-			cresistance = ei.value;
+		{
+			this.cresistance = ei.value;
+		}
 	}
 }

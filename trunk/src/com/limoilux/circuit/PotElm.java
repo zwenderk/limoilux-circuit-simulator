@@ -1,6 +1,10 @@
 package com.limoilux.circuit;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Graphics;
+import java.awt.Label;
+import java.awt.Point;
+import java.awt.Scrollbar;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.util.StringTokenizer;
 
 class PotElm extends CircuitElm implements AdjustmentListener
@@ -15,126 +19,138 @@ class PotElm extends CircuitElm implements AdjustmentListener
 	public PotElm(int xx, int yy)
 	{
 		super(xx, yy);
-		setup();
-		maxResistance = 1000;
-		position = .5;
-		sliderText = "Resistance";
-		createSlider();
+		this.setup();
+		this.maxResistance = 1000;
+		this.position = .5;
+		this.sliderText = "Resistance";
+		this.createSlider();
 	}
 
 	public PotElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		maxResistance = new Double(st.nextToken()).doubleValue();
-		position = new Double(st.nextToken()).doubleValue();
-		sliderText = st.nextToken();
+		this.maxResistance = new Double(st.nextToken()).doubleValue();
+		this.position = new Double(st.nextToken()).doubleValue();
+		this.sliderText = st.nextToken();
 		while (st.hasMoreTokens())
-			sliderText += ' ' + st.nextToken();
-		createSlider();
+		{
+			this.sliderText += ' ' + st.nextToken();
+		}
+		this.createSlider();
 	}
 
 	void setup()
 	{
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 3;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 174;
 	}
 
+	@Override
 	Point getPost(int n)
 	{
-		return (n == 0) ? point1 : (n == 1) ? point2 : post3;
+		return n == 0 ? this.point1 : n == 1 ? this.point2 : this.post3;
 	}
 
+	@Override
 	String dump()
 	{
-		return super.dump() + " " + maxResistance + " " + position + " " + sliderText;
+		return super.dump() + " " + this.maxResistance + " " + this.position + " " + this.sliderText;
 	}
 
 	void createSlider()
 	{
-		sim.mainContainer.add(label = new Label(sliderText, Label.CENTER));
-		int value = (int) (position * 100);
-		sim.mainContainer.add(slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
-		sim.mainContainer.validate();
-		slider.addAdjustmentListener(this);
+		CircuitElm.sim.mainContainer.add(this.label = new Label(this.sliderText, Label.CENTER));
+		int value = (int) (this.position * 100);
+		CircuitElm.sim.mainContainer.add(this.slider = new Scrollbar(Scrollbar.HORIZONTAL, value, 1, 0, 101));
+		CircuitElm.sim.mainContainer.validate();
+		this.slider.addAdjustmentListener(this);
 	}
 
+	@Override
 	public void adjustmentValueChanged(AdjustmentEvent e)
 	{
-		sim.analyzeFlag = true;
-		setPoints();
+		CircuitElm.sim.analyzeFlag = true;
+		this.setPoints();
 	}
 
+	@Override
 	void delete()
 	{
-		sim.mainContainer.remove(label);
-		sim.mainContainer.remove(slider);
+		CircuitElm.sim.mainContainer.remove(this.label);
+		CircuitElm.sim.mainContainer.remove(this.slider);
 	}
 
 	Point post3, corner2, arrowPoint, midpoint, arrow1, arrow2;
 	Point ps3, ps4;
 	int bodyLen;
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
 		int offset = 0;
-		if (abs(dx) > abs(dy))
+		if (CircuitElm.abs(this.dx) > CircuitElm.abs(this.dy))
 		{
-			dx = sim.snapGrid(dx / 2) * 2;
-			point2.x = x2 = point1.x + dx;
-			offset = (dx < 0) ? dy : -dy;
-			point2.y = point1.y;
+			this.dx = CircuitElm.sim.snapGrid(this.dx / 2) * 2;
+			this.point2.x = this.x2 = this.point1.x + this.dx;
+			offset = this.dx < 0 ? this.dy : -this.dy;
+			this.point2.y = this.point1.y;
 		}
 		else
 		{
-			dy = sim.snapGrid(dy / 2) * 2;
-			point2.y = y2 = point1.y + dy;
-			offset = (dy > 0) ? dx : -dx;
-			point2.x = point1.x;
+			this.dy = CircuitElm.sim.snapGrid(this.dy / 2) * 2;
+			this.point2.y = this.y2 = this.point1.y + this.dy;
+			offset = this.dy > 0 ? this.dx : -this.dx;
+			this.point2.x = this.point1.x;
 		}
 		if (offset == 0)
-			offset = sim.gridSize;
-		dn = distance(point1, point2);
+		{
+			offset = CircuitElm.sim.gridSize;
+		}
+		this.dn = CircuitElm.distance(this.point1, this.point2);
 		int bodyLen = 32;
-		calcLeads(bodyLen);
-		position = slider.getValue() * .0099 + .005;
-		int soff = (int) ((position - .5) * bodyLen);
+		this.calcLeads(bodyLen);
+		this.position = this.slider.getValue() * .0099 + .005;
+		int soff = (int) ((this.position - .5) * bodyLen);
 		// int offset2 = offset - sign(offset)*4;
-		post3 = interpPoint(point1, point2, .5, offset);
-		corner2 = interpPoint(point1, point2, soff / dn + .5, offset);
-		arrowPoint = interpPoint(point1, point2, soff / dn + .5, 8 * sign(offset));
-		midpoint = interpPoint(point1, point2, soff / dn + .5);
-		arrow1 = new Point();
-		arrow2 = new Point();
-		double clen = abs(offset) - 8;
-		interpPoint2(corner2, arrowPoint, arrow1, arrow2, (clen - 8) / clen, 8);
-		ps3 = new Point();
-		ps4 = new Point();
+		this.post3 = this.interpPoint(this.point1, this.point2, .5, offset);
+		this.corner2 = this.interpPoint(this.point1, this.point2, soff / this.dn + .5, offset);
+		this.arrowPoint = this.interpPoint(this.point1, this.point2, soff / this.dn + .5, 8 * CircuitElm.sign(offset));
+		this.midpoint = this.interpPoint(this.point1, this.point2, soff / this.dn + .5);
+		this.arrow1 = new Point();
+		this.arrow2 = new Point();
+		double clen = CircuitElm.abs(offset) - 8;
+		this.interpPoint2(this.corner2, this.arrowPoint, this.arrow1, this.arrow2, (clen - 8) / clen, 8);
+		this.ps3 = new Point();
+		this.ps4 = new Point();
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
 		int segments = 16;
 		int i;
 		int ox = 0;
-		int hs = sim.euroResistorCheckItem.getState() ? 6 : 8;
-		double v1 = volts[0];
-		double v2 = volts[1];
-		double v3 = volts[2];
-		setBbox(point1, point2, hs);
-		draw2Leads(g);
-		setPowerColor(g, true);
+		int hs = CircuitElm.sim.euroResistorCheckItem.getState() ? 6 : 8;
+		double v1 = this.volts[0];
+		double v2 = this.volts[1];
+		double v3 = this.volts[2];
+		this.setBbox(this.point1, this.point2, hs);
+		this.draw2Leads(g);
+		this.setPowerColor(g, true);
 		double segf = 1. / segments;
-		int divide = (int) (segments * position);
-		if (!sim.euroResistorCheckItem.getState())
+		int divide = (int) (segments * this.position);
+		if (!CircuitElm.sim.euroResistorCheckItem.getState())
 		{
 			// draw zigzag
 			for (i = 0; i != segments; i++)
@@ -154,99 +170,112 @@ class PotElm extends CircuitElm implements AdjustmentListener
 				}
 				double v = v1 + (v3 - v1) * i / divide;
 				if (i >= divide)
+				{
 					v = v3 + (v2 - v3) * (i - divide) / (segments - divide);
-				setVoltageColor(g, v);
-				interpPoint(lead1, lead2, ps1, i * segf, hs * ox);
-				interpPoint(lead1, lead2, ps2, (i + 1) * segf, hs * nx);
-				drawThickLine(g, ps1, ps2);
+				}
+				this.setVoltageColor(g, v);
+				this.interpPoint(this.lead1, this.lead2, CircuitElm.ps1, i * segf, hs * ox);
+				this.interpPoint(this.lead1, this.lead2, CircuitElm.ps2, (i + 1) * segf, hs * nx);
+				CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 				ox = nx;
 			}
 		}
 		else
 		{
 			// draw rectangle
-			setVoltageColor(g, v1);
-			interpPoint2(lead1, lead2, ps1, ps2, 0, hs);
-			drawThickLine(g, ps1, ps2);
+			this.setVoltageColor(g, v1);
+			this.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 0, hs);
+			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 			for (i = 0; i != segments; i++)
 			{
 				double v = v1 + (v3 - v1) * i / divide;
 				if (i >= divide)
+				{
 					v = v3 + (v2 - v3) * (i - divide) / (segments - divide);
-				setVoltageColor(g, v);
-				interpPoint2(lead1, lead2, ps1, ps2, i * segf, hs);
-				interpPoint2(lead1, lead2, ps3, ps4, (i + 1) * segf, hs);
-				drawThickLine(g, ps1, ps3);
-				drawThickLine(g, ps2, ps4);
+				}
+				this.setVoltageColor(g, v);
+				this.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, i * segf, hs);
+				this.interpPoint2(this.lead1, this.lead2, this.ps3, this.ps4, (i + 1) * segf, hs);
+				CircuitElm.drawThickLine(g, CircuitElm.ps1, this.ps3);
+				CircuitElm.drawThickLine(g, CircuitElm.ps2, this.ps4);
 			}
-			interpPoint2(lead1, lead2, ps1, ps2, 1, hs);
-			drawThickLine(g, ps1, ps2);
+			this.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 1, hs);
+			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 		}
-		setVoltageColor(g, v3);
-		drawThickLine(g, post3, corner2);
-		drawThickLine(g, corner2, arrowPoint);
-		drawThickLine(g, arrow1, arrowPoint);
-		drawThickLine(g, arrow2, arrowPoint);
-		curcount1 = updateDotCount(current1, curcount1);
-		curcount2 = updateDotCount(current2, curcount2);
-		curcount3 = updateDotCount(current3, curcount3);
-		if (sim.dragElm != this)
+		this.setVoltageColor(g, v3);
+		CircuitElm.drawThickLine(g, this.post3, this.corner2);
+		CircuitElm.drawThickLine(g, this.corner2, this.arrowPoint);
+		CircuitElm.drawThickLine(g, this.arrow1, this.arrowPoint);
+		CircuitElm.drawThickLine(g, this.arrow2, this.arrowPoint);
+		this.curcount1 = this.updateDotCount(this.current1, this.curcount1);
+		this.curcount2 = this.updateDotCount(this.current2, this.curcount2);
+		this.curcount3 = this.updateDotCount(this.current3, this.curcount3);
+		if (CircuitElm.sim.dragElm != this)
 		{
-			drawDots(g, point1, midpoint, curcount1);
-			drawDots(g, point2, midpoint, curcount2);
-			drawDots(g, post3, corner2, curcount3);
-			drawDots(g, corner2, midpoint, curcount3 + distance(post3, corner2));
+			this.drawDots(g, this.point1, this.midpoint, this.curcount1);
+			this.drawDots(g, this.point2, this.midpoint, this.curcount2);
+			this.drawDots(g, this.post3, this.corner2, this.curcount3);
+			this.drawDots(g, this.corner2, this.midpoint, this.curcount3 + CircuitElm.distance(this.post3, this.corner2));
 		}
-		drawPosts(g);
+		this.drawPosts(g);
 	}
 
+	@Override
 	void calculateCurrent()
 	{
-		current1 = (volts[0] - volts[2]) / resistance1;
-		current2 = (volts[1] - volts[2]) / resistance2;
-		current3 = -current1 - current2;
+		this.current1 = (this.volts[0] - this.volts[2]) / this.resistance1;
+		this.current2 = (this.volts[1] - this.volts[2]) / this.resistance2;
+		this.current3 = -this.current1 - this.current2;
 	}
 
+	@Override
 	void stamp()
 	{
-		resistance1 = maxResistance * position;
-		resistance2 = maxResistance * (1 - position);
-		sim.stampResistor(nodes[0], nodes[2], resistance1);
-		sim.stampResistor(nodes[2], nodes[1], resistance2);
+		this.resistance1 = this.maxResistance * this.position;
+		this.resistance2 = this.maxResistance * (1 - this.position);
+		CircuitElm.sim.stampResistor(this.nodes[0], this.nodes[2], this.resistance1);
+		CircuitElm.sim.stampResistor(this.nodes[2], this.nodes[1], this.resistance2);
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
 		arr[0] = "potentiometer";
-		arr[1] = "Vd = " + getVoltageDText(getVoltageDiff());
-		arr[2] = "R1 = " + getUnitText(resistance1, sim.ohmString);
-		arr[3] = "R2 = " + getUnitText(resistance2, sim.ohmString);
-		arr[4] = "I1 = " + getCurrentDText(current1);
-		arr[5] = "I2 = " + getCurrentDText(current2);
+		arr[1] = "Vd = " + CircuitElm.getVoltageDText(this.getVoltageDiff());
+		arr[2] = "R1 = " + CircuitElm.getUnitText(this.resistance1, CircuitElm.sim.ohmString);
+		arr[3] = "R2 = " + CircuitElm.getUnitText(this.resistance2, CircuitElm.sim.ohmString);
+		arr[4] = "I1 = " + CircuitElm.getCurrentDText(this.current1);
+		arr[5] = "I2 = " + CircuitElm.getCurrentDText(this.current2);
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		// ohmString doesn't work here on linux
 		if (n == 0)
-			return new EditInfo("Resistance (ohms)", maxResistance, 0, 0);
+		{
+			return new EditInfo("Resistance (ohms)", this.maxResistance, 0, 0);
+		}
 		if (n == 1)
 		{
 			EditInfo ei = new EditInfo("Slider Text", 0, -1, -1);
-			ei.text = sliderText;
+			ei.text = this.sliderText;
 			return ei;
 		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (n == 0)
-			maxResistance = ei.value;
+		{
+			this.maxResistance = ei.value;
+		}
 		if (n == 1)
 		{
-			sliderText = ei.textf.getText();
-			label.setText(sliderText);
+			this.sliderText = ei.textf.getText();
+			this.label.setText(this.sliderText);
 		}
 	}
 }

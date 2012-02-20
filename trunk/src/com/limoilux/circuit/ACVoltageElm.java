@@ -3,7 +3,7 @@ public class ACVoltageElm extends VoltageElm
 {
 	public ACVoltageElm(int xx, int yy)
 	{
-		super(xx, yy, WF_AC);
+		super(xx, yy, VoltageElm.WF_AC);
 	}
 
 	@Override

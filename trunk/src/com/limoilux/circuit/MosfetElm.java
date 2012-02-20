@@ -1,5 +1,9 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Checkbox;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.util.StringTokenizer;
 
 class MosfetElm extends CircuitElm
@@ -13,21 +17,21 @@ class MosfetElm extends CircuitElm
 	MosfetElm(int xx, int yy, boolean pnpflag)
 	{
 		super(xx, yy);
-		pnp = (pnpflag) ? -1 : 1;
-		flags = (pnpflag) ? FLAG_PNP : 0;
-		noDiagonal = true;
-		vt = getDefaultThreshold();
+		this.pnp = pnpflag ? -1 : 1;
+		this.flags = pnpflag ? this.FLAG_PNP : 0;
+		this.noDiagonal = true;
+		this.vt = this.getDefaultThreshold();
 	}
 
 	public MosfetElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		pnp = ((f & FLAG_PNP) != 0) ? -1 : 1;
-		noDiagonal = true;
-		vt = getDefaultThreshold();
+		this.pnp = (f & this.FLAG_PNP) != 0 ? -1 : 1;
+		this.noDiagonal = true;
+		this.vt = this.getDefaultThreshold();
 		try
 		{
-			vt = new Double(st.nextToken()).doubleValue();
+			this.vt = new Double(st.nextToken()).doubleValue();
 		}
 		catch (Exception e)
 		{
@@ -44,6 +48,7 @@ class MosfetElm extends CircuitElm
 		return .02;
 	}
 
+	@Override
 	boolean nonLinear()
 	{
 		return true;
@@ -51,19 +56,22 @@ class MosfetElm extends CircuitElm
 
 	boolean drawDigital()
 	{
-		return (flags & FLAG_DIGITAL) != 0;
+		return (this.flags & this.FLAG_DIGITAL) != 0;
 	}
 
+	@Override
 	void reset()
 	{
-		lastv1 = lastv2 = volts[0] = volts[1] = volts[2] = curcount = 0;
+		this.lastv1 = this.lastv2 = this.volts[0] = this.volts[1] = this.volts[2] = this.curcount = 0;
 	}
 
+	@Override
 	String dump()
 	{
-		return super.dump() + " " + vt;
+		return super.dump() + " " + this.vt;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 'f';
@@ -71,84 +79,93 @@ class MosfetElm extends CircuitElm
 
 	final int hs = 16;
 
+	@Override
 	void draw(Graphics g)
 	{
-		setBbox(point1, point2, hs);
-		setVoltageColor(g, volts[1]);
-		drawThickLine(g, src[0], src[1]);
-		setVoltageColor(g, volts[2]);
-		drawThickLine(g, drn[0], drn[1]);
+		this.setBbox(this.point1, this.point2, this.hs);
+		this.setVoltageColor(g, this.volts[1]);
+		CircuitElm.drawThickLine(g, this.src[0], this.src[1]);
+		this.setVoltageColor(g, this.volts[2]);
+		CircuitElm.drawThickLine(g, this.drn[0], this.drn[1]);
 		int segments = 6;
 		int i;
-		setPowerColor(g, true);
+		this.setPowerColor(g, true);
 		double segf = 1. / segments;
 		for (i = 0; i != segments; i++)
 		{
-			double v = volts[1] + (volts[2] - volts[1]) * i / segments;
-			setVoltageColor(g, v);
-			interpPoint(src[1], drn[1], ps1, i * segf);
-			interpPoint(src[1], drn[1], ps2, (i + 1) * segf);
-			drawThickLine(g, ps1, ps2);
+			double v = this.volts[1] + (this.volts[2] - this.volts[1]) * i / segments;
+			this.setVoltageColor(g, v);
+			this.interpPoint(this.src[1], this.drn[1], CircuitElm.ps1, i * segf);
+			this.interpPoint(this.src[1], this.drn[1], CircuitElm.ps2, (i + 1) * segf);
+			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 		}
-		setVoltageColor(g, volts[1]);
-		drawThickLine(g, src[1], src[2]);
-		setVoltageColor(g, volts[2]);
-		drawThickLine(g, drn[1], drn[2]);
-		if (!drawDigital())
+		this.setVoltageColor(g, this.volts[1]);
+		CircuitElm.drawThickLine(g, this.src[1], this.src[2]);
+		this.setVoltageColor(g, this.volts[2]);
+		CircuitElm.drawThickLine(g, this.drn[1], this.drn[2]);
+		if (!this.drawDigital())
 		{
-			setVoltageColor(g, pnp == 1 ? volts[1] : volts[2]);
-			g.fillPolygon(arrowPoly);
+			this.setVoltageColor(g, this.pnp == 1 ? this.volts[1] : this.volts[2]);
+			g.fillPolygon(this.arrowPoly);
 		}
-		if (sim.powerCheckItem.getState())
+		if (CircuitElm.sim.powerCheckItem.getState())
+		{
 			g.setColor(Color.gray);
-		setVoltageColor(g, volts[0]);
-		drawThickLine(g, point1, gate[1]);
-		drawThickLine(g, gate[0], gate[2]);
-		if (drawDigital() && pnp == -1)
-			drawThickCircle(g, pcircle.x, pcircle.y, pcircler);
-		if ((flags & FLAG_SHOWVT) != 0)
-		{
-			String s = "" + (vt * pnp);
-			g.setColor(whiteColor);
-			g.setFont(unitsFont);
-			drawCenteredText(g, s, x2 + 2, y2, false);
 		}
-		if ((needsHighlight() || sim.dragElm == this) && dy == 0)
+		this.setVoltageColor(g, this.volts[0]);
+		CircuitElm.drawThickLine(g, this.point1, this.gate[1]);
+		CircuitElm.drawThickLine(g, this.gate[0], this.gate[2]);
+		if (this.drawDigital() && this.pnp == -1)
+		{
+			CircuitElm.drawThickCircle(g, this.pcircle.x, this.pcircle.y, this.pcircler);
+		}
+		if ((this.flags & this.FLAG_SHOWVT) != 0)
+		{
+			String s = "" + this.vt * this.pnp;
+			g.setColor(CircuitElm.whiteColor);
+			g.setFont(CircuitElm.unitsFont);
+			this.drawCenteredText(g, s, this.x2 + 2, this.y2, false);
+		}
+		if ((this.needsHighlight() || CircuitElm.sim.dragElm == this) && this.dy == 0)
 		{
 			g.setColor(Color.white);
-			g.setFont(unitsFont);
-			int ds = sign(dx);
-			g.drawString("G", gate[1].x - 10 * ds, gate[1].y - 5);
-			g.drawString(pnp == -1 ? "D" : "S", src[0].x - 3 + 9 * ds, src[0].y + 4); // x+6
-																						// if
-																						// ds=1,
-																						// -12
-																						// if
-																						// -1
-			g.drawString(pnp == -1 ? "S" : "D", drn[0].x - 3 + 9 * ds, drn[0].y + 4);
+			g.setFont(CircuitElm.unitsFont);
+			int ds = CircuitElm.sign(this.dx);
+			g.drawString("G", this.gate[1].x - 10 * ds, this.gate[1].y - 5);
+			g.drawString(this.pnp == -1 ? "D" : "S", this.src[0].x - 3 + 9 * ds, this.src[0].y + 4); // x+6
+			// if
+			// ds=1,
+			// -12
+			// if
+			// -1
+			g.drawString(this.pnp == -1 ? "S" : "D", this.drn[0].x - 3 + 9 * ds, this.drn[0].y + 4);
 		}
-		curcount = updateDotCount(-ids, curcount);
-		drawDots(g, src[0], src[1], curcount);
-		drawDots(g, src[1], drn[1], curcount);
-		drawDots(g, drn[1], drn[0], curcount);
-		drawPosts(g);
+		this.curcount = this.updateDotCount(-this.ids, this.curcount);
+		this.drawDots(g, this.src[0], this.src[1], this.curcount);
+		this.drawDots(g, this.src[1], this.drn[1], this.curcount);
+		this.drawDots(g, this.drn[1], this.drn[0], this.curcount);
+		this.drawPosts(g);
 	}
 
+	@Override
 	Point getPost(int n)
 	{
-		return (n == 0) ? point1 : (n == 1) ? src[0] : drn[0];
+		return n == 0 ? this.point1 : n == 1 ? this.src[0] : this.drn[0];
 	}
 
+	@Override
 	double getCurrent()
 	{
-		return ids;
+		return this.ids;
 	}
 
+	@Override
 	double getPower()
 	{
-		return ids * (volts[2] - volts[1]);
+		return this.ids * (this.volts[2] - this.volts[1]);
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 3;
@@ -158,37 +175,42 @@ class MosfetElm extends CircuitElm
 	Point src[], drn[], gate[], pcircle;
 	Polygon arrowPoly;
 
+	@Override
 	void setPoints()
 	{
 		super.setPoints();
 
 		// find the coordinates of the various points we need to draw
 		// the MOSFET.
-		int hs2 = hs * dsign;
-		src = newPointArray(3);
-		drn = newPointArray(3);
-		interpPoint2(point1, point2, src[0], drn[0], 1, -hs2);
-		interpPoint2(point1, point2, src[1], drn[1], 1 - 22 / dn, -hs2);
-		interpPoint2(point1, point2, src[2], drn[2], 1 - 22 / dn, -hs2 * 4 / 3);
+		int hs2 = this.hs * this.dsign;
+		this.src = this.newPointArray(3);
+		this.drn = this.newPointArray(3);
+		this.interpPoint2(this.point1, this.point2, this.src[0], this.drn[0], 1, -hs2);
+		this.interpPoint2(this.point1, this.point2, this.src[1], this.drn[1], 1 - 22 / this.dn, -hs2);
+		this.interpPoint2(this.point1, this.point2, this.src[2], this.drn[2], 1 - 22 / this.dn, -hs2 * 4 / 3);
 
-		gate = newPointArray(3);
-		interpPoint2(point1, point2, gate[0], gate[2], 1 - 28 / dn, hs2 / 2); // was
-																				// 1-20/dn
-		interpPoint(gate[0], gate[2], gate[1], .5);
+		this.gate = this.newPointArray(3);
+		this.interpPoint2(this.point1, this.point2, this.gate[0], this.gate[2], 1 - 28 / this.dn, hs2 / 2); // was
+		// 1-20/dn
+		this.interpPoint(this.gate[0], this.gate[2], this.gate[1], .5);
 
-		if (!drawDigital())
+		if (!this.drawDigital())
 		{
-			if (pnp == 1)
-				arrowPoly = calcArrow(src[1], src[0], 10, 4);
+			if (this.pnp == 1)
+			{
+				this.arrowPoly = this.calcArrow(this.src[1], this.src[0], 10, 4);
+			}
 			else
-				arrowPoly = calcArrow(drn[0], drn[1], 12, 5);
+			{
+				this.arrowPoly = this.calcArrow(this.drn[0], this.drn[1], 12, 5);
+			}
 		}
-		else if (pnp == -1)
+		else if (this.pnp == -1)
 		{
-			interpPoint(point1, point2, gate[1], 1 - 36 / dn);
-			int dist = (dsign < 0) ? 32 : 31;
-			pcircle = interpPoint(point1, point2, 1 - dist / dn);
-			pcircler = 3;
+			this.interpPoint(this.point1, this.point2, this.gate[1], 1 - 36 / this.dn);
+			int dist = this.dsign < 0 ? 32 : 31;
+			this.pcircle = this.interpPoint(this.point1, this.point2, 1 - dist / this.dn);
+			this.pcircler = 3;
 		}
 	}
 
@@ -197,29 +219,39 @@ class MosfetElm extends CircuitElm
 	int mode = 0;
 	double gm = 0;
 
+	@Override
 	void stamp()
 	{
-		sim.stampNonLinear(nodes[1]);
-		sim.stampNonLinear(nodes[2]);
+		CircuitElm.sim.stampNonLinear(this.nodes[1]);
+		CircuitElm.sim.stampNonLinear(this.nodes[2]);
 	}
 
+	@Override
 	void doStep()
 	{
 		double vs[] = new double[3];
-		vs[0] = volts[0];
-		vs[1] = volts[1];
-		vs[2] = volts[2];
-		if (vs[1] > lastv1 + .5)
-			vs[1] = lastv1 + .5;
-		if (vs[1] < lastv1 - .5)
-			vs[1] = lastv1 - .5;
-		if (vs[2] > lastv2 + .5)
-			vs[2] = lastv2 + .5;
-		if (vs[2] < lastv2 - .5)
-			vs[2] = lastv2 - .5;
+		vs[0] = this.volts[0];
+		vs[1] = this.volts[1];
+		vs[2] = this.volts[2];
+		if (vs[1] > this.lastv1 + .5)
+		{
+			vs[1] = this.lastv1 + .5;
+		}
+		if (vs[1] < this.lastv1 - .5)
+		{
+			vs[1] = this.lastv1 - .5;
+		}
+		if (vs[2] > this.lastv2 + .5)
+		{
+			vs[2] = this.lastv2 + .5;
+		}
+		if (vs[2] < this.lastv2 - .5)
+		{
+			vs[2] = this.lastv2 - .5;
+		}
 		int source = 1;
 		int drain = 2;
-		if (pnp * vs[1] > pnp * vs[2])
+		if (this.pnp * vs[1] > this.pnp * vs[2])
 		{
 			source = 2;
 			drain = 1;
@@ -227,119 +259,133 @@ class MosfetElm extends CircuitElm
 		int gate = 0;
 		double vgs = vs[gate] - vs[source];
 		double vds = vs[drain] - vs[source];
-		if (Math.abs(lastv1 - vs[1]) > .01 || Math.abs(lastv2 - vs[2]) > .01)
-			sim.converged = false;
-		lastv1 = vs[1];
-		lastv2 = vs[2];
+		if (Math.abs(this.lastv1 - vs[1]) > .01 || Math.abs(this.lastv2 - vs[2]) > .01)
+		{
+			CircuitElm.sim.converged = false;
+		}
+		this.lastv1 = vs[1];
+		this.lastv2 = vs[2];
 		double realvgs = vgs;
 		double realvds = vds;
-		vgs *= pnp;
-		vds *= pnp;
-		ids = 0;
-		gm = 0;
+		vgs *= this.pnp;
+		vds *= this.pnp;
+		this.ids = 0;
+		this.gm = 0;
 		double Gds = 0;
-		double beta = getBeta();
+		double beta = this.getBeta();
 		if (vgs > .5 && this instanceof JfetElm)
 		{
-			sim.stop("JFET is reverse biased!", this);
+			CircuitElm.sim.stop("JFET is reverse biased!", this);
 			return;
 		}
-		if (vgs < vt)
+		if (vgs < this.vt)
 		{
 			// should be all zero, but that causes a singular matrix,
 			// so instead we treat it as a large resistor
 			Gds = 1e-8;
-			ids = vds * Gds;
-			mode = 0;
+			this.ids = vds * Gds;
+			this.mode = 0;
 		}
-		else if (vds < vgs - vt)
+		else if (vds < vgs - this.vt)
 		{
 			// linear
-			ids = beta * ((vgs - vt) * vds - vds * vds * .5);
-			gm = beta * vds;
-			Gds = beta * (vgs - vds - vt);
-			mode = 1;
+			this.ids = beta * ((vgs - this.vt) * vds - vds * vds * .5);
+			this.gm = beta * vds;
+			Gds = beta * (vgs - vds - this.vt);
+			this.mode = 1;
 		}
 		else
 		{
 			// saturation; Gds = 0
-			gm = beta * (vgs - vt);
+			this.gm = beta * (vgs - this.vt);
 			// use very small Gds to avoid nonconvergence
 			Gds = 1e-8;
-			ids = .5 * beta * (vgs - vt) * (vgs - vt) + (vds - (vgs - vt)) * Gds;
-			mode = 2;
+			this.ids = .5 * beta * (vgs - this.vt) * (vgs - this.vt) + (vds - (vgs - this.vt)) * Gds;
+			this.mode = 2;
 		}
-		double rs = -pnp * ids + Gds * realvds + gm * realvgs;
+		double rs = -this.pnp * this.ids + Gds * realvds + this.gm * realvgs;
 		// System.out.println("M " + vds + " " + vgs + " " + ids + " " + gm +
 		// " "+ Gds + " " + volts[0] + " " + volts[1] + " " + volts[2] + " " +
 		// source + " " + rs + " " + this);
-		sim.stampMatrix(nodes[drain], nodes[drain], Gds);
-		sim.stampMatrix(nodes[drain], nodes[source], -Gds - gm);
-		sim.stampMatrix(nodes[drain], nodes[gate], gm);
+		CircuitElm.sim.stampMatrix(this.nodes[drain], this.nodes[drain], Gds);
+		CircuitElm.sim.stampMatrix(this.nodes[drain], this.nodes[source], -Gds - this.gm);
+		CircuitElm.sim.stampMatrix(this.nodes[drain], this.nodes[gate], this.gm);
 
-		sim.stampMatrix(nodes[source], nodes[drain], -Gds);
-		sim.stampMatrix(nodes[source], nodes[source], Gds + gm);
-		sim.stampMatrix(nodes[source], nodes[gate], -gm);
+		CircuitElm.sim.stampMatrix(this.nodes[source], this.nodes[drain], -Gds);
+		CircuitElm.sim.stampMatrix(this.nodes[source], this.nodes[source], Gds + this.gm);
+		CircuitElm.sim.stampMatrix(this.nodes[source], this.nodes[gate], -this.gm);
 
-		sim.stampRightSide(nodes[drain], rs);
-		sim.stampRightSide(nodes[source], -rs);
-		if (source == 2 && pnp == 1 || source == 1 && pnp == -1)
-			ids = -ids;
+		CircuitElm.sim.stampRightSide(this.nodes[drain], rs);
+		CircuitElm.sim.stampRightSide(this.nodes[source], -rs);
+		if (source == 2 && this.pnp == 1 || source == 1 && this.pnp == -1)
+		{
+			this.ids = -this.ids;
+		}
 	}
 
 	void getFetInfo(String arr[], String n)
 	{
-		arr[0] = ((pnp == -1) ? "p-" : "n-") + n;
-		arr[0] += " (Vt = " + getVoltageText(pnp * vt) + ")";
-		arr[1] = ((pnp == 1) ? "Ids = " : "Isd = ") + getCurrentText(ids);
-		arr[2] = "Vgs = " + getVoltageText(volts[0] - volts[pnp == -1 ? 2 : 1]);
-		arr[3] = ((pnp == 1) ? "Vds = " : "Vsd = ") + getVoltageText(volts[2] - volts[1]);
-		arr[4] = (mode == 0) ? "off" : (mode == 1) ? "linear" : "saturation";
-		arr[5] = "gm = " + getUnitText(gm, "A/V");
+		arr[0] = (this.pnp == -1 ? "p-" : "n-") + n;
+		arr[0] += " (Vt = " + CircuitElm.getVoltageText(this.pnp * this.vt) + ")";
+		arr[1] = (this.pnp == 1 ? "Ids = " : "Isd = ") + CircuitElm.getCurrentText(this.ids);
+		arr[2] = "Vgs = " + CircuitElm.getVoltageText(this.volts[0] - this.volts[this.pnp == -1 ? 2 : 1]);
+		arr[3] = (this.pnp == 1 ? "Vds = " : "Vsd = ") + CircuitElm.getVoltageText(this.volts[2] - this.volts[1]);
+		arr[4] = this.mode == 0 ? "off" : this.mode == 1 ? "linear" : "saturation";
+		arr[5] = "gm = " + CircuitElm.getUnitText(this.gm, "A/V");
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
-		getFetInfo(arr, "MOSFET");
+		this.getFetInfo(arr, "MOSFET");
 	}
 
+	@Override
 	boolean canViewInScope()
 	{
 		return true;
 	}
 
+	@Override
 	double getVoltageDiff()
 	{
-		return volts[2] - volts[1];
+		return this.volts[2] - this.volts[1];
 	}
 
+	@Override
 	boolean getConnection(int n1, int n2)
 	{
 		return !(n1 == 0 || n2 == 0);
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
-			return new EditInfo("Threshold Voltage", pnp * vt, .01, 5);
+		{
+			return new EditInfo("Threshold Voltage", this.pnp * this.vt, .01, 5);
+		}
 		if (n == 1)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Digital Symbol", drawDigital());
+			ei.checkbox = new Checkbox("Digital Symbol", this.drawDigital());
 			return ei;
 		}
 
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (n == 0)
-			vt = pnp * ei.value;
+		{
+			this.vt = this.pnp * ei.value;
+		}
 		if (n == 1)
 		{
-			flags = (ei.checkbox.getState()) ? (flags | FLAG_DIGITAL) : (flags & ~FLAG_DIGITAL);
-			setPoints();
+			this.flags = ei.checkbox.getState() ? this.flags | this.FLAG_DIGITAL : this.flags & ~this.FLAG_DIGITAL;
+			this.setPoints();
 		}
 	}
 }

@@ -1,5 +1,8 @@
 package com.limoilux.circuit;
-import java.awt.*;
+import java.awt.Checkbox;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -14,27 +17,29 @@ class TextElm extends CircuitElm
 	public TextElm(int xx, int yy)
 	{
 		super(xx, yy);
-		text = "hello";
-		lines = new Vector();
-		lines.add(text);
-		size = 24;
+		this.text = "hello";
+		this.lines = new Vector();
+		this.lines.add(this.text);
+		this.size = 24;
 	}
 
 	public TextElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		size = new Integer(st.nextToken()).intValue();
-		text = st.nextToken();
+		this.size = new Integer(st.nextToken()).intValue();
+		this.text = st.nextToken();
 		while (st.hasMoreTokens())
-			text += ' ' + st.nextToken();
-		split();
+		{
+			this.text += ' ' + st.nextToken();
+		}
+		this.split();
 	}
 
 	void split()
 	{
 		int i;
-		lines = new Vector();
-		StringBuffer sb = new StringBuffer(text);
+		this.lines = new Vector();
+		StringBuffer sb = new StringBuffer(this.text);
 		for (i = 0; i < sb.length(); i++)
 		{
 			char c = sb.charAt(i);
@@ -44,128 +49,153 @@ class TextElm extends CircuitElm
 				c = sb.charAt(i);
 				if (c == 'n')
 				{
-					lines.add(sb.substring(0, i));
+					this.lines.add(sb.substring(0, i));
 					sb.delete(0, i + 1);
 					i = -1;
 					continue;
 				}
 			}
 		}
-		lines.add(sb.toString());
+		this.lines.add(sb.toString());
 	}
 
+	@Override
 	String dump()
 	{
-		return super.dump() + " " + size + " " + text;
+		return super.dump() + " " + this.size + " " + this.text;
 	}
 
+	@Override
 	int getDumpType()
 	{
 		return 'x';
 	}
 
+	@Override
 	void drag(int xx, int yy)
 	{
-		x = xx;
-		y = yy;
-		x2 = xx + 16;
-		y2 = yy;
+		this.x = xx;
+		this.y = yy;
+		this.x2 = xx + 16;
+		this.y2 = yy;
 	}
 
+	@Override
 	void draw(Graphics g)
 	{
-		g.setColor(needsHighlight() ? selectColor : lightGrayColor);
-		Font f = new Font("SansSerif", 0, size);
+		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
+		Font f = new Font("SansSerif", 0, this.size);
 		g.setFont(f);
 		FontMetrics fm = g.getFontMetrics();
 		int i;
 		int maxw = -1;
-		for (i = 0; i != lines.size(); i++)
+		for (i = 0; i != this.lines.size(); i++)
 		{
-			int w = fm.stringWidth((String) (lines.elementAt(i)));
+			int w = fm.stringWidth((String) this.lines.elementAt(i));
 			if (w > maxw)
+			{
 				maxw = w;
+			}
 		}
-		int cury = y;
-		setBbox(x, y, x, y);
-		for (i = 0; i != lines.size(); i++)
+		int cury = this.y;
+		this.setBbox(this.x, this.y, this.x, this.y);
+		for (i = 0; i != this.lines.size(); i++)
 		{
-			String s = (String) (lines.elementAt(i));
-			if ((flags & FLAG_CENTER) != 0)
-				x = (sim.winSize.width - fm.stringWidth(s)) / 2;
-			g.drawString(s, x, cury);
-			if ((flags & FLAG_BAR) != 0)
+			String s = (String) this.lines.elementAt(i);
+			if ((this.flags & this.FLAG_CENTER) != 0)
+			{
+				this.x = (CircuitElm.sim.winSize.width - fm.stringWidth(s)) / 2;
+			}
+			g.drawString(s, this.x, cury);
+			if ((this.flags & this.FLAG_BAR) != 0)
 			{
 				int by = cury - fm.getAscent();
-				g.drawLine(x, by, x + fm.stringWidth(s) - 1, by);
+				g.drawLine(this.x, by, this.x + fm.stringWidth(s) - 1, by);
 			}
-			adjustBbox(x, cury - fm.getAscent(), x + fm.stringWidth(s), cury + fm.getDescent());
+			this.adjustBbox(this.x, cury - fm.getAscent(), this.x + fm.stringWidth(s), cury + fm.getDescent());
 			cury += fm.getHeight();
 		}
-		x2 = boundingBox.x + boundingBox.width;
-		y2 = boundingBox.y + boundingBox.height;
+		this.x2 = this.boundingBox.x + this.boundingBox.width;
+		this.y2 = this.boundingBox.y + this.boundingBox.height;
 	}
 
+	@Override
 	public EditInfo getEditInfo(int n)
 	{
 		if (n == 0)
 		{
 			EditInfo ei = new EditInfo("Text", 0, -1, -1);
-			ei.text = text;
+			ei.text = this.text;
 			return ei;
 		}
 		if (n == 1)
-			return new EditInfo("Size", size, 5, 100);
+		{
+			return new EditInfo("Size", this.size, 5, 100);
+		}
 		if (n == 2)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Center", (flags & FLAG_CENTER) != 0);
+			ei.checkbox = new Checkbox("Center", (this.flags & this.FLAG_CENTER) != 0);
 			return ei;
 		}
 		if (n == 3)
 		{
 			EditInfo ei = new EditInfo("", 0, -1, -1);
-			ei.checkbox = new Checkbox("Draw Bar On Top", (flags & FLAG_BAR) != 0);
+			ei.checkbox = new Checkbox("Draw Bar On Top", (this.flags & this.FLAG_BAR) != 0);
 			return ei;
 		}
 		return null;
 	}
 
+	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
 		if (n == 0)
 		{
-			text = ei.textf.getText();
-			split();
+			this.text = ei.textf.getText();
+			this.split();
 		}
 		if (n == 1)
-			size = (int) ei.value;
+		{
+			this.size = (int) ei.value;
+		}
 		if (n == 3)
 		{
 			if (ei.checkbox.getState())
-				flags |= FLAG_BAR;
+			{
+				this.flags |= this.FLAG_BAR;
+			}
 			else
-				flags &= ~FLAG_BAR;
+			{
+				this.flags &= ~this.FLAG_BAR;
+			}
 		}
 		if (n == 2)
 		{
 			if (ei.checkbox.getState())
-				flags |= FLAG_CENTER;
+			{
+				this.flags |= this.FLAG_CENTER;
+			}
 			else
-				flags &= ~FLAG_CENTER;
+			{
+				this.flags &= ~this.FLAG_CENTER;
+			}
 		}
 	}
 
+	@Override
 	boolean isCenteredText()
 	{
-		return (flags & FLAG_CENTER) != 0;
+		return (this.flags & this.FLAG_CENTER) != 0;
 	}
 
+	@Override
 	void getInfo(String arr[])
 	{
-		arr[0] = text;
+		arr[0] = this.text;
 	}
 
+	@Override
 	int getPostCount()
 	{
 		return 0;
