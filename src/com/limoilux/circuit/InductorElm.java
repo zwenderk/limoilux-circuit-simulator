@@ -5,6 +5,8 @@ import java.awt.Checkbox;
 import java.awt.Graphics;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class InductorElm extends CircuitElm
 {
 	Inductor ind;

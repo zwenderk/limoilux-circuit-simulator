@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit;
+package com.limoilux.circuit.core;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -10,7 +10,12 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.text.NumberFormat;
 
-import com.limoilux.circuit.core.CoreUtil;
+import com.limoilux.circuit.CirSim;
+import com.limoilux.circuit.EditInfo;
+import com.limoilux.circuit.Editable;
+import com.limoilux.circuit.RailElm;
+import com.limoilux.circuit.SweepElm;
+import com.limoilux.circuit.VoltageElm;
 import com.limoilux.circuit.ui.DrawUtil;
 
 public abstract class CircuitElm implements Editable
@@ -20,7 +25,7 @@ public abstract class CircuitElm implements Editable
 	public static final double PI = 3.14159265358979323846;
 	public static final Font unitsFont = new Font("SansSerif", 0, 10);
 
-	static double voltageRange = 5;
+	public static double voltageRange = 5;
 
 	static Color colorScale[];
 	public static double currentMult;
@@ -228,7 +233,7 @@ public abstract class CircuitElm implements Editable
 		CoreUtil.interpPoint2(a, b, c, d, f, g);
 	}
 
-	void draw2Leads(Graphics g)
+	public void draw2Leads(Graphics g)
 	{
 		// draw first lead
 		this.setVoltageColor(g, this.volts[0]);

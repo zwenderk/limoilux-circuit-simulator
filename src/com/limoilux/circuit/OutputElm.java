@@ -8,6 +8,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class OutputElm extends CircuitElm
 {
 	final int FLAG_VALUE = 1;

@@ -6,7 +6,6 @@ import java.awt.Polygon;
 import java.util.Random;
 
 import com.limoilux.circuit.CirSim;
-import com.limoilux.circuit.CircuitElm;
 
 public class CoreUtil
 {

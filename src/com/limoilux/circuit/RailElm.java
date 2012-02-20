@@ -5,7 +5,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.util.StringTokenizer;
 
-class RailElm extends VoltageElm
+import com.limoilux.circuit.core.CircuitElm;
+
+public class RailElm extends VoltageElm
 {
 	public RailElm(int xx, int yy)
 	{

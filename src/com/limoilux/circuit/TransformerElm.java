@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class TransformerElm extends CircuitElm
 {
 	double inductance, ratio, couplingCoef;

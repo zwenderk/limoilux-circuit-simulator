@@ -7,6 +7,8 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class OpAmpElm extends CircuitElm
 {
 	int opsize, opheight, opwidth, opaddtext;

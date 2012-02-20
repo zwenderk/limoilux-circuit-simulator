@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class LogicOutputElm extends CircuitElm
 {
 	final int FLAG_TERNARY = 1;

@@ -5,6 +5,8 @@ import java.awt.Label;
 import java.awt.Scrollbar;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class VarRailElm extends RailElm
 {
 	Scrollbar slider;

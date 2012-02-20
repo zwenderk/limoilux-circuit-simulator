@@ -9,6 +9,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 public class DiacElm extends CircuitElm
 {
 	public double onresistance, offresistance, breakdown, holdcurrent;

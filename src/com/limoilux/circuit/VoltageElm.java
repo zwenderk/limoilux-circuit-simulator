@@ -7,7 +7,9 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
-class VoltageElm extends CircuitElm
+import com.limoilux.circuit.core.CircuitElm;
+
+public class VoltageElm extends CircuitElm
 {
 	static final int FLAG_COS = 2;
 	int waveform;

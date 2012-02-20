@@ -6,7 +6,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.StringTokenizer;
 
-class SweepElm extends CircuitElm
+import com.limoilux.circuit.core.CircuitElm;
+
+public class SweepElm extends CircuitElm
 {
 	double maxV, maxF, minF, sweepTime, frequency;
 	final int FLAG_LOG = 1;

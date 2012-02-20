@@ -8,6 +8,8 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CircuitElm;
+
 class TransistorElm extends CircuitElm
 {
 	int pnp;
