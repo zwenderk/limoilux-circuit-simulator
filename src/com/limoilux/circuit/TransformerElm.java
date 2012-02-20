@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class TransformerElm extends CircuitElm
+public class TransformerElm extends CircuitElm
 {
 	double inductance, ratio, couplingCoef;
 	Point ptEnds[], ptCoil[], ptCore[];

@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class AnalogSwitchElm extends CircuitElm
+public class AnalogSwitchElm extends CircuitElm
 {
 	final int FLAG_INVERT = 1;
 	double resistance, r_on, r_off;

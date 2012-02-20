@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class TunnelDiodeElm extends CircuitElm
+public class TunnelDiodeElm extends CircuitElm
 {
 	public TunnelDiodeElm(int xx, int yy)
 	{

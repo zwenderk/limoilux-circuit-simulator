@@ -10,7 +10,6 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.text.NumberFormat;
 
-import com.limoilux.circuit.CirSim;
 import com.limoilux.circuit.EditInfo;
 import com.limoilux.circuit.RailElm;
 import com.limoilux.circuit.SweepElm;

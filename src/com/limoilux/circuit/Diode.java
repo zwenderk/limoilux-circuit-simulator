@@ -1,6 +1,8 @@
 
 package com.limoilux.circuit;
 
+import com.limoilux.circuit.core.CirSim;
+
 public class Diode
 {
 	public int nodes[];

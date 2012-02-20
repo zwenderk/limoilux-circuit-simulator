@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
 
-import com.limoilux.circuit.CirSim;
+import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CircuitElm;
 
 public class DrawUtil
@@ -115,7 +115,7 @@ public class DrawUtil
 			g.setColor(new Color(b, rg, b));
 		}
 	}
-	
+
 	public static void setConductanceColor(Graphics g, double w0)
 	{
 		w0 *= CircuitElm.powerMult;

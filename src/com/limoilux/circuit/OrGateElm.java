@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class OrGateElm extends GateElm
+public class OrGateElm extends GateElm
 {
 	public OrGateElm(int xx, int yy)
 	{

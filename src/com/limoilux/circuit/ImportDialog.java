@@ -10,7 +10,9 @@ import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class ImportDialog extends Dialog implements ActionListener
+import com.limoilux.circuit.core.CirSim;
+
+public class ImportDialog extends Dialog implements ActionListener
 {
 	/**
 	 * 
@@ -21,7 +23,7 @@ class ImportDialog extends Dialog implements ActionListener
 	TextArea text;
 	boolean isURL;
 
-	ImportDialog(CirSim f, String str, boolean url)
+	public ImportDialog(CirSim f, String str, boolean url)
 	{
 		super(f, str.length() > 0 ? "Export" : "Import", false);
 		this.isURL = url;

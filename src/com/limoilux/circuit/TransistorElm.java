@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class TransistorElm extends CircuitElm
+public class TransistorElm extends CircuitElm
 {
 	int pnp;
 	double beta;

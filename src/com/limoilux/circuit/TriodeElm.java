@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class TriodeElm extends CircuitElm
+public class TriodeElm extends CircuitElm
 {
 	double mu, kg1;
 	double curcountp, curcountc, curcountg, currentp, currentg, currentc;

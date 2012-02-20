@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class Switch2Elm extends SwitchElm
+public class Switch2Elm extends SwitchElm
 {
 	int link;
 	static final int FLAG_CENTER_OFF = 1;
@@ -131,7 +131,7 @@ class Switch2Elm extends SwitchElm
 	}
 
 	@Override
-	void toggle()
+	public void toggle()
 	{
 		super.toggle();
 		if (this.link != 0)

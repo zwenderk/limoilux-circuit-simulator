@@ -1,10 +1,11 @@
 
 package com.limoilux.circuit;
 
+import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CircuitElm;
 import com.limoilux.circuit.core.Editable;
 
-class EditOptions implements Editable
+public class EditOptions implements Editable
 {
 	CirSim sim;
 

@@ -10,7 +10,7 @@ import java.awt.Label;
 import java.awt.LayoutManager;
 import java.awt.Scrollbar;
 
-class CircuitLayout implements LayoutManager
+public class CircuitLayout implements LayoutManager
 {
 	public CircuitLayout()
 	{

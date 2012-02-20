@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class LogicInputElm extends SwitchElm
+public class LogicInputElm extends SwitchElm
 {
 	final int FLAG_TERNARY = 1;
 	final int FLAG_NUMERIC = 2;

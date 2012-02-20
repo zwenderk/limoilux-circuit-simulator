@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class VarRailElm extends RailElm
+public class VarRailElm extends RailElm
 {
 	Scrollbar slider;
 	Label label;

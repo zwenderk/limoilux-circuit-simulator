@@ -8,9 +8,9 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class SwitchElm extends CircuitElm
+public class SwitchElm extends CircuitElm
 {
-	boolean momentary;
+	public boolean momentary;
 	// position 0 == closed, position 1 == open
 	int position, posCount;
 
@@ -123,7 +123,7 @@ class SwitchElm extends CircuitElm
 		return this.position == 1 ? 0 : 1;
 	}
 
-	void mouseUp()
+	public void mouseUp()
 	{
 		if (this.momentary)
 		{
@@ -131,7 +131,7 @@ class SwitchElm extends CircuitElm
 		}
 	}
 
-	void toggle()
+	public void toggle()
 	{
 		this.position++;
 		if (this.position >= this.posCount)

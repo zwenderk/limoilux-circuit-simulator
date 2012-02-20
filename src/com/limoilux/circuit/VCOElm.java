@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class VCOElm extends ChipElm
+public class VCOElm extends ChipElm
 {
 	public VCOElm(int xx, int yy)
 	{

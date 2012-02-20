@@ -7,7 +7,7 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 
-class ImportDialogLayout implements LayoutManager
+public class ImportDialogLayout implements LayoutManager
 {
 	public ImportDialogLayout()
 	{

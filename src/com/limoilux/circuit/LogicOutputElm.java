@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class LogicOutputElm extends CircuitElm
+public class LogicOutputElm extends CircuitElm
 {
 	final int FLAG_TERNARY = 1;
 	final int FLAG_NUMERIC = 2;

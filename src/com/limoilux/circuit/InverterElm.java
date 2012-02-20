@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class InverterElm extends CircuitElm
+public class InverterElm extends CircuitElm
 {
 	double slewRate; // V/ns
 

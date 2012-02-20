@@ -12,11 +12,12 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CircuitElm;
 
 public class Scope
 {
-	final int FLAG_YELM = 32;
+	static final int FLAG_YELM = 32;
 	static final int VAL_POWER = 1;
 	static final int VAL_IB = 1;
 	static final int VAL_IC = 2;
@@ -25,21 +26,25 @@ public class Scope
 	static final int VAL_VBC = 5;
 	static final int VAL_VCE = 6;
 	static final int VAL_R = 2;
-	double minV[], maxV[], minMaxV;
-	double minI[], maxI[], minMaxI;
-	int scopePointCount = 128;
-	int ptr, ctr, speed, position;
-	int value, ivalue;
-	String text;
-	Rectangle rect;
-	boolean showI, showV, showMax, showMin, showFreq, lockScale, plot2d, plotXY;
-	CircuitElm elm, xElm, yElm;
-	MemoryImageSource imageSource;
-	Image image;
-	int pixels[];
-	int draw_ox, draw_oy;
-	float dpixels[];
-	CirSim sim;
+	public double minV[], maxV[], minMaxV;
+	public double minI[], maxI[], minMaxI;
+	public int scopePointCount = 128;
+	public int ptr, ctr;
+	public int speed;
+	public int position;
+	public int value, ivalue;
+	public String text;
+	public Rectangle rect;
+	public boolean showI, showV, showMax, showMin, showFreq, lockScale, plot2d, plotXY;
+	public CircuitElm elm;
+	public CircuitElm xElm;
+	public CircuitElm yElm;
+	public MemoryImageSource imageSource;
+	public Image image;
+	public int pixels[];
+	public int draw_ox, draw_oy;
+	public float dpixels[];
+	public CirSim sim;
 
 	public Scope(CirSim s)
 	{
@@ -48,39 +53,39 @@ public class Scope
 		this.sim = s;
 	}
 
-	void showCurrent(boolean b)
+	public void showCurrent(boolean b)
 	{
 		this.showI = b;
 		this.value = this.ivalue = 0;
 	}
 
-	void showVoltage(boolean b)
+	public void showVoltage(boolean b)
 	{
 		this.showV = b;
 		this.value = this.ivalue = 0;
 	}
 
-	void showMax(boolean b)
+	public void showMax(boolean b)
 	{
 		this.showMax = b;
 	}
 
-	void showMin(boolean b)
+	public void showMin(boolean b)
 	{
 		this.showMin = b;
 	}
 
-	void showFreq(boolean b)
+	public void showFreq(boolean b)
 	{
 		this.showFreq = b;
 	}
 
-	void setLockScale(boolean b)
+	public void setLockScale(boolean b)
 	{
 		this.lockScale = b;
 	}
 
-	void resetGraph()
+	public void resetGraph()
 	{
 		this.scopePointCount = 1;
 		while (this.scopePointCount <= this.rect.width)
@@ -122,29 +127,29 @@ public class Scope
 		}
 	}
 
-	void setRect(Rectangle r)
+	public void setRect(Rectangle r)
 	{
 		this.rect = r;
 		this.resetGraph();
 	}
 
-	int getWidth()
+	public int getWidth()
 	{
 		return this.rect.width;
 	}
 
-	int rightEdge()
+	public int rightEdge()
 	{
 		return this.rect.x + this.rect.width;
 	}
 
-	void setElm(CircuitElm ce)
+	public void setElm(CircuitElm ce)
 	{
 		this.elm = ce;
 		this.reset();
 	}
 
-	void timeStep()
+	public void timeStep()
 	{
 		if (this.elm == null)
 		{
@@ -264,7 +269,7 @@ public class Scope
 		this.draw_ox = this.draw_oy = -1;
 	}
 
-	void adjustScale(double x)
+	public void adjustScale(double x)
 	{
 		this.minMaxV *= x;
 		this.minMaxI *= x;
@@ -312,7 +317,7 @@ public class Scope
 		}
 	}
 
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		if (this.elm == null)
 		{
@@ -684,7 +689,7 @@ public class Scope
 		}
 	}
 
-	void speedUp()
+	public void speedUp()
 	{
 		if (this.speed > 1)
 		{
@@ -693,13 +698,13 @@ public class Scope
 		}
 	}
 
-	void slowDown()
+	public void slowDown()
 	{
 		this.speed *= 2;
 		this.resetGraph();
 	}
 
-	PopupMenu getMenu()
+	public PopupMenu getMenu()
 	{
 		if (this.elm == null)
 		{
@@ -739,7 +744,7 @@ public class Scope
 		this.value = x;
 	}
 
-	String dump()
+	public String dump()
 	{
 		if (this.elm == null)
 		{
@@ -765,7 +770,7 @@ public class Scope
 		return x;
 	}
 
-	void undump(StringTokenizer st)
+	public void undump(StringTokenizer st)
 	{
 		this.reset();
 		int e = new Integer(st.nextToken()).intValue();
@@ -881,7 +886,7 @@ public class Scope
 		this.draw_ox = this.draw_oy = -1;
 	}
 
-	void handleMenu(ItemEvent e, Object mi)
+	public void handleMenu(ItemEvent e, Object mi)
 	{
 		if (mi == this.sim.scopeVMenuItem)
 		{
@@ -961,7 +966,7 @@ public class Scope
 		}
 	}
 
-	void select()
+	public void select()
 	{
 		this.sim.mouseElm = this.elm;
 		if (this.plotXY)
@@ -971,7 +976,7 @@ public class Scope
 		}
 	}
 
-	void selectY()
+	public void selectY()
 	{
 		int e = this.yElm == null ? -1 : this.sim.locateElm(this.yElm);
 		int firstE = e;

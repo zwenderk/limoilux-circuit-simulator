@@ -7,10 +7,10 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class InductorElm extends CircuitElm
+public class InductorElm extends CircuitElm
 {
 	Inductor ind;
-	double inductance;
+	public double inductance;
 
 	public InductorElm(int xx, int yy)
 	{

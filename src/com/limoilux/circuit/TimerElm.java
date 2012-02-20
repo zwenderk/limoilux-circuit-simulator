@@ -15,9 +15,8 @@ public class TimerElm extends ChipElm
 	private static final int N_CTL = 4;
 	private static final int N_OUT = 5;
 	private static final int N_RST = 6;
-	
-	private boolean setOut, out;
 
+	private boolean setOut, out;
 
 	@Override
 	public int getDefaultFlags()
@@ -91,7 +90,6 @@ public class TimerElm extends ChipElm
 		this.pins[TimerElm.N_DIS].current = !this.out && !this.setOut ? -this.volts[TimerElm.N_DIS] / 10 : 0;
 	}
 
-
 	@Override
 	public void startIteration()
 	{
@@ -102,7 +100,8 @@ public class TimerElm extends ChipElm
 		{
 			this.setOut = this.out = true;
 		}
-		if (this.volts[TimerElm.N_THRES] > this.volts[TimerElm.N_CTL] || this.hasReset() && this.volts[TimerElm.N_RST] < .7)
+		if (this.volts[TimerElm.N_THRES] > this.volts[TimerElm.N_CTL] || this.hasReset()
+				&& this.volts[TimerElm.N_RST] < .7)
 		{
 			this.out = false;
 		}
