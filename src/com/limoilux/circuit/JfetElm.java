@@ -9,9 +9,14 @@ import java.util.StringTokenizer;
 import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.ui.DrawUtil;
 
-class JfetElm extends MosfetElm
+public class JfetElm extends MosfetElm
 {
-	JfetElm(int xx, int yy, boolean pnpflag)
+
+	public Polygon gatePoly;
+	public Polygon arrowPoly;
+	public Point gatePt;
+	
+	public JfetElm(int xx, int yy, boolean pnpflag)
 	{
 		super(xx, yy, pnpflag);
 		this.noDiagonal = true;
@@ -23,9 +28,6 @@ class JfetElm extends MosfetElm
 		this.noDiagonal = true;
 	}
 
-	Polygon gatePoly;
-	Polygon arrowPoly;
-	Point gatePt;
 
 	@Override
 	public void draw(Graphics g)
