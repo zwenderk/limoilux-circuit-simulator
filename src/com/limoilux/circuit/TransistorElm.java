@@ -71,7 +71,7 @@ class TransistorElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.pnp + " " + (this.volts[0] - this.volts[1]) + " "
 				+ (this.volts[0] - this.volts[2]) + " " + this.beta;
@@ -81,7 +81,7 @@ class TransistorElm extends CircuitElm
 	Polygon rectPoly, arrowPoly;
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.setBbox(this.point1, this.point2, 16);
 		this.setPowerColor(g, true);
@@ -234,7 +234,7 @@ class TransistorElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		double vbc = this.volts[0] - this.volts[1]; // typically negative
 		double vbe = this.volts[0] - this.volts[2]; // typically positive

@@ -84,14 +84,14 @@ class RelayElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.poleCount + " " + this.inductance + " " + this.coilCurrent + " " + this.r_on
 				+ " " + this.r_off + " " + this.onCurrent + " " + this.coilR;
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		int i, p;
 		for (i = 0; i != 2; i++)
@@ -253,7 +253,7 @@ class RelayElm extends CircuitElm
 	}
 
 	@Override
-	void startIteration()
+	public void startIteration()
 	{
 		this.ind.startIteration(this.volts[this.nCoil1] - this.volts[this.nCoil3]);
 
@@ -295,7 +295,7 @@ class RelayElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		double voltdiff = this.volts[this.nCoil1] - this.volts[this.nCoil3];
 		this.ind.doStep(voltdiff);

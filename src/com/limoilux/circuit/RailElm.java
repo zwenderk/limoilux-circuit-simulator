@@ -44,7 +44,7 @@ class RailElm extends VoltageElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.setBbox(this.point1, this.point2, this.circleSize);
 		this.setVoltageColor(g, this.volts[0]);
@@ -108,7 +108,7 @@ class RailElm extends VoltageElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		if (this.waveform != VoltageElm.WF_DC)
 		{

@@ -28,7 +28,7 @@ class ResistorElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.resistance;
 	}
@@ -45,7 +45,7 @@ class ResistorElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		int segments = 16;
 		int i;

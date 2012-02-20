@@ -35,7 +35,7 @@ class AnalogSwitchElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.r_on + " " + this.r_off;
 	}
@@ -62,7 +62,7 @@ class AnalogSwitchElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		int openhs = 16;
 		int hs = this.open ? openhs : 0;
@@ -105,7 +105,7 @@ class AnalogSwitchElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		this.open = this.volts[2] < 2.5;
 		if ((this.flags & this.FLAG_INVERT) != 0)

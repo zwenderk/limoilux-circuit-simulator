@@ -45,7 +45,7 @@ class DACElm extends ChipElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		int ival = 0;
 		int i;

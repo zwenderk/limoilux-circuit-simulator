@@ -47,7 +47,7 @@ class TriodeElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.mu + " " + this.kg1;
 	}
@@ -94,7 +94,7 @@ class TriodeElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		g.setColor(Color.gray);
 		CircuitElm.drawThickCircle(g, this.point2.x, this.point2.y, this.circler);
@@ -154,7 +154,7 @@ class TriodeElm extends CircuitElm
 	double lastv0, lastv1, lastv2;
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		double vs[] = new double[3];
 		vs[0] = this.volts[0];

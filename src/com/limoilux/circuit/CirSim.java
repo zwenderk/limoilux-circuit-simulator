@@ -506,9 +506,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		Dimension x = this.getSize();
 		this.setLocation((screen.width - x.width) / 2, (screen.height - x.height) / 2);
 
-		this.setVisible(true);
-
-		this.requestFocus();
 	}
 
 	private PopupMenu buildScopeMenu(boolean t)
@@ -3914,6 +3911,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	public static void main(String args[])
 	{
 		CirSim c = new CirSim();
+
+		c.setVisible(true);
+		c.requestFocus();
 
 	}
 }

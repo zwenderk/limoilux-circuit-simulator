@@ -51,7 +51,7 @@ class PhaseCompElm extends ChipElm
 	boolean ff1, ff2;
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		boolean v1 = this.volts[0] > 2.5;
 		boolean v2 = this.volts[1] > 2.5;

@@ -33,7 +33,7 @@ class LampElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.temp + " " + this.nom_pow + " " + this.nom_v + " " + this.warmTime + " "
 				+ this.coolTime;
@@ -107,7 +107,7 @@ class LampElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		double v1 = this.volts[0];
 		double v2 = this.volts[1];
@@ -164,7 +164,7 @@ class LampElm extends CircuitElm
 	}
 
 	@Override
-	void startIteration()
+	public void startIteration()
 	{
 		// based on http://www.intusoft.com/nlpdf/nl11.pdf
 		double nom_r = this.nom_v * this.nom_v / this.nom_pow;
@@ -182,7 +182,7 @@ class LampElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
 	}

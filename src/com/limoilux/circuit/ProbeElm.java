@@ -44,7 +44,7 @@ class ProbeElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		int hs = 8;
 		this.setBbox(this.point1, this.point2, hs);

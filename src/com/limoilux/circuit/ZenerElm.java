@@ -38,7 +38,7 @@ class ZenerElm extends DiodeElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.zvoltage;
 	}
@@ -64,7 +64,7 @@ class ZenerElm extends DiodeElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.setBbox(this.point1, this.point2, this.hs);
 

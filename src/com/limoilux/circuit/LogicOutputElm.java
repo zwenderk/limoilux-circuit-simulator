@@ -34,7 +34,7 @@ class LogicOutputElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.threshold;
 	}
@@ -74,7 +74,7 @@ class LogicOutputElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		Font f = new Font("SansSerif", Font.BOLD, 20);
 		g.setFont(f);

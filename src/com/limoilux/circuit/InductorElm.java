@@ -34,7 +34,7 @@ class InductorElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.inductance + " " + this.current;
 	}
@@ -47,7 +47,7 @@ class InductorElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		double v1 = this.volts[0];
 		double v2 = this.volts[1];
@@ -80,7 +80,7 @@ class InductorElm extends CircuitElm
 	}
 
 	@Override
-	void startIteration()
+	public void startIteration()
 	{
 		this.ind.startIteration(this.volts[0] - this.volts[1]);
 	}
@@ -99,7 +99,7 @@ class InductorElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		double voltdiff = this.volts[0] - this.volts[1];
 		this.ind.doStep(voltdiff);

@@ -64,7 +64,7 @@ class PotElm extends CircuitElm implements AdjustmentListener
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.maxResistance + " " + this.position + " " + this.sliderText;
 	}
@@ -86,7 +86,7 @@ class PotElm extends CircuitElm implements AdjustmentListener
 	}
 
 	@Override
-	void delete()
+	public void delete()
 	{
 		CircuitElm.cirSim.mainContainer.remove(this.label);
 		CircuitElm.cirSim.mainContainer.remove(this.slider);
@@ -138,7 +138,7 @@ class PotElm extends CircuitElm implements AdjustmentListener
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		int segments = 16;
 		int i;

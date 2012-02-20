@@ -55,7 +55,7 @@ class SwitchElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.position + " " + this.momentary;
 	}
@@ -72,7 +72,7 @@ class SwitchElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		int openhs = 16;
 		int hs1 = this.position == 1 ? 0 : 2;

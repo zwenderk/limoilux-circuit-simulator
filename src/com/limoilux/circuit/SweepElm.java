@@ -48,7 +48,7 @@ class SweepElm extends CircuitElm
 	final int circleSize = 17;
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.minF + " " + this.maxF + " " + this.maxV + " " + this.sweepTime;
 	}
@@ -61,7 +61,7 @@ class SweepElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.setBbox(this.point1, this.point2, this.circleSize);
 		this.setVoltageColor(g, this.volts[0]);
@@ -157,7 +157,7 @@ class SweepElm extends CircuitElm
 	double v;
 
 	@Override
-	void startIteration()
+	public void startIteration()
 	{
 		// has timestep been changed?
 		if (CircuitElm.cirSim.timeStep != this.savedTimeStep)
@@ -189,7 +189,7 @@ class SweepElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[0], this.voltSource, this.v);
 	}

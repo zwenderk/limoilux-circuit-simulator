@@ -29,7 +29,7 @@ class GroundElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.setVoltageColor(g, 0);
 		CircuitElm.drawThickLine(g, this.point1, this.point2);

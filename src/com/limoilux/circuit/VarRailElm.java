@@ -31,7 +31,7 @@ class VarRailElm extends RailElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.sliderText;
 	}
@@ -59,7 +59,7 @@ class VarRailElm extends RailElm
 	}
 
 	@Override
-	void delete()
+	public void delete()
 	{
 		CircuitElm.cirSim.mainContainer.remove(this.label);
 		CircuitElm.cirSim.mainContainer.remove(this.slider);

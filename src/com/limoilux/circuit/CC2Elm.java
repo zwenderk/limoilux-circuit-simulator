@@ -27,7 +27,7 @@ class CC2Elm extends ChipElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.gain;
 	}
@@ -71,7 +71,7 @@ class CC2Elm extends ChipElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.pins[2].current = this.pins[0].current * this.gain;
 		this.drawChip(g);

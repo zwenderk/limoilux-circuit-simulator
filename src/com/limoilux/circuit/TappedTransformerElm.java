@@ -47,14 +47,14 @@ class TappedTransformerElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.inductance + " " + this.ratio + " " + this.current[0] + " " + this.current[1]
 				+ " " + this.current[2];
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		int i;
 		for (i = 0; i != 5; i++)
@@ -215,7 +215,7 @@ class TappedTransformerElm extends CircuitElm
 	}
 
 	@Override
-	void startIteration()
+	public void startIteration()
 	{
 		this.voltdiff[0] = this.volts[0] - this.volts[1];
 		this.voltdiff[1] = this.volts[2] - this.volts[3];
@@ -234,7 +234,7 @@ class TappedTransformerElm extends CircuitElm
 	double curSourceValue[], voltdiff[];
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		CircuitElm.cirSim.stampCurrentSource(this.nodes[0], this.nodes[1], this.curSourceValue[0]);
 		CircuitElm.cirSim.stampCurrentSource(this.nodes[2], this.nodes[3], this.curSourceValue[1]);

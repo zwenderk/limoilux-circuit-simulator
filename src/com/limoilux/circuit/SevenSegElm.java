@@ -42,7 +42,7 @@ class SevenSegElm extends ChipElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.drawChip(g);
 		g.setColor(Color.red);

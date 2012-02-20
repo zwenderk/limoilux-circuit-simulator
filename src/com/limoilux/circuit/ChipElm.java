@@ -67,7 +67,7 @@ abstract class ChipElm extends CircuitElm
 	abstract void setupPins();
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.drawChip(g);
 	}
@@ -223,7 +223,7 @@ abstract class ChipElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		int i;
 		for (i = 0; i != this.getPostCount(); i++)
@@ -259,7 +259,7 @@ abstract class ChipElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		int t = this.getDumpType();
 		String s = super.dump();

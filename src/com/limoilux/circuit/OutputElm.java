@@ -42,7 +42,7 @@ class OutputElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		boolean selected = this.needsHighlight() || CircuitElm.cirSim.plotYElm == this;
 		Font f = new Font("SansSerif", selected ? Font.BOLD : 0, 14);

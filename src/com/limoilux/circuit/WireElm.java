@@ -21,7 +21,7 @@ class WireElm extends CircuitElm
 	static final int FLAG_SHOWVOLTAGE = 2;
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.setVoltageColor(g, this.volts[0]);
 		CircuitElm.drawThickLine(g, this.point1, this.point2);

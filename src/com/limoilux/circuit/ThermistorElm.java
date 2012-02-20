@@ -47,7 +47,7 @@ class ThermistorElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.minresistance + " " + this.maxresistance;
 	}
@@ -72,14 +72,14 @@ class ThermistorElm extends CircuitElm
 	}
 
 	@Override
-	void delete()
+	public void delete()
 	{
 		CircuitElm.cirSim.mainContainer.remove(this.label);
 		CircuitElm.cirSim.mainContainer.remove(this.slider);
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		int i;
 		double v1 = this.volts[0];
@@ -100,7 +100,7 @@ class ThermistorElm extends CircuitElm
 	}
 
 	@Override
-	void startIteration()
+	public void startIteration()
 	{
 		double vd = this.volts[0] - this.volts[1];
 		// FIXME set resistance as appropriate, using slider.getValue()
@@ -109,7 +109,7 @@ class ThermistorElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
 	}

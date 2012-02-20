@@ -59,7 +59,7 @@ class DiodeElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		this.flags |= DiodeElm.FLAG_FWDROP;
 		return super.dump() + " " + this.fwdrop;
@@ -82,7 +82,7 @@ class DiodeElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.drawDiode(g);
 		this.doDots(g);
@@ -122,7 +122,7 @@ class DiodeElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		this.diode.doStep(this.volts[0] - this.volts[1]);
 	}
