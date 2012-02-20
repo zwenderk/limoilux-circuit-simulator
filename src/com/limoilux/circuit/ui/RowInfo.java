@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit;
+package com.limoilux.circuit.ui;
 
 // info about each row/column of the matrix for simplification purposes
 public class RowInfo

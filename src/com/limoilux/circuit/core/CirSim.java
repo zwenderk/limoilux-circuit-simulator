@@ -51,23 +51,23 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import com.limoilux.circuit.CapacitorElm;
-import com.limoilux.circuit.CircuitCanvas;
-import com.limoilux.circuit.CircuitLayout;
-import com.limoilux.circuit.CircuitNode;
 import com.limoilux.circuit.CircuitNodeLink;
 import com.limoilux.circuit.CurrentElm;
 import com.limoilux.circuit.EditDialog;
 import com.limoilux.circuit.EditOptions;
 import com.limoilux.circuit.GroundElm;
-import com.limoilux.circuit.ImportDialog;
 import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.RailElm;
 import com.limoilux.circuit.ResistorElm;
-import com.limoilux.circuit.RowInfo;
 import com.limoilux.circuit.SwitchElm;
 import com.limoilux.circuit.TextElm;
 import com.limoilux.circuit.VoltageElm;
 import com.limoilux.circuit.WireElm;
+import com.limoilux.circuit.ui.CircuitCanvas;
+import com.limoilux.circuit.ui.CircuitLayout;
+import com.limoilux.circuit.ui.CircuitNode;
+import com.limoilux.circuit.ui.ImportDialog;
+import com.limoilux.circuit.ui.RowInfo;
 import com.limoilux.circuit.ui.Scope;
 
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
