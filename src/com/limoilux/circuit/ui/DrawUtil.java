@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
 
-import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CircuitElm;
 
 public class DrawUtil

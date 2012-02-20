@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit;
+package com.limoilux.circuit.ui;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -12,6 +12,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.LogicOutputElm;
+import com.limoilux.circuit.MemristorElm;
+import com.limoilux.circuit.OutputElm;
+import com.limoilux.circuit.ProbeElm;
+import com.limoilux.circuit.TransistorElm;
 import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CircuitElm;
 
@@ -19,12 +24,12 @@ public class Scope
 {
 	static final int FLAG_YELM = 32;
 	static final int VAL_POWER = 1;
-	static final int VAL_IB = 1;
-	static final int VAL_IC = 2;
-	static final int VAL_IE = 3;
-	static final int VAL_VBE = 4;
-	static final int VAL_VBC = 5;
-	static final int VAL_VCE = 6;
+	public static final int VAL_IB = 1;
+	public static final int VAL_IC = 2;
+	public static final int VAL_IE = 3;
+	public static final int VAL_VBE = 4;
+	public static final int VAL_VBC = 5;
+	public static final int VAL_VCE = 6;
 	static final int VAL_R = 2;
 	public double minV[], maxV[], minMaxV;
 	public double minI[], maxI[], minMaxI;
@@ -754,7 +759,7 @@ public class Scope
 				| // showMax used to be always on
 				(this.showFreq ? 8 : 0) | (this.lockScale ? 16 : 0) | (this.plot2d ? 64 : 0) | (this.plotXY ? 128 : 0)
 				| (this.showMin ? 256 : 0);
-		flags |= this.FLAG_YELM; // yelm present
+		flags |= Scope.FLAG_YELM; // yelm present
 		int eno = this.sim.locateElm(this.elm);
 		if (eno < 0)
 		{
@@ -798,7 +803,7 @@ public class Scope
 		{
 			this.position = new Integer(st.nextToken()).intValue();
 			int ye = -1;
-			if ((flags & this.FLAG_YELM) != 0)
+			if ((flags & Scope.FLAG_YELM) != 0)
 			{
 				ye = new Integer(st.nextToken()).intValue();
 				if (ye != -1)
