@@ -5,6 +5,7 @@ import java.awt.Button;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Event;
+import java.awt.Frame;
 import java.awt.Point;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
@@ -18,64 +19,77 @@ public class ImportDialog extends Dialog implements ActionListener
 	 * 
 	 */
 	private static final long serialVersionUID = 2596556603819783800L;
-	CirSim cframe;
-	Button importButton, closeButton;
-	TextArea text;
-	boolean isURL;
 
-	public ImportDialog(CirSim f, String str, boolean url)
+	@Deprecated
+	
+	private final Frame frame;
+	private final Button importButton;
+	private final Button closeButton;
+	private final TextArea textBox;
+	private String content = null;
+
+	public ImportDialog(CirSim f, Frame frame, String str, Dimension winSize)
 	{
-		super(f, str.length() > 0 ? "Export" : "Import", false);
-		this.isURL = url;
-		this.cframe = f;
+		super(frame, str.length() > 0 ? "Export" : "Import", true);
+
+
+		this.frame = frame;
+
 		this.setLayout(new ImportDialogLayout());
-		this.add(this.text = new TextArea(str, 10, 60, TextArea.SCROLLBARS_BOTH));
+
+		this.textBox = new TextArea(str, 10, 60, TextArea.SCROLLBARS_BOTH);
+		this.add(this.textBox);
 		this.importButton = new Button("Import");
-		if (!this.isURL)
-		{
-			this.add(this.importButton);
-		}
+
+		this.add(this.importButton);
+
 		this.importButton.addActionListener(this);
-		this.add(this.closeButton = new Button("Close"));
+
+		this.closeButton = new Button("Close");
+		this.add(this.closeButton);
 		this.closeButton.addActionListener(this);
-		Point x = this.cframe.mainContainer.getLocationOnScreen();
-		this.resize(400, 300);
+
+		Point x = frame.getLocationOnScreen();
+
+		this.setSize(400, 300);
 		Dimension d = this.getSize();
-		this.setLocation(x.x + (this.cframe.winSize.width - d.width) / 2, x.y + (this.cframe.winSize.height - d.height)
-				/ 2);
-		this.show();
+
+		this.setLocation(x.x + (winSize.width - d.width) / 2, x.y + (winSize.height - d.height) / 2);
+
 		if (str.length() > 0)
 		{
-			this.text.selectAll();
+			this.textBox.selectAll();
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		int i;
-		Object src = e.getSource();
-		if (src == this.importButton)
-		{
-			this.cframe.readSetup(this.text.getText());
-			this.setVisible(false);
-		}
-		if (src == this.closeButton)
-		{
-			this.setVisible(false);
-		}
+		this.setVisible(false);
+	}
+	
+	public String getContent()
+	{
+		return this.textBox.getText();
 	}
 
 	@Override
 	public boolean handleEvent(Event ev)
 	{
+		boolean out = false;
 		if (ev.id == Event.WINDOW_DESTROY)
 		{
-			this.cframe.mainContainer.requestFocus();
+			this.frame.requestFocus();
+
 			this.setVisible(false);
-			CirSim.impDialog = null;
-			return true;
+
+			out = true;
 		}
-		return super.handleEvent(ev);
+		else
+		{
+			out = super.handleEvent(ev);
+		}
+		
+		return out;
 	}
 }
