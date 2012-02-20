@@ -64,7 +64,7 @@ class VoltageElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.waveform + " " + this.frequency + " " + this.maxVoltage + " " + this.bias
 				+ " " + this.phaseShift + " " + this.dutyCycle;
@@ -105,7 +105,7 @@ class VoltageElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		if (this.waveform != VoltageElm.WF_DC)
 		{
@@ -148,7 +148,7 @@ class VoltageElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.setBbox(this.x, this.y, this.x2, this.y2);
 		this.draw2Leads(g);

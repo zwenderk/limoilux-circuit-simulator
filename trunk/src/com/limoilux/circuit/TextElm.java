@@ -62,7 +62,7 @@ class TextElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.size + " " + this.text;
 	}
@@ -83,7 +83,7 @@ class TextElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
 		Font f = new Font("SansSerif", 0, this.size);

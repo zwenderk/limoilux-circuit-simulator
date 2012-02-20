@@ -30,7 +30,7 @@ class CurrentElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.currentValue;
 	}
@@ -57,7 +57,7 @@ class CurrentElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		int cr = 12;
 		this.draw2Leads(g);

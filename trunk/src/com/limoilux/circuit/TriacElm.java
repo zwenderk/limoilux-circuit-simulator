@@ -87,7 +87,7 @@ class TriacElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + (this.volts[this.anode] - this.volts[this.cnode]) + " "
 				+ (this.volts[this.anode] - this.volts[this.gnode]) + " " + this.triggerI + " " + this.holdingI + " "
@@ -143,7 +143,7 @@ class TriacElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.setBbox(this.point1, this.point2, this.hs);
 		this.adjustBbox(this.gate[0], this.gate[1]);
@@ -218,7 +218,7 @@ class TriacElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		double vac = this.volts[this.anode] - this.volts[this.cnode]; // typically
 																		// negative

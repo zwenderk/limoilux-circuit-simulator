@@ -43,7 +43,7 @@ class SparkGapElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.onresistance + " " + this.offresistance + " " + this.breakdown + " "
 				+ this.holdcurrent;
@@ -65,7 +65,7 @@ class SparkGapElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		int i;
 		double v1 = this.volts[0];
@@ -99,7 +99,7 @@ class SparkGapElm extends CircuitElm
 	}
 
 	@Override
-	void startIteration()
+	public void startIteration()
 	{
 		if (Math.abs(this.current) < this.holdcurrent)
 		{
@@ -113,7 +113,7 @@ class SparkGapElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		this.resistance = this.state ? this.onresistance : this.offresistance;
 		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);

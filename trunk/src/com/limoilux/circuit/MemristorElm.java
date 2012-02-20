@@ -38,7 +38,7 @@ class MemristorElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.r_on + " " + this.r_off + " " + this.dopeWidth + " " + this.totalWidth + " "
 				+ this.mobility;
@@ -56,7 +56,7 @@ class MemristorElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		int segments = 6;
 		int i;
@@ -114,7 +114,7 @@ class MemristorElm extends CircuitElm
 	}
 
 	@Override
-	void startIteration()
+	public void startIteration()
 	{
 		double wd = this.dopeWidth / this.totalWidth;
 		this.dopeWidth += CircuitElm.cirSim.timeStep * this.mobility * this.r_on * this.current / this.totalWidth;
@@ -137,7 +137,7 @@ class MemristorElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
 	}

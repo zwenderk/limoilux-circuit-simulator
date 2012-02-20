@@ -68,7 +68,7 @@ class MosfetElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.vt;
 	}
@@ -82,7 +82,7 @@ class MosfetElm extends CircuitElm
 	final int hs = 16;
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.setBbox(this.point1, this.point2, this.hs);
 		this.setVoltageColor(g, this.volts[1]);
@@ -229,7 +229,7 @@ class MosfetElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		double vs[] = new double[3];
 		vs[0] = this.volts[0];

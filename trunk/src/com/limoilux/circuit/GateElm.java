@@ -46,7 +46,7 @@ abstract class GateElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.inputCount + " " + this.volts[this.inputCount];
 	}
@@ -93,7 +93,7 @@ abstract class GateElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		int i;
 		for (i = 0; i != this.inputCount; i++)
@@ -170,7 +170,7 @@ abstract class GateElm extends CircuitElm
 	abstract boolean calcFunction();
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		int i;
 		boolean f = this.calcFunction();

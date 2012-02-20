@@ -47,7 +47,7 @@ class DiacElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.onresistance + " " + this.offresistance + " " + this.breakdown + " "
 				+ this.holdcurrent;
@@ -65,7 +65,7 @@ class DiacElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		// FIXME need to draw Diac
 		int i;
@@ -93,7 +93,7 @@ class DiacElm extends CircuitElm
 	}
 
 	@Override
-	void startIteration()
+	public void startIteration()
 	{
 		double vd = this.volts[0] - this.volts[1];
 		if (Math.abs(this.current) < this.holdcurrent)
@@ -108,7 +108,7 @@ class DiacElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		if (this.state)
 		{

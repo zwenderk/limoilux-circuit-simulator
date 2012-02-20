@@ -37,7 +37,7 @@ class Switch2Elm extends SwitchElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.link;
 	}
@@ -59,7 +59,7 @@ class Switch2Elm extends SwitchElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.setBbox(this.point1, this.point2, this.openhs);
 

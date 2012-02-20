@@ -39,7 +39,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.setBbox(this.point1, this.point2, this.openhs);
 
@@ -100,7 +100,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		this.open = this.volts[3] < 2.5;
 		if ((this.flags & this.FLAG_INVERT) != 0)

@@ -69,7 +69,7 @@ class TransformerElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.inductance + " " + this.ratio + " " + this.current[0] + " " + this.current[1]
 				+ " " + this.couplingCoef;
@@ -81,7 +81,7 @@ class TransformerElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		int i;
 		for (i = 0; i != 4; i++)
@@ -207,7 +207,7 @@ class TransformerElm extends CircuitElm
 	}
 
 	@Override
-	void startIteration()
+	public void startIteration()
 	{
 		double voltdiff1 = this.volts[0] - this.volts[2];
 		double voltdiff2 = this.volts[1] - this.volts[3];
@@ -226,7 +226,7 @@ class TransformerElm extends CircuitElm
 	double curSourceValue1, curSourceValue2;
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		CircuitElm.cirSim.stampCurrentSource(this.nodes[0], this.nodes[2], this.curSourceValue1);
 		CircuitElm.cirSim.stampCurrentSource(this.nodes[1], this.nodes[3], this.curSourceValue2);

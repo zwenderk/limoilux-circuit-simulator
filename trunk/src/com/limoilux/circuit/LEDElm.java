@@ -39,7 +39,7 @@ class LEDElm extends DiodeElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.colorR + " " + this.colorG + " " + this.colorB;
 	}
@@ -57,7 +57,7 @@ class LEDElm extends DiodeElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		if (this.needsHighlight() || this == CircuitElm.cirSim.dragElm)
 		{

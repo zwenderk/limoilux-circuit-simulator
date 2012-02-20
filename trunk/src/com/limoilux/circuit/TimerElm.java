@@ -89,7 +89,7 @@ class TimerElm extends ChipElm
 	boolean setOut, out;
 
 	@Override
-	void startIteration()
+	public void startIteration()
 	{
 		this.out = this.volts[this.N_OUT] > this.volts[this.N_VIN] / 2;
 		this.setOut = false;
@@ -105,7 +105,7 @@ class TimerElm extends ChipElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		// if output is low, discharge pin 0. we use a small
 		// resistor because it's easier, and sometimes people tie

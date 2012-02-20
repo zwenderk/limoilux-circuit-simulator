@@ -58,7 +58,7 @@ class OpAmpElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.maxOut + " " + this.minOut + " " + this.gbw;
 	}
@@ -70,7 +70,7 @@ class OpAmpElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.setBbox(this.point1, this.point2, this.opheight * 2);
 		this.setVoltageColor(g, this.volts[0]);
@@ -182,7 +182,7 @@ class OpAmpElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		double vd = this.volts[1] - this.volts[0];
 		if (Math.abs(this.lastvd - vd) > .1)

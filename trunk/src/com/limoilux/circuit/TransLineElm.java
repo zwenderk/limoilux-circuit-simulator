@@ -52,7 +52,7 @@ class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.delay + " " + this.imped + " " + this.width + " " + 0.;
 	}
@@ -127,7 +127,7 @@ class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.setBbox(this.posts[0], this.posts[3], 0);
 		int segments = (int) (this.dn / 2);
@@ -211,7 +211,7 @@ class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	void startIteration()
+	public void startIteration()
 	{
 		// calculate voltages, currents sent over wire
 		if (this.voltageL == null)
@@ -232,7 +232,7 @@ class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		if (this.voltageL == null)
 		{

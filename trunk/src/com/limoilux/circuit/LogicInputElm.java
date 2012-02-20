@@ -55,7 +55,7 @@ class LogicInputElm extends SwitchElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.hiV + " " + this.loV;
 	}
@@ -74,7 +74,7 @@ class LogicInputElm extends SwitchElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		Font f = new Font("SansSerif", Font.BOLD, 20);
 		g.setFont(f);

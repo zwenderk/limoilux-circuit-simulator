@@ -65,55 +65,6 @@ public abstract class CircuitElm implements Editable
 
 	public double volts[];
 
-	int getDumpType()
-	{
-		return 0;
-	}
-
-	public Class getDumpClass()
-	{
-		return this.getClass();
-	}
-
-	int getDefaultFlags()
-	{
-		return 0;
-	}
-
-	public static void initClass(CirSim cirSim)
-	{
-		CircuitElm.cirSim = cirSim;
-
-		CircuitElm.colorScale = new Color[CircuitElm.COLOR_SCALE_COUNT];
-
-		for (int i = 0; i < colorScale.length; i++)
-		{
-			double v = i * 2. / CircuitElm.COLOR_SCALE_COUNT - 1;
-			if (v < 0)
-			{
-				int n1 = (int) (128 * -v) + 127;
-				int n2 = (int) (127 * (1 + v));
-				CircuitElm.colorScale[i] = new Color(n1, n2, n2);
-			}
-			else
-			{
-				int n1 = (int) (128 * v) + 127;
-				int n2 = (int) (127 * (1 - v));
-				CircuitElm.colorScale[i] = new Color(n2, n1, n2);
-			}
-		}
-
-		CircuitElm.showFormat = NumberFormat.getInstance();
-		CircuitElm.showFormat.setMaximumFractionDigits(2);
-
-		CircuitElm.shortFormat = NumberFormat.getInstance();
-		CircuitElm.shortFormat.setMaximumFractionDigits(1);
-
-		CircuitElm.noCommaFormat = NumberFormat.getInstance();
-		CircuitElm.noCommaFormat.setMaximumFractionDigits(10);
-		CircuitElm.noCommaFormat.setGroupingUsed(false);
-	}
-
 	public CircuitElm(int xx, int yy)
 	{
 		this.x = this.x2 = xx;
@@ -134,20 +85,35 @@ public abstract class CircuitElm implements Editable
 		this.initBoundingBox();
 	}
 
-	void initBoundingBox()
+	int getDumpType()
 	{
-		this.boundingBox = new Rectangle();
-		this.boundingBox.setBounds(CircuitElm.min(this.x, this.x2), CircuitElm.min(this.y, this.y2),
-				CircuitElm.abs(this.x2 - this.x) + 1, CircuitElm.abs(this.y2 - this.y) + 1);
+		return 0;
 	}
 
-	void allocNodes()
+	public Class getDumpClass()
+	{
+		return this.getClass();
+	}
+
+	int getDefaultFlags()
+	{
+		return 0;
+	}
+
+	private void initBoundingBox()
+	{
+		this.boundingBox = new Rectangle();
+		this.boundingBox.setBounds(Math.min(this.x, this.x2), Math.min(this.y, this.y2),
+				Math.abs(this.x2 - this.x) + 1, Math.abs(this.y2 - this.y) + 1);
+	}
+
+	public void allocNodes()
 	{
 		this.nodes = new int[this.getPostCount() + this.getInternalNodeCount()];
 		this.volts = new double[this.getPostCount() + this.getInternalNodeCount()];
 	}
 
-	String dump()
+	public String dump()
 	{
 		int t = this.getDumpType();
 		return (t < 127 ? (char) t + " " : t + " ") + this.x + " " + this.y + " " + this.x2 + " " + this.y2 + " "
@@ -164,9 +130,7 @@ public abstract class CircuitElm implements Editable
 		this.curcount = 0;
 	}
 
-	void draw(Graphics g)
-	{
-	}
+	public abstract void draw(Graphics g);
 
 	void setCurrent(int x, double c)
 	{
@@ -178,16 +142,19 @@ public abstract class CircuitElm implements Editable
 		return this.current;
 	}
 
-	void doStep()
+	public void doStep()
 	{
+
 	}
 
-	void delete()
+	public void delete()
 	{
+
 	}
 
-	void startIteration()
+	public void startIteration()
 	{
+
 	}
 
 	double getPostVoltage(int x)
@@ -212,7 +179,7 @@ public abstract class CircuitElm implements Editable
 		this.dn = Math.sqrt(this.dx * this.dx + this.dy * this.dy);
 		this.dpx1 = this.dy / this.dn;
 		this.dpy1 = -this.dx / this.dn;
-		this.dsign = this.dy == 0 ? CircuitElm.sign(this.dx) : CircuitElm.sign(this.dy);
+		this.dsign = this.dy == 0 ? CoreUtil.sign(this.dx) : CoreUtil.sign(this.dy);
 		this.point1 = new Point(this.x, this.y);
 		this.point2 = new Point(this.x2, this.y2);
 	}
@@ -999,25 +966,31 @@ public abstract class CircuitElm implements Editable
 		this.selected = r.intersects(this.boundingBox);
 	}
 
+	public Rectangle getBoundingBox()
+	{
+		return this.boundingBox;
+	}
+
 	@Deprecated
-	static int abs(int x)
+	public static int abs(int x)
 	{
 		return Math.abs(x);
 	}
 
-	static int sign(int x)
+	@Deprecated
+	public static int sign(int x)
 	{
-		return x < 0 ? -1 : x == 0 ? 0 : 1;
+		return CoreUtil.sign(x);
 	}
 
 	@Deprecated
-	static int min(int a, int b)
+	public static int min(int a, int b)
 	{
 		return Math.min(a, b);
 	}
 
 	@Deprecated
-	static int max(int a, int b)
+	public static int max(int a, int b)
 	{
 		return Math.max(a, b);
 	}
@@ -1028,9 +1001,38 @@ public abstract class CircuitElm implements Editable
 		return CoreUtil.distance(p1, p2);
 	}
 
-	Rectangle getBoundingBox()
+	public static void initClass(CirSim cirSim)
 	{
-		return this.boundingBox;
+		CircuitElm.cirSim = cirSim;
+
+		CircuitElm.colorScale = new Color[CircuitElm.COLOR_SCALE_COUNT];
+
+		for (int i = 0; i < colorScale.length; i++)
+		{
+			double v = i * 2. / CircuitElm.COLOR_SCALE_COUNT - 1;
+			if (v < 0)
+			{
+				int n1 = (int) (128 * -v) + 127;
+				int n2 = (int) (127 * (1 + v));
+				CircuitElm.colorScale[i] = new Color(n1, n2, n2);
+			}
+			else
+			{
+				int n1 = (int) (128 * v) + 127;
+				int n2 = (int) (127 * (1 - v));
+				CircuitElm.colorScale[i] = new Color(n2, n1, n2);
+			}
+		}
+
+		CircuitElm.showFormat = NumberFormat.getInstance();
+		CircuitElm.showFormat.setMaximumFractionDigits(2);
+
+		CircuitElm.shortFormat = NumberFormat.getInstance();
+		CircuitElm.shortFormat.setMaximumFractionDigits(1);
+
+		CircuitElm.noCommaFormat = NumberFormat.getInstance();
+		CircuitElm.noCommaFormat.setMaximumFractionDigits(10);
+		CircuitElm.noCommaFormat.setGroupingUsed(false);
 	}
 
 	public boolean needsShortcut()

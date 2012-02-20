@@ -66,7 +66,7 @@ class VCOElm extends ChipElm
 	int cDir;
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		double vc = this.volts[3] - this.volts[2];
 		double vo = this.volts[1];
@@ -113,7 +113,7 @@ class VCOElm extends ChipElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.computeCurrent();
 		this.drawChip(g);

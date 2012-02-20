@@ -54,7 +54,7 @@ class CapacitorElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.capacitance + " " + this.voltdiff;
 	}
@@ -75,7 +75,7 @@ class CapacitorElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		int hs = 12;
 		this.setBbox(this.point1, this.point2, hs);
@@ -132,7 +132,7 @@ class CapacitorElm extends CircuitElm
 	}
 
 	@Override
-	void startIteration()
+	public void startIteration()
 	{
 		if (this.isTrapezoidal())
 		{
@@ -163,7 +163,7 @@ class CapacitorElm extends CircuitElm
 	double curSourceValue;
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		CircuitElm.cirSim.stampCurrentSource(this.nodes[0], this.nodes[1], this.curSourceValue);
 	}

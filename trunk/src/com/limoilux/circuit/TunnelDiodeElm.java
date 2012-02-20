@@ -54,7 +54,7 @@ class TunnelDiodeElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.setBbox(this.point1, this.point2, this.hs);
 
@@ -117,7 +117,7 @@ class TunnelDiodeElm extends CircuitElm
 	static final double piv = 370e-6;
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		double voltdiff = this.volts[0] - this.volts[1];
 		if (Math.abs(voltdiff - this.lastvoltdiff) > .01)

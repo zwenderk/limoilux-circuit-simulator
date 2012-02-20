@@ -32,7 +32,7 @@ class InverterElm extends CircuitElm
 	}
 
 	@Override
-	String dump()
+	public String dump()
 	{
 		return super.dump() + " " + this.slewRate;
 	}
@@ -44,7 +44,7 @@ class InverterElm extends CircuitElm
 	}
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.drawPosts(g);
 		this.draw2Leads(g);
@@ -91,7 +91,7 @@ class InverterElm extends CircuitElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		double v0 = this.volts[1];
 		double out = this.volts[0] > 2.5 ? 0 : 5;

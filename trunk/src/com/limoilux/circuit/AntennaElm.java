@@ -25,7 +25,7 @@ class AntennaElm extends RailElm
 	}
 
 	@Override
-	void doStep()
+	public void doStep()
 	{
 		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
 	}

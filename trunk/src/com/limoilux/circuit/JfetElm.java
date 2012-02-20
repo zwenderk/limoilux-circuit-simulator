@@ -25,7 +25,7 @@ class JfetElm extends MosfetElm
 	Point gatePt;
 
 	@Override
-	void draw(Graphics g)
+	public void draw(Graphics g)
 	{
 		this.setBbox(this.point1, this.point2, this.hs);
 		this.setVoltageColor(g, this.volts[1]);
