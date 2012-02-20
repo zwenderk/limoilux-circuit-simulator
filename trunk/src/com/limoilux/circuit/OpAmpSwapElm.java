@@ -1,7 +1,7 @@
 
 package com.limoilux.circuit;
 
-class OpAmpSwapElm extends OpAmpElm
+public class OpAmpSwapElm extends OpAmpElm
 {
 	public OpAmpSwapElm(int xx, int yy)
 	{

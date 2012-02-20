@@ -5,11 +5,12 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CircuitElm;
 
-class ResistorElm extends CircuitElm
+public class ResistorElm extends CircuitElm
 {
-	double resistance;
+	public double resistance;
 
 	public ResistorElm(int xx, int yy)
 	{

@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class AntennaElm extends RailElm
+public class AntennaElm extends RailElm
 {
 	public AntennaElm(int xx, int yy)
 	{

@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class ProbeElm extends CircuitElm
+public class ProbeElm extends CircuitElm
 {
 	static final int FLAG_SHOWVOLTAGE = 1;
 

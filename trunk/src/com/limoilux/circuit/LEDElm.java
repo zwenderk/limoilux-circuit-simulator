@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class LEDElm extends DiodeElm
+public class LEDElm extends DiodeElm
 {
 	double colorR, colorG, colorB;
 

@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class DiodeElm extends CircuitElm
+public class DiodeElm extends CircuitElm
 {
 	Diode diode;
 	static final int FLAG_FWDROP = 1;

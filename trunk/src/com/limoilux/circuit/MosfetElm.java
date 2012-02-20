@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class MosfetElm extends CircuitElm
+public class MosfetElm extends CircuitElm
 {
 	int pnp;
 	int FLAG_PNP = 1;

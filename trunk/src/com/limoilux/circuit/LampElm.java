@@ -6,9 +6,10 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CircuitElm;
 
-class LampElm extends CircuitElm
+public class LampElm extends CircuitElm
 {
 	double resistance;
 	final double roomTemp = 300;

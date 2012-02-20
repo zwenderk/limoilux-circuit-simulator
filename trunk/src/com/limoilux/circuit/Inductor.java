@@ -1,6 +1,8 @@
 
 package com.limoilux.circuit;
 
+import com.limoilux.circuit.core.CirSim;
+
 class Inductor
 {
 	public static final int FLAG_BACK_EULER = 2;

@@ -3,7 +3,7 @@ package com.limoilux.circuit;
 
 import java.util.StringTokenizer;
 
-class JKFlipFlopElm extends ChipElm
+public class JKFlipFlopElm extends ChipElm
 {
 	public JKFlipFlopElm(int xx, int yy)
 	{

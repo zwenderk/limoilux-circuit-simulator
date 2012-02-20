@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class PhaseCompElm extends ChipElm
+public class PhaseCompElm extends ChipElm
 {
 	public PhaseCompElm(int xx, int yy)
 	{

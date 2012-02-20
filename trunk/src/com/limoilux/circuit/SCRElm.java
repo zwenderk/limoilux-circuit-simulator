@@ -15,7 +15,7 @@ import com.limoilux.circuit.core.CircuitElm;
 // 3, 2 = diode
 // 2, 1 = 50 ohm resistor
 
-class SCRElm extends CircuitElm
+public class SCRElm extends CircuitElm
 {
 	final int anode = 0;
 	final int cnode = 1;

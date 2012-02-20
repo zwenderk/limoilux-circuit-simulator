@@ -3,7 +3,7 @@ package com.limoilux.circuit;
 
 import java.util.StringTokenizer;
 
-class LatchElm extends ChipElm
+public class LatchElm extends ChipElm
 {
 	public LatchElm(int xx, int yy)
 	{

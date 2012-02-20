@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class WireElm extends CircuitElm
+public class WireElm extends CircuitElm
 {
 	public WireElm(int xx, int yy)
 	{

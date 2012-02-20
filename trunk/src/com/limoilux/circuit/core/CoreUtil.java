@@ -5,8 +5,6 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.util.Random;
 
-import com.limoilux.circuit.CirSim;
-
 public class CoreUtil
 {
 	private static final Random RANDOM_GENERATOR = new Random();
@@ -286,7 +284,6 @@ public class CoreUtil
 		}
 		return p;
 	}
-	
 
 	public static String getVoltageDText(double v)
 	{
@@ -297,7 +294,6 @@ public class CoreUtil
 	{
 		return CoreUtil.getUnitText(v, "V");
 	}
-	
 
 	public static String getUnitText(double v, String u)
 	{
@@ -337,7 +333,6 @@ public class CoreUtil
 		return CircuitElm.showFormat.format(v * 1e-9) + " G" + u;
 	}
 
-	
 	public static String getShortUnitText(double v, String u)
 	{
 		double va = Math.abs(v);
@@ -375,7 +370,7 @@ public class CoreUtil
 		}
 		return CircuitElm.shortFormat.format(v * 1e-9) + "G" + u;
 	}
-	
+
 	public static String getCurrentText(double i)
 	{
 		return CoreUtil.getUnitText(i, "A");
@@ -385,7 +380,7 @@ public class CoreUtil
 	{
 		return CoreUtil.getUnitText(Math.abs(i), "A");
 	}
-	
+
 	public static double updateDotCount(double cur, double cc)
 	{
 		if (CircuitElm.cirSim.stoppedCheck.getState())
@@ -403,7 +398,7 @@ public class CoreUtil
 		 */
 		return cc + cadd;
 	}
-	
+
 	public static boolean comparePair(int x1, int x2, int y1, int y2)
 	{
 		return x1 == y1 && x2 == y2 || x1 == y2 && x2 == y1;

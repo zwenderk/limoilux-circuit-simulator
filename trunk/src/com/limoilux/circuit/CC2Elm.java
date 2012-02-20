@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class CC2Elm extends ChipElm
+public class CC2Elm extends ChipElm
 {
 	double gain;
 
@@ -95,19 +95,5 @@ class CC2Elm extends ChipElm
 	public int getDumpType()
 	{
 		return 179;
-	}
-}
-
-class CC2NegElm extends CC2Elm
-{
-	public CC2NegElm(int xx, int yy)
-	{
-		super(xx, yy, -1);
-	}
-
-	@Override
-	public Class getDumpClass()
-	{
-		return CC2Elm.class;
 	}
 }

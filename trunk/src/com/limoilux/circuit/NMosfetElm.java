@@ -1,7 +1,7 @@
 
 package com.limoilux.circuit;
 
-class NMosfetElm extends MosfetElm
+public class NMosfetElm extends MosfetElm
 {
 	public NMosfetElm(int xx, int yy)
 	{

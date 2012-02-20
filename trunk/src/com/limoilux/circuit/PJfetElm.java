@@ -1,9 +1,9 @@
 
 package com.limoilux.circuit;
 
-public class PMosfetElm extends MosfetElm
+public class PJfetElm extends JfetElm
 {
-	public PMosfetElm(int xx, int yy)
+	public PJfetElm(int xx, int yy)
 	{
 		super(xx, yy, true);
 	}
@@ -11,6 +11,6 @@ public class PMosfetElm extends MosfetElm
 	@Override
 	public Class getDumpClass()
 	{
-		return MosfetElm.class;
+		return JfetElm.class;
 	}
 }

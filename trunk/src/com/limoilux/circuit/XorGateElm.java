@@ -3,7 +3,7 @@ package com.limoilux.circuit;
 
 import java.util.StringTokenizer;
 
-class XorGateElm extends OrGateElm
+public class XorGateElm extends OrGateElm
 {
 	public XorGateElm(int xx, int yy)
 	{

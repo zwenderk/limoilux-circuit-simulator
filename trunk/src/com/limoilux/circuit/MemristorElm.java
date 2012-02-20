@@ -5,9 +5,10 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CircuitElm;
 
-class MemristorElm extends CircuitElm
+public class MemristorElm extends CircuitElm
 {
 	double r_on, r_off, dopeWidth, totalWidth, mobility, resistance;
 

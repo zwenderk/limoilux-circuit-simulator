@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit;
+package com.limoilux.circuit.core;
 
 // CirSim.java (c) 2010 by Paul Falstad
 
@@ -50,9 +50,25 @@ import java.net.URLEncoder;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import com.limoilux.circuit.core.CircuitElm;
-import com.limoilux.circuit.core.CoreUtil;
-import com.limoilux.circuit.core.Editable;
+import com.limoilux.circuit.CapacitorElm;
+import com.limoilux.circuit.CircuitCanvas;
+import com.limoilux.circuit.CircuitLayout;
+import com.limoilux.circuit.CircuitNode;
+import com.limoilux.circuit.CircuitNodeLink;
+import com.limoilux.circuit.CurrentElm;
+import com.limoilux.circuit.EditDialog;
+import com.limoilux.circuit.EditOptions;
+import com.limoilux.circuit.GroundElm;
+import com.limoilux.circuit.ImportDialog;
+import com.limoilux.circuit.InductorElm;
+import com.limoilux.circuit.RailElm;
+import com.limoilux.circuit.ResistorElm;
+import com.limoilux.circuit.RowInfo;
+import com.limoilux.circuit.Scope;
+import com.limoilux.circuit.SwitchElm;
+import com.limoilux.circuit.TextElm;
+import com.limoilux.circuit.VoltageElm;
+import com.limoilux.circuit.WireElm;
 
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
 {
@@ -86,9 +102,9 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	public Container mainContainer;
 
 	public static String muString = "u";
-	static String ohmString = "ohm";
-	static EditDialog editDialog;
-	static ImportDialog impDialog;
+	public static String ohmString = "ohm";
+	public static EditDialog editDialog;
+	public static ImportDialog impDialog;
 
 	private String baseURL = "http://www.falstad.com/circuit/";
 	private String startCircuit = null;
