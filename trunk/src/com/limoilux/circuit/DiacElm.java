@@ -41,7 +41,7 @@ class DiacElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 185;
 	}
@@ -56,7 +56,7 @@ class DiacElm extends CircuitElm
 	Point ps3, ps4;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.calcLeads(32);
@@ -128,7 +128,7 @@ class DiacElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		// FIXME
 		arr[0] = "spark gap";

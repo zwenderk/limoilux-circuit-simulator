@@ -31,7 +31,7 @@ class TunnelDiodeElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 175;
 	}
@@ -41,7 +41,7 @@ class TunnelDiodeElm extends CircuitElm
 	Point cathode[];
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.calcLeads(16);
@@ -156,7 +156,7 @@ class TunnelDiodeElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "tunnel diode";
 		arr[1] = "I = " + CircuitElm.getCurrentText(this.getCurrent());

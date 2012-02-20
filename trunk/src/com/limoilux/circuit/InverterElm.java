@@ -38,7 +38,7 @@ class InverterElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'I';
 	}
@@ -59,7 +59,7 @@ class InverterElm extends CircuitElm
 	Point pcircle;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		int hs = 16;
@@ -107,7 +107,7 @@ class InverterElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "inverter";
 		arr[1] = "Vi = " + CircuitElm.getVoltageText(this.volts[0]);

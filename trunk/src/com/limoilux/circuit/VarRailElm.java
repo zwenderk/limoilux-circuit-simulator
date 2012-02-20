@@ -37,7 +37,7 @@ class VarRailElm extends RailElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 172;
 	}

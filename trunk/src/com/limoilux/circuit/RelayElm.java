@@ -78,7 +78,7 @@ class RelayElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 178;
 	}
@@ -158,7 +158,7 @@ class RelayElm extends CircuitElm
 	}
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.setupPoles();
@@ -334,7 +334,7 @@ class RelayElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = this.i_position == 0 ? "relay (off)" : this.i_position == 1 ? "relay (on)" : "relay";
 		int i;

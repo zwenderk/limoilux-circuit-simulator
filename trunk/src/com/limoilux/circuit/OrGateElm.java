@@ -23,7 +23,7 @@ class OrGateElm extends GateElm
 	}
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 
@@ -74,7 +74,7 @@ class OrGateElm extends GateElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 152;
 	}

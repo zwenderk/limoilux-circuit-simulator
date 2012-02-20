@@ -34,7 +34,7 @@ class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 171;
 	}
@@ -104,7 +104,7 @@ class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		int ds = this.dy == 0 ? CircuitElm.sign(this.dx) : -CircuitElm.sign(this.dy);
@@ -278,7 +278,7 @@ class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "transmission line";
 		arr[1] = CircuitElm.getUnitText(this.imped, CircuitElm.cirSim.ohmString);

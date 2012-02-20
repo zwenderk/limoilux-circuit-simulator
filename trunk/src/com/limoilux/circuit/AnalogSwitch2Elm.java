@@ -21,7 +21,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 	Point swposts[], swpoles[], ctlPoint;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.calcLeads(32);
@@ -73,7 +73,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 160;
 	}
@@ -130,7 +130,7 @@ class AnalogSwitch2Elm extends AnalogSwitchElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "analog switch (SPDT)";
 		arr[1] = "I = " + CircuitElm.getCurrentDText(this.getCurrent());

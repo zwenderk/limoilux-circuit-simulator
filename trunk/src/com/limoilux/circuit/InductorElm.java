@@ -28,7 +28,7 @@ class InductorElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'l';
 	}
@@ -40,7 +40,7 @@ class InductorElm extends CircuitElm
 	}
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.calcLeads(32);
@@ -106,7 +106,7 @@ class InductorElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "inductor";
 		this.getBasicInfo(arr);

@@ -49,7 +49,7 @@ class SwitchElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 's';
 	}
@@ -63,7 +63,7 @@ class SwitchElm extends CircuitElm
 	Point ps, ps2;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.calcLeads(32);
@@ -139,7 +139,7 @@ class SwitchElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = this.momentary ? "push switch (SPST)" : "switch (SPST)";
 		if (this.position == 1)

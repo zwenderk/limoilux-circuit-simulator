@@ -108,7 +108,7 @@ class CounterElm extends ChipElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 164;
 	}

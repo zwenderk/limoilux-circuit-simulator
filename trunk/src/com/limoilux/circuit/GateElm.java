@@ -55,7 +55,7 @@ abstract class GateElm extends CircuitElm
 	int ww;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		if (this.dn > 150 && this == CircuitElm.cirSim.dragElm)
@@ -149,7 +149,7 @@ abstract class GateElm extends CircuitElm
 	abstract String getGateName();
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = this.getGateName();
 		arr[1] = "Vout = " + CircuitElm.getVoltageText(this.volts[this.inputCount]);

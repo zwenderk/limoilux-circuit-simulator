@@ -86,7 +86,7 @@ public abstract class CircuitElm implements Editable
 		this.initBoundingBox();
 	}
 
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 0;
 	}
@@ -173,7 +173,7 @@ public abstract class CircuitElm implements Editable
 	{
 	}
 
-	void setPoints()
+	public void setPoints()
 	{
 		this.dx = this.x2 - this.x;
 		this.dy = this.y2 - this.y;
@@ -212,7 +212,7 @@ public abstract class CircuitElm implements Editable
 	@Deprecated
 	public static void interpPoint(Point a, Point b, Point c, double f, double g)
 	{
-		CoreUtil.interpPoint(a, b, c,f,g);
+		CoreUtil.interpPoint(a, b, c, f, g);
 	}
 
 	@Deprecated
@@ -749,7 +749,7 @@ public abstract class CircuitElm implements Editable
 	{
 	}
 
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 	}
 

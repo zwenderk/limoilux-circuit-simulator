@@ -34,7 +34,7 @@ class SweepElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 170;
 	}
@@ -54,7 +54,7 @@ class SweepElm extends CircuitElm
 	}
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.lead1 = this.interpPoint(this.point1, this.point2, 1 - this.circleSize / this.dn);
@@ -213,7 +213,7 @@ class SweepElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "sweep " + ((this.flags & this.FLAG_LOG) == 0 ? "(linear)" : "(log)");
 		arr[1] = "I = " + CircuitElm.getCurrentDText(this.getCurrent());

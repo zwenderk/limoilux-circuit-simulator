@@ -53,7 +53,7 @@ class TriodeElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 173;
 	}
@@ -62,7 +62,7 @@ class TriodeElm extends CircuitElm
 	int circler;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.plate = this.newPointArray(4);
@@ -239,7 +239,7 @@ class TriodeElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "triode";
 		double vbc = this.volts[0] - this.volts[1];

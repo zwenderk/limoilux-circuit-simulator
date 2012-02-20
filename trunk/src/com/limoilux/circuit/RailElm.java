@@ -25,7 +25,7 @@ class RailElm extends VoltageElm
 	final int FLAG_CLOCK = 1;
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'R';
 	}
@@ -37,7 +37,7 @@ class RailElm extends VoltageElm
 	}
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.lead1 = this.interpPoint(this.point1, this.point2, 1 - this.circleSize / this.dn);

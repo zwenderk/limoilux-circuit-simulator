@@ -23,7 +23,7 @@ class OutputElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'O';
 	}
@@ -35,7 +35,7 @@ class OutputElm extends CircuitElm
 	}
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.lead1 = new Point();
@@ -77,7 +77,7 @@ class OutputElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "output";
 		arr[1] = "V = " + CircuitElm.getVoltageText(this.volts[0]);

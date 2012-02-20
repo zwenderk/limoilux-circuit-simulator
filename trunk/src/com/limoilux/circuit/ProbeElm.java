@@ -22,7 +22,7 @@ class ProbeElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'p';
 	}
@@ -30,7 +30,7 @@ class ProbeElm extends CircuitElm
 	Point center;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		// swap points so that we subtract higher from lower
@@ -87,7 +87,7 @@ class ProbeElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "scope probe";
 		arr[1] = "Vd = " + CircuitElm.getVoltageText(this.getVoltageDiff());

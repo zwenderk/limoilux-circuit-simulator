@@ -6,14 +6,25 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CoreUtil;
+import com.limoilux.circuit.ui.DrawUtil;
+
 // Zener code contributed by J. Mike Rollins
 // http://www.camotruck.net/rollins/simulator.html
-class ZenerElm extends DiodeElm
+public class ZenerElm extends DiodeElm
 {
+
+	private static final double DEFAULT_ZVOLTAGE = 5.6;
+	private static final int HS = 8;
+
+	private Polygon poly;
+	private Point cathode[];
+	private Point wing[];
+
 	public ZenerElm(int xx, int yy)
 	{
 		super(xx, yy);
-		this.zvoltage = this.default_zvoltage;
+		this.zvoltage = ZenerElm.DEFAULT_ZVOLTAGE;
 		this.setup();
 	}
 
@@ -25,14 +36,14 @@ class ZenerElm extends DiodeElm
 	}
 
 	@Override
-	void setup()
+	public void setup()
 	{
 		this.diode.leakage = 5e-6; // 1N4004 is 5.0 uAmp
 		super.setup();
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'z';
 	}
@@ -43,30 +54,25 @@ class ZenerElm extends DiodeElm
 		return super.dump() + " " + this.zvoltage;
 	}
 
-	final int hs = 8;
-	Polygon poly;
-	Point cathode[];
-	Point wing[];
-
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.calcLeads(16);
-		this.cathode = this.newPointArray(2);
-		this.wing = this.newPointArray(2);
-		Point pa[] = this.newPointArray(2);
-		this.interpPoint2(this.lead1, this.lead2, pa[0], pa[1], 0, this.hs);
-		this.interpPoint2(this.lead1, this.lead2, this.cathode[0], this.cathode[1], 1, this.hs);
-		this.interpPoint(this.cathode[0], this.cathode[1], this.wing[0], -0.2, -this.hs);
-		this.interpPoint(this.cathode[1], this.cathode[0], this.wing[1], -0.2, -this.hs);
+		this.cathode = CoreUtil.newPointArray(2);
+		this.wing = CoreUtil.newPointArray(2);
+		Point pa[] = CoreUtil.newPointArray(2);
+		CoreUtil.interpPoint2(this.lead1, this.lead2, pa[0], pa[1], 0, ZenerElm.HS);
+		CoreUtil.interpPoint2(this.lead1, this.lead2, this.cathode[0], this.cathode[1], 1, ZenerElm.HS);
+		CoreUtil.interpPoint(this.cathode[0], this.cathode[1], this.wing[0], -0.2, -ZenerElm.HS);
+		CoreUtil.interpPoint(this.cathode[1], this.cathode[0], this.wing[1], -0.2, -ZenerElm.HS);
 		this.poly = this.createPolygon(pa[0], pa[1], this.lead2);
 	}
 
 	@Override
 	public void draw(Graphics g)
 	{
-		this.setBbox(this.point1, this.point2, this.hs);
+		this.setBbox(this.point1, this.point2, ZenerElm.HS);
 
 		double v1 = this.volts[0];
 		double v2 = this.volts[1];
@@ -80,20 +86,18 @@ class ZenerElm extends DiodeElm
 
 		// draw thing arrow is pointing to
 		this.setVoltageColor(g, v2);
-		CircuitElm.drawThickLine(g, this.cathode[0], this.cathode[1]);
+		DrawUtil.drawThickLine(g, this.cathode[0], this.cathode[1]);
 
 		// draw wings on cathode
-		CircuitElm.drawThickLine(g, this.wing[0], this.cathode[0]);
-		CircuitElm.drawThickLine(g, this.wing[1], this.cathode[1]);
+		DrawUtil.drawThickLine(g, this.wing[0], this.cathode[0]);
+		DrawUtil.drawThickLine(g, this.wing[1], this.cathode[1]);
 
 		this.doDots(g);
 		this.drawPosts(g);
 	}
 
-	final double default_zvoltage = 5.6;
-
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		super.getInfo(arr);
 		arr[0] = "Zener diode";

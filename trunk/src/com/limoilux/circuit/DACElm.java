@@ -74,7 +74,7 @@ class DACElm extends ChipElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 166;
 	}

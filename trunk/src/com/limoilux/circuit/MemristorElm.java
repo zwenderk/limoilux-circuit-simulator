@@ -32,7 +32,7 @@ class MemristorElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'm';
 	}
@@ -47,7 +47,7 @@ class MemristorElm extends CircuitElm
 	Point ps3, ps4;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.calcLeads(32);
@@ -143,7 +143,7 @@ class MemristorElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "memristor";
 		this.getBasicInfo(arr);

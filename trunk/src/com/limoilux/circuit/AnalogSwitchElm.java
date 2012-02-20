@@ -41,7 +41,7 @@ class AnalogSwitchElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 159;
 	}
@@ -51,7 +51,7 @@ class AnalogSwitchElm extends CircuitElm
 	Point ps, point3, lead3;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		this.calcLeads(32);
@@ -153,7 +153,7 @@ class AnalogSwitchElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "analog switch";
 		arr[1] = this.open ? "open" : "closed";

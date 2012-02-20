@@ -109,7 +109,7 @@ class OpAmpElm extends CircuitElm
 	}
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		if (this.dn > 150 && this == CircuitElm.cirSim.dragElm)
@@ -158,7 +158,7 @@ class OpAmpElm extends CircuitElm
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "op-amp";
 		arr[1] = "V+ = " + CircuitElm.getVoltageText(this.volts[1]);
@@ -248,7 +248,7 @@ class OpAmpElm extends CircuitElm
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 'a';
 	}

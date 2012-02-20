@@ -52,7 +52,7 @@ class PotElm extends CircuitElm implements AdjustmentListener
 	}
 
 	@Override
-	int getDumpType()
+	public int getDumpType()
 	{
 		return 174;
 	}
@@ -97,7 +97,7 @@ class PotElm extends CircuitElm implements AdjustmentListener
 	int bodyLen;
 
 	@Override
-	void setPoints()
+	public void setPoints()
 	{
 		super.setPoints();
 		int offset = 0;
@@ -241,7 +241,7 @@ class PotElm extends CircuitElm implements AdjustmentListener
 	}
 
 	@Override
-	void getInfo(String arr[])
+	public void getInfo(String arr[])
 	{
 		arr[0] = "potentiometer";
 		arr[1] = "Vd = " + CircuitElm.getVoltageDText(this.getVoltageDiff());
