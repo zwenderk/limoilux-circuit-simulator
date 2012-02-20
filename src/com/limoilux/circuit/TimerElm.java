@@ -37,7 +37,7 @@ class TimerElm extends ChipElm
 	}
 
 	@Override
-	void setupPins()
+	public void setupPins()
 	{
 		this.sizeX = 3;
 		this.sizeY = 5;
@@ -122,13 +122,13 @@ class TimerElm extends ChipElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return this.hasReset() ? 7 : 6;
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return 1;
 	}

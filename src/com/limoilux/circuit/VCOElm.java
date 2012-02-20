@@ -23,7 +23,7 @@ class VCOElm extends ChipElm
 	}
 
 	@Override
-	void setupPins()
+	public void setupPins()
 	{
 		this.sizeX = 2;
 		this.sizeY = 4;
@@ -120,13 +120,13 @@ class VCOElm extends ChipElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 6;
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return 3;
 	}

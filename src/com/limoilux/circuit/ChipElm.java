@@ -50,7 +50,7 @@ abstract class ChipElm extends CircuitElm
 		}
 	}
 
-	boolean needsBits()
+	public boolean needsBits()
 	{
 		return false;
 	}
@@ -64,7 +64,7 @@ abstract class ChipElm extends CircuitElm
 		this.flags |= s == 1 ? this.FLAG_SMALL : 0;
 	}
 
-	abstract void setupPins();
+	public abstract void setupPins();
 
 	@Override
 	public void draw(Graphics g)
@@ -186,7 +186,7 @@ abstract class ChipElm extends CircuitElm
 	}
 
 	@Override
-	abstract int getVoltageSourceCount(); // output count
+	public abstract int getVoltageSourceCount(); // output count
 
 	@Override
 	void setVoltageSource(int j, int vs)
@@ -218,7 +218,7 @@ abstract class ChipElm extends CircuitElm
 		}
 	}
 
-	void execute()
+	public void execute()
 	{
 	}
 

@@ -23,7 +23,7 @@ class GroundElm extends CircuitElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 1;
 	}
@@ -66,7 +66,7 @@ class GroundElm extends CircuitElm
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return 1;
 	}

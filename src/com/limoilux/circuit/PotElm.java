@@ -46,7 +46,7 @@ class PotElm extends CircuitElm implements AdjustmentListener
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 3;
 	}

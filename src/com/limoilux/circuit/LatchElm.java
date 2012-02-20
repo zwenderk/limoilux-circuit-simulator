@@ -22,7 +22,7 @@ class LatchElm extends ChipElm
 	}
 
 	@Override
-	boolean needsBits()
+	public boolean needsBits()
 	{
 		return true;
 	}
@@ -30,7 +30,7 @@ class LatchElm extends ChipElm
 	int loadPin;
 
 	@Override
-	void setupPins()
+	public void setupPins()
 	{
 		this.sizeX = 2;
 		this.sizeY = this.bits + 1;
@@ -52,7 +52,7 @@ class LatchElm extends ChipElm
 	boolean lastLoad = false;
 
 	@Override
-	void execute()
+	public void execute()
 	{
 		int i;
 		if (this.pins[this.loadPin].value && !this.lastLoad)
@@ -66,13 +66,13 @@ class LatchElm extends ChipElm
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return this.bits;
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return this.bits * 2 + 1;
 	}

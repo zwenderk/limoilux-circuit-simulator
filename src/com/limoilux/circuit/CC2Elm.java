@@ -39,7 +39,7 @@ class CC2Elm extends ChipElm
 	}
 
 	@Override
-	void setupPins()
+	public void setupPins()
 	{
 		this.sizeX = 2;
 		this.sizeY = 3;
@@ -78,13 +78,13 @@ class CC2Elm extends ChipElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 3;
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return 1;
 	}

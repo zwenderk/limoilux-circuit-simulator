@@ -29,7 +29,7 @@ class OutputElm extends CircuitElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 1;
 	}

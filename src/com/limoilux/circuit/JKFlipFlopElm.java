@@ -23,7 +23,7 @@ class JKFlipFlopElm extends ChipElm
 	}
 
 	@Override
-	void setupPins()
+	public void setupPins()
 	{
 		this.sizeX = 2;
 		this.sizeY = 3;
@@ -41,19 +41,19 @@ class JKFlipFlopElm extends ChipElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 5;
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return 2;
 	}
 
 	@Override
-	void execute()
+	public void execute()
 	{
 		if (!this.pins[1].value && this.lastClock)
 		{

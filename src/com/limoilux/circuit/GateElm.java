@@ -125,7 +125,7 @@ abstract class GateElm extends CircuitElm
 	Point pcircle, linePoints[];
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return this.inputCount + 1;
 	}
@@ -141,7 +141,7 @@ abstract class GateElm extends CircuitElm
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return 1;
 	}

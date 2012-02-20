@@ -186,7 +186,7 @@ class TriacElm extends CircuitElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 3;
 	}

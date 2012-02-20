@@ -22,13 +22,13 @@ public class ADCElm extends ChipElm
 	}
 
 	@Override
-	boolean needsBits()
+	public boolean needsBits()
 	{
 		return true;
 	}
 
 	@Override
-	void setupPins()
+	public void setupPins()
 	{
 		this.sizeX = 2;
 		this.sizeY = this.bits > 2 ? this.bits : 2;
@@ -45,7 +45,7 @@ public class ADCElm extends ChipElm
 	}
 
 	@Override
-	void execute()
+	public void execute()
 	{
 		int imax = (1 << this.bits) - 1;
 		// if we round, the half-flash doesn't work
@@ -61,13 +61,13 @@ public class ADCElm extends ChipElm
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return this.bits;
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return this.bits + 2;
 	}

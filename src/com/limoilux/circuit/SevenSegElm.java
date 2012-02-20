@@ -26,7 +26,7 @@ class SevenSegElm extends ChipElm
 	Color darkred;
 
 	@Override
-	void setupPins()
+	public void setupPins()
 	{
 		this.darkred = new Color(30, 0, 0);
 		this.sizeX = 4;
@@ -71,13 +71,13 @@ class SevenSegElm extends ChipElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 7;
 	}
 
 	@Override
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return 0;
 	}

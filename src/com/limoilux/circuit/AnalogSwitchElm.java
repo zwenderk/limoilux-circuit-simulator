@@ -141,7 +141,7 @@ class AnalogSwitchElm extends CircuitElm
 	}
 
 	@Override
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 3;
 	}

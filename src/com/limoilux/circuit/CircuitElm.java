@@ -378,7 +378,7 @@ public abstract class CircuitElm implements Editable
 	{
 	}
 
-	int getVoltageSourceCount()
+	public int getVoltageSourceCount()
 	{
 		return 0;
 	}
@@ -413,7 +413,7 @@ public abstract class CircuitElm implements Editable
 		return false;
 	}
 
-	int getPostCount()
+	public int getPostCount()
 	{
 		return 2;
 	}
