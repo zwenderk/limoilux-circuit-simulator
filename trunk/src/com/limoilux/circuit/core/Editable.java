@@ -1,5 +1,7 @@
 
-package com.limoilux.circuit;
+package com.limoilux.circuit.core;
+
+import com.limoilux.circuit.EditInfo;
 
 public interface Editable
 {

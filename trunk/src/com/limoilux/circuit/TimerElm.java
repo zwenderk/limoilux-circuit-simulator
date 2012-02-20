@@ -5,21 +5,24 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 
-class TimerElm extends ChipElm
+public class TimerElm extends ChipElm
 {
-	final int FLAG_RESET = 2;
-	final int N_DIS = 0;
-	final int N_TRIG = 1;
-	final int N_THRES = 2;
-	final int N_VIN = 3;
-	final int N_CTL = 4;
-	final int N_OUT = 5;
-	final int N_RST = 6;
+	private static final int FLAG_RESET = 2;
+	private static final int N_DIS = 0;
+	private static final int N_TRIG = 1;
+	private static final int N_THRES = 2;
+	private static final int N_VIN = 3;
+	private static final int N_CTL = 4;
+	private static final int N_OUT = 5;
+	private static final int N_RST = 6;
+	
+	private boolean setOut, out;
+
 
 	@Override
 	public int getDefaultFlags()
 	{
-		return this.FLAG_RESET;
+		return TimerElm.FLAG_RESET;
 	}
 
 	public TimerElm(int xx, int yy)
@@ -44,15 +47,15 @@ class TimerElm extends ChipElm
 		this.sizeX = 3;
 		this.sizeY = 5;
 		this.pins = new Pin[7];
-		this.pins[this.N_DIS] = new Pin(1, this.SIDE_W, "dis");
-		this.pins[this.N_TRIG] = new Pin(3, this.SIDE_W, "tr");
-		this.pins[this.N_TRIG].lineOver = true;
-		this.pins[this.N_THRES] = new Pin(4, this.SIDE_W, "th");
-		this.pins[this.N_VIN] = new Pin(1, this.SIDE_N, "Vin");
-		this.pins[this.N_CTL] = new Pin(1, this.SIDE_S, "ctl");
-		this.pins[this.N_OUT] = new Pin(2, this.SIDE_E, "out");
-		this.pins[this.N_OUT].output = this.pins[this.N_OUT].state = true;
-		this.pins[this.N_RST] = new Pin(1, this.SIDE_E, "rst");
+		this.pins[TimerElm.N_DIS] = new Pin(1, this.SIDE_W, "dis");
+		this.pins[TimerElm.N_TRIG] = new Pin(3, this.SIDE_W, "tr");
+		this.pins[TimerElm.N_TRIG].lineOver = true;
+		this.pins[TimerElm.N_THRES] = new Pin(4, this.SIDE_W, "th");
+		this.pins[TimerElm.N_VIN] = new Pin(1, this.SIDE_N, "Vin");
+		this.pins[TimerElm.N_CTL] = new Pin(1, this.SIDE_S, "ctl");
+		this.pins[TimerElm.N_OUT] = new Pin(2, this.SIDE_E, "out");
+		this.pins[TimerElm.N_OUT].output = this.pins[TimerElm.N_OUT].state = true;
+		this.pins[TimerElm.N_RST] = new Pin(1, this.SIDE_E, "rst");
 	}
 
 	@Override
@@ -61,7 +64,7 @@ class TimerElm extends ChipElm
 		return true;
 	}
 
-	boolean hasReset()
+	public boolean hasReset()
 	{
 		return (this.flags & this.FLAG_RESET) != 0;
 	}
@@ -70,12 +73,12 @@ class TimerElm extends ChipElm
 	public void stamp()
 	{
 		// stamp voltage divider to put ctl pin at 2/3 V
-		CircuitElm.cirSim.stampResistor(this.nodes[this.N_VIN], this.nodes[this.N_CTL], 5000);
-		CircuitElm.cirSim.stampResistor(this.nodes[this.N_CTL], 0, 10000);
+		CircuitElm.cirSim.stampResistor(this.nodes[TimerElm.N_VIN], this.nodes[TimerElm.N_CTL], 5000);
+		CircuitElm.cirSim.stampResistor(this.nodes[TimerElm.N_CTL], 0, 10000);
 		// output pin
-		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[this.N_OUT], this.pins[this.N_OUT].voltSource);
+		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[TimerElm.N_OUT], this.pins[TimerElm.N_OUT].voltSource);
 		// discharge pin
-		CircuitElm.cirSim.stampNonLinear(this.nodes[this.N_DIS]);
+		CircuitElm.cirSim.stampNonLinear(this.nodes[TimerElm.N_DIS]);
 	}
 
 	@Override
@@ -83,24 +86,23 @@ class TimerElm extends ChipElm
 	{
 		// need current for V, discharge, control; output current is
 		// calculated for us, and other pins have no current
-		this.pins[this.N_VIN].current = (this.volts[this.N_CTL] - this.volts[this.N_VIN]) / 5000;
-		this.pins[this.N_CTL].current = -this.volts[this.N_CTL] / 10000 - this.pins[this.N_VIN].current;
-		this.pins[this.N_DIS].current = !this.out && !this.setOut ? -this.volts[this.N_DIS] / 10 : 0;
+		this.pins[TimerElm.N_VIN].current = (this.volts[TimerElm.N_CTL] - this.volts[TimerElm.N_VIN]) / 5000;
+		this.pins[TimerElm.N_CTL].current = -this.volts[TimerElm.N_CTL] / 10000 - this.pins[TimerElm.N_VIN].current;
+		this.pins[TimerElm.N_DIS].current = !this.out && !this.setOut ? -this.volts[TimerElm.N_DIS] / 10 : 0;
 	}
 
-	boolean setOut, out;
 
 	@Override
 	public void startIteration()
 	{
-		this.out = this.volts[this.N_OUT] > this.volts[this.N_VIN] / 2;
+		this.out = this.volts[TimerElm.N_OUT] > this.volts[TimerElm.N_VIN] / 2;
 		this.setOut = false;
 		// check comparators
-		if (this.volts[this.N_CTL] / 2 > this.volts[this.N_TRIG])
+		if (this.volts[TimerElm.N_CTL] / 2 > this.volts[TimerElm.N_TRIG])
 		{
 			this.setOut = this.out = true;
 		}
-		if (this.volts[this.N_THRES] > this.volts[this.N_CTL] || this.hasReset() && this.volts[this.N_RST] < .7)
+		if (this.volts[TimerElm.N_THRES] > this.volts[TimerElm.N_CTL] || this.hasReset() && this.volts[TimerElm.N_RST] < .7)
 		{
 			this.out = false;
 		}
@@ -116,11 +118,11 @@ class TimerElm extends ChipElm
 		// trigger is low and threshold is high.
 		if (!this.out && !this.setOut)
 		{
-			CircuitElm.cirSim.stampResistor(this.nodes[this.N_DIS], 0, 10);
+			CircuitElm.cirSim.stampResistor(this.nodes[TimerElm.N_DIS], 0, 10);
 		}
 		// output
-		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[this.N_OUT], this.pins[this.N_OUT].voltSource,
-				this.out ? this.volts[this.N_VIN] : 0);
+		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[TimerElm.N_OUT], this.pins[TimerElm.N_OUT].voltSource,
+				this.out ? this.volts[TimerElm.N_VIN] : 0);
 	}
 
 	@Override

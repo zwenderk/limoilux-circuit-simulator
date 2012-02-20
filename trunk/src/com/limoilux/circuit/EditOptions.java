@@ -2,6 +2,7 @@
 package com.limoilux.circuit;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.core.Editable;
 
 class EditOptions implements Editable
 {
