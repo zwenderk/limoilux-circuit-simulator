@@ -221,6 +221,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public CirSim()
 	{
 		super("Limoilux Circuit Simulator v1.1");
+		
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		this.mouseMotionList = new MyMouseMotionListener();
 		this.mouseList = new MyMouseListener();
