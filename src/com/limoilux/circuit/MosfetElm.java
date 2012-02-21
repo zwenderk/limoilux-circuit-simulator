@@ -19,7 +19,7 @@ public class MosfetElm extends CircuitElm
 	int FLAG_DIGITAL = 4;
 	double vt;
 
-	MosfetElm(int xx, int yy, boolean pnpflag)
+	public MosfetElm(int xx, int yy, boolean pnpflag)
 	{
 		super(xx, yy);
 		this.pnp = pnpflag ? -1 : 1;
@@ -328,7 +328,7 @@ public class MosfetElm extends CircuitElm
 		}
 	}
 
-	void getFetInfo(String arr[], String n)
+	public void getFetInfo(String arr[], String n)
 	{
 		arr[0] = (this.pnp == -1 ? "p-" : "n-") + n;
 		arr[0] += " (Vt = " + CircuitElm.getVoltageText(this.pnp * this.vt) + ")";
