@@ -7,6 +7,8 @@ import java.awt.Point;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.core.CoreUtil;
+import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class TransformerElm extends CircuitElm
@@ -106,9 +108,9 @@ public class TransformerElm extends CircuitElm
 		}
 		for (i = 0; i != 2; i++)
 		{
-			CircuitElm.drawDots(g, this.ptEnds[i], this.ptCoil[i], this.curcount[i]);
-			CircuitElm.drawDots(g, this.ptCoil[i], this.ptCoil[i + 2], this.curcount[i]);
-			CircuitElm.drawDots(g, this.ptEnds[i + 2], this.ptCoil[i + 2], -this.curcount[i]);
+			DrawUtil.drawDots(g, this.ptEnds[i], this.ptCoil[i], this.curcount[i]);
+			DrawUtil.drawDots(g, this.ptCoil[i], this.ptCoil[i + 2], this.curcount[i]);
+			DrawUtil.drawDots(g, this.ptEnds[i + 2], this.ptCoil[i + 2], -this.curcount[i]);
 		}
 
 		this.drawPosts(g);
@@ -120,22 +122,22 @@ public class TransformerElm extends CircuitElm
 	{
 		super.setPoints();
 		this.point2.y = this.point1.y;
-		this.ptEnds = CircuitElm.newPointArray(4);
-		this.ptCoil = CircuitElm.newPointArray(4);
-		this.ptCore = CircuitElm.newPointArray(4);
+		this.ptEnds = CoreUtil.newPointArray(4);
+		this.ptCoil = CoreUtil.newPointArray(4);
+		this.ptCore = CoreUtil.newPointArray(4);
 		this.ptEnds[0] = this.point1;
 		this.ptEnds[1] = this.point2;
-		CircuitElm.interpPoint(this.point1, this.point2, this.ptEnds[2], 0, -this.dsign * this.width);
-		CircuitElm.interpPoint(this.point1, this.point2, this.ptEnds[3], 1, -this.dsign * this.width);
+		CoreUtil.interpPoint(this.point1, this.point2, this.ptEnds[2], 0, -this.dsign * this.width);
+		CoreUtil.interpPoint(this.point1, this.point2, this.ptEnds[3], 1, -this.dsign * this.width);
 		double ce = .5 - 12 / this.dn;
 		double cd = .5 - 2 / this.dn;
 		int i;
 		for (i = 0; i != 4; i += 2)
 		{
-			CircuitElm.interpPoint(this.ptEnds[i], this.ptEnds[i + 1], this.ptCoil[i], ce);
-			CircuitElm.interpPoint(this.ptEnds[i], this.ptEnds[i + 1], this.ptCoil[i + 1], 1 - ce);
-			CircuitElm.interpPoint(this.ptEnds[i], this.ptEnds[i + 1], this.ptCore[i], cd);
-			CircuitElm.interpPoint(this.ptEnds[i], this.ptEnds[i + 1], this.ptCore[i + 1], 1 - cd);
+			CoreUtil.interpPoint(this.ptEnds[i], this.ptEnds[i + 1], this.ptCoil[i], ce);
+			CoreUtil.interpPoint(this.ptEnds[i], this.ptEnds[i + 1], this.ptCoil[i + 1], 1 - ce);
+			CoreUtil.interpPoint(this.ptEnds[i], this.ptEnds[i + 1], this.ptCore[i], cd);
+			CoreUtil.interpPoint(this.ptEnds[i], this.ptEnds[i + 1], this.ptCore[i + 1], 1 - cd);
 		}
 	}
 
