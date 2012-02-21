@@ -856,10 +856,10 @@ public class Scope
 				 * getRaster().getDataBuffer()); DataBufferInt dbi =
 				 * (DataBufferInt) db; pixels = dbi.getData();
 				 */
-				Class biclass = Class.forName("java.awt.image.BufferedImage");
-				Class dbiclass = Class.forName("java.awt.image.DataBufferInt");
-				Class rasclass = Class.forName("java.awt.image.Raster");
-				Constructor cstr = biclass.getConstructor(new Class[]
+				Class<?> biclass = Class.forName("java.awt.image.BufferedImage");
+				Class<?> dbiclass = Class.forName("java.awt.image.DataBufferInt");
+				Class<?> rasclass = Class.forName("java.awt.image.Raster");
+				Constructor<?> cstr = biclass.getConstructor(new Class[]
 				{ int.class, int.class, int.class });
 				this.image = (Image) cstr.newInstance(new Object[]
 				{ new Integer(w), new Integer(h), new Integer(BufferedImage.TYPE_INT_RGB) });
@@ -885,7 +885,7 @@ public class Scope
 			this.imageSource = new MemoryImageSource(w, h, this.pixels, 0, w);
 			this.imageSource.setAnimated(true);
 			this.imageSource.setFullBufferUpdates(true);
-			this.image = this.sim.scopeCanvas.createImage(this.imageSource);
+			this.image = this.sim.circuitCanvas.createImage(this.imageSource);
 			
 		}
 		this.dpixels = new float[w * h];
