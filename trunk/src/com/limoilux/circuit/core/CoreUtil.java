@@ -11,7 +11,6 @@ public class CoreUtil
 
 	private CoreUtil()
 	{
-
 	}
 
 	public static int getRandomInt(int max)
