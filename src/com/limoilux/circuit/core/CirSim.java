@@ -96,8 +96,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	public static final int MODE_DRAG_COLUMN = 3;
 
 	private long lastTime = 0, lastFrameTime, lastIterTime, secTime = 0;
-	private int frames = 0;
-	private int steps = 0;
 
 	public final Frame mainContainer;
 
@@ -129,7 +127,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private boolean circuitNonLinear;
 	private int circuitMatrixSize, circuitMatrixFullSize;
 	private boolean circuitNeedsMap;
-	private boolean useFrame = true;
 	private int scopeCount;
 	private Scope scopes[];
 	private int scopeColCount[];
@@ -218,7 +215,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	{
 		super("Limoilux Circuit Simulator v1.1");
 
-		this.useFrame = false;
 
 		this.mouseMotionList = new MyMouseMotionListener();
 		this.mouseList = new MyMouseListener();
@@ -794,8 +790,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 			if (sysTime - this.secTime >= 1000)
 			{
-				this.frames = 0;
-				this.steps = 0;
 				this.secTime = sysTime;
 			}
 			this.lastTime = sysTime;
@@ -964,7 +958,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			g.drawRect(this.selectedArea.x, this.selectedArea.y, this.selectedArea.width, this.selectedArea.height);
 		}
 		this.mouseElm = realMouseElm;
-		this.frames++;
 		/*
 		 * g.setColor(Color.white); g.drawString("Framerate: " + framerate, 10,
 		 * 10); g.drawString("Steprate: " + steprate, 10, 30);
@@ -1959,7 +1952,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 				CircuitElm ce = this.getElm(i);
 				ce.startIteration();
 			}
-			this.steps++;
 			final int subiterCount = 5000;
 			for (subiter = 0; subiter != subiterCount; subiter++)
 			{
