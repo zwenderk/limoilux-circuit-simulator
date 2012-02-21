@@ -22,6 +22,7 @@ import com.limoilux.circuit.ProbeElm;
 import com.limoilux.circuit.TransistorElm;
 import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.core.CoreUtil;
 
 public class Scope
 {
@@ -647,15 +648,15 @@ public class Scope
 		{
 			if (this.value != 0)
 			{
-				g.drawString(CircuitElm.getUnitText(realMaxV, this.elm.getScopeUnits(this.value)), x, yt);
+				g.drawString(CoreUtil.getUnitText(realMaxV, this.elm.getScopeUnits(this.value)), x, yt);
 			}
 			else if (this.showV)
 			{
-				g.drawString(CircuitElm.getVoltageText(realMaxV), x, yt);
+				g.drawString(CoreUtil.getVoltageText(realMaxV), x, yt);
 			}
 			else if (this.showI)
 			{
-				g.drawString(CircuitElm.getCurrentText(realMaxI), x, yt);
+				g.drawString(CoreUtil.getCurrentText(realMaxI), x, yt);
 			}
 			yt += 15;
 		}
@@ -664,15 +665,15 @@ public class Scope
 			int ym = this.rect.y + this.rect.height - 5;
 			if (this.value != 0)
 			{
-				g.drawString(CircuitElm.getUnitText(realMinV, this.elm.getScopeUnits(this.value)), x, ym);
+				g.drawString(CoreUtil.getUnitText(realMinV, this.elm.getScopeUnits(this.value)), x, ym);
 			}
 			else if (this.showV)
 			{
-				g.drawString(CircuitElm.getVoltageText(realMinV), x, ym);
+				g.drawString(CoreUtil.getVoltageText(realMinV), x, ym);
 			}
 			else if (this.showI)
 			{
-				g.drawString(CircuitElm.getCurrentText(realMinI), x, ym);
+				g.drawString(CoreUtil.getCurrentText(realMinI), x, ym);
 			}
 		}
 		if (this.text != null && this.rect.y + this.rect.height > yt + 5)
@@ -682,7 +683,7 @@ public class Scope
 		}
 		if (this.showFreq && freq != 0 && this.rect.y + this.rect.height > yt + 5)
 		{
-			g.drawString(CircuitElm.getUnitText(freq, "Hz"), x, yt);
+			g.drawString(CoreUtil.getUnitText(freq, "Hz"), x, yt);
 		}
 		if (this.ptr > 5 && !this.lockScale)
 		{
