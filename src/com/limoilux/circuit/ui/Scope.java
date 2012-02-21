@@ -885,7 +885,8 @@ public class Scope
 			this.imageSource = new MemoryImageSource(w, h, this.pixels, 0, w);
 			this.imageSource.setAnimated(true);
 			this.imageSource.setFullBufferUpdates(true);
-			this.image = this.sim.circuitCanvas.createImage(this.imageSource);
+			this.image = this.sim.scopeCanvas.createImage(this.imageSource);
+			
 		}
 		this.dpixels = new float[w * h];
 		this.draw_ox = this.draw_oy = -1;
