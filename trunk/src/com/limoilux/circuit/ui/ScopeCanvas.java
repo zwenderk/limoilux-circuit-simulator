@@ -1,4 +1,3 @@
-
 package com.limoilux.circuit.ui;
 
 import java.awt.Canvas;
@@ -7,17 +6,12 @@ import java.awt.Graphics;
 
 import com.limoilux.circuit.core.CirSim;
 
-public class CircuitCanvas extends Canvas
+public class ScopeCanvas extends Canvas
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3418969740606491502L;
-
 	@Deprecated
 	private final CirSim cirSim;
 
-	public CircuitCanvas(CirSim cirSim)
+	public ScopeCanvas(CirSim cirSim)
 	{
 		this.cirSim = cirSim;
 	}
