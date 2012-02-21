@@ -45,9 +45,10 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
+import javax.swing.JFrame;
 
 import com.limoilux.circuit.CapacitorElm;
 import com.limoilux.circuit.CurrentElm;
@@ -70,7 +71,7 @@ import com.limoilux.circuit.ui.RowInfo;
 import com.limoilux.circuit.ui.Scope;
 import com.limoilux.circuit.ui.io.MigrationWizard;
 
-public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
+public class CirSim extends JFrame implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
 {
 	/**
 	 * 
@@ -104,7 +105,6 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	public static EditDialog editDialog;
 	public static MigrationWizard impDialog;
 
-	private String baseURL = "http://www.falstad.com/circuit/";
 	private String startCircuit = null;
 	private String startLabel = null;
 	private String startCircuitText = null;
