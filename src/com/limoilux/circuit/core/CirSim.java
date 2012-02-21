@@ -43,6 +43,7 @@ import java.io.File;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.StringTokenizer;
@@ -214,7 +215,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public CirSim()
 	{
 		super("Limoilux Circuit Simulator v1.1");
-
 
 		this.mouseMotionList = new MyMouseMotionListener();
 		this.mouseList = new MyMouseListener();
@@ -582,26 +582,34 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		return mi;
 	}
 
-	private CheckboxMenuItem getClassCheckItem(String s, String t)
+	private CheckboxMenuItem getClassCheckItem(String s, String className)
 	{
+		int dt = 0;
+		Class<?> classPath = null;
+		CircuitElm element = null;
+
 		try
 		{
-			Class<?> c = Class.forName("com.limoilux.circuit." + t);
-			CircuitElm elm = this.constructElement(c, 0, 0);
-			this.register(c, elm);
-			int dt = 0;
-			if (elm.needsShortcut() && elm.getDumpClass() == c)
-			{
-				dt = elm.getDumpType();
-				s += " (" + (char) dt + ")";
-			}
-			elm.delete();
+			classPath = Class.forName("com.limoilux.circuit." + className);
 		}
-		catch (Exception ee)
+		catch (ClassNotFoundException e)
 		{
-			ee.printStackTrace();
+			e.printStackTrace();
 		}
-		return this.getCheckItem(s, t);
+
+		element = this.constructElement(classPath, 0, 0);
+
+		this.register(classPath, element);
+
+		if (element.needsShortcut() && element.getDumpClass() == classPath)
+		{
+			dt = element.getDumpType();
+			s += " (" + (char) dt + ")";
+		}
+
+		element.delete();
+
+		return this.getCheckItem(s, className);
 	}
 
 	private CheckboxMenuItem getCheckItem(String s, String t)
@@ -614,26 +622,27 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void register(Class<?> c, CircuitElm elm)
 	{
-		int t = elm.getDumpType();
-		if (t == 0)
+		Class<Scope> dumpClass = null;
+		int elementId = elm.getDumpType();
+		if (elementId == 0)
 		{
 			System.out.println("no dump type: " + c);
 			return;
 		}
 
-		Class<Scope> dclass = elm.getDumpClass();
-		if (this.dumpTypes[t] == dclass)
+		dumpClass = elm.getDumpClass();
+		if (this.dumpTypes[elementId] == dumpClass)
 		{
 			return;
 		}
 
-		if (this.dumpTypes[t] != null)
+		if (this.dumpTypes[elementId] != null)
 		{
-			System.out.println("dump type conflict: " + c + " " + this.dumpTypes[t]);
+			System.out.println("dump type conflict: " + c + " " + this.dumpTypes[elementId]);
 			return;
 		}
 
-		this.dumpTypes[t] = dclass;
+		this.dumpTypes[elementId] = dumpClass;
 	}
 
 	public String getAppletInfo()
@@ -2175,13 +2184,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		// Appel bloquand du wizard.
 		dialog.setVisible(true);
-		
+
 		if (dialog.isImport())
 		{
 			dump = dialog.getContent();
 			this.readSetup(dump);
 		}
-		
+
 		dialog.dispose();
 
 		// ????
@@ -2218,7 +2227,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		return dump;
 	}
 
-	private ByteArrayOutputStream readUrlData(URL url) throws java.io.IOException
+	private ByteArrayOutputStream readUrlData(URL url) throws IOException
 	{
 		Object o = url.getContent();
 		FilterInputStream fis = (FilterInputStream) o;
@@ -2757,47 +2766,61 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.needAnalyze();
 	}
 
-	private CircuitElm constructElement(Class<?> c, int x0, int y0)
+	private CircuitElm constructElement(Class<?> classType, int x0, int y0)
 	{
 		// find element class
-		Class<?> carr[] = new Class[2];
+		Class<?> carr[] = null;
 		// carr[0] = getClass();
-		carr[0] = carr[1] = int.class;
-		Constructor<?> cstr = null;
+
+		Object oarr[] = null;
+		Constructor<?> constructor = null;
+		CircuitElm elem = null;
+
+		carr = new Class[2];
+		carr[1] = int.class;
+		carr[0] = int.class;
+
 		try
 		{
-			cstr = c.getConstructor(carr);
+			System.out.println("CirSim construct:" + classType.toString());
+			constructor = classType.getConstructor(carr);
+
+			// invoke constructor with starting coordinates
+			oarr = new Object[2];
+			oarr[0] = new Integer(x0);
+			oarr[1] = new Integer(y0);
+
+			elem = (CircuitElm) constructor.newInstance(oarr);
 		}
-		catch (NoSuchMethodException ee)
+		catch (NoSuchMethodException e)
 		{
-			System.out.println("caught NoSuchMethodException " + c);
-			return null;
+			System.out.println("caught NoSuchMethodException " + classType);
 		}
-		catch (Exception ee)
+		catch (IllegalArgumentException e)
 		{
-			ee.printStackTrace();
-			return null;
+			e.printStackTrace();
+		}
+		catch (InstantiationException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IllegalAccessException e)
+		{
+			e.printStackTrace();
+		}
+		catch (InvocationTargetException e)
+		{
+			e.printStackTrace();
 		}
 
-		// invoke constructor with starting coordinates
-		Object oarr[] = new Object[2];
-		oarr[0] = new Integer(x0);
-		oarr[1] = new Integer(y0);
-		try
-		{
-			return (CircuitElm) cstr.newInstance(oarr);
-		}
-		catch (Exception ee)
-		{
-			ee.printStackTrace();
-		}
-		return null;
+		return elem;
 	}
 
 	private void doPopupMenu(MouseEvent e)
 	{
 		this.menuElm = this.mouseElm;
 		this.menuScope = -1;
+		
 		if (this.scopeSelected != -1)
 		{
 			PopupMenu m = this.scopes[this.scopeSelected].getMenu();
@@ -3610,13 +3633,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					return;
 				}
 			}
-			
-			//if (!CirSim.this.circuitArea.contains(e.getX(), e.getY()))
-			//{
-			//	System.out.println("!!!!");
-			//	return;
-			//}
-			
+
+			// if (!CirSim.this.circuitArea.contains(e.getX(), e.getY()))
+			// {
+			// System.out.println("!!!!");
+			// return;
+			// }
+
 			if (CirSim.this.dragElm != null)
 			{
 				CirSim.this.dragElm.drag(e.getX(), e.getY());
@@ -3693,21 +3716,21 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			CirSim.this.plotXElm = CirSim.this.plotYElm = null;
 			int bestDist = 100000;
 			int bestArea = 100000;
-			
+
 			for (i = 0; i < CirSim.this.elmList.size(); i++)
 			{
 				CircuitElm currentElement = CirSim.this.getElm(i);
 				if (currentElement.boundingBox.contains(x, y))
 				{
-					
+
 					int area = currentElement.boundingBox.width * currentElement.boundingBox.height;
 					int jn = currentElement.getPostCount();
-					
+
 					if (jn > 2)
 					{
 						jn = 2;
 					}
-					
+
 					for (int j = 0; j < jn; j++)
 					{
 						Point pt = currentElement.getPost(j);
@@ -3724,7 +3747,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 							CirSim.this.mouseElm = currentElement;
 						}
 					}
-					
+
 					if (currentElement.getPostCount() == 0)
 					{
 						CirSim.this.mouseElm = currentElement;
