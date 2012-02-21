@@ -3610,10 +3610,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 					return;
 				}
 			}
-			if (!CirSim.this.circuitArea.contains(e.getX(), e.getY()))
-			{
-				return;
-			}
+			
+			//if (!CirSim.this.circuitArea.contains(e.getX(), e.getY()))
+			//{
+			//	System.out.println("!!!!");
+			//	return;
+			//}
+			
 			if (CirSim.this.dragElm != null)
 			{
 				CirSim.this.dragElm.drag(e.getX(), e.getY());
@@ -3690,21 +3693,24 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			CirSim.this.plotXElm = CirSim.this.plotYElm = null;
 			int bestDist = 100000;
 			int bestArea = 100000;
-			for (i = 0; i != CirSim.this.elmList.size(); i++)
+			
+			for (i = 0; i < CirSim.this.elmList.size(); i++)
 			{
-				CircuitElm ce = CirSim.this.getElm(i);
-				if (ce.boundingBox.contains(x, y))
+				CircuitElm currentElement = CirSim.this.getElm(i);
+				if (currentElement.boundingBox.contains(x, y))
 				{
-					int j;
-					int area = ce.boundingBox.width * ce.boundingBox.height;
-					int jn = ce.getPostCount();
+					
+					int area = currentElement.boundingBox.width * currentElement.boundingBox.height;
+					int jn = currentElement.getPostCount();
+					
 					if (jn > 2)
 					{
 						jn = 2;
 					}
-					for (j = 0; j != jn; j++)
+					
+					for (int j = 0; j < jn; j++)
 					{
-						Point pt = ce.getPost(j);
+						Point pt = currentElement.getPost(j);
 						int dist = CoreUtil.distanceSq(x, y, pt.x, pt.y);
 
 						// if multiple elements have overlapping bounding boxes,
@@ -3715,12 +3721,13 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 						{
 							bestDist = dist;
 							bestArea = area;
-							CirSim.this.mouseElm = ce;
+							CirSim.this.mouseElm = currentElement;
 						}
 					}
-					if (ce.getPostCount() == 0)
+					
+					if (currentElement.getPostCount() == 0)
 					{
-						CirSim.this.mouseElm = ce;
+						CirSim.this.mouseElm = currentElement;
 					}
 				}
 			}
