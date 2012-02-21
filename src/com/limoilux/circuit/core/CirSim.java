@@ -71,9 +71,9 @@ import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditDialog;
 import com.limoilux.circuit.ui.EditOptions;
 import com.limoilux.circuit.ui.RowInfo;
-import com.limoilux.circuit.ui.Scope;
-import com.limoilux.circuit.ui.ScopeCanvas;
 import com.limoilux.circuit.ui.io.MigrationWizard;
+import com.limoilux.circuit.ui.scope.Scope;
+import com.limoilux.circuit.ui.scope.ScopeCanvas;
 
 public class CirSim extends JFrame implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
 {
