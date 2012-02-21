@@ -9,7 +9,6 @@ import java.awt.Button;
 import java.awt.Checkbox;
 import java.awt.CheckboxMenuItem;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.Font;
@@ -67,9 +66,9 @@ import com.limoilux.circuit.ui.CircuitNodeLink;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditDialog;
 import com.limoilux.circuit.ui.EditOptions;
-import com.limoilux.circuit.ui.ImportDialog;
 import com.limoilux.circuit.ui.RowInfo;
 import com.limoilux.circuit.ui.Scope;
+import com.limoilux.circuit.ui.io.MigrationWizard;
 
 public class CirSim extends Frame implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
 {
@@ -105,7 +104,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	public static String muString = "u";
 	public static String ohmString = "ohm";
 	public static EditDialog editDialog;
-	public static ImportDialog impDialog;
+	public static MigrationWizard impDialog;
 
 	private String baseURL = "http://www.falstad.com/circuit/";
 	private String startCircuit = null;
@@ -160,8 +159,8 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 	private Label titleLabel;
 	private Button resetButton;
 	private Button dumpMatrixButton;
-	private MenuItem exportItem, importItem, exitItem, undoItem, redoItem, cutItem, copyItem,
-			pasteItem, selectAllItem, optionsItem;
+	private MenuItem exportItem, importItem, exitItem, undoItem, redoItem, cutItem, copyItem, pasteItem, selectAllItem,
+			optionsItem;
 	private Menu optionsMenu;
 	public Checkbox stoppedCheck;
 	public CheckboxMenuItem dotsCheckItem;
@@ -2174,33 +2173,27 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 		CirSim.editDialog.show();
 	}
 
-	private void doImport(boolean imp)
+	/**
+	 * Montre un dialog de migration.
+	 */
+	private void showMigrationDialog()
 	{
-		ImportDialog impDialog = null;
-		String dump = "";
+		String dump = this.dumpCircuit();
+		MigrationWizard dialog = new MigrationWizard(this.mainContainer, dump, this.winSize);
 
-		if (!imp)
+		// Appel bloquand du wizard.
+		dialog.setVisible(true);
+		
+		if (dialog.isImport())
 		{
-			dump = this.dumpCircuit();
-		}
-		
-		impDialog = new ImportDialog(this,this.mainContainer, dump, this.winSize);
-		
-		impDialog.setVisible(true);
-		
-		this.pushUndo();
-		
-		impDialog.setVisible(false);
-		
-		dump = impDialog.getContent();
-		
-		if (dump != null)
-		{
+			dump = dialog.getContent();
 			this.readSetup(dump);
-			System.out.println(dump);
 		}
 		
-		System.out.println("import done");
+		dialog.dispose();
+
+		// ????
+		this.pushUndo();
 	}
 
 	private String dumpCircuit()
@@ -3142,37 +3135,37 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			this.stoppedCheck.setState(false);
 			this.circuitCanvas.repaint();
 		}
-		
+
 		if (e.getSource() == this.dumpMatrixButton)
 		{
 			this.dumpMatrix = true;
 		}
-		
+
 		if (e.getSource() == this.exportItem)
 		{
-			this.doImport(false);
+			this.showMigrationDialog();
 		}
-		
+
 		if (e.getSource() == this.optionsItem)
 		{
 			this.doEdit(new EditOptions(this));
 		}
-		
+
 		if (e.getSource() == this.importItem)
 		{
-			this.doImport(true);
+			this.showMigrationDialog();
 		}
-		
+
 		if (e.getSource() == this.undoItem)
 		{
 			this.doUndo();
 		}
-		
+
 		if (e.getSource() == this.redoItem)
 		{
 			this.doRedo();
 		}
-		
+
 		if (ac.compareTo("Cut") == 0)
 		{
 			if (e.getSource() != this.elmCutMenuItem)
@@ -3181,7 +3174,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 			this.doCut();
 		}
-		
+
 		if (ac.compareTo("Copy") == 0)
 		{
 			if (e.getSource() != this.elmCopyMenuItem)
@@ -3190,38 +3183,38 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 			this.doCopy();
 		}
-		
+
 		if (ac.compareTo("Paste") == 0)
 		{
 			this.doPaste();
 		}
-		
+
 		if (e.getSource() == this.selectAllItem)
 		{
 			this.doSelectAll();
 		}
-		
+
 		if (e.getSource() == this.exitItem)
 		{
 			this.destroyFrame();
 			return;
 		}
-		
+
 		if (ac.compareTo("stackAll") == 0)
 		{
 			this.stackAll();
 		}
-		
+
 		if (ac.compareTo("unstackAll") == 0)
 		{
 			this.unstackAll();
 		}
-		
+
 		if (e.getSource() == this.elmEditMenuItem)
 		{
 			this.doEdit(this.menuElm);
 		}
-		
+
 		if (ac.compareTo("Delete") == 0)
 		{
 			if (e.getSource() != this.elmDeleteMenuItem)
@@ -3230,7 +3223,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 			this.doDelete();
 		}
-		
+
 		if (e.getSource() == this.elmScopeMenuItem && this.menuElm != null)
 		{
 			int i;
@@ -3254,7 +3247,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 			this.scopes[i].setElm(this.menuElm);
 		}
-		
+
 		if (this.menuScope != -1)
 		{
 			if (ac.compareTo("remove") == 0)
@@ -3295,7 +3288,7 @@ public class CirSim extends Frame implements ComponentListener, ActionListener, 
 			}
 			this.circuitCanvas.repaint();
 		}
-		
+
 		if (ac.indexOf("setup ") == 0)
 		{
 			this.pushUndo();
