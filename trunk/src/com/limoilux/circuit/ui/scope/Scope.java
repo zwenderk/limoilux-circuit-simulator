@@ -7,7 +7,10 @@ import java.awt.PopupMenu;
 import java.awt.Rectangle;
 import java.awt.event.ItemEvent;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferInt;
 import java.awt.image.MemoryImageSource;
+import java.awt.image.Raster;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.StringTokenizer;
@@ -45,7 +48,7 @@ public class Scope
 	public CircuitElm xElm;
 	public CircuitElm yElm;
 	public MemoryImageSource imageSource;
-	public Image image;
+	public BufferedImage image;
 	public int pixels[];
 	public int draw_ox, draw_oy;
 	public float dpixels[];
@@ -836,60 +839,42 @@ public class Scope
 		this.showMin = (flags & 256) != 0;
 	}
 
-	void allocImage()
+	private void allocImage()
 	{
 		this.pixels = null;
 		int w = this.rect.width;
 		int h = this.rect.height;
-		if (w == 0 || h == 0)
+		int size = w * h;
+
+		if (w > 0 && h > 0)
 		{
-			return;
-		}
-		if (this.sim.useBufferedImage)
-		{
-			try
+			if (this.sim.useBufferedImage)
 			{
-				/*
-				 * simulate the following code using reflection: dbimage = new
-				 * BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_RGB);
-				 * DataBuffer db = (DataBuffer)(((BufferedImage)dbimage).
-				 * getRaster().getDataBuffer()); DataBufferInt dbi =
-				 * (DataBufferInt) db; pixels = dbi.getData();
-				 */
-				Class<?> biclass = Class.forName("java.awt.image.BufferedImage");
-				Class<?> dbiclass = Class.forName("java.awt.image.DataBufferInt");
-				Class<?> rasclass = Class.forName("java.awt.image.Raster");
-				Constructor<?> cstr = biclass.getConstructor(new Class[]
-				{ int.class, int.class, int.class });
-				this.image = (Image) cstr.newInstance(new Object[]
-				{ new Integer(w), new Integer(h), new Integer(BufferedImage.TYPE_INT_RGB) });
-				Method m = biclass.getMethod("getRaster");
-				Object ras = m.invoke(this.image);
-				Object db = rasclass.getMethod("getDataBuffer").invoke(ras);
-				this.pixels = (int[]) dbiclass.getMethod("getData").invoke(db);
+				this.image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+				Raster raster = this.image.getRaster();
+				DataBuffer dbu = raster.getDataBuffer();
+				DataBufferInt dbi = (DataBufferInt) dbu;
+				this.pixels = dbi.getData();
 			}
-			catch (Exception ee)
+
+			if (this.pixels == null)
 			{
-				// ee.printStackTrace();
-				System.out.println("BufferedImage failed");
+				this.pixels = new int[size];
+
+				for (int i = 0; i < size; i++)
+				{
+					this.pixels[i] = 0xFF000000;
+				}
+
+				this.imageSource = new MemoryImageSource(w, h, this.pixels, 0, w);
+				this.imageSource.setAnimated(true);
+				this.imageSource.setFullBufferUpdates(true);
+				this.image = (BufferedImage) this.sim.circuitCanvas.createImage(this.imageSource);
 			}
+
+			this.dpixels = new float[size];
+			this.draw_ox = this.draw_oy = -1;
 		}
-		if (this.pixels == null)
-		{
-			this.pixels = new int[w * h];
-			int i;
-			for (i = 0; i != w * h; i++)
-			{
-				this.pixels[i] = 0xFF000000;
-			}
-			this.imageSource = new MemoryImageSource(w, h, this.pixels, 0, w);
-			this.imageSource.setAnimated(true);
-			this.imageSource.setFullBufferUpdates(true);
-			this.image = this.sim.circuitCanvas.createImage(this.imageSource);
-			
-		}
-		this.dpixels = new float[w * h];
-		this.draw_ox = this.draw_oy = -1;
 	}
 
 	public void handleMenu(ItemEvent e, Object mi)
