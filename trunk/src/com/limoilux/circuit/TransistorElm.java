@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 import com.limoilux.circuit.ui.EditInfo;
-import com.limoilux.circuit.ui.Scope;
+import com.limoilux.circuit.ui.scope.Scope;
 
 public class TransistorElm extends CircuitElm
 {
