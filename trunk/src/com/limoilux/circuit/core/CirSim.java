@@ -221,7 +221,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public CirSim()
 	{
 		super("Limoilux Circuit Simulator v1.1");
-		
+
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		this.mouseMotionList = new MyMouseMotionListener();
@@ -277,17 +277,16 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.circuitCanvas.addKeyListener(this.keyList);
 
 		JPanel pane = new JPanel();
-		//pane.add(this.circuitCanvas);
-		//this.scrollPane = new JScrollPane(pane);
+		// pane.add(this.circuitCanvas);
+		// this.scrollPane = new JScrollPane(pane);
 		this.mainContainer.add(this.circuitCanvas);
-		
-		
+
 		this.scopeCanvas = new ScopeCanvas(this);
 		this.scopeCanvas.addComponentListener(this);
 		this.scopeCanvas.addMouseMotionListener(this.mouseMotionList);
 		this.scopeCanvas.addMouseListener(this.mouseList);
 		this.scopeCanvas.addKeyListener(this.keyList);
-		//this.mainContainer.add(this.scopeCanvas);
+		// this.mainContainer.add(this.scopeCanvas);
 
 		this.mainMenu = new PopupMenu();
 		MenuBar menubar = null;
@@ -2227,31 +2226,77 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private String dumpCircuit()
 	{
-		int i;
-		int f = this.dotsCheckItem.getState() ? 1 : 0;
-		f |= this.smallGridCheckItem.getState() ? 2 : 0;
-		f |= this.voltsCheckItem.getState() ? 0 : 4;
-		f |= this.powerCheckItem.getState() ? 8 : 0;
-		f |= this.showValuesCheckItem.getState() ? 0 : 16;
+		String dump = "";
+		String tempDump = "";
+
+		int f = 0;
+
+		// f = this.dotsCheckItem.getState() ? 1 : 0;
+		if (this.dotsCheckItem.getState())
+		{
+			f = 1;
+		}
+
+		// f |= this.smallGridCheckItem.getState() ? 2 : 0;
+		if (this.smallGridCheckItem.getState())
+		{
+			f |= 2;
+		}
+
+		// f |= this.voltsCheckItem.getState() ? 0 : 4;
+		if (!this.voltsCheckItem.getState())
+		{
+			f |= 4;
+		}
+
+		// f |= this.powerCheckItem.getState() ? 8 : 0;
+		if (this.powerCheckItem.getState())
+		{
+			f |= 8;
+		}
+
+		// f |= this.showValuesCheckItem.getState() ? 0 : 16;
+		if (!this.showValuesCheckItem.getState())
+		{
+			f |= 16;
+		}
+
 		// 32 = linear scale in afilter
-		String dump = "$ " + f + " " + this.timeStep + " " + this.getIterCount() + " " + this.currentBar.getValue()
-				+ " " + CircuitElm.voltageRange + " " + this.powerBar.getValue() + "\n";
-		for (i = 0; i != this.elmList.size(); i++)
+		// Construire le String de dump
+		dump = "$ ";
+
+		dump += f + " ";
+		dump += this.timeStep + " ";
+		dump += this.getIterCount() + " ";
+		dump += this.currentBar.getValue() + " ";
+		dump += CircuitElm.voltageRange + " ";
+		dump += this.powerBar.getValue();
+
+		dump += "\n";
+
+		for (int i = 0; i < this.elmList.size(); i++)
 		{
 			dump += this.getElm(i).dump() + "\n";
 		}
-		for (i = 0; i != this.scopeCount; i++)
+
+		for (int i = 0; i < this.scopeCount; i++)
 		{
-			String d = this.scopes[i].dump();
-			if (d != null)
+			tempDump = this.scopes[i].dump();
+			if (tempDump != null)
 			{
-				dump += d + "\n";
+				dump += tempDump + "\n";
 			}
 		}
+
 		if (this.hintType != -1)
 		{
-			dump += "h " + this.hintType + " " + this.hintItem1 + " " + this.hintItem2 + "\n";
+			dump += "h ";
+			dump += this.hintType + " ";
+			dump += this.hintItem1 + " ";
+			dump += this.hintItem2;
+			dump += "\n";
 		}
+		
 		return dump;
 	}
 
