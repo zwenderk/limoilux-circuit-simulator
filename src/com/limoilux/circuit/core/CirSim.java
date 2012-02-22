@@ -693,8 +693,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			// so we special-case it here
 			if (!ce.isCenteredText())
 			{
-				minx = CirSim.min(ce.x, Math.min(ce.x2, minx));
-				maxx = CirSim.max(ce.x, Math.max(ce.x2, maxx));
+				minx = Math.min(ce.x, Math.min(ce.x2, minx));
+				maxx = Math.max(ce.x, Math.max(ce.x2, maxx));
 			}
 			miny = Math.min(ce.y, Math.min(ce.y2, miny));
 			maxy = Math.max(ce.y, Math.max(ce.y2, maxy));
@@ -960,7 +960,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				x = this.scopes[ct - 1].rightEdge() + 20;
 			}
 
-			x = CirSim.max(x, this.winSize.width * 2 / 3);
+			x = Math.max(x, this.winSize.width * 2 / 3);
 
 			// count lines of data
 			for (i = 0; info[i] != null; i++)
@@ -1067,7 +1067,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		for (i = 0; i != this.scopeCount; i++)
 		{
-			pos = CirSim.max(this.scopes[i].position, pos);
+			pos = Math.max(this.scopes[i].position, pos);
 			this.scopeColCount[this.scopes[i].position]++;
 		}
 
@@ -1767,7 +1767,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		// needing to do it every frame
 		if (!this.circuitNonLinear)
 		{
-			if (!CirSim.lu_factor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute))
+			if (!CoreUtil.luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute))
 			{
 				this.stop("Singular matrix!", null);
 				return;
@@ -2048,7 +2048,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					{
 						break;
 					}
-					if (!CirSim.lu_factor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute))
+					if (!CoreUtil.luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute))
 					{
 						this.stop("Singular matrix!", null);
 						return;
@@ -2296,7 +2296,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			dump += this.hintItem2;
 			dump += "\n";
 		}
-		
+
 		return dump;
 	}
 
@@ -2791,7 +2791,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		if (this.draggingPost == -1)
 		{
-			this.draggingPost = CirSim.distanceSq(this.mouseElm.x, this.mouseElm.y, x, y) > CirSim.distanceSq(
+			this.draggingPost = CoreUtil.distanceSq(this.mouseElm.x, this.mouseElm.y, x, y) > CoreUtil.distanceSq(
 					this.mouseElm.x2, this.mouseElm.y2, x, y) ? 1 : 0;
 		}
 		int dx = x - this.dragX;
@@ -2806,10 +2806,10 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void selectArea(int x, int y)
 	{
-		int x1 = CirSim.min(x, this.initDragX);
-		int x2 = CirSim.max(x, this.initDragX);
-		int y1 = CirSim.min(y, this.initDragY);
-		int y2 = CirSim.max(y, this.initDragY);
+		int x1 = Math.min(x, this.initDragX);
+		int x2 = Math.max(x, this.initDragX);
+		int y1 = Math.min(y, this.initDragY);
+		int y2 = Math.max(y, this.initDragY);
 		this.selectedArea = new Rectangle(x1, y1, x2 - x1, y2 - y1);
 		int i;
 		for (i = 0; i != this.elmList.size(); i++)
@@ -4038,36 +4038,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			// System.out.println(n1 + " failed");
 			return false;
 		}
-	}
-
-	@Deprecated
-	private static int distanceSq(int x1, int y1, int x2, int y2)
-	{
-		return CoreUtil.distanceSq(x1, y1, x2, y2);
-	}
-
-	@Deprecated
-	private static boolean lu_factor(double a[][], int n, int ipvt[])
-	{
-		return CoreUtil.luFactor(a, n, ipvt);
-	}
-
-	@Deprecated
-	private static int min(int a, int b)
-	{
-		return Math.min(a, b);
-	}
-
-	@Deprecated
-	private static int max(int a, int b)
-	{
-		return Math.max(a, b);
-	}
-
-	@Deprecated
-	public static int getRandom(int max)
-	{
-		return CoreUtil.getRandomInt(max);
 	}
 
 	public static void main(String args[])

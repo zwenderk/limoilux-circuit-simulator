@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class OpAmpElm extends CircuitElm
@@ -200,12 +201,12 @@ public class OpAmpElm extends CircuitElm
 		double x = 0;
 		int vn = CircuitElm.cirSim.nodeList.size() + this.voltSource;
 		double dx = 0;
-		if (vd >= this.maxOut / this.gain && (this.lastvd >= 0 || CirSim.getRandom(4) == 1))
+		if (vd >= this.maxOut / this.gain && (this.lastvd >= 0 || CoreUtil.getRandomInt(4) == 1))
 		{
 			dx = 1e-4;
 			x = this.maxOut - dx * this.maxOut / this.gain;
 		}
-		else if (vd <= this.minOut / this.gain && (this.lastvd <= 0 || CirSim.getRandom(4) == 1))
+		else if (vd <= this.minOut / this.gain && (this.lastvd <= 0 || CoreUtil.getRandomInt(4) == 1))
 		{
 			dx = 1e-4;
 			x = this.minOut - dx * this.minOut / this.gain;
