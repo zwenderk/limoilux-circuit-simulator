@@ -1373,7 +1373,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			// look for inductors with no current path
 			if (ce instanceof InductorElm)
 			{
-				FindPathInfo fpi = new FindPathInfo(this, FindPathInfo.INDUCT, ce, ce.getNode(1), this.circuit);
+				FindPathInfo fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1), this.circuit);
 				// first try findPath with maximum depth of 5, to avoid
 				// slowdowns
 				if (!fpi.findPath(ce.getNode(0), 5) && !fpi.findPath(ce.getNode(0)))
@@ -1385,7 +1385,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			// look for current sources with no current path
 			if (ce instanceof CurrentElm)
 			{
-				FindPathInfo fpi = new FindPathInfo(this, FindPathInfo.INDUCT, ce, ce.getNode(1), this.circuit);
+				FindPathInfo fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1), this.circuit);
 				if (!fpi.findPath(ce.getNode(0)))
 				{
 					this.stop("No path for current source!", ce);
@@ -1395,7 +1395,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			// look for voltage source loops
 			if (ce instanceof VoltageElm && ce.getPostCount() == 2 || ce instanceof WireElm)
 			{
-				FindPathInfo fpi = new FindPathInfo(this, FindPathInfo.VOLTAGE, ce, ce.getNode(1), this.circuit);
+				FindPathInfo fpi = new FindPathInfo(FindPathInfo.VOLTAGE, ce, ce.getNode(1), this.circuit);
 				if (fpi.findPath(ce.getNode(0)))
 				{
 					this.stop("Voltage source/wire loop with no resistance!", ce);
@@ -1405,7 +1405,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			// look for shorted caps, or caps w/ voltage but no R
 			if (ce instanceof CapacitorElm)
 			{
-				FindPathInfo fpi = new FindPathInfo(this, FindPathInfo.SHORT, ce, ce.getNode(1), this.circuit);
+				FindPathInfo fpi = new FindPathInfo(FindPathInfo.SHORT, ce, ce.getNode(1), this.circuit);
 				if (fpi.findPath(ce.getNode(0)))
 				{
 					System.out.println(ce + " shorted");
@@ -1413,7 +1413,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				}
 				else
 				{
-					fpi = new FindPathInfo(this, FindPathInfo.CAP_V, ce, ce.getNode(1), this.circuit);
+					fpi = new FindPathInfo(FindPathInfo.CAP_V, ce, ce.getNode(1), this.circuit);
 					if (fpi.findPath(ce.getNode(0)))
 					{
 						this.stop("Capacitor loop with no resistance!", ce);
@@ -1646,12 +1646,12 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.circuit.circuitMatrix = newmatx;
 		this.circuit.circuitRightSide = newrs;
 		matrixSize = this.circuit.circuitMatrixSize = newsize;
-		
+
 		for (i = 0; i != matrixSize; i++)
 		{
 			this.circuit.origRightSide[i] = this.circuit.circuitRightSide[i];
 		}
-		
+
 		for (i = 0; i != matrixSize; i++)
 		{
 			for (j = 0; j != matrixSize; j++)
@@ -1659,7 +1659,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				this.circuit.origMatrix[i][j] = this.circuit.circuitMatrix[i][j];
 			}
 		}
-		
+
 		this.circuit.circuitNeedsMap = true;
 
 		/*
@@ -1681,7 +1681,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				return;
 			}
 		}
-		
+
 	}
 
 	@Deprecated
@@ -1695,11 +1695,11 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.circuit.stopMessage = msg;
 		this.circuit.circuitMatrix = null;
 		this.circuit.stopElm = ce;
-		
+
 		this.stoppedCheck.setState(true);
-		
+
 		this.circuit.analyzeFlag = false;
-		
+
 		this.circuitCanvas.repaint();
 	}
 
