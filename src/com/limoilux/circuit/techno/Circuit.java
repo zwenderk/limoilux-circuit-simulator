@@ -72,6 +72,11 @@ public class Circuit
 	{
 		return this.elmList.size();
 	}
+	
+	public CircuitElm getElementAt(int index)
+	{
+		return this.elmList.elementAt(index);
+	}
 
 	public CircuitNode getCircuitNode(int n)
 	{
