@@ -971,7 +971,7 @@ public class Scope
 		int firstE = e;
 		while (true)
 		{
-			for (e++; e < this.sim.circuit.elmList.size(); e++)
+			for (e++; e < this.sim.circuit.getElementCount(); e++)
 			{
 				CircuitElm ce = this.sim.circuit.getElement(e);
 				if ((ce instanceof OutputElm || ce instanceof ProbeElm) && ce != this.elm)
