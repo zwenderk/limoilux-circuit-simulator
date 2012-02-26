@@ -10,7 +10,6 @@ import java.awt.event.AdjustmentListener;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CirSim;
-import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.EditInfo;
 

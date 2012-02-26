@@ -20,7 +20,7 @@ import com.limoilux.circuit.ui.RowInfo;
 public class Circuit
 {
 	private final Vector<CircuitElm> elementList;
-	
+
 	private int circuitMatrixFullSize;
 
 	private boolean circuitNonLinear;
@@ -68,27 +68,27 @@ public class Circuit
 		this.analyzeFlag = analyzeFlag;
 		return true;
 	}
-	
+
 	public int getElementCount()
 	{
 		return this.elementList.size();
 	}
-	
+
 	public void removeElementAt(int index)
 	{
 		this.elementList.removeElementAt(index);
 	}
-	
+
 	public CircuitElm getElementAt(int index)
 	{
 		return this.elementList.elementAt(index);
 	}
-	
+
 	public void removeAllElements()
 	{
 		this.elementList.removeAllElements();
 	}
-	
+
 	public void addElement(CircuitElm element)
 	{
 		this.elementList.addElement(element);

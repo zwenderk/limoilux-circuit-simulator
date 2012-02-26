@@ -14,10 +14,9 @@ import com.limoilux.circuit.ui.DrawUtil;
 public class TriodeElm extends CircuitElm
 {
 	private static final double GRID_CURRENT_R = 6000;
-	
+
 	double mu, kg1;
 	double curcountp, curcountc, curcountg, currentp, currentg, currentc;
-
 
 	public TriodeElm(int xx, int yy)
 	{
@@ -203,8 +202,8 @@ public class TriodeElm extends CircuitElm
 		this.currentg = 0;
 		if (vgk > .01)
 		{
-			CircuitElm.cirSim.circuit.stampResistor(this.nodes[grid], this.nodes[cath], this.GRID_CURRENT_R);
-			this.currentg = vgk / this.GRID_CURRENT_R;
+			CircuitElm.cirSim.circuit.stampResistor(this.nodes[grid], this.nodes[cath], TriodeElm.GRID_CURRENT_R);
+			this.currentg = vgk / TriodeElm.GRID_CURRENT_R;
 		}
 		if (ival < 0)
 		{
