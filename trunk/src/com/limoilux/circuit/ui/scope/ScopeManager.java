@@ -1,7 +1,5 @@
 
-package com.limoilux.circuit.core;
-
-import com.limoilux.circuit.ui.scope.Scope;
+package com.limoilux.circuit.ui.scope;
 
 public class ScopeManager
 {

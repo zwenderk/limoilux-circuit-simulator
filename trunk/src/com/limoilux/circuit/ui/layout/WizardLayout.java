@@ -1,3 +1,4 @@
+
 package com.limoilux.circuit.ui.layout;
 
 import java.awt.Component;
@@ -48,7 +49,7 @@ public class WizardLayout implements LayoutManager
 			cl = target.getComponent(target.getComponentCount() - 1);
 			dl = cl.getPreferredSize();
 			target.getComponent(0).setLocation(insets.left, insets.top);
-			
+
 			int cw = target.getSize().width - insets.left - insets.right;
 			int ch = target.getSize().height - insets.top - insets.bottom - dl.height;
 			target.getComponent(0).setSize(cw, ch);
