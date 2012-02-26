@@ -120,6 +120,12 @@ public class Circuit
 
 		return dump;
 	}
+	
+	public void updateVoltageSource(int n1, int n2, int vs, double v)
+	{
+		int vn = this.nodeList.size() + vs;
+		this.stampRightSide(vn, v);
+	}
 
 	// indicate that the value on the right side of row i changes in doStep()
 	public void stampRightSide(int i)
@@ -187,5 +193,83 @@ public class Circuit
 			}
 			this.circuitMatrix[i][j] += x;
 		}
+	}
+	
+	// stamp a current source from n1 to n2 depending on current through vs
+	public void stampCCCS(int n1, int n2, int vs, double gain)
+	{
+		int vn = this.nodeList.size() + vs;
+		this.stampMatrix(n1, vn, gain);
+		this.stampMatrix(n2, vn, -gain);
+	}
+	
+	public void stampConductance(int n1, int n2, double r0)
+	{
+		this.stampMatrix(n1, n1, r0);
+		this.stampMatrix(n2, n2, r0);
+		this.stampMatrix(n1, n2, -r0);
+		this.stampMatrix(n2, n1, -r0);
+	}
+
+	// current from cn1 to cn2 is equal to voltage from vn1 to 2, divided by g
+	public void stampVCCurrentSource(int cn1, int cn2, int vn1, int vn2, double g)
+	{
+		this.stampMatrix(cn1, vn1, g);
+		this.stampMatrix(cn2, vn2, g);
+		this.stampMatrix(cn1, vn2, -g);
+		this.stampMatrix(cn2, vn1, -g);
+	}
+
+	public void stampCurrentSource(int n1, int n2, double i)
+	{
+		this.stampRightSide(n1, -i);
+		this.stampRightSide(n2, i);
+	}
+	
+	public void stampResistor(int n1, int n2, double r)
+	{
+		double r0 = 1 / r;
+		if (Double.isNaN(r0) || Double.isInfinite(r0))
+		{
+			System.out.print("bad resistance " + r + " " + r0 + "\n");
+			int a = 0;
+			a /= a;
+		}
+		this.stampMatrix(n1, n1, r0);
+		this.stampMatrix(n2, n2, r0);
+		this.stampMatrix(n1, n2, -r0);
+		this.stampMatrix(n2, n1, -r0);
+	}
+	
+
+	// control voltage source vs with voltage from n1 to n2 (must
+	// also call stampVoltageSource())
+	public void stampVCVS(int n1, int n2, double coef, int vs)
+	{
+		int vn = this.nodeList.size() + vs;
+		this.stampMatrix(vn, n1, coef);
+		this.stampMatrix(vn, n2, -coef);
+	}
+
+	// stamp independent voltage source #vs, from n1 to n2, amount v
+	public void stampVoltageSource(int n1, int n2, int vs, double v)
+	{
+		int vn = this.nodeList.size() + vs;
+		this.stampMatrix(vn, n1, -1);
+		this.stampMatrix(vn, n2, 1);
+		this.stampRightSide(vn, v);
+		this.stampMatrix(n1, vn, 1);
+		this.stampMatrix(n2, vn, -1);
+	}
+
+	// use this if the amount of voltage is going to be updated in doStep()
+	public void stampVoltageSource(int n1, int n2, int vs)
+	{
+		int vn = this.nodeList.size() + vs;
+		this.stampMatrix(vn, n1, -1);
+		this.stampMatrix(vn, n2, 1);
+		this.stampRightSide(vn);
+		this.stampMatrix(n1, vn, 1);
+		this.stampMatrix(n2, vn, -1);
 	}
 }

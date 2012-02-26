@@ -1690,87 +1690,58 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.circuitCanvas.repaint();
 	}
 
-	// control voltage source vs with voltage from n1 to n2 (must
-	// also call stampVoltageSource())
+	@Deprecated
 	public void stampVCVS(int n1, int n2, double coef, int vs)
 	{
-		int vn = this.circuit.nodeList.size() + vs;
-		this.stampMatrix(vn, n1, coef);
-		this.stampMatrix(vn, n2, -coef);
+		this.circuit.stampVCVS(n1, n2, coef, vs);
 	}
 
-	// stamp independent voltage source #vs, from n1 to n2, amount v
+	@Deprecated
 	public void stampVoltageSource(int n1, int n2, int vs, double v)
 	{
-		int vn = this.circuit.nodeList.size() + vs;
-		this.stampMatrix(vn, n1, -1);
-		this.stampMatrix(vn, n2, 1);
-		this.stampRightSide(vn, v);
-		this.stampMatrix(n1, vn, 1);
-		this.stampMatrix(n2, vn, -1);
+		this.circuit.stampVoltageSource(n1, n2, vs, v);
 	}
 
-	// use this if the amount of voltage is going to be updated in doStep()
+	@Deprecated
 	public void stampVoltageSource(int n1, int n2, int vs)
 	{
-		int vn = this.circuit.nodeList.size() + vs;
-		this.stampMatrix(vn, n1, -1);
-		this.stampMatrix(vn, n2, 1);
-		this.stampRightSide(vn);
-		this.stampMatrix(n1, vn, 1);
-		this.stampMatrix(n2, vn, -1);
+		this.circuit.stampVoltageSource(n1, n2, vs);
 	}
 
+	@Deprecated
 	public void updateVoltageSource(int n1, int n2, int vs, double v)
 	{
-		int vn = this.circuit.nodeList.size() + vs;
-		this.stampRightSide(vn, v);
+		this.circuit.updateVoltageSource(n1, n2, vs, v);
 	}
 
+	@Deprecated
 	public void stampResistor(int n1, int n2, double r)
 	{
-		double r0 = 1 / r;
-		if (Double.isNaN(r0) || Double.isInfinite(r0))
-		{
-			System.out.print("bad resistance " + r + " " + r0 + "\n");
-			int a = 0;
-			a /= a;
-		}
-		this.stampMatrix(n1, n1, r0);
-		this.stampMatrix(n2, n2, r0);
-		this.stampMatrix(n1, n2, -r0);
-		this.stampMatrix(n2, n1, -r0);
+		this.circuit.stampResistor(n1, n2, r);
 	}
 
+	@Deprecated
 	public void stampConductance(int n1, int n2, double r0)
 	{
-		this.stampMatrix(n1, n1, r0);
-		this.stampMatrix(n2, n2, r0);
-		this.stampMatrix(n1, n2, -r0);
-		this.stampMatrix(n2, n1, -r0);
+		this.circuit.stampConductance(n1, n2, r0);
 	}
 
-	// current from cn1 to cn2 is equal to voltage from vn1 to 2, divided by g
+	@Deprecated
 	public void stampVCCurrentSource(int cn1, int cn2, int vn1, int vn2, double g)
 	{
-		this.stampMatrix(cn1, vn1, g);
-		this.stampMatrix(cn2, vn2, g);
-		this.stampMatrix(cn1, vn2, -g);
-		this.stampMatrix(cn2, vn1, -g);
+		this.circuit.stampVCCurrentSource(cn1, cn2, vn1, vn2, g);
 	}
 
+	@Deprecated
 	public void stampCurrentSource(int n1, int n2, double i)
 	{
-		this.stampRightSide(n1, -i);
-		this.stampRightSide(n2, i);
+		this.circuit.stampCurrentSource(n1, n2, i);
 	}
 
-	// stamp a current source from n1 to n2 depending on current through vs
+	@Deprecated
 	public void stampCCCS(int n1, int n2, int vs, double gain)
 	{
-		int vn = this.circuit.nodeList.size() + vs;
-		this.stampMatrix(n1, vn, gain);
-		this.stampMatrix(n2, vn, -gain);
+		this.circuit.stampCCCS(n1, n2, vs, gain);
 	}
 	
 	@Deprecated
