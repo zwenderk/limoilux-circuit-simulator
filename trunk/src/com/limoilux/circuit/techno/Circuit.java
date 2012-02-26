@@ -540,10 +540,7 @@ public class Circuit
 				FindPathInfo fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1), this);
 				if (!fpi.findPath(ce.getNode(0)))
 				{
-					stopDump = new StopDump();
-					stopDump.msg = "No path for current source!";
-					stopDump.ce = ce;
-					
+					stopDump = new StopDump("No path for current source!",ce); 
 					return stopDump;
 				}
 			}
@@ -553,10 +550,8 @@ public class Circuit
 				FindPathInfo fpi = new FindPathInfo(FindPathInfo.VOLTAGE, ce, ce.getNode(1), this);
 				if (fpi.findPath(ce.getNode(0)))
 				{
-					stopDump = new StopDump();
-					stopDump.msg = "Voltage source/wire loop with no resistance!";
-					stopDump.ce = ce;
-
+					stopDump = new StopDump("Voltage source/wire loop with no resistance!",ce);
+					
 					return stopDump;
 				}
 			}
@@ -574,10 +569,7 @@ public class Circuit
 					fpi = new FindPathInfo(FindPathInfo.CAP_V, ce, ce.getNode(1), this);
 					if (fpi.findPath(ce.getNode(0)))
 					{
-						stopDump = new StopDump();
-						stopDump.msg = "Capacitor loop with no resistance!";
-						stopDump.ce = ce;
-	
+						stopDump = new StopDump( "Capacitor loop with no resistance!", ce);
 						return stopDump;
 					}
 				}
@@ -640,9 +632,7 @@ public class Circuit
 			{
 				if (qp == -1)
 				{
-					stopDump = new StopDump();
-					stopDump.msg ="Matrix error";
-					stopDump.ce = null;
+					stopDump = new StopDump("Matrix error"); 
 					
 					return stopDump;
 				}
@@ -841,9 +831,8 @@ public class Circuit
 			if (!CoreUtil.luFactor(this.circuitMatrix, this.circuitMatrixSize,
 					this.circuitPermute))
 			{
-				stopDump = new StopDump();
-				stopDump.msg = "Singular matrix!";
-				stopDump.ce = null;
+				stopDump = new StopDump( "Singular matrix!");
+				
 				return stopDump;
 			}
 		}

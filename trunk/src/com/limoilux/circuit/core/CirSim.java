@@ -755,7 +755,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 			if (stopDump != null)
 			{
-				this.stop(stopDump.msg, stopDump.ce);
+				this.stop(stopDump);
 			}
 
 			this.circuit.analyzeFlag = false;
@@ -1163,12 +1163,18 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		this.circuit.calcCircuitBottom();
 	}
-
+	
+	@Deprecated
 	public void stop(String msg, CircuitElm ce)
 	{
-		this.circuit.stopMessage = msg;
+		this.stop(new StopDump(msg, ce));
+	}
+
+	public void stop(StopDump stopDump)
+	{
+		this.circuit.stopMessage = stopDump.msg;
 		this.circuit.circuitMatrix = null;
-		this.circuit.stopElm = ce;
+		this.circuit.stopElm = stopDump.ce;
 
 		this.stoppedCheck.setState(true);
 
@@ -1319,6 +1325,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					if (!CoreUtil.luFactor(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize,
 							this.circuit.circuitPermute))
 					{
+						
 						this.stop("Singular matrix!", null);
 						return;
 					}
