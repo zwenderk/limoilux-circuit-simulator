@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
 
 public class AnalogSwitch2Elm extends AnalogSwitchElm
 {
@@ -47,24 +48,24 @@ public class AnalogSwitch2Elm extends AnalogSwitchElm
 
 		// draw first lead
 		this.setVoltageColor(g, this.volts[0]);
-		CircuitElm.drawThickLine(g, this.point1, this.lead1);
+		DrawUtil.drawThickLine(g, this.point1, this.lead1);
 
 		// draw second lead
 		this.setVoltageColor(g, this.volts[1]);
-		CircuitElm.drawThickLine(g, this.swpoles[0], this.swposts[0]);
+		DrawUtil.drawThickLine(g, this.swpoles[0], this.swposts[0]);
 
 		// draw third lead
 		this.setVoltageColor(g, this.volts[2]);
-		CircuitElm.drawThickLine(g, this.swpoles[1], this.swposts[1]);
+		DrawUtil.drawThickLine(g, this.swpoles[1], this.swposts[1]);
 
 		// draw switch
 		g.setColor(CircuitElm.lightGrayColor);
 		int position = this.open ? 1 : 0;
-		CircuitElm.drawThickLine(g, this.lead1, this.swpoles[position]);
+		DrawUtil.drawThickLine(g, this.lead1, this.swpoles[position]);
 
 		this.updateDotCount();
-		CircuitElm.drawDots(g, this.point1, this.lead1, this.curcount);
-		CircuitElm.drawDots(g, this.swpoles[position], this.swposts[position], this.curcount);
+		DrawUtil.drawDots(g, this.point1, this.lead1, this.curcount);
+		DrawUtil.drawDots(g, this.swpoles[position], this.swposts[position], this.curcount);
 		this.drawPosts(g);
 	}
 

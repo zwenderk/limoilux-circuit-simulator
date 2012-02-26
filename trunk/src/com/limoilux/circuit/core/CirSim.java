@@ -2589,12 +2589,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		return true;
 	}
 
-	@Deprecated
-	public int locateElm(CircuitElm elm)
-	{
-		return this.circuit.locateElm(elm);
-	}
-
 	private void dragAll(int x, int y)
 	{
 		int dx = x - this.dragX;
