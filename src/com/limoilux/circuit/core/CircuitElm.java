@@ -13,6 +13,7 @@ import java.text.NumberFormat;
 import com.limoilux.circuit.RailElm;
 import com.limoilux.circuit.SweepElm;
 import com.limoilux.circuit.VoltageElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
@@ -147,7 +148,7 @@ public abstract class CircuitElm implements Editable
 		return this.current;
 	}
 
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 
 	}

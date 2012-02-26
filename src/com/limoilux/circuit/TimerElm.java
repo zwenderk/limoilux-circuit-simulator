@@ -4,6 +4,7 @@ package com.limoilux.circuit;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 
 public class TimerElm extends ChipElm
 {
@@ -108,7 +109,7 @@ public class TimerElm extends ChipElm
 	}
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		// if output is low, discharge pin 0. we use a small
 		// resistor because it's easier, and sometimes people tie

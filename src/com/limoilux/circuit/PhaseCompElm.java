@@ -4,6 +4,7 @@ package com.limoilux.circuit;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 
 public class PhaseCompElm extends ChipElm
 {
@@ -53,7 +54,7 @@ public class PhaseCompElm extends ChipElm
 	boolean ff1, ff2;
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		boolean v1 = this.volts[0] > 2.5;
 		boolean v2 = this.volts[1] > 2.5;

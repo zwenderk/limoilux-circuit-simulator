@@ -9,6 +9,7 @@ import java.awt.Polygon;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.ui.EditInfo;
 import com.limoilux.circuit.ui.scope.Scope;
 
@@ -238,7 +239,7 @@ public class TransistorElm extends CircuitElm
 	}
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		double vbc = this.volts[0] - this.volts[1]; // typically negative
 		double vbe = this.volts[0] - this.volts[2]; // typically positive

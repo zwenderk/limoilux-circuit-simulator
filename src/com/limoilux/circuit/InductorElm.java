@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class InductorElm extends CircuitElm
@@ -102,7 +103,7 @@ public class InductorElm extends CircuitElm
 	}
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		double voltdiff = this.volts[0] - this.volts[1];
 		this.ind.doStep(voltdiff);

@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 
 public class VCOElm extends ChipElm
 {
@@ -68,7 +69,7 @@ public class VCOElm extends ChipElm
 	int cDir;
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		double vc = this.volts[3] - this.volts[2];
 		double vo = this.volts[1];

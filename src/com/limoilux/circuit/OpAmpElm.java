@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 import com.limoilux.circuit.core.CoreUtil;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class OpAmpElm extends CircuitElm
@@ -186,7 +187,7 @@ public class OpAmpElm extends CircuitElm
 	}
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		double vd = this.volts[1] - this.volts[0];
 		if (Math.abs(this.lastvd - vd) > .1)

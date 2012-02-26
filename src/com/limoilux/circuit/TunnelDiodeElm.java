@@ -7,6 +7,7 @@ import java.awt.Polygon;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 
 public class TunnelDiodeElm extends CircuitElm
 {
@@ -119,7 +120,7 @@ public class TunnelDiodeElm extends CircuitElm
 	static final double piv = 370e-6;
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		double voltdiff = this.volts[0] - this.volts[1];
 		if (Math.abs(voltdiff - this.lastvoltdiff) > .01)

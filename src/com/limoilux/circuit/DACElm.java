@@ -4,6 +4,7 @@ package com.limoilux.circuit;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 
 public class DACElm extends ChipElm
 {
@@ -47,7 +48,7 @@ public class DACElm extends ChipElm
 	}
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		int ival = 0;
 		int i;
