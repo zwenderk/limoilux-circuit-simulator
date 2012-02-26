@@ -221,24 +221,24 @@ public class TriodeElm extends CircuitElm
 		this.currentp = ids;
 		this.currentc = ids + this.currentg;
 		double rs = -ids + Gds * vpk + gm * vgk;
-		CircuitElm.cirSim.stampMatrix(this.nodes[plate], this.nodes[plate], Gds);
-		CircuitElm.cirSim.stampMatrix(this.nodes[plate], this.nodes[cath], -Gds - gm);
-		CircuitElm.cirSim.stampMatrix(this.nodes[plate], this.nodes[grid], gm);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[plate], this.nodes[plate], Gds);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[plate], this.nodes[cath], -Gds - gm);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[plate], this.nodes[grid], gm);
 
-		CircuitElm.cirSim.stampMatrix(this.nodes[cath], this.nodes[plate], -Gds);
-		CircuitElm.cirSim.stampMatrix(this.nodes[cath], this.nodes[cath], Gds + gm);
-		CircuitElm.cirSim.stampMatrix(this.nodes[cath], this.nodes[grid], -gm);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[cath], this.nodes[plate], -Gds);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[cath], this.nodes[cath], Gds + gm);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[cath], this.nodes[grid], -gm);
 
-		CircuitElm.cirSim.stampRightSide(this.nodes[plate], rs);
-		CircuitElm.cirSim.stampRightSide(this.nodes[cath], -rs);
+		CircuitElm.cirSim.circuit.stampRightSide(this.nodes[plate], rs);
+		CircuitElm.cirSim.circuit.stampRightSide(this.nodes[cath], -rs);
 	}
 
 	@Override
 	public void stamp()
 	{
-		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
-		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);
-		CircuitElm.cirSim.stampNonLinear(this.nodes[2]);
+		CircuitElm.cirSim.circuit.stampNonLinear(this.nodes[0]);
+		CircuitElm.cirSim.circuit.stampNonLinear(this.nodes[1]);
+		CircuitElm.cirSim.circuit.stampNonLinear(this.nodes[2]);
 	}
 
 	@Override

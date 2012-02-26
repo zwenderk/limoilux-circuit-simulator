@@ -312,16 +312,16 @@ public class MosfetElm extends CircuitElm
 		// System.out.println("M " + vds + " " + vgs + " " + ids + " " + gm +
 		// " "+ Gds + " " + volts[0] + " " + volts[1] + " " + volts[2] + " " +
 		// source + " " + rs + " " + this);
-		CircuitElm.cirSim.stampMatrix(this.nodes[drain], this.nodes[drain], Gds);
-		CircuitElm.cirSim.stampMatrix(this.nodes[drain], this.nodes[source], -Gds - this.gm);
-		CircuitElm.cirSim.stampMatrix(this.nodes[drain], this.nodes[gate], this.gm);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[drain], this.nodes[drain], Gds);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[drain], this.nodes[source], -Gds - this.gm);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[drain], this.nodes[gate], this.gm);
 
-		CircuitElm.cirSim.stampMatrix(this.nodes[source], this.nodes[drain], -Gds);
-		CircuitElm.cirSim.stampMatrix(this.nodes[source], this.nodes[source], Gds + this.gm);
-		CircuitElm.cirSim.stampMatrix(this.nodes[source], this.nodes[gate], -this.gm);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[source], this.nodes[drain], -Gds);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[source], this.nodes[source], Gds + this.gm);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[source], this.nodes[gate], -this.gm);
 
-		CircuitElm.cirSim.stampRightSide(this.nodes[drain], rs);
-		CircuitElm.cirSim.stampRightSide(this.nodes[source], -rs);
+		CircuitElm.cirSim.circuit.stampRightSide(this.nodes[drain], rs);
+		CircuitElm.cirSim.circuit.stampRightSide(this.nodes[source], -rs);
 		if (source == 2 && this.pnp == 1 || source == 1 && this.pnp == -1)
 		{
 			this.ids = -this.ids;
