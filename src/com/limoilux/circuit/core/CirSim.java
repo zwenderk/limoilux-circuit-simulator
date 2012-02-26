@@ -3715,47 +3715,16 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 	}
 
+	@Deprecated
 	private static ByteArrayOutputStream readUrlData(URL url) throws IOException
 	{
-		Object o = url.getContent();
-		FilterInputStream fis = (FilterInputStream) o;
-		ByteArrayOutputStream ba = new ByteArrayOutputStream(fis.available());
-		byte[] bytes = null;
-		int blen = 1024;
-		int len;
-		
-		bytes = new byte[blen];
-		
-		while (true)
-		{
-			len = fis.read(bytes);
-			if (len <= 0)
-			{
-				break;
-			}
-			ba.write(bytes, 0, len);
-		}
-		return ba;
+		return CoreUtil.readUrlData(url);
 	}
 
+	@Deprecated
 	private static URL getCodeBase()
 	{
-		URL out = null;
-		File f = null;
-
-		try
-		{
-			f = new File(".");
-			out = new URL("file:" + f.getCanonicalPath() + "/");
-		}
-		catch (MalformedURLException e)
-		{
-		}
-		catch (IOException e)
-		{
-		}
-
-		return out;
+		return CoreUtil.getCodeBase();
 	}
 
 	public static void main(String args[])
