@@ -126,9 +126,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private double circuitMatrix[][], circuitRightSide[], origRightSide[], origMatrix[][];
 	private RowInfo circuitRowInfo[];
 	private int circuitPermute[];
-
-	private int circuitMatrixSize, circuitMatrixFullSize;
-
+	
 	private boolean circuitNeedsMap;
 
 	private Class<?> dumpTypes[];
@@ -798,7 +796,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				e.printStackTrace();
 				this.circuit.analyzeFlag = true;
 				this.circuitCanvas.repaint();
-	
+
 				return;
 			}
 		}
@@ -995,7 +993,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		 */
 
 		realg.drawImage(this.dbimage, 0, 0, this);
-		if (!this.stoppedCheck.getState() && this.circuitMatrix != null)
+		if (!this.stoppedCheck.getState() && this.circuit.circuitMatrix != null)
 		{
 			// Limit to 50 fps (thanks to J�rgen Kl�tzer for this)
 			long delay = 1000 / 50 - (System.currentTimeMillis() - this.lastFrameTime);
@@ -1282,14 +1280,15 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		// voltageSourceCount = vscount;
 
 		int matrixSize = this.circuit.nodeList.size() - 1 + vscount;
-		this.circuitMatrix = new double[matrixSize][matrixSize];
+		this.circuit.circuitMatrix = new double[matrixSize][matrixSize];
 		this.circuitRightSide = new double[matrixSize];
 		this.origMatrix = new double[matrixSize][matrixSize];
 		this.origRightSide = new double[matrixSize];
-		this.circuitMatrixSize = this.circuitMatrixFullSize = matrixSize;
+		this.circuit.circuitMatrixSize = matrixSize;
+		this.circuit.circuitMatrixFullSize = matrixSize;
 		this.circuitRowInfo = new RowInfo[matrixSize];
 		this.circuitPermute = new int[matrixSize];
-		//int vs = 0;
+		// int vs = 0;
 
 		for (i = 0; i != matrixSize; i++)
 		{
@@ -1440,7 +1439,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			// look for rows that can be removed
 			for (j = 0; j != matrixSize; j++)
 			{
-				double q = this.circuitMatrix[i][j];
+				double q = this.circuit.circuitMatrix[i][j];
 				if (this.circuitRowInfo[j].type == RowInfo.ROW_CONST)
 				{
 					// keep a running total of const values that have been
@@ -1630,19 +1629,19 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				RowInfo ri = this.circuitRowInfo[j];
 				if (ri.type == RowInfo.ROW_CONST)
 				{
-					newrs[ii] -= ri.value * this.circuitMatrix[i][j];
+					newrs[ii] -= ri.value * this.circuit.circuitMatrix[i][j];
 				}
 				else
 				{
-					newmatx[ii][ri.mapCol] += this.circuitMatrix[i][j];
+					newmatx[ii][ri.mapCol] += this.circuit.circuitMatrix[i][j];
 				}
 			}
 			ii++;
 		}
 
-		this.circuitMatrix = newmatx;
+		this.circuit.circuitMatrix = newmatx;
 		this.circuitRightSide = newrs;
-		matrixSize = this.circuitMatrixSize = newsize;
+		matrixSize = this.circuit.circuitMatrixSize = newsize;
 		for (i = 0; i != matrixSize; i++)
 		{
 			this.origRightSide[i] = this.circuitRightSide[i];
@@ -1651,7 +1650,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			for (j = 0; j != matrixSize; j++)
 			{
-				this.origMatrix[i][j] = this.circuitMatrix[i][j];
+				this.origMatrix[i][j] = this.circuit.circuitMatrix[i][j];
 			}
 		}
 		this.circuitNeedsMap = true;
@@ -1668,7 +1667,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		// needing to do it every frame
 		if (!this.circuit.circuitNonLinear)
 		{
-			if (!CoreUtil.luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute))
+			if (!CoreUtil.luFactor(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize, this.circuitPermute))
 			{
 				this.stop("Singular matrix!", null);
 				return;
@@ -1685,7 +1684,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public void stop(String msg, CircuitElm ce)
 	{
 		this.stopMessage = msg;
-		this.circuitMatrix = null;
+		this.circuit.circuitMatrix = null;
 		this.stopElm = ce;
 		this.stoppedCheck.setState(true);
 		this.circuit.analyzeFlag = false;
@@ -1801,7 +1800,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				i--;
 				j--;
 			}
-			this.circuitMatrix[i][j] += x;
+			this.circuit.circuitMatrix[i][j] += x;
 		}
 	}
 
@@ -1855,9 +1854,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void runCircuit()
 	{
-		if (this.circuitMatrix == null || this.circuit.elmList.size() == 0)
+		if (this.circuit.circuitMatrix == null || this.circuit.elmList.size() == 0)
 		{
-			this.circuitMatrix = null;
+			this.circuit.circuitMatrix = null;
 			return;
 		}
 		int iter;
@@ -1884,23 +1883,23 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			{
 				this.converged = true;
 				this.subIterations = subiter;
-				for (i = 0; i != this.circuitMatrixSize; i++)
+				for (i = 0; i != this.circuit.circuitMatrixSize; i++)
 				{
 					this.circuitRightSide[i] = this.origRightSide[i];
 				}
 				if (this.circuit.circuitNonLinear)
 				{
-					for (i = 0; i != this.circuitMatrixSize; i++)
+					for (i = 0; i != this.circuit.circuitMatrixSize; i++)
 					{
-						for (j = 0; j != this.circuitMatrixSize; j++)
+						for (j = 0; j != this.circuit.circuitMatrixSize; j++)
 						{
-							this.circuitMatrix[i][j] = this.origMatrix[i][j];
+							this.circuit.circuitMatrix[i][j] = this.origMatrix[i][j];
 						}
 					}
 				}
 				for (i = 0; i != this.circuit.elmList.size(); i++)
 				{
-					CircuitElm ce = this.getElement(i);
+					CircuitElm ce = this.circuit.getElement(i);
 					ce.doStep();
 				}
 				if (this.stopMessage != null)
@@ -1909,11 +1908,11 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				}
 				boolean printit = debugprint;
 				debugprint = false;
-				for (j = 0; j != this.circuitMatrixSize; j++)
+				for (j = 0; j != this.circuit.circuitMatrixSize; j++)
 				{
-					for (i = 0; i != this.circuitMatrixSize; i++)
+					for (i = 0; i != this.circuit.circuitMatrixSize; i++)
 					{
-						double x = this.circuitMatrix[i][j];
+						double x = this.circuit.circuitMatrix[i][j];
 						if (Double.isNaN(x) || Double.isInfinite(x))
 						{
 							this.stop("nan/infinite matrix!", null);
@@ -1923,11 +1922,11 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				}
 				if (printit)
 				{
-					for (j = 0; j != this.circuitMatrixSize; j++)
+					for (j = 0; j != this.circuit.circuitMatrixSize; j++)
 					{
-						for (i = 0; i != this.circuitMatrixSize; i++)
+						for (i = 0; i != this.circuit.circuitMatrixSize; i++)
 						{
-							System.out.print(this.circuitMatrix[j][i] + ",");
+							System.out.print(this.circuit.circuitMatrix[j][i] + ",");
 						}
 						System.out.print("  " + this.circuitRightSide[j] + "\n");
 					}
@@ -1939,15 +1938,16 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					{
 						break;
 					}
-					if (!CoreUtil.luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute))
+					if (!CoreUtil.luFactor(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize, this.circuitPermute))
 					{
 						this.stop("Singular matrix!", null);
 						return;
 					}
 				}
-				CoreUtil.luSolve(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute, this.circuitRightSide);
+				CoreUtil.luSolve(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize, this.circuitPermute,
+						this.circuitRightSide);
 
-				for (j = 0; j != this.circuitMatrixFullSize; j++)
+				for (j = 0; j != this.circuit.circuitMatrixFullSize; j++)
 				{
 					RowInfo ri = this.circuitRowInfo[j];
 					double res = 0;
@@ -3680,7 +3680,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					for (j = 0; j != jn; j++)
 					{
 						Point pt = ce.getPost(j);
-						//int dist = CoreUtil.distanceSq(x, y, pt.x, pt.y);
+						// int dist = CoreUtil.distanceSq(x, y, pt.x, pt.y);
 						if (CoreUtil.distanceSq(pt.x, pt.y, x, y) < 26)
 						{
 							CirSim.this.mouseElm = ce;
