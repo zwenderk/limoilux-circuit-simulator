@@ -1373,7 +1373,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			// look for inductors with no current path
 			if (ce instanceof InductorElm)
 			{
-				FindPathInfo fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1));
+				FindPathInfo fpi = new FindPathInfo(this, FindPathInfo.INDUCT, ce, ce.getNode(1), this.circuit);
 				// first try findPath with maximum depth of 5, to avoid
 				// slowdowns
 				if (!fpi.findPath(ce.getNode(0), 5) && !fpi.findPath(ce.getNode(0)))
@@ -1385,7 +1385,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			// look for current sources with no current path
 			if (ce instanceof CurrentElm)
 			{
-				FindPathInfo fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1));
+				FindPathInfo fpi = new FindPathInfo(this, FindPathInfo.INDUCT, ce, ce.getNode(1), this.circuit);
 				if (!fpi.findPath(ce.getNode(0)))
 				{
 					this.stop("No path for current source!", ce);
@@ -1395,7 +1395,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			// look for voltage source loops
 			if (ce instanceof VoltageElm && ce.getPostCount() == 2 || ce instanceof WireElm)
 			{
-				FindPathInfo fpi = new FindPathInfo(FindPathInfo.VOLTAGE, ce, ce.getNode(1));
+				FindPathInfo fpi = new FindPathInfo(this, FindPathInfo.VOLTAGE, ce, ce.getNode(1), this.circuit);
 				if (fpi.findPath(ce.getNode(0)))
 				{
 					this.stop("Voltage source/wire loop with no resistance!", ce);
@@ -1405,7 +1405,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			// look for shorted caps, or caps w/ voltage but no R
 			if (ce instanceof CapacitorElm)
 			{
-				FindPathInfo fpi = new FindPathInfo(FindPathInfo.SHORT, ce, ce.getNode(1));
+				FindPathInfo fpi = new FindPathInfo(this, FindPathInfo.SHORT, ce, ce.getNode(1), this.circuit);
 				if (fpi.findPath(ce.getNode(0)))
 				{
 					System.out.println(ce + " shorted");
@@ -1413,7 +1413,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				}
 				else
 				{
-					fpi = new FindPathInfo(FindPathInfo.CAP_V, ce, ce.getNode(1));
+					fpi = new FindPathInfo(this, FindPathInfo.CAP_V, ce, ce.getNode(1), this.circuit);
 					if (fpi.findPath(ce.getNode(0)))
 					{
 						this.stop("Capacitor loop with no resistance!", ce);
@@ -3575,162 +3575,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				CirSim.this.circuitCanvas.repaint();
 			}
 
-		}
-	}
-
-	private class FindPathInfo
-	{
-		static final int INDUCT = 1;
-		static final int VOLTAGE = 2;
-		static final int SHORT = 3;
-		static final int CAP_V = 4;
-		boolean used[];
-		int dest;
-		CircuitElm firstElm;
-		int type;
-
-		private FindPathInfo(int t, CircuitElm e, int d)
-		{
-			this.dest = d;
-			this.type = t;
-			this.firstElm = e;
-			this.used = new boolean[CirSim.this.circuit.nodeList.size()];
-		}
-
-		private boolean findPath(int n1)
-		{
-			return this.findPath(n1, -1);
-		}
-
-		private boolean findPath(int n1, int depth)
-		{
-			if (n1 == this.dest)
-			{
-				return true;
-			}
-
-			if (depth-- == 0)
-			{
-				return false;
-
-			}
-
-			if (this.used[n1])
-			{
-				return false;
-			}
-
-			this.used[n1] = true;
-
-			for (int i = 0; i != CirSim.this.circuit.elmList.size(); i++)
-			{
-				CircuitElm circuitElement = CirSim.this.circuit.getElement(i);
-
-				if (circuitElement == this.firstElm)
-				{
-					continue;
-				}
-				if (this.type == FindPathInfo.INDUCT)
-				{
-					if (circuitElement instanceof CurrentElm)
-					{
-						continue;
-					}
-				}
-				if (this.type == FindPathInfo.VOLTAGE)
-				{
-					if (!(circuitElement.isWire() || circuitElement instanceof VoltageElm))
-					{
-						continue;
-					}
-				}
-				if (this.type == FindPathInfo.SHORT && !circuitElement.isWire())
-				{
-					continue;
-				}
-
-				if (this.type == FindPathInfo.CAP_V)
-				{
-					if (!(circuitElement.isWire() || circuitElement instanceof CapacitorElm || circuitElement instanceof VoltageElm))
-					{
-						continue;
-					}
-				}
-
-				if (n1 == 0)
-				{
-					// look for posts which have a ground connection;
-					// our path can go through ground
-					int j;
-					for (j = 0; j != circuitElement.getPostCount(); j++)
-					{
-						if (circuitElement.hasGroundConnection(j) && this.findPath(circuitElement.getNode(j), depth))
-						{
-							this.used[n1] = false;
-							return true;
-						}
-					}
-				}
-
-				int j;
-
-				for (j = 0; j != circuitElement.getPostCount(); j++)
-				{
-					// System.out.println(ce + " " + ce.getNode(j));
-					if (circuitElement.getNode(j) == n1)
-					{
-						break;
-					}
-				}
-
-				if (j == circuitElement.getPostCount())
-				{
-					continue;
-				}
-
-				if (circuitElement.hasGroundConnection(j) && this.findPath(0, depth))
-				{
-					// System.out.println(ce + " has ground");
-					this.used[n1] = false;
-					return true;
-				}
-
-				if (this.type == FindPathInfo.INDUCT && circuitElement instanceof InductorElm)
-				{
-					double current = circuitElement.getCurrent();
-					if (j == 0)
-					{
-						current = -current;
-					}
-					// System.out.println("matching " + c + " to " +
-					// firstElm.getCurrent());
-					// System.out.println(ce + " " + firstElm);
-					if (Math.abs(current - this.firstElm.getCurrent()) > 1e-10)
-					{
-						continue;
-					}
-				}
-
-				for (int k = 0; k != circuitElement.getPostCount(); k++)
-				{
-					if (j == k)
-					{
-						continue;
-					}
-					// System.out.println(ce + " " + ce.getNode(j) + "-" +
-					// ce.getNode(k));
-					if (circuitElement.getConnection(j, k) && this.findPath(circuitElement.getNode(k), depth))
-					{
-						// System.out.println("got findpath " + n1);
-						this.used[n1] = false;
-						return true;
-					}
-					// System.out.println("back on findpath " + n1);
-				}
-			}
-			this.used[n1] = false;
-			// System.out.println(n1 + " failed");
-			return false;
 		}
 	}
 
