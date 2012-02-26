@@ -6,14 +6,18 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
 
 public class TriodeElm extends CircuitElm
 {
+	private static final double GRID_CURRENT_R = 6000;
+	
 	double mu, kg1;
 	double curcountp, curcountc, curcountg, currentp, currentg, currentc;
-	final double gridCurrentR = 6000;
+
 
 	public TriodeElm(int xx, int yy)
 	{
@@ -31,7 +35,7 @@ public class TriodeElm extends CircuitElm
 		this.setup();
 	}
 
-	void setup()
+	private void setup()
 	{
 		this.noDiagonal = true;
 	}
@@ -68,70 +72,70 @@ public class TriodeElm extends CircuitElm
 	public void setPoints()
 	{
 		super.setPoints();
-		this.plate = CircuitElm.newPointArray(4);
-		this.grid = CircuitElm.newPointArray(8);
-		this.cath = CircuitElm.newPointArray(4);
+		this.plate = CoreUtil.newPointArray(4);
+		this.grid = CoreUtil.newPointArray(8);
+		this.cath = CoreUtil.newPointArray(4);
 		this.grid[0] = this.point1;
 		int nearw = 8;
-		CircuitElm.interpPoint(this.point1, this.point2, this.plate[1], 1, nearw);
+		CoreUtil.interpPoint(this.point1, this.point2, this.plate[1], 1, nearw);
 		int farw = 32;
-		CircuitElm.interpPoint(this.point1, this.point2, this.plate[0], 1, farw);
+		CoreUtil.interpPoint(this.point1, this.point2, this.plate[0], 1, farw);
 		int platew = 18;
-		CircuitElm.interpPoint2(this.point2, this.plate[1], this.plate[2], this.plate[3], 1, platew);
+		CoreUtil.interpPoint2(this.point2, this.plate[1], this.plate[2], this.plate[3], 1, platew);
 
 		this.circler = 24;
-		CircuitElm.interpPoint(this.point1, this.point2, this.grid[1], (this.dn - this.circler) / this.dn, 0);
+		CoreUtil.interpPoint(this.point1, this.point2, this.grid[1], (this.dn - this.circler) / this.dn, 0);
 		int i;
 		for (i = 0; i != 3; i++)
 		{
-			CircuitElm.interpPoint(this.grid[1], this.point2, this.grid[2 + i * 2], (i * 3 + 1) / 4.5, 0);
-			CircuitElm.interpPoint(this.grid[1], this.point2, this.grid[3 + i * 2], (i * 3 + 2) / 4.5, 0);
+			CoreUtil.interpPoint(this.grid[1], this.point2, this.grid[2 + i * 2], (i * 3 + 1) / 4.5, 0);
+			CoreUtil.interpPoint(this.grid[1], this.point2, this.grid[3 + i * 2], (i * 3 + 2) / 4.5, 0);
 		}
 		this.midgrid = this.point2;
 
 		int cathw = 16;
-		this.midcath = CircuitElm.interpPoint(this.point1, this.point2, 1, -nearw);
-		CircuitElm.interpPoint2(this.point2, this.plate[1], this.cath[1], this.cath[2], -1, cathw);
-		CircuitElm.interpPoint(this.point2, this.plate[1], this.cath[3], -1.2, -cathw);
-		CircuitElm.interpPoint(this.point2, this.plate[1], this.cath[0], -farw / (double) nearw, cathw);
+		this.midcath = CoreUtil.interpPoint(this.point1, this.point2, 1, -nearw);
+		CoreUtil.interpPoint2(this.point2, this.plate[1], this.cath[1], this.cath[2], -1, cathw);
+		CoreUtil.interpPoint(this.point2, this.plate[1], this.cath[3], -1.2, -cathw);
+		CoreUtil.interpPoint(this.point2, this.plate[1], this.cath[0], -farw / (double) nearw, cathw);
 	}
 
 	@Override
 	public void draw(Graphics g)
 	{
 		g.setColor(Color.gray);
-		CircuitElm.drawThickCircle(g, this.point2.x, this.point2.y, this.circler);
+		DrawUtil.drawThickCircle(g, this.point2.x, this.point2.y, this.circler);
 		this.setBbox(this.point1, this.plate[0], 16);
 		this.adjustBbox(this.cath[0].x, this.cath[1].y, this.point2.x + this.circler, this.point2.y + this.circler);
 		this.setPowerColor(g, true);
 		// draw plate
 		this.setVoltageColor(g, this.volts[0]);
-		CircuitElm.drawThickLine(g, this.plate[0], this.plate[1]);
-		CircuitElm.drawThickLine(g, this.plate[2], this.plate[3]);
+		DrawUtil.drawThickLine(g, this.plate[0], this.plate[1]);
+		DrawUtil.drawThickLine(g, this.plate[2], this.plate[3]);
 		// draw grid
 		this.setVoltageColor(g, this.volts[1]);
 		int i;
 		for (i = 0; i != 8; i += 2)
 		{
-			CircuitElm.drawThickLine(g, this.grid[i], this.grid[i + 1]);
+			DrawUtil.drawThickLine(g, this.grid[i], this.grid[i + 1]);
 		}
 		// draw cathode
 		this.setVoltageColor(g, this.volts[2]);
 		for (i = 0; i != 3; i++)
 		{
-			CircuitElm.drawThickLine(g, this.cath[i], this.cath[i + 1]);
+			DrawUtil.drawThickLine(g, this.cath[i], this.cath[i + 1]);
 		}
 		// draw dots
-		this.curcountp = CircuitElm.updateDotCount(this.currentp, this.curcountp);
-		this.curcountc = CircuitElm.updateDotCount(this.currentc, this.curcountc);
-		this.curcountg = CircuitElm.updateDotCount(this.currentg, this.curcountg);
+		this.curcountp = CoreUtil.updateDotCount(this.currentp, this.curcountp);
+		this.curcountc = CoreUtil.updateDotCount(this.currentc, this.curcountc);
+		this.curcountg = CoreUtil.updateDotCount(this.currentg, this.curcountg);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
-			CircuitElm.drawDots(g, this.plate[0], this.midgrid, this.curcountp);
-			CircuitElm.drawDots(g, this.midgrid, this.midcath, this.curcountc);
-			CircuitElm.drawDots(g, this.midcath, this.cath[1], this.curcountc + 8);
-			CircuitElm.drawDots(g, this.cath[1], this.cath[0], this.curcountc + 8);
-			CircuitElm.drawDots(g, this.point1, this.midgrid, this.curcountg);
+			DrawUtil.drawDots(g, this.plate[0], this.midgrid, this.curcountp);
+			DrawUtil.drawDots(g, this.midgrid, this.midcath, this.curcountc);
+			DrawUtil.drawDots(g, this.midcath, this.cath[1], this.curcountc + 8);
+			DrawUtil.drawDots(g, this.cath[1], this.cath[0], this.curcountc + 8);
+			DrawUtil.drawDots(g, this.point1, this.midgrid, this.curcountg);
 		}
 		this.drawPosts(g);
 	}
@@ -199,8 +203,8 @@ public class TriodeElm extends CircuitElm
 		this.currentg = 0;
 		if (vgk > .01)
 		{
-			CircuitElm.cirSim.circuit.stampResistor(this.nodes[grid], this.nodes[cath], this.gridCurrentR);
-			this.currentg = vgk / this.gridCurrentR;
+			CircuitElm.cirSim.circuit.stampResistor(this.nodes[grid], this.nodes[cath], this.GRID_CURRENT_R);
+			this.currentg = vgk / this.GRID_CURRENT_R;
 		}
 		if (ival < 0)
 		{
