@@ -328,7 +328,7 @@ public abstract class CircuitElm implements Editable
 		int i;
 		for (i = 0; i != CircuitElm.cirSim.circuit.elmList.size(); i++)
 		{
-			CircuitElm ce = CircuitElm.cirSim.getElement(i);
+			CircuitElm ce = CircuitElm.cirSim.circuit.getElement(i);
 			if (ce.x == nx && ce.y == ny && ce.x2 == nx2 && ce.y2 == ny2)
 			{
 				return false;

@@ -98,10 +98,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public static final int MODE_DRAG_ROW = 2;
 	public static final int MODE_DRAG_COLUMN = 3;
 
-	private long lastTime = 0;
-	private long lastFrameTime;
-	private long lastIterTime;
-	private long secTime = 0;
+
 
 	public final JFrame mainContainer;
 
@@ -127,8 +124,11 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private SwitchElm heldSwitchElm;
 	private double origRightSide[], origMatrix[][];
 	private int circuitPermute[];
-
-	private boolean circuitNeedsMap;
+	
+	private long lastTime = 0;
+	private long lastFrameTime;
+	private long lastIterTime;
+	private long secTime = 0;
 
 	private Class<?> dumpTypes[];
 
@@ -683,7 +683,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		int minx = 1000, maxx = 0, miny = 1000, maxy = 0;
 		for (i = 0; i != this.circuit.elmList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			// centered text causes problems when trying to center the circuit,
 			// so we special-case it here
 			if (!ce.isCenteredText())
@@ -710,7 +710,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		for (i = 0; i != this.circuit.elmList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			ce.move(dx, dy);
 		}
 
@@ -840,7 +840,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			 * else if (conductanceCheckItem.getState())
 			 * g.setColor(Color.white);
 			 */
-			this.getElement(i).draw(g);
+			this.circuit.getElement(i).draw(g);
 		}
 
 		if (this.tempMouseMode == CirSim.MODE_DRAG_ROW || this.tempMouseMode == CirSim.MODE_DRAG_COLUMN
@@ -848,7 +848,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			for (i = 0; i != this.circuit.elmList.size(); i++)
 			{
-				CircuitElm ce = this.getElement(i);
+				CircuitElm ce = this.circuit.getElement(i);
 				DrawUtil.drawPost(g, ce.x, ce.y);
 				DrawUtil.drawPost(g, ce.x2, ce.y2);
 			}
@@ -866,7 +866,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				CircuitNodeLink cnl = cn.elementAt(0);
 				for (j = 0; j != this.circuit.elmList.size(); j++)
 				{
-					if (cnl.elm != this.getElement(j) && this.getElement(j).boundingBox.contains(cn.x, cn.y))
+					if (cnl.elm != this.circuit.getElement(j) && this.circuit.getElement(j).boundingBox.contains(cn.x, cn.y))
 					{
 						bb++;
 					}
@@ -1107,7 +1107,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		for (int i = 0; i != this.circuit.elmList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			if (ce instanceof SwitchElm)
 			{
 				n--;
@@ -1266,7 +1266,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		// determine if circuit is nonlinear
 		for (i = 0; i != this.circuit.elmList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			if (ce.nonLinear())
 			{
 				this.circuit.circuitNonLinear = true;
@@ -1301,7 +1301,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		// stamp linear circuit elements
 		for (i = 0; i != this.circuit.elmList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			ce.stamp();
 		}
 		// System.out.println("ac4");
@@ -1315,7 +1315,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			changed = false;
 			for (i = 0; i != this.circuit.elmList.size(); i++)
 			{
-				CircuitElm ce = this.getElement(i);
+				CircuitElm ce = this.circuit.getElement(i);
 				// loop through all ce's nodes to see if they are connected
 				// to other nodes not in closure
 				for (j = 0; j < ce.getPostCount(); j++)
@@ -2156,7 +2156,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			for (i = 0; i != this.circuit.elmList.size(); i++)
 			{
-				CircuitElm ce = this.getElement(i);
+				CircuitElm ce = this.circuit.getElement(i);
 				ce.delete();
 			}
 
@@ -2375,7 +2375,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		int i;
 		for (i = 0; i != this.circuit.elmList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			if (ce.y == this.dragY)
 			{
 				ce.movePoint(0, 0, dy);
@@ -2398,7 +2398,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		int i;
 		for (i = 0; i != this.circuit.elmList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			if (ce.x == this.dragX)
 			{
 				ce.movePoint(0, dx, 0);
@@ -2423,7 +2423,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		int i;
 		for (i = 0; i != this.circuit.elmList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			if (ce.isSelected() && !(ce instanceof TextElm))
 			{
 				break;
@@ -2451,7 +2451,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		// check if moves are allowed
 		for (i = 0; allowed && i != this.circuit.elmList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			if (ce.isSelected() && !ce.allowMove(dx, dy))
 			{
 				allowed = false;
@@ -2462,7 +2462,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			for (i = 0; i != this.circuit.elmList.size(); i++)
 			{
-				CircuitElm ce = this.getElement(i);
+				CircuitElm ce = this.circuit.getElement(i);
 				if (ce.isSelected())
 				{
 					ce.move(dx, dy);
@@ -2516,7 +2516,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		for (int i = 0; i != this.circuit.elmList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			ce.setSelected(ce == cs);
 		}
 		this.mouseElm = cs;
@@ -2727,7 +2727,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		for (int i = this.circuit.elmList.size() - 1; i >= 0; i--)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			if (ce.isSelected())
 			{
 				this.clipboard += ce.dump() + "\n";
@@ -2746,7 +2746,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		for (int i = this.circuit.elmList.size() - 1; i >= 0; i--)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			if (ce.isSelected())
 			{
 				ce.delete();
@@ -2763,7 +2763,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.setMenuSelection();
 		for (int i = this.circuit.elmList.size() - 1; i >= 0; i--)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			if (ce.isSelected())
 			{
 				this.clipboard += ce.dump() + "\n";
@@ -2787,7 +2787,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		Rectangle oldbb = null;
 		for (i = 0; i != this.circuit.elmList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			Rectangle bb = ce.getBoundingBox();
 			if (oldbb != null)
 			{
@@ -2805,7 +2805,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		Rectangle newbb = null;
 		for (i = oldsz; i != this.circuit.elmList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			ce.setSelected(true);
 			Rectangle bb = ce.getBoundingBox();
 
@@ -2838,7 +2838,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 			for (i = oldsz; i != this.circuit.elmList.size(); i++)
 			{
-				CircuitElm ce = this.getElement(i);
+				CircuitElm ce = this.circuit.getElement(i);
 				ce.move(dx, dy);
 			}
 			// center circuit
@@ -2896,7 +2896,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 			for (i = 0; i != this.circuit.elmList.size(); i++)
 			{
-				this.getElement(i).reset();
+				this.circuit.getElement(i).reset();
 			}
 			for (i = 0; i != this.scopeMan.scopeCount; i++)
 			{
@@ -3476,7 +3476,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 			for (i = 0; i < CirSim.this.circuit.elmList.size(); i++)
 			{
-				CircuitElm currentElement = CirSim.this.getElement(i);
+				CircuitElm currentElement = CirSim.this.circuit.getElement(i);
 				if (currentElement.boundingBox.contains(x, y))
 				{
 
@@ -3613,7 +3613,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			int i;
 			for (i = 0; i != CirSim.this.circuit.elmList.size(); i++)
 			{
-				CircuitElm ce = CirSim.this.getElement(i);
+				CircuitElm ce = CirSim.this.circuit.getElement(i);
 				if (ce == this.firstElm)
 				{
 					continue;
