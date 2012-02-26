@@ -20,6 +20,7 @@ import com.limoilux.circuit.ui.RowInfo;
 public class Circuit
 {
 	private final Vector<CircuitElm> elementList;
+	private final Vector<CircuitNode> nodeList;
 
 	private int circuitMatrixFullSize;
 
@@ -27,7 +28,6 @@ public class Circuit
 	private boolean analyzeFlag;
 	private boolean circuitNeedsMap;
 
-	public Vector<CircuitNode> nodeList;
 
 	public int circuitBottom;
 	public int circuitMatrixSize;
@@ -446,6 +446,7 @@ public class Circuit
 					}
 				}
 			}
+			
 			for (j = 0; j != inodes; j++)
 			{
 				cn = new CircuitNode(true);
