@@ -266,7 +266,7 @@ public class MosfetElm extends CircuitElm
 		double vds = vs[drain] - vs[source];
 		if (Math.abs(this.lastv1 - vs[1]) > .01 || Math.abs(this.lastv2 - vs[2]) > .01)
 		{
-			CircuitElm.cirSim.converged = false;
+			CircuitElm.cirSim.circuit.converged = false;
 		}
 		this.lastv1 = vs[1];
 		this.lastv2 = vs[2];

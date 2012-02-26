@@ -79,7 +79,7 @@ public class Diode
 				// (1/vt = slope of load line)
 				vnew = this.vt * Math.log(vnew / this.vt);
 			}
-			this.sim.converged = false;
+			this.sim.circuit.converged = false;
 			// System.out.println(vnew + " " + oo + " " + vold);
 		}
 		else if (vnew < 0 && this.zoffset != 0)
@@ -109,7 +109,7 @@ public class Diode
 				{
 					vnew = this.vt * Math.log(vnew / this.vt);
 				}
-				this.sim.converged = false;
+				this.sim.circuit.converged = false;
 			}
 			vnew = -(vnew + this.zoffset);
 		}
@@ -120,8 +120,8 @@ public class Diode
 	{
 		this.nodes[0] = n0;
 		this.nodes[1] = n1;
-		this.sim.stampNonLinear(this.nodes[0]);
-		this.sim.stampNonLinear(this.nodes[1]);
+		this.sim.circuit.stampNonLinear(this.nodes[0]);
+		this.sim.circuit.stampNonLinear(this.nodes[1]);
 	}
 
 	public void doStep(double voltdiff)
@@ -129,7 +129,7 @@ public class Diode
 		// used to have .1 here, but needed .01 for peak detector
 		if (Math.abs(voltdiff - this.lastvoltdiff) > .01)
 		{
-			this.sim.converged = false;
+			this.sim.circuit.converged = false;
 		}
 		voltdiff = this.limitStep(voltdiff, this.lastvoltdiff);
 		this.lastvoltdiff = voltdiff;

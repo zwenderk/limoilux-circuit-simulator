@@ -186,7 +186,7 @@ public class TriodeElm extends CircuitElm
 		if (Math.abs(this.lastv0 - vs[0]) > .01 || Math.abs(this.lastv1 - vs[1]) > .01
 				|| Math.abs(this.lastv2 - vs[2]) > .01)
 		{
-			CircuitElm.cirSim.converged = false;
+			CircuitElm.cirSim.circuit.converged = false;
 		}
 		this.lastv0 = vs[0];
 		this.lastv1 = vs[1];

@@ -223,7 +223,7 @@ public class TransistorElm extends CircuitElm
 			{
 				vnew = TransistorElm.vt * Math.log(vnew / TransistorElm.vt);
 			}
-			CircuitElm.cirSim.converged = false;
+			CircuitElm.cirSim.circuit.converged = false;
 			// System.out.println(vnew + " " + oo + " " + vold);
 		}
 		return vnew;
@@ -245,7 +245,7 @@ public class TransistorElm extends CircuitElm
 		if (Math.abs(vbc - this.lastvbc) > .01 || // .01
 				Math.abs(vbe - this.lastvbe) > .01)
 		{
-			CircuitElm.cirSim.converged = false;
+			CircuitElm.cirSim.circuit.converged = false;
 		}
 		this.gmin = 0;
 		if (CircuitElm.cirSim.subIterations > 100)

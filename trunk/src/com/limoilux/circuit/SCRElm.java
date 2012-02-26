@@ -226,7 +226,7 @@ public class SCRElm extends CircuitElm
 		// positive
 		if (Math.abs(vac - this.lastvac) > .01 || Math.abs(vag - this.lastvag) > .01)
 		{
-			CircuitElm.cirSim.converged = false;
+			CircuitElm.cirSim.circuit.converged = false;
 		}
 		this.lastvac = vac;
 		this.lastvag = vag;

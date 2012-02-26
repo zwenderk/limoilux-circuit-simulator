@@ -18,11 +18,15 @@ public class Circuit
 	public int circuitMatrixSize;
 	public int circuitMatrixFullSize;
 
+	public String stopMessage;
 	public RowInfo circuitRowInfo[];
+	public int circuitPermute[];
+	public double origRightSide[];
 	public double circuitMatrix[][];
 	public double circuitRightSide[];
 	public boolean circuitNonLinear;
 	public boolean analyzeFlag;
+	public boolean converged;
 	public boolean circuitNeedsMap;
 
 	public Circuit()

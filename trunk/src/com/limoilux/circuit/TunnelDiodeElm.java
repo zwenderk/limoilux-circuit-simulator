@@ -124,7 +124,7 @@ public class TunnelDiodeElm extends CircuitElm
 		double voltdiff = this.volts[0] - this.volts[1];
 		if (Math.abs(voltdiff - this.lastvoltdiff) > .01)
 		{
-			CircuitElm.cirSim.converged = false;
+			CircuitElm.cirSim.circuit.converged = false;
 		}
 		// System.out.println(voltdiff + " " + lastvoltdiff + " " +
 		// Math.abs(voltdiff-lastvoltdiff));

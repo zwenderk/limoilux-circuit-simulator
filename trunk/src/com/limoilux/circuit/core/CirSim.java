@@ -98,8 +98,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public static final int MODE_DRAG_ROW = 2;
 	public static final int MODE_DRAG_COLUMN = 3;
 
-
-
 	public final JFrame mainContainer;
 
 	public static String muString = "u";
@@ -112,7 +110,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private String startCircuitText = null;
 	private Image dbimage;
 
-	public boolean converged;
+
 	public int subIterations;
 
 	public Dimension winSize;
@@ -122,9 +120,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public CircuitElm plotXElm, plotYElm;
 	private int draggingPost;
 	private SwitchElm heldSwitchElm;
-	private double origRightSide[], origMatrix[][];
-	private int circuitPermute[];
-	
+	private double  origMatrix[][];
+
 	private long lastTime = 0;
 	private long lastFrameTime;
 	private long lastIterTime;
@@ -512,7 +509,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			this.readSetup(this.startCircuitText);
 		}
-		else if (this.stopMessage == null && this.startCircuit != null)
+		else if (this.circuit.stopMessage == null && this.startCircuit != null)
 		{
 			this.readSetupFile(this.startCircuit, this.startLabel);
 		}
@@ -855,6 +852,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 
 		int badnodes = 0;
+
 		// find bad connections, nodes not connected to other elements which
 		// intersect other elements' bounding boxes
 		for (i = 0; i != this.circuit.nodeList.size(); i++)
@@ -866,7 +864,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				CircuitNodeLink cnl = cn.elementAt(0);
 				for (j = 0; j != this.circuit.elmList.size(); j++)
 				{
-					if (cnl.elm != this.circuit.getElement(j) && this.circuit.getElement(j).boundingBox.contains(cn.x, cn.y))
+					if (cnl.elm != this.circuit.getElement(j)
+							&& this.circuit.getElement(j).boundingBox.contains(cn.x, cn.y))
 					{
 						bb++;
 					}
@@ -887,20 +886,25 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			this.dragElm.draw(g);
 		}
+
 		g.setFont(oldfont);
+
 		int ct = this.scopeMan.scopeCount;
-		if (this.stopMessage != null)
+
+		if (this.circuit.stopMessage != null)
 		{
 			ct = 0;
 		}
+
 		for (i = 0; i != ct; i++)
 		{
 			this.scopeMan.scopes[i].draw(g);
 		}
+
 		g.setColor(CircuitElm.whiteColor);
-		if (this.stopMessage != null)
+		if (this.circuit.stopMessage != null)
 		{
-			g.drawString(this.stopMessage, 10, this.circuitArea.height);
+			g.drawString(this.circuit.stopMessage, 10, this.circuitArea.height);
 		}
 		else
 		{
@@ -1150,7 +1154,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			return;
 		}
 
-		this.stopMessage = null;
+		this.circuit.stopMessage = null;
 		this.stopElm = null;
 		int i, j;
 		int vscount = 0;
@@ -1284,11 +1288,11 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.circuit.circuitMatrix = new double[matrixSize][matrixSize];
 		this.circuit.circuitRightSide = new double[matrixSize];
 		this.origMatrix = new double[matrixSize][matrixSize];
-		this.origRightSide = new double[matrixSize];
+		this.circuit.origRightSide = new double[matrixSize];
 		this.circuit.circuitMatrixSize = matrixSize;
 		this.circuit.circuitMatrixFullSize = matrixSize;
 		this.circuit.circuitRowInfo = new RowInfo[matrixSize];
-		this.circuitPermute = new int[matrixSize];
+		this.circuit.circuitPermute = new int[matrixSize];
 		// int vs = 0;
 
 		for (i = 0; i != matrixSize; i++)
@@ -1645,7 +1649,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		matrixSize = this.circuit.circuitMatrixSize = newsize;
 		for (i = 0; i != matrixSize; i++)
 		{
-			this.origRightSide[i] = this.circuit.circuitRightSide[i];
+			this.circuit.origRightSide[i] = this.circuit.circuitRightSide[i];
 		}
 		for (i = 0; i != matrixSize; i++)
 		{
@@ -1668,7 +1672,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		// needing to do it every frame
 		if (!this.circuit.circuitNonLinear)
 		{
-			if (!CoreUtil.luFactor(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize, this.circuitPermute))
+			if (!CoreUtil.luFactor(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize,
+					this.circuit.circuitPermute))
 			{
 				this.stop("Singular matrix!", null);
 				return;
@@ -1684,7 +1689,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	public void stop(String msg, CircuitElm ce)
 	{
-		this.stopMessage = msg;
+		this.circuit.stopMessage = msg;
 		this.circuit.circuitMatrix = null;
 		this.stopElm = ce;
 		this.stoppedCheck.setState(true);
@@ -1774,11 +1779,11 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			final int subiterCount = 5000;
 			for (subiter = 0; subiter != subiterCount; subiter++)
 			{
-				this.converged = true;
+				this.circuit.converged = true;
 				this.subIterations = subiter;
 				for (i = 0; i != this.circuit.circuitMatrixSize; i++)
 				{
-					this.circuit.circuitRightSide[i] = this.origRightSide[i];
+					this.circuit.circuitRightSide[i] = this.circuit.origRightSide[i];
 				}
 				if (this.circuit.circuitNonLinear)
 				{
@@ -1795,7 +1800,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					CircuitElm ce = this.circuit.getElement(i);
 					ce.doStep();
 				}
-				if (this.stopMessage != null)
+				if (this.circuit.stopMessage != null)
 				{
 					return;
 				}
@@ -1827,19 +1832,19 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				}
 				if (this.circuit.circuitNonLinear)
 				{
-					if (this.converged && subiter > 0)
+					if (this.circuit.converged && subiter > 0)
 					{
 						break;
 					}
 					if (!CoreUtil.luFactor(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize,
-							this.circuitPermute))
+							this.circuit.circuitPermute))
 					{
 						this.stop("Singular matrix!", null);
 						return;
 					}
 				}
-				CoreUtil.luSolve(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize, this.circuitPermute,
-						this.circuit.circuitRightSide);
+				CoreUtil.luSolve(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize,
+						this.circuit.circuitPermute, this.circuit.circuitRightSide);
 
 				for (j = 0; j != this.circuit.circuitMatrixFullSize; j++)
 				{
@@ -1859,7 +1864,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					 */
 					if (Double.isNaN(res))
 					{
-						this.converged = false;
+						this.circuit.converged = false;
 						// debugprint = true;
 						break;
 					}
@@ -3610,11 +3615,11 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			}
 
 			this.used[n1] = true;
-			
+
 			for (int i = 0; i != CirSim.this.circuit.elmList.size(); i++)
 			{
 				CircuitElm circuitElement = CirSim.this.circuit.getElement(i);
-				
+
 				if (circuitElement == this.firstElm)
 				{
 					continue;
@@ -3637,7 +3642,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				{
 					continue;
 				}
-				
+
 				if (this.type == FindPathInfo.CAP_V)
 				{
 					if (!(circuitElement.isWire() || circuitElement instanceof CapacitorElm || circuitElement instanceof VoltageElm))
@@ -3645,7 +3650,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 						continue;
 					}
 				}
-				
+
 				if (n1 == 0)
 				{
 					// look for posts which have a ground connection;
@@ -3660,9 +3665,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 						}
 					}
 				}
-				
+
 				int j;
-				
+
 				for (j = 0; j != circuitElement.getPostCount(); j++)
 				{
 					// System.out.println(ce + " " + ce.getNode(j));
@@ -3671,19 +3676,19 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 						break;
 					}
 				}
-				
+
 				if (j == circuitElement.getPostCount())
 				{
 					continue;
 				}
-				
+
 				if (circuitElement.hasGroundConnection(j) && this.findPath(0, depth))
 				{
 					// System.out.println(ce + " has ground");
 					this.used[n1] = false;
 					return true;
 				}
-				
+
 				if (this.type == FindPathInfo.INDUCT && circuitElement instanceof InductorElm)
 				{
 					double current = circuitElement.getCurrent();
@@ -3699,7 +3704,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 						continue;
 					}
 				}
-				
+
 				for (int k = 0; k != circuitElement.getPostCount(); k++)
 				{
 					if (j == k)
