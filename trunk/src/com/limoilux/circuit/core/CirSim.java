@@ -774,7 +774,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			this.mouseElm = this.circuit.stopElm;
 		}
 		this.setupScopes();
+		
 		Graphics g = null;
+		
 		g = this.dbimage.getGraphics();
 		CircuitElm.selectColor = Color.cyan;
 		if (this.printableCheckItem.getState())
@@ -797,6 +799,10 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			try
 			{
 				this.runCircuit();
+			}
+			catch (CircuitAnalysisException e)
+			{
+				this.stop(e);
 			}
 			catch (Exception e)
 			{
@@ -1237,7 +1243,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		return .1 * Math.exp((this.speedBar.getValue() - 61) / 24.);
 	}
 
-	private void runCircuit()
+	private void runCircuit() throws CircuitAnalysisException
 	{
 		if (this.circuit.circuitMatrix == null || this.circuit.elmList.size() == 0)
 		{
@@ -1294,6 +1300,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				}
 				boolean printit = debugprint;
 				debugprint = false;
+				
 				for (j = 0; j != this.circuit.circuitMatrixSize; j++)
 				{
 					for (i = 0; i != this.circuit.circuitMatrixSize; i++)
@@ -1301,8 +1308,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 						double x = this.circuit.circuitMatrix[i][j];
 						if (Double.isNaN(x) || Double.isInfinite(x))
 						{
-							this.stop("nan/infinite matrix!", null);
-							return;
+							throw new CircuitAnalysisException("nan/infinite matrix!");
 						}
 					}
 				}
