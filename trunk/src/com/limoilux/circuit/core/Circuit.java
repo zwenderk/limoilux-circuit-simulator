@@ -18,7 +18,6 @@ import com.limoilux.circuit.ui.RowInfo;
 
 public class Circuit
 {
-	private final CirSim cirSim;
 	public Vector<CircuitNode> nodeList;
 	public Vector<CircuitElm> elmList;
 
@@ -41,9 +40,9 @@ public class Circuit
 	public boolean circuitNeedsMap;
 	public CircuitElm stopElm;
 
-	public Circuit(CirSim cirSim)
+	public Circuit()
 	{
-		this.cirSim = cirSim;
+
 	}
 
 	public CircuitNode getCircuitNode(int n)
@@ -290,15 +289,18 @@ public class Circuit
 		this.stampMatrix(n2, vn, -1);
 	}
 	
-	public void analyzeCircuit()
+	public StopDump analyzeCircuit()
 	{
+		StopDump stopDump = null;
+		
 		System.out.println("Analysing");
 		CircuitNode cn;
 
 		this.calcCircuitBottom();
+		
 		if (this.elmList.isEmpty())
 		{
-			return;
+			return stopDump;
 		}
 
 		this.stopMessage = null;
@@ -536,8 +538,11 @@ public class Circuit
 				FindPathInfo fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1), this);
 				if (!fpi.findPath(ce.getNode(0)))
 				{
-					this.cirSim.stop("No path for current source!", ce);
-					return;
+					stopDump = new StopDump();
+					stopDump.msg = "No path for current source!";
+					stopDump.ce = ce;
+					
+					return stopDump;
 				}
 			}
 			// look for voltage source loops
@@ -546,8 +551,11 @@ public class Circuit
 				FindPathInfo fpi = new FindPathInfo(FindPathInfo.VOLTAGE, ce, ce.getNode(1), this);
 				if (fpi.findPath(ce.getNode(0)))
 				{
-					this.cirSim.stop("Voltage source/wire loop with no resistance!", ce);
-					return;
+					stopDump = new StopDump();
+					stopDump.msg = "Voltage source/wire loop with no resistance!";
+					stopDump.ce = ce;
+
+					return stopDump;
 				}
 			}
 			// look for shorted caps, or caps w/ voltage but no R
@@ -564,8 +572,11 @@ public class Circuit
 					fpi = new FindPathInfo(FindPathInfo.CAP_V, ce, ce.getNode(1), this);
 					if (fpi.findPath(ce.getNode(0)))
 					{
-						this.cirSim.stop("Capacitor loop with no resistance!", ce);
-						return;
+						stopDump = new StopDump();
+						stopDump.msg = "Capacitor loop with no resistance!";
+						stopDump.ce = ce;
+	
+						return stopDump;
 					}
 				}
 			}
@@ -627,8 +638,11 @@ public class Circuit
 			{
 				if (qp == -1)
 				{
-					this.cirSim.stop("Matrix error", null);
-					return;
+					stopDump = new StopDump();
+					stopDump.msg ="Matrix error";
+					stopDump.ce = null;
+					
+					return stopDump;
 				}
 				RowInfo elt = this.circuitRowInfo[qp];
 				if (qm == -1)
@@ -825,10 +839,13 @@ public class Circuit
 			if (!CoreUtil.luFactor(this.circuitMatrix, this.circuitMatrixSize,
 					this.circuitPermute))
 			{
-				this.cirSim.stop("Singular matrix!", null);
-				return;
+				stopDump = new StopDump();
+				stopDump.msg = "Singular matrix!";
+				stopDump.ce = null;
+				return stopDump;
 			}
 		}
 
+		return stopDump;
 	}
 }

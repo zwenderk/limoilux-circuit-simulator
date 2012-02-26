@@ -212,7 +212,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		super("Limoilux Circuit Simulator v1.1");
 
-		this.circuit = new Circuit(this);
+		this.circuit = new Circuit();
 		this.scopeMan = new ScopeManager();
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -749,7 +749,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		if (this.circuit.analyzeFlag)
 		{
-			this.analyzeCircuit();
+			StopDump stopDump = this.circuit.analyzeCircuit();
+
+			if (stopDump != null)
+			{
+				this.stop(stopDump.msg, stopDump.ce);
+			}
+
 			this.circuit.analyzeFlag = false;
 		}
 
@@ -1118,7 +1124,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				{
 					((SwitchElm) ce).toggle();
 					this.circuit.analyzeFlag = true;
-					
+
 					this.circuitCanvas.repaint();
 					return;
 				}
