@@ -77,6 +77,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	@Deprecated
 	private static final double PI = Math.PI;
 
+	private static final int subiterCount = 5000;
 	private static final int MODE_ADD_ELM = 0;
 	private static final int MODE_DRAG_ALL = 1;
 
@@ -1010,7 +1011,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		 */
 
 		realg.drawImage(this.dbimage, 0, 0, this);
-		if (!this.stoppedCheck.getState() && this.circuit.circuitMatrix != null)
+		if (!this.stoppedCheck.getState() && !this.circuit.matrixIsNull())
 		{
 			// Limit to 50 fps (thanks to J�rgen Kl�tzer for this)
 			long delay = 1000 / 50 - (System.currentTimeMillis() - this.lastFrameTime);
@@ -1039,8 +1040,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private String getHint()
 	{
-		CircuitElm c1 = this.circuit.getElement(this.hintItem1);
-		CircuitElm c2 = this.circuit.getElement(this.hintItem2);
+		CircuitElm c1 = this.circuit.getElementAt(this.hintItem1);
+		CircuitElm c2 = this.circuit.getElementAt(this.hintItem2);
 		if (c1 == null || c2 == null)
 		{
 			return null;
@@ -1171,7 +1172,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void handleAnalysisException(CircuitAnalysisException e)
 	{
-		this.circuit.circuitMatrix = null;
+		this.circuit.clearMatrix();
 
 		this.stopMessage = e.getTechnicalMessage();
 		this.stopElm = e.getCauseElement();
@@ -1237,9 +1238,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void runCircuit() throws CircuitAnalysisException
 	{
-		if (this.circuit.circuitMatrix == null || this.circuit.getElementCount() == 0)
+		if (this.circuit.matrixIsNull() || this.circuit.getElementCount() == 0)
 		{
-			this.circuit.circuitMatrix = null;
+			this.circuit.clearMatrix();
 			return;
 		}
 
@@ -1271,7 +1272,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				}
 
 			}
-			final int subiterCount = 5000;
+			
+			
 			for (subiter = 0; subiter != subiterCount; subiter++)
 			{
 				this.circuit.converged = true;
@@ -1280,15 +1282,11 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				{
 					this.circuit.circuitRightSide[i] = this.circuit.origRightSide[i];
 				}
+
 				if (this.circuit.isNonLinear())
 				{
-					for (i = 0; i != this.circuit.circuitMatrixSize; i++)
-					{
-						for (j = 0; j != this.circuit.circuitMatrixSize; j++)
-						{
-							this.circuit.circuitMatrix[i][j] = this.circuit.origMatrix[i][j];
-						}
-					}
+					this.circuit.recopyMatrix();
+
 				}
 				for (i = 0; i != this.circuit.getElementCount(); i++)
 				{
@@ -1312,29 +1310,16 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				boolean printit = debugprint;
 				debugprint = false;
 
-				for (j = 0; j != this.circuit.circuitMatrixSize; j++)
+				if (this.circuit.matrixIsInfiniteOrNAN())
 				{
-					for (i = 0; i != this.circuit.circuitMatrixSize; i++)
-					{
-						double x = this.circuit.circuitMatrix[i][j];
-						if (Double.isNaN(x) || Double.isInfinite(x))
-						{
-							throw new CircuitAnalysisException("nan/infinite matrix!");
-						}
-					}
+					throw new CircuitAnalysisException("nan/infinite matrix!");
 				}
+
 				if (printit)
 				{
-					for (j = 0; j != this.circuit.circuitMatrixSize; j++)
-					{
-						for (i = 0; i != this.circuit.circuitMatrixSize; i++)
-						{
-							System.out.print(this.circuit.circuitMatrix[j][i] + ",");
-						}
-						System.out.print("  " + this.circuit.circuitRightSide[j] + "\n");
-					}
-					System.out.print("\n");
+					System.out.print(this.circuit.matrixToString());
 				}
+
 				if (this.circuit.isNonLinear())
 				{
 					if (this.circuit.converged && subiter > 0)
@@ -1946,7 +1931,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		int i;
 		for (i = 0; i != this.circuit.getElementCount(); i++)
 		{
-			CircuitElm ce = this.circuit.getElement(i);
+			CircuitElm ce = this.circuit.getElementAt(i);
 			if (ce.isSelected() && !(ce instanceof TextElm))
 			{
 				break;
@@ -1974,7 +1959,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		// check if moves are allowed
 		for (i = 0; allowed && i != this.circuit.getElementCount(); i++)
 		{
-			CircuitElm ce = this.circuit.getElement(i);
+			CircuitElm ce = this.circuit.getElementAt(i);
 			if (ce.isSelected() && !ce.allowMove(dx, dy))
 			{
 				allowed = false;
@@ -1985,7 +1970,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			for (i = 0; i != this.circuit.getElementCount(); i++)
 			{
-				CircuitElm ce = this.circuit.getElement(i);
+				CircuitElm ce = this.circuit.getElementAt(i);
 				if (ce.isSelected())
 				{
 					ce.move(dx, dy);
@@ -3082,7 +3067,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 				}
 			}
-			
+
 			if (CirSim.this.mouseElm != origMouse)
 			{
 				CirSim.this.circuitCanvas.repaint();

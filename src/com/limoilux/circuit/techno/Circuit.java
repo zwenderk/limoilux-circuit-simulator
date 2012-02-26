@@ -29,7 +29,6 @@ public class Circuit
 	private boolean analyzeFlag;
 	private boolean circuitNeedsMap;
 
-
 	public int circuitBottom;
 	public int circuitMatrixSize;
 
@@ -42,7 +41,7 @@ public class Circuit
 	public double[] circuitRightSide;
 
 	public double[][] circuitMatrix;
-	public double[][] origMatrix;
+	private double[][] originalMatrix;
 
 	public Circuit()
 	{
@@ -447,7 +446,7 @@ public class Circuit
 					}
 				}
 			}
-			
+
 			for (j = 0; j != inodes; j++)
 			{
 				cn = new CircuitNode(true);
@@ -488,7 +487,7 @@ public class Circuit
 		int matrixSize = this.getNodeCount() - 1 + vscount;
 		this.circuitMatrix = new double[matrixSize][matrixSize];
 		this.circuitRightSide = new double[matrixSize];
-		this.origMatrix = new double[matrixSize][matrixSize];
+		this.originalMatrix = new double[matrixSize][matrixSize];
 		this.origRightSide = new double[matrixSize];
 		this.circuitMatrixSize = matrixSize;
 		this.circuitMatrixFullSize = matrixSize;
@@ -855,7 +854,7 @@ public class Circuit
 		{
 			for (j = 0; j != matrixSize; j++)
 			{
-				this.origMatrix[i][j] = this.circuitMatrix[i][j];
+				this.originalMatrix[i][j] = this.circuitMatrix[i][j];
 			}
 		}
 
@@ -878,5 +877,64 @@ public class Circuit
 				throw new CircuitAnalysisException("Singular matrix!");
 			}
 		}
+	}
+
+	/**
+	 * ???? origMatrix to circuitMatrix
+	 */
+	public void recopyMatrix()
+	{
+		// TODO à optimiser
+		for (int i = 0; i < this.circuitMatrixSize; i++)
+		{
+			for (int j = 0; j < this.circuitMatrixSize; j++)
+			{
+				this.circuitMatrix[i][j] = this.originalMatrix[i][j];
+			}
+		}
+	}
+
+	public void clearMatrix()
+	{
+		this.circuitMatrix = null;
+	}
+
+	public boolean matrixIsNull()
+	{
+		return this.circuitMatrix == null;
+	}
+
+	public boolean matrixIsInfiniteOrNAN()
+	{
+		double x;
+		for (int j = 0; j != this.circuitMatrixSize; j++)
+		{
+			for (int i = 0; i != this.circuitMatrixSize; i++)
+			{
+				x = this.circuitMatrix[i][j];
+				if (Double.isNaN(x) || Double.isInfinite(x))
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public String matrixToString()
+	{
+		String out = "";
+		for (int j = 0; j != this.circuitMatrixSize; j++)
+		{
+			for (int i = 0; i != this.circuitMatrixSize; i++)
+			{
+				out += this.circuitMatrix[j][i] + ",";
+			}
+			out += "  " + this.circuitRightSide[j] + "\n";
+		}
+
+		out += "\n";
+		return out;
 	}
 }
