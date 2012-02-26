@@ -123,7 +123,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public CircuitElm plotXElm, plotYElm;
 	private int draggingPost;
 	private SwitchElm heldSwitchElm;
-	private double circuitMatrix[][], circuitRightSide[], origRightSide[], origMatrix[][];
+	private double circuitRightSide[], origRightSide[], origMatrix[][];
 	private RowInfo circuitRowInfo[];
 	private int circuitPermute[];
 	
@@ -1286,13 +1286,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.origRightSide = new double[matrixSize];
 		this.circuit.circuitMatrixSize = matrixSize;
 		this.circuit.circuitMatrixFullSize = matrixSize;
-		this.circuitRowInfo = new RowInfo[matrixSize];
+		this.circuit.circuitRowInfo = new RowInfo[matrixSize];
 		this.circuitPermute = new int[matrixSize];
 		// int vs = 0;
 
 		for (i = 0; i != matrixSize; i++)
 		{
-			this.circuitRowInfo[i] = new RowInfo();
+			this.circuit.circuitRowInfo[i] = new RowInfo();
 		}
 
 		this.circuitNeedsMap = false;
@@ -1425,7 +1425,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			int qm = -1, qp = -1;
 			double qv = 0;
-			RowInfo re = this.circuitRowInfo[i];
+			RowInfo re = this.circuit.circuitRowInfo[i];
 			/*
 			 * System.out.println("row " + i + " " + re.lsChanges + " " +
 			 * re.rsChanges + " " + re.dropRow);
@@ -1440,11 +1440,11 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			for (j = 0; j != matrixSize; j++)
 			{
 				double q = this.circuit.circuitMatrix[i][j];
-				if (this.circuitRowInfo[j].type == RowInfo.ROW_CONST)
+				if (this.circuit.circuitRowInfo[j].type == RowInfo.ROW_CONST)
 				{
 					// keep a running total of const values that have been
 					// removed already
-					rsadd -= this.circuitRowInfo[j].value * q;
+					rsadd -= this.circuit.circuitRowInfo[j].value * q;
 					continue;
 				}
 				if (q == 0)
@@ -1478,7 +1478,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					this.stop("Matrix error", null);
 					return;
 				}
-				RowInfo elt = this.circuitRowInfo[qp];
+				RowInfo elt = this.circuit.circuitRowInfo[qp];
 				if (qm == -1)
 				{
 					// we found a row with only one nonzero entry; that value
@@ -1492,7 +1492,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 						 * + " " + qp + " to " + elt.nodeEq);
 						 */
 						qp = elt.nodeEq;
-						elt = this.circuitRowInfo[qp];
+						elt = this.circuit.circuitRowInfo[qp];
 					}
 					if (elt.type == RowInfo.ROW_EQUAL)
 					{
@@ -1508,7 +1508,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					}
 					elt.type = RowInfo.ROW_CONST;
 					elt.value = (this.circuitRightSide[i] + rsadd) / qv;
-					this.circuitRowInfo[i].dropRow = true;
+					this.circuit.circuitRowInfo[i].dropRow = true;
 					// System.out.println(qp + " * " + qv + " = const " +
 					// elt.value);
 					i = -1; // start over from scratch
@@ -1523,7 +1523,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 						int qq = qm;
 						qm = qp;
 						qp = qq;
-						elt = this.circuitRowInfo[qp];
+						elt = this.circuit.circuitRowInfo[qp];
 						if (elt.type != RowInfo.ROW_NORMAL)
 						{
 							// we should follow the chain here, but this
@@ -1535,7 +1535,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					}
 					elt.type = RowInfo.ROW_EQUAL;
 					elt.nodeEq = qm;
-					this.circuitRowInfo[i].dropRow = true;
+					this.circuit.circuitRowInfo[i].dropRow = true;
 					// System.out.println(qp + " = " + qm);
 				}
 			}
@@ -1546,7 +1546,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		int nn = 0;
 		for (i = 0; i != matrixSize; i++)
 		{
-			RowInfo elt = this.circuitRowInfo[i];
+			RowInfo elt = this.circuit.circuitRowInfo[i];
 			if (elt.type == RowInfo.ROW_NORMAL)
 			{
 				elt.mapCol = nn++;
@@ -1559,7 +1559,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				// resolve chains of equality; 100 max steps to avoid loops
 				for (j = 0; j != 100; j++)
 				{
-					e2 = this.circuitRowInfo[elt.nodeEq];
+					e2 = this.circuit.circuitRowInfo[elt.nodeEq];
 					if (e2.type != RowInfo.ROW_EQUAL)
 					{
 						break;
@@ -1578,10 +1578,10 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 		for (i = 0; i != matrixSize; i++)
 		{
-			RowInfo elt = this.circuitRowInfo[i];
+			RowInfo elt = this.circuit.circuitRowInfo[i];
 			if (elt.type == RowInfo.ROW_EQUAL)
 			{
-				RowInfo e2 = this.circuitRowInfo[elt.nodeEq];
+				RowInfo e2 = this.circuit.circuitRowInfo[elt.nodeEq];
 				if (e2.type == RowInfo.ROW_CONST)
 				{
 					// if something is equal to a const, it's a const
@@ -1615,7 +1615,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		int ii = 0;
 		for (i = 0; i != matrixSize; i++)
 		{
-			RowInfo rri = this.circuitRowInfo[i];
+			RowInfo rri = this.circuit.circuitRowInfo[i];
 			if (rri.dropRow)
 			{
 				rri.mapRow = -1;
@@ -1626,7 +1626,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			// System.out.println("Row " + i + " maps to " + ii);
 			for (j = 0; j != matrixSize; j++)
 			{
-				RowInfo ri = this.circuitRowInfo[j];
+				RowInfo ri = this.circuit.circuitRowInfo[j];
 				if (ri.type == RowInfo.ROW_CONST)
 				{
 					newrs[ii] -= ri.value * this.circuit.circuitMatrix[i][j];
@@ -1783,8 +1783,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			if (this.circuitNeedsMap)
 			{
-				i = this.circuitRowInfo[i - 1].mapRow;
-				RowInfo ri = this.circuitRowInfo[j - 1];
+				i = this.circuit.circuitRowInfo[i - 1].mapRow;
+				RowInfo ri = this.circuit.circuitRowInfo[j - 1];
 				if (ri.type == RowInfo.ROW_CONST)
 				{
 					// System.out.println("Stamping constant " + i + " " + j +
@@ -1812,7 +1812,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			if (this.circuitNeedsMap)
 			{
-				i = this.circuitRowInfo[i - 1].mapRow;
+				i = this.circuit.circuitRowInfo[i - 1].mapRow;
 				// System.out.println("stamping " + i + " " + x);
 			}
 			else
@@ -1829,7 +1829,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		// System.out.println("rschanges true " + (i-1));
 		if (i > 0)
 		{
-			this.circuitRowInfo[i - 1].rsChanges = true;
+			this.circuit.circuitRowInfo[i - 1].rsChanges = true;
 		}
 	}
 
@@ -1838,7 +1838,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		if (i > 0)
 		{
-			this.circuitRowInfo[i - 1].lsChanges = true;
+			this.circuit.circuitRowInfo[i - 1].lsChanges = true;
 		}
 	}
 
@@ -1949,7 +1949,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 				for (j = 0; j != this.circuit.circuitMatrixFullSize; j++)
 				{
-					RowInfo ri = this.circuitRowInfo[j];
+					RowInfo ri = this.circuit.circuitRowInfo[j];
 					double res = 0;
 					if (ri.type == RowInfo.ROW_CONST)
 					{
