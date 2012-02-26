@@ -46,6 +46,7 @@ public class Circuit
 	public Circuit()
 	{
 		this.elementList = new Vector<CircuitElm>();
+		this.nodeList = new Vector<CircuitNode>();
 	}
 
 	public int getNodeCount()
@@ -356,7 +357,7 @@ public class Circuit
 
 		int i, j;
 		int vscount = 0;
-		this.nodeList = new Vector<CircuitNode>();
+		this.nodeList.clear();
 		boolean gotGround = false;
 		boolean gotRail = false;
 		CircuitElm volt = null;
