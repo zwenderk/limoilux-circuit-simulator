@@ -4,7 +4,7 @@ package com.limoilux.circuit;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
-import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitElm;
 
 public class AndGateElm extends GateElm
 {

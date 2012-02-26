@@ -11,6 +11,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Random;
 
+import com.limoilux.circuit.techno.CircuitElm;
+
 public class CoreUtil
 {
 	private static final Random RANDOM_GENERATOR = new Random();

@@ -4,7 +4,7 @@ package com.limoilux.circuit;
 import java.awt.Graphics;
 import java.util.StringTokenizer;
 
-import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitElm;
 
 public class GroundElm extends CircuitElm
 {

@@ -18,8 +18,8 @@ import com.limoilux.circuit.OutputElm;
 import com.limoilux.circuit.ProbeElm;
 import com.limoilux.circuit.TransistorElm;
 import com.limoilux.circuit.core.CirSim;
-import com.limoilux.circuit.core.CircuitElm;
 import com.limoilux.circuit.core.CoreUtil;
+import com.limoilux.circuit.techno.CircuitElm;
 
 public class Scope
 {

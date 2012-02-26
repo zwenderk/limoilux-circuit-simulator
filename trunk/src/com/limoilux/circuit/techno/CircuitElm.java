@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.core;
+package com.limoilux.circuit.techno;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -13,7 +13,9 @@ import java.text.NumberFormat;
 import com.limoilux.circuit.RailElm;
 import com.limoilux.circuit.SweepElm;
 import com.limoilux.circuit.VoltageElm;
-import com.limoilux.circuit.techno.CircuitAnalysisException;
+import com.limoilux.circuit.core.CirSim;
+import com.limoilux.circuit.core.CoreUtil;
+import com.limoilux.circuit.core.Editable;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
