@@ -5,19 +5,19 @@ import com.limoilux.circuit.CurrentElm;
 import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.VoltageElm;
 
-class FindPathInfo
+public class FindPathInfo
 {
-	static final int INDUCT = 1;
-	static final int VOLTAGE = 2;
-	static final int SHORT = 3;
-	static final int CAP_V = 4;
-	boolean used[];
-	int dest;
-	CircuitElm firstElm;
-	int type;
-	Circuit circuit;
+	public static final int INDUCT = 1;
+	public static final int VOLTAGE = 2;
+	public static final int SHORT = 3;
+	public static final int CAP_V = 4;
+	public boolean used[];
+	public int dest;
+	public CircuitElm firstElm;
+	public int type;
+	public Circuit circuit;
 
-	FindPathInfo( int t, CircuitElm e, int d, Circuit circuit)
+	public FindPathInfo( int t, CircuitElm e, int d, Circuit circuit)
 	{ 
 		this.circuit = circuit;
 		this.dest = d;
@@ -26,12 +26,12 @@ class FindPathInfo
 		this.used = new boolean[this.circuit.nodeList.size()];
 	}
 
-	boolean findPath(int n1)
+	public boolean findPath(int n1)
 	{
 		return this.findPath(n1, -1);
 	}
 
-	boolean findPath(int n1, int depth)
+	public boolean findPath(int n1, int depth)
 	{
 		if (n1 == this.dest)
 		{
