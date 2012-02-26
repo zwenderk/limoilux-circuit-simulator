@@ -3,6 +3,12 @@ package com.limoilux.circuit.core;
 
 import java.awt.Point;
 import java.awt.Polygon;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Random;
 
 public class CoreUtil
@@ -401,5 +407,48 @@ public class CoreUtil
 	public static boolean comparePair(int x1, int x2, int y1, int y2)
 	{
 		return x1 == y1 && x2 == y2 || x1 == y2 && x2 == y1;
+	}
+	
+	public static ByteArrayOutputStream readUrlData(URL url) throws IOException
+	{
+		Object o = url.getContent();
+		FilterInputStream fis = (FilterInputStream) o;
+		ByteArrayOutputStream ba = new ByteArrayOutputStream(fis.available());
+		byte[] bytes = null;
+		int blen = 1024;
+		int len;
+		
+		bytes = new byte[blen];
+		
+		while (true)
+		{
+			len = fis.read(bytes);
+			if (len <= 0)
+			{
+				break;
+			}
+			ba.write(bytes, 0, len);
+		}
+		return ba;
+	}
+
+	public static URL getCodeBase()
+	{
+		URL out = null;
+		File f = null;
+
+		try
+		{
+			f = new File(".");
+			out = new URL("file:" + f.getCanonicalPath() + "/");
+		}
+		catch (MalformedURLException e)
+		{
+		}
+		catch (IOException e)
+		{
+		}
+
+		return out;
 	}
 }
