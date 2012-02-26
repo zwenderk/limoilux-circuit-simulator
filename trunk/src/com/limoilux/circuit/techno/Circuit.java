@@ -3,6 +3,7 @@ package com.limoilux.circuit.techno;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import com.limoilux.circuit.CapacitorElm;
@@ -19,8 +20,8 @@ import com.limoilux.circuit.ui.RowInfo;
 
 public class Circuit
 {
-	private final Vector<CircuitElm> elementList;
-	private final Vector<CircuitNode> nodeList;
+	private final ArrayList<CircuitElm> elementList;
+	private final ArrayList<CircuitNode> nodeList;
 
 	private int circuitMatrixFullSize;
 
@@ -45,8 +46,8 @@ public class Circuit
 
 	public Circuit()
 	{
-		this.elementList = new Vector<CircuitElm>();
-		this.nodeList = new Vector<CircuitNode>();
+		this.elementList = new ArrayList<CircuitElm>();
+		this.nodeList = new ArrayList<CircuitNode>();
 	}
 
 	public int getNodeCount()
@@ -82,22 +83,22 @@ public class Circuit
 
 	public void removeElementAt(int index)
 	{
-		this.elementList.removeElementAt(index);
+		this.elementList.remove(index);
 	}
 
 	public void removeAllElements()
 	{
-		this.elementList.removeAllElements();
+		this.elementList.clear();
 	}
 
 	public void addElement(CircuitElm element)
 	{
-		this.elementList.addElement(element);
+		this.elementList.add(element);
 	}
 
 	public CircuitNode getNodeAt(int index)
 	{
-		return this.nodeList.elementAt(index);
+		return this.nodeList.get(index);
 
 	}
 
@@ -107,7 +108,7 @@ public class Circuit
 	 */
 	public CircuitElm getElementAt(int index)
 	{
-		return this.elementList.elementAt(index);
+		return this.elementList.get(index);
 	}
 
 	/**
@@ -125,7 +126,7 @@ public class Circuit
 	{
 		for (int i = 0; i != this.elementList.size(); i++)
 		{
-			if (elm == this.elementList.elementAt(i))
+			if (elm == this.elementList.get(i))
 			{
 				return i;
 			}
@@ -158,7 +159,7 @@ public class Circuit
 			CircuitElm ce = this.getElementAt(i);
 			if (ce.x == ce.x2 && ce.y == ce.y2)
 			{
-				this.elementList.removeElementAt(i);
+				this.elementList.remove(i);
 				ce.delete();
 			}
 		}
@@ -390,7 +391,7 @@ public class Circuit
 			Point pt = volt.getPost(0);
 			cn.x = pt.x;
 			cn.y = pt.y;
-			this.nodeList.addElement(cn);
+			this.nodeList.add(cn);
 		}
 		else
 		{
@@ -398,7 +399,7 @@ public class Circuit
 			cn = new CircuitNode(false);
 			cn.x = cn.y = -1;
 
-			this.nodeList.addElement(cn);
+			this.nodeList.add(cn);
 		}
 		// System.out.println("ac2");
 
@@ -431,7 +432,7 @@ public class Circuit
 					CircuitNodeLink cnl = new CircuitNodeLink(j, ce);
 					cn.addElement(cnl);
 					ce.setNode(j, this.getNodeCount());
-					this.nodeList.addElement(cn);
+					this.nodeList.add(cn);
 				}
 				else
 				{
@@ -457,7 +458,7 @@ public class Circuit
 
 				cn.addElement(cnl);
 				ce.setNode(cnl.num, this.getNodeCount());
-				this.nodeList.addElement(cn);
+				this.nodeList.add(cn);
 			}
 			vscount += ivs;
 		}
