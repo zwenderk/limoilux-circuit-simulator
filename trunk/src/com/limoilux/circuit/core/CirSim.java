@@ -123,8 +123,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public CircuitElm plotXElm, plotYElm;
 	private int draggingPost;
 	private SwitchElm heldSwitchElm;
-	private double circuitRightSide[], origRightSide[], origMatrix[][];
-	private RowInfo circuitRowInfo[];
+	private double origRightSide[], origMatrix[][];
 	private int circuitPermute[];
 	
 	private boolean circuitNeedsMap;
@@ -1281,7 +1280,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		int matrixSize = this.circuit.nodeList.size() - 1 + vscount;
 		this.circuit.circuitMatrix = new double[matrixSize][matrixSize];
-		this.circuitRightSide = new double[matrixSize];
+		this.circuit.circuitRightSide = new double[matrixSize];
 		this.origMatrix = new double[matrixSize][matrixSize];
 		this.origRightSide = new double[matrixSize];
 		this.circuit.circuitMatrixSize = matrixSize;
@@ -1295,7 +1294,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			this.circuit.circuitRowInfo[i] = new RowInfo();
 		}
 
-		this.circuitNeedsMap = false;
+		this.circuit.circuitNeedsMap = false;
 
 		// stamp linear circuit elements
 		for (i = 0; i != this.circuit.elmList.size(); i++)
@@ -1507,13 +1506,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 						continue;
 					}
 					elt.type = RowInfo.ROW_CONST;
-					elt.value = (this.circuitRightSide[i] + rsadd) / qv;
+					elt.value = (this.circuit.circuitRightSide[i] + rsadd) / qv;
 					this.circuit.circuitRowInfo[i].dropRow = true;
 					// System.out.println(qp + " * " + qv + " = const " +
 					// elt.value);
 					i = -1; // start over from scratch
 				}
-				else if (this.circuitRightSide[i] + rsadd == 0)
+				else if (this.circuit.circuitRightSide[i] + rsadd == 0)
 				{
 					// we found a row with only two nonzero entries, and one
 					// is the negative of the other; the values are equal
@@ -1621,7 +1620,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				rri.mapRow = -1;
 				continue;
 			}
-			newrs[ii] = this.circuitRightSide[i];
+			newrs[ii] = this.circuit.circuitRightSide[i];
 			rri.mapRow = ii;
 			// System.out.println("Row " + i + " maps to " + ii);
 			for (j = 0; j != matrixSize; j++)
@@ -1640,11 +1639,11 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 
 		this.circuit.circuitMatrix = newmatx;
-		this.circuitRightSide = newrs;
+		this.circuit.circuitRightSide = newrs;
 		matrixSize = this.circuit.circuitMatrixSize = newsize;
 		for (i = 0; i != matrixSize; i++)
 		{
-			this.origRightSide[i] = this.circuitRightSide[i];
+			this.origRightSide[i] = this.circuit.circuitRightSide[i];
 		}
 		for (i = 0; i != matrixSize; i++)
 		{
@@ -1653,7 +1652,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				this.origMatrix[i][j] = this.circuit.circuitMatrix[i][j];
 			}
 		}
-		this.circuitNeedsMap = true;
+		this.circuit.circuitNeedsMap = true;
 
 		/*
 		 * System.out.println("matrixSize = " + matrixSize + " " +
@@ -1781,7 +1780,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		if (i > 0 && j > 0)
 		{
-			if (this.circuitNeedsMap)
+			if (this.circuit.circuitNeedsMap)
 			{
 				i = this.circuit.circuitRowInfo[i - 1].mapRow;
 				RowInfo ri = this.circuit.circuitRowInfo[j - 1];
@@ -1789,7 +1788,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				{
 					// System.out.println("Stamping constant " + i + " " + j +
 					// " " + x);
-					this.circuitRightSide[i] -= x * ri.value;
+					this.circuit.circuitRightSide[i] -= x * ri.value;
 					return;
 				}
 				j = ri.mapCol;
@@ -1810,7 +1809,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		if (i > 0)
 		{
-			if (this.circuitNeedsMap)
+			if (this.circuit.circuitNeedsMap)
 			{
 				i = this.circuit.circuitRowInfo[i - 1].mapRow;
 				// System.out.println("stamping " + i + " " + x);
@@ -1819,27 +1818,20 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			{
 				i--;
 			}
-			this.circuitRightSide[i] += x;
+			this.circuit.circuitRightSide[i] += x;
 		}
 	}
 
-	// indicate that the value on the right side of row i changes in doStep()
+	@Deprecated
 	public void stampRightSide(int i)
 	{
-		// System.out.println("rschanges true " + (i-1));
-		if (i > 0)
-		{
-			this.circuit.circuitRowInfo[i - 1].rsChanges = true;
-		}
+		this.circuit.stampRightSide(i);
 	}
-
-	// indicate that the values on the left side of row i change in doStep()
+	
+	@Deprecated
 	public void stampNonLinear(int i)
 	{
-		if (i > 0)
-		{
-			this.circuit.circuitRowInfo[i - 1].lsChanges = true;
-		}
+		this.circuit.stampNonLinear(i);
 	}
 
 	private double getIterCount()
@@ -1885,7 +1877,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				this.subIterations = subiter;
 				for (i = 0; i != this.circuit.circuitMatrixSize; i++)
 				{
-					this.circuitRightSide[i] = this.origRightSide[i];
+					this.circuit.circuitRightSide[i] = this.origRightSide[i];
 				}
 				if (this.circuit.circuitNonLinear)
 				{
@@ -1928,7 +1920,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 						{
 							System.out.print(this.circuit.circuitMatrix[j][i] + ",");
 						}
-						System.out.print("  " + this.circuitRightSide[j] + "\n");
+						System.out.print("  " + this.circuit.circuitRightSide[j] + "\n");
 					}
 					System.out.print("\n");
 				}
@@ -1945,7 +1937,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					}
 				}
 				CoreUtil.luSolve(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize, this.circuitPermute,
-						this.circuitRightSide);
+						this.circuit.circuitRightSide);
 
 				for (j = 0; j != this.circuit.circuitMatrixFullSize; j++)
 				{
@@ -1957,7 +1949,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					}
 					else
 					{
-						res = this.circuitRightSide[ri.mapCol];
+						res = this.circuit.circuitRightSide[ri.mapCol];
 					}
 					/*
 					 * System.out.println(j + " " + res + " " + ri.type + " " +

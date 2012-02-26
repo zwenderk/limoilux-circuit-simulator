@@ -20,8 +20,10 @@ public class Circuit
 	
 	public RowInfo circuitRowInfo[];
 	public double circuitMatrix[][];
+	public double circuitRightSide[];
 	public boolean circuitNonLinear;
 	public boolean analyzeFlag;
+	public boolean circuitNeedsMap;
 
 	public Circuit()
 	{
@@ -119,4 +121,22 @@ public class Circuit
 		return dump;
 	}
 
+	// indicate that the value on the right side of row i changes in doStep()
+	public void stampRightSide(int i)
+	{
+		// System.out.println("rschanges true " + (i-1));
+		if (i > 0)
+		{
+			this.circuitRowInfo[i - 1].rsChanges = true;
+		}
+	}
+	
+	// indicate that the values on the left side of row i change in doStep()
+	public void stampNonLinear(int i)
+	{
+		if (i > 0)
+		{
+			this.circuitRowInfo[i - 1].lsChanges = true;
+		}
+	}
 }
