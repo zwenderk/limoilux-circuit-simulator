@@ -159,8 +159,8 @@ public abstract class GateElm extends CircuitElm
 	public void getInfo(String arr[])
 	{
 		arr[0] = this.getGateName();
-		arr[1] = "Vout = " + CircuitElm.getVoltageText(this.volts[this.inputCount]);
-		arr[2] = "Iout = " + CircuitElm.getCurrentText(this.getCurrent());
+		arr[1] = "Vout = " + CoreUtil.getVoltageText(this.volts[this.inputCount]);
+		arr[2] = "Iout = " + CoreUtil.getCurrentText(this.getCurrent());
 	}
 
 	@Override
