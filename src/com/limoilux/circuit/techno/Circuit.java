@@ -19,17 +19,19 @@ import com.limoilux.circuit.ui.RowInfo;
 
 public class Circuit
 {
+	private int circuitMatrixFullSize;
+
+	private boolean circuitNonLinear;
+	private boolean analyzeFlag;
+	private boolean circuitNeedsMap;
+
 	public Vector<CircuitNode> nodeList;
 	public Vector<CircuitElm> elmList;
 
 	public int circuitBottom;
 	public int circuitMatrixSize;
-	private int circuitMatrixFullSize;
 
-	private boolean circuitNonLinear;
-	private boolean analyzeFlag;
 	public boolean converged;
-	public boolean circuitNeedsMap;
 
 	public CircuitElm[] voltageSources;
 	public RowInfo[] circuitRowInfo;
@@ -39,33 +41,32 @@ public class Circuit
 
 	public double[][] circuitMatrix;
 	public double[][] origMatrix;
-	
+
 	public Circuit()
 	{
 
 	}
-	
+
 	public int getMatrixFullSize()
 	{
 		return this.circuitMatrixFullSize;
 	}
-	
+
 	public boolean isNonLinear()
 	{
 		return this.circuitNonLinear;
 	}
-	
+
 	public boolean needAnalysis()
 	{
 		return this.analyzeFlag;
 	}
-	
+
 	public boolean setNeedAnalysis(boolean analyzeFlag)
 	{
 		this.analyzeFlag = analyzeFlag;
 		return true;
 	}
-	
 
 	public CircuitNode getCircuitNode(int n)
 	{
@@ -321,7 +322,6 @@ public class Circuit
 			return;
 		}
 
-		
 		int i, j;
 		int vscount = 0;
 		this.nodeList = new Vector<CircuitNode>();
