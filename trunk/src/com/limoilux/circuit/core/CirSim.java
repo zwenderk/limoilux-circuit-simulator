@@ -3720,16 +3720,20 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		Object o = url.getContent();
 		FilterInputStream fis = (FilterInputStream) o;
 		ByteArrayOutputStream ba = new ByteArrayOutputStream(fis.available());
+		byte[] bytes = null;
 		int blen = 1024;
-		byte b[] = new byte[blen];
+		int len;
+		
+		bytes = new byte[blen];
+		
 		while (true)
 		{
-			int len = fis.read(b);
+			len = fis.read(bytes);
 			if (len <= 0)
 			{
 				break;
 			}
-			ba.write(b, 0, len);
+			ba.write(bytes, 0, len);
 		}
 		return ba;
 	}
