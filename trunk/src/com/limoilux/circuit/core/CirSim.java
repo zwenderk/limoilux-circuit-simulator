@@ -2359,7 +2359,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		int i;
 		for (i = 0; i != this.circuit.elmList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.circuit.getElement(i);
 			ce.move(dx, dy);
 		}
 		this.removeZeroLengthElements();
@@ -2782,7 +2782,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private void doPaste()
 	{
 		this.pushUndo();
-		this.clearSelection();
+		this.circuit.clearSelection();
 		int i;
 		Rectangle oldbb = null;
 		for (i = 0; i != this.circuit.elmList.size(); i++)
