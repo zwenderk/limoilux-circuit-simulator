@@ -83,7 +83,7 @@ public class ScopeManager
 		int pos = -1;
 		for (i = 0; i < this.scopeCount; i++)
 		{
-			if (c.locateElm(this.scopes[i].elm) < 0)
+			if (c.locateElement(this.scopes[i].elm) < 0)
 			{
 				this.scopes[i].setElm(null);
 			}

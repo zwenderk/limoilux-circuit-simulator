@@ -166,14 +166,14 @@ public class OpAmpElm extends CircuitElm
 	public void getInfo(String arr[])
 	{
 		arr[0] = "op-amp";
-		arr[1] = "V+ = " + CircuitElm.getVoltageText(this.volts[1]);
-		arr[2] = "V- = " + CircuitElm.getVoltageText(this.volts[0]);
+		arr[1] = "V+ = " + CoreUtil.getVoltageText(this.volts[1]);
+		arr[2] = "V- = " + CoreUtil.getVoltageText(this.volts[0]);
 		// sometimes the voltage goes slightly outside range, to make
 		// convergence easier. so we hide that here.
 		double vo = Math.max(Math.min(this.volts[2], this.maxOut), this.minOut);
-		arr[3] = "Vout = " + CircuitElm.getVoltageText(vo);
-		arr[4] = "Iout = " + CircuitElm.getCurrentText(this.getCurrent());
-		arr[5] = "range = " + CircuitElm.getVoltageText(this.minOut) + " to " + CircuitElm.getVoltageText(this.maxOut);
+		arr[3] = "Vout = " + CoreUtil.getVoltageText(vo);
+		arr[4] = "Iout = " + CoreUtil.getCurrentText(this.getCurrent());
+		arr[5] = "range = " + CoreUtil.getVoltageText(this.minOut) + " to " + CircuitElm.getVoltageText(this.maxOut);
 	}
 
 	double lastvd;
@@ -181,9 +181,9 @@ public class OpAmpElm extends CircuitElm
 	@Override
 	public void stamp()
 	{
-		int vn = CircuitElm.cirSim.circuit.nodeList.size() + this.voltSource;
-		CircuitElm.cirSim.stampNonLinear(vn);
-		CircuitElm.cirSim.stampMatrix(this.nodes[2], vn, 1);
+		int vn = CircuitElm.cirSim.circuit.getNodeCount() + this.voltSource;
+		CircuitElm.cirSim.circuit.stampNonLinear(vn);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[2], vn, 1);
 	}
 
 	@Override
@@ -199,7 +199,7 @@ public class OpAmpElm extends CircuitElm
 			CircuitElm.cirSim.circuit.converged = false;
 		}
 		double x = 0;
-		int vn = CircuitElm.cirSim.circuit.nodeList.size() + this.voltSource;
+		int vn = CircuitElm.cirSim.circuit.getNodeCount() + this.voltSource;
 		double dx = 0;
 		if (vd >= this.maxOut / this.gain && (this.lastvd >= 0 || CoreUtil.getRandomInt(4) == 1))
 		{
