@@ -22,23 +22,25 @@ public class Circuit
 	public Vector<CircuitNode> nodeList;
 	public Vector<CircuitElm> elmList;
 
-	public CircuitElm voltageSources[];
+	public CircuitElm stopElm;
 
 	public int circuitBottom;
 	public int circuitMatrixSize;
 	public int circuitMatrixFullSize;
 
-	public RowInfo circuitRowInfo[];
-	public int circuitPermute[];
-	public double origRightSide[];
-	public double circuitMatrix[][];
-	public double origMatrix[][];
-	public double circuitRightSide[];
 	public boolean circuitNonLinear;
 	public boolean analyzeFlag;
 	public boolean converged;
 	public boolean circuitNeedsMap;
-	public CircuitElm stopElm;
+
+	public CircuitElm[] voltageSources;
+	public RowInfo[] circuitRowInfo;
+	public int[] circuitPermute;
+	public double[] origRightSide;
+	public double[] circuitRightSide;
+
+	public double[][] circuitMatrix;
+	public double[][] origMatrix;
 
 	public Circuit()
 	{
