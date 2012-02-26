@@ -747,6 +747,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			try
 			{
 				this.stopMessage = null;
+				this.stopElm = null;
+				
 				this.circuit.analyzeCircuit();
 			}
 			catch (CircuitAnalysisException e)
@@ -765,9 +767,10 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		realMouseElm = this.mouseElm;
 		if (this.mouseElm == null)
 		{
-			this.mouseElm = this.circuit.stopElm;
+			this.mouseElm = this.stopElm;
 		}
-		this.setupScopes();
+		
+		this.scopeMan.setupScopes(this.circuit, this.winSize, this.circuitArea);
 
 		Graphics g = null;
 
@@ -1168,9 +1171,10 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void handleAnalysisException(CircuitAnalysisException e)
 	{
-		this.stopMessage = e.getTechnicalMessage();
 		this.circuit.circuitMatrix = null;
-		this.circuit.stopElm = e.getCauseElement();
+		
+		this.stopMessage = e.getTechnicalMessage();
+		this.stopElm = e.getCauseElement();
 
 		this.stoppedCheck.setState(true);
 
