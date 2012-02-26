@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.util.Vector;
 
 import com.limoilux.circuit.ui.CircuitNode;
+import com.limoilux.circuit.ui.RowInfo;
 
 public class Circuit
 {
@@ -17,6 +18,7 @@ public class Circuit
 	public int circuitMatrixSize;
 	public int circuitMatrixFullSize;
 	
+	public RowInfo circuitRowInfo[];
 	public double circuitMatrix[][];
 	public boolean circuitNonLinear;
 	public boolean analyzeFlag;
