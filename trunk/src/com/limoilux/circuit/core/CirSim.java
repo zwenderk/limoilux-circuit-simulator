@@ -742,13 +742,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			return;
 		}
 
-		if (this.circuit.analyzeFlag)
+		if (this.circuit.needAnalysis())
 		{
 			try
 			{
 				this.stopMessage = null;
 				this.stopElm = null;
-				
+
 				this.circuit.analyzeCircuit();
 			}
 			catch (CircuitAnalysisException e)
@@ -756,7 +756,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				this.handleAnalysisException(e);
 			}
 
-			this.circuit.analyzeFlag = false;
+			this.circuit.setNeedAnalysis(false);
 		}
 
 		if (CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElm)
@@ -769,7 +769,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			this.mouseElm = this.stopElm;
 		}
-		
+
 		this.scopeMan.setupScopes(this.circuit, this.winSize, this.circuitArea);
 
 		Graphics g = null;
@@ -804,7 +804,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			catch (Exception e)
 			{
 				e.printStackTrace();
-				this.circuit.analyzeFlag = true;
+				this.circuit.setNeedAnalysis(true);
 				this.circuitCanvas.repaint();
 
 				return;
@@ -922,7 +922,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			if (this.circuit.circuitBottom == 0)
 			{
-				this.calcCircuitBottom();
+				this.circuit.calcCircuitBottom();
 			}
 			String info[] = new String[10];
 			if (this.mouseElm != null)
@@ -1130,7 +1130,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				if (n == 0)
 				{
 					((SwitchElm) ce).toggle();
-					this.circuit.analyzeFlag = true;
+					this.circuit.setNeedAnalysis(true);
 
 					this.circuitCanvas.repaint();
 					return;
@@ -1141,7 +1141,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	public void needAnalyze()
 	{
-		this.circuit.analyzeFlag = true;
+		this.circuit.setNeedAnalysis(true);
 		this.circuitCanvas.repaint();
 	}
 
@@ -1172,13 +1172,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private void handleAnalysisException(CircuitAnalysisException e)
 	{
 		this.circuit.circuitMatrix = null;
-		
+
 		this.stopMessage = e.getTechnicalMessage();
 		this.stopElm = e.getCauseElement();
 
 		this.stoppedCheck.setState(true);
 
-		this.circuit.analyzeFlag = false;
+		this.circuit.setNeedAnalysis(false);
 
 		this.circuitCanvas.repaint();
 	}
@@ -1280,7 +1280,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				{
 					this.circuit.circuitRightSide[i] = this.circuit.origRightSide[i];
 				}
-				if (this.circuit.circuitNonLinear)
+				if (this.circuit.isNonLinear())
 				{
 					for (i = 0; i != this.circuit.circuitMatrixSize; i++)
 					{
@@ -1335,7 +1335,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					}
 					System.out.print("\n");
 				}
-				if (this.circuit.circuitNonLinear)
+				if (this.circuit.isNonLinear())
 				{
 					if (this.circuit.converged && subiter > 0)
 					{
@@ -1352,7 +1352,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				CoreUtil.luSolve(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize,
 						this.circuit.circuitPermute, this.circuit.circuitRightSide);
 
-				for (j = 0; j != this.circuit.circuitMatrixFullSize; j++)
+				for (j = 0; j != this.circuit.getMatrixFullSize(); j++)
 				{
 					RowInfo ri = this.circuit.circuitRowInfo[j];
 					double res = 0;
@@ -1391,7 +1391,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 						this.circuit.voltageSources[ji].setCurrent(ji, res);
 					}
 				}
-				if (!this.circuit.circuitNonLinear)
+				if (!this.circuit.isNonLinear())
 				{
 					break;
 				}
@@ -2425,7 +2425,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			{
 				this.scopeMan.scopes[i].resetGraph();
 			}
-			this.circuit.analyzeFlag = true;
+			this.circuit.setNeedAnalysis(true);
 			this.t = 0;
 			this.stoppedCheck.setState(false);
 			this.circuitCanvas.repaint();

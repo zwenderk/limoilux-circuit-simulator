@@ -22,13 +22,12 @@ public class Circuit
 	public Vector<CircuitNode> nodeList;
 	public Vector<CircuitElm> elmList;
 
-
 	public int circuitBottom;
 	public int circuitMatrixSize;
-	public int circuitMatrixFullSize;
+	private int circuitMatrixFullSize;
 
-	public boolean circuitNonLinear;
-	public boolean analyzeFlag;
+	private boolean circuitNonLinear;
+	private boolean analyzeFlag;
 	public boolean converged;
 	public boolean circuitNeedsMap;
 
@@ -40,11 +39,33 @@ public class Circuit
 
 	public double[][] circuitMatrix;
 	public double[][] origMatrix;
-
+	
 	public Circuit()
 	{
 
 	}
+	
+	public int getMatrixFullSize()
+	{
+		return this.circuitMatrixFullSize;
+	}
+	
+	public boolean isNonLinear()
+	{
+		return this.circuitNonLinear;
+	}
+	
+	public boolean needAnalysis()
+	{
+		return this.analyzeFlag;
+	}
+	
+	public boolean setNeedAnalysis(boolean analyzeFlag)
+	{
+		this.analyzeFlag = analyzeFlag;
+		return true;
+	}
+	
 
 	public CircuitNode getCircuitNode(int n)
 	{
