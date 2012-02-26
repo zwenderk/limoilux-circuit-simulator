@@ -44,7 +44,7 @@ public class PhaseCompElm extends ChipElm
 	@Override
 	public void stamp()
 	{
-		int vn = CircuitElm.cirSim.nodeList.size() + this.pins[2].voltSource;
+		int vn = CircuitElm.cirSim.circuit.nodeList.size() + this.pins[2].voltSource;
 		CircuitElm.cirSim.stampNonLinear(vn);
 		CircuitElm.cirSim.stampNonLinear(0);
 		CircuitElm.cirSim.stampNonLinear(this.nodes[2]);
@@ -78,7 +78,7 @@ public class PhaseCompElm extends ChipElm
 		else
 		{
 			// tie current through output pin to 0
-			int vn = CircuitElm.cirSim.nodeList.size() + this.pins[2].voltSource;
+			int vn = CircuitElm.cirSim.circuit.nodeList.size() + this.pins[2].voltSource;
 			CircuitElm.cirSim.stampMatrix(vn, vn, 1);
 		}
 		this.pins[0].value = v1;

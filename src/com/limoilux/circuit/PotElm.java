@@ -85,7 +85,7 @@ public class PotElm extends CircuitElm implements AdjustmentListener
 	@Override
 	public void adjustmentValueChanged(AdjustmentEvent e)
 	{
-		CircuitElm.cirSim.analyzeFlag = true;
+		CircuitElm.cirSim.circuit.analyzeFlag = true;
 		this.setPoints();
 	}
 

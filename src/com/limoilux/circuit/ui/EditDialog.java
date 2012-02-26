@@ -19,6 +19,7 @@ import java.text.NumberFormat;
 
 import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.Editable;
+import com.limoilux.circuit.ui.layout.EditDialogLayout;
 
 public class EditDialog extends Dialog implements AdjustmentListener, ActionListener, ItemListener
 {

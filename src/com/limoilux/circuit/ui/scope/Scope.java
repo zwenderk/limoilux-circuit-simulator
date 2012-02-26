@@ -787,7 +787,7 @@ public class Scope
 		{
 			return;
 		}
-		this.elm = this.sim.getElm(e);
+		this.elm = this.sim.getElement(e);
 		this.speed = new Integer(st.nextToken()).intValue();
 		this.value = new Integer(st.nextToken()).intValue();
 		int flags = new Integer(st.nextToken()).intValue();
@@ -812,7 +812,7 @@ public class Scope
 				ye = new Integer(st.nextToken()).intValue();
 				if (ye != -1)
 				{
-					this.yElm = this.sim.getElm(ye);
+					this.yElm = this.sim.getElement(ye);
 				}
 			}
 			while (st.hasMoreTokens())
@@ -974,9 +974,9 @@ public class Scope
 		int firstE = e;
 		while (true)
 		{
-			for (e++; e < this.sim.elmList.size(); e++)
+			for (e++; e < this.sim.circuit.elmList.size(); e++)
 			{
-				CircuitElm ce = this.sim.getElm(e);
+				CircuitElm ce = this.sim.getElement(e);
 				if ((ce instanceof OutputElm || ce instanceof ProbeElm) && ce != this.elm)
 				{
 					this.yElm = ce;

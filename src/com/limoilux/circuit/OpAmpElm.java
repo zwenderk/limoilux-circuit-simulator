@@ -181,7 +181,7 @@ public class OpAmpElm extends CircuitElm
 	@Override
 	public void stamp()
 	{
-		int vn = CircuitElm.cirSim.nodeList.size() + this.voltSource;
+		int vn = CircuitElm.cirSim.circuit.nodeList.size() + this.voltSource;
 		CircuitElm.cirSim.stampNonLinear(vn);
 		CircuitElm.cirSim.stampMatrix(this.nodes[2], vn, 1);
 	}
@@ -199,7 +199,7 @@ public class OpAmpElm extends CircuitElm
 			CircuitElm.cirSim.converged = false;
 		}
 		double x = 0;
-		int vn = CircuitElm.cirSim.nodeList.size() + this.voltSource;
+		int vn = CircuitElm.cirSim.circuit.nodeList.size() + this.voltSource;
 		double dx = 0;
 		if (vd >= this.maxOut / this.gain && (this.lastvd >= 0 || CoreUtil.getRandomInt(4) == 1))
 		{
