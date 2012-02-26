@@ -757,7 +757,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			}
 			catch (CircuitAnalysisException e)
 			{
-				this.stop(e);
+				this.handleAnalysisException(e);
 			}
 
 			this.circuit.analyzeFlag = false;
@@ -802,7 +802,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			}
 			catch (CircuitAnalysisException e)
 			{
-				this.stop(e);
+				this.handleAnalysisException(e);
 			}
 			catch (Exception e)
 			{
@@ -1175,14 +1175,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	@Deprecated
 	public void stop(String msg, CircuitElm ce)
 	{
-		this.stop(new CircuitAnalysisException(msg, ce));
+		this.handleAnalysisException(new CircuitAnalysisException(msg, ce));
 	}
 
-	public void stop(CircuitAnalysisException stopDump)
+	public void handleAnalysisException(CircuitAnalysisException e)
 	{
-		this.circuit.stopMessage = stopDump.getTechnicalMessage();
+		this.circuit.stopMessage = e.getTechnicalMessage();
 		this.circuit.circuitMatrix = null;
-		this.circuit.stopElm = stopDump.getCauseElement();
+		this.circuit.stopElm = e.getCauseElement();
 
 		this.stoppedCheck.setState(true);
 
