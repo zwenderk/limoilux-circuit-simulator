@@ -219,7 +219,7 @@ public abstract class ChipElm extends CircuitElm
 			Pin p = this.pins[i];
 			if (p.output)
 			{
-				CircuitElm.cirSim.stampVoltageSource(0, this.nodes[i], p.voltSource);
+				CircuitElm.cirSim.circuit.stampVoltageSource(0, this.nodes[i], p.voltSource);
 			}
 		}
 	}
@@ -246,7 +246,7 @@ public abstract class ChipElm extends CircuitElm
 			Pin p = this.pins[i];
 			if (p.output)
 			{
-				CircuitElm.cirSim.updateVoltageSource(0, this.nodes[i], p.voltSource, p.value ? 5 : 0);
+				CircuitElm.cirSim.circuit.updateVoltageSource(0, this.nodes[i], p.voltSource, p.value ? 5 : 0);
 			}
 		}
 	}

@@ -55,9 +55,9 @@ class Inductor
 			// backward euler
 			this.compResistance = this.inductance / this.sim.timeStep;
 		}
-		this.sim.stampResistor(this.nodes[0], this.nodes[1], this.compResistance);
-		this.sim.stampRightSide(this.nodes[0]);
-		this.sim.stampRightSide(this.nodes[1]);
+		this.sim.circuit.stampResistor(this.nodes[0], this.nodes[1], this.compResistance);
+		this.sim.circuit.stampRightSide(this.nodes[0]);
+		this.sim.circuit.stampRightSide(this.nodes[1]);
 	}
 
 	boolean nonLinear()

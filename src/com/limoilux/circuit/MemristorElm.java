@@ -143,7 +143,7 @@ public class MemristorElm extends CircuitElm
 	@Override
 	public void doStep()
 	{
-		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
+		CircuitElm.cirSim.circuit.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
 	}
 
 	@Override

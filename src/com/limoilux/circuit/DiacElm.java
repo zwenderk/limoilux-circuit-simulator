@@ -116,19 +116,19 @@ public class DiacElm extends CircuitElm
 	{
 		if (this.state)
 		{
-			CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.onresistance);
+			CircuitElm.cirSim.circuit.stampResistor(this.nodes[0], this.nodes[1], this.onresistance);
 		}
 		else
 		{
-			CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.offresistance);
+			CircuitElm.cirSim.circuit.stampResistor(this.nodes[0], this.nodes[1], this.offresistance);
 		}
 	}
 
 	@Override
 	public void stamp()
 	{
-		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
-		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);
+		CircuitElm.cirSim.circuit.stampNonLinear(this.nodes[0]);
+		CircuitElm.cirSim.circuit.stampNonLinear(this.nodes[1]);
 	}
 
 	@Override

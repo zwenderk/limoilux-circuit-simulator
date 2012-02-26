@@ -201,14 +201,14 @@ public class TransformerElm extends CircuitElm
 		this.a2 = -m * deti * ts;
 		this.a3 = -m * deti * ts;
 		this.a4 = l1 * deti * ts;
-		CircuitElm.cirSim.stampConductance(this.nodes[0], this.nodes[2], this.a1);
-		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[0], this.nodes[2], this.nodes[1], this.nodes[3], this.a2);
-		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[1], this.nodes[3], this.nodes[0], this.nodes[2], this.a3);
-		CircuitElm.cirSim.stampConductance(this.nodes[1], this.nodes[3], this.a4);
-		CircuitElm.cirSim.stampRightSide(this.nodes[0]);
-		CircuitElm.cirSim.stampRightSide(this.nodes[1]);
-		CircuitElm.cirSim.stampRightSide(this.nodes[2]);
-		CircuitElm.cirSim.stampRightSide(this.nodes[3]);
+		CircuitElm.cirSim.circuit.stampConductance(this.nodes[0], this.nodes[2], this.a1);
+		CircuitElm.cirSim.circuit.stampVCCurrentSource(this.nodes[0], this.nodes[2], this.nodes[1], this.nodes[3], this.a2);
+		CircuitElm.cirSim.circuit.stampVCCurrentSource(this.nodes[1], this.nodes[3], this.nodes[0], this.nodes[2], this.a3);
+		CircuitElm.cirSim.circuit.stampConductance(this.nodes[1], this.nodes[3], this.a4);
+		CircuitElm.cirSim.circuit.stampRightSide(this.nodes[0]);
+		CircuitElm.cirSim.circuit.stampRightSide(this.nodes[1]);
+		CircuitElm.cirSim.circuit.stampRightSide(this.nodes[2]);
+		CircuitElm.cirSim.circuit.stampRightSide(this.nodes[3]);
 	}
 
 	@Override

@@ -110,7 +110,7 @@ public class LogicInputElm extends SwitchElm
 		{
 			v = this.position * 2.5;
 		}
-		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[0], this.voltSource, v);
+		CircuitElm.cirSim.circuit.stampVoltageSource(0, this.nodes[0], this.voltSource, v);
 	}
 
 	@Override

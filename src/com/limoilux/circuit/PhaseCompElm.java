@@ -73,7 +73,7 @@ public class PhaseCompElm extends ChipElm
 		// System.out.println(out + " " + v1 + " " + v2);
 		if (out != -1)
 		{
-			CircuitElm.cirSim.stampVoltageSource(0, this.nodes[2], this.pins[2].voltSource, out);
+			CircuitElm.cirSim.circuit.stampVoltageSource(0, this.nodes[2], this.pins[2].voltSource, out);
 		}
 		else
 		{

@@ -166,7 +166,7 @@ public abstract class GateElm extends CircuitElm
 	@Override
 	public void stamp()
 	{
-		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[this.inputCount], this.voltSource);
+		CircuitElm.cirSim.circuit.stampVoltageSource(0, this.nodes[this.inputCount], this.voltSource);
 	}
 
 	@Override
@@ -180,7 +180,7 @@ public abstract class GateElm extends CircuitElm
 		}
 		this.lastOutput = f;
 		double res = f ? 5 : 0;
-		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[this.inputCount], this.voltSource, res);
+		CircuitElm.cirSim.circuit.updateVoltageSource(0, this.nodes[this.inputCount], this.voltSource, res);
 	}
 
 	@Override

@@ -246,7 +246,7 @@ public class RelayElm extends CircuitElm
 		// inductor from coil post 1 to internal node
 		this.ind.stamp(this.nodes[this.nCoil1], this.nodes[this.nCoil3]);
 		// resistor from internal node to coil post 2
-		CircuitElm.cirSim.stampResistor(this.nodes[this.nCoil3], this.nodes[this.nCoil2], this.coilR);
+		CircuitElm.cirSim.circuit.stampResistor(this.nodes[this.nCoil3], this.nodes[this.nCoil2], this.coilR);
 
 		int i;
 		for (i = 0; i != this.poleCount * 3; i++)
@@ -305,9 +305,9 @@ public class RelayElm extends CircuitElm
 		int p;
 		for (p = 0; p != this.poleCount * 3; p += 3)
 		{
-			CircuitElm.cirSim.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch1 + p],
+			CircuitElm.cirSim.circuit.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch1 + p],
 					this.i_position == 0 ? this.r_on : this.r_off);
-			CircuitElm.cirSim.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch2 + p],
+			CircuitElm.cirSim.circuit.stampResistor(this.nodes[this.nSwitch0 + p], this.nodes[this.nSwitch2 + p],
 					this.i_position == 1 ? this.r_on : this.r_off);
 		}
 	}

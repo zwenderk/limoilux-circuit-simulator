@@ -242,8 +242,8 @@ public class PotElm extends CircuitElm implements AdjustmentListener
 	{
 		this.resistance1 = this.maxResistance * this.position;
 		this.resistance2 = this.maxResistance * (1 - this.position);
-		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[2], this.resistance1);
-		CircuitElm.cirSim.stampResistor(this.nodes[2], this.nodes[1], this.resistance2);
+		CircuitElm.cirSim.circuit.stampResistor(this.nodes[0], this.nodes[2], this.resistance1);
+		CircuitElm.cirSim.circuit.stampResistor(this.nodes[2], this.nodes[1], this.resistance2);
 	}
 
 	@Override

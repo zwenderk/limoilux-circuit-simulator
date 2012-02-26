@@ -90,7 +90,7 @@ public class InverterElm extends CircuitElm
 	@Override
 	public void stamp()
 	{
-		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[1], this.voltSource);
+		CircuitElm.cirSim.circuit.stampVoltageSource(0, this.nodes[1], this.voltSource);
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class InverterElm extends CircuitElm
 		double out = this.volts[0] > 2.5 ? 0 : 5;
 		double maxStep = this.slewRate * CircuitElm.cirSim.timeStep * 1e9;
 		out = Math.max(Math.min(v0 + maxStep, out), v0 - maxStep);
-		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[1], this.voltSource, out);
+		CircuitElm.cirSim.circuit.updateVoltageSource(0, this.nodes[1], this.voltSource, out);
 	}
 
 	@Override

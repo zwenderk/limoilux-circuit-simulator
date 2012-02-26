@@ -51,16 +51,16 @@ public class VCOElm extends ChipElm
 	public void stamp()
 	{
 		// output pin
-		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[1], this.pins[1].voltSource);
+		CircuitElm.cirSim.circuit.stampVoltageSource(0, this.nodes[1], this.pins[1].voltSource);
 		// attach Vi to R1 pin so its current is proportional to Vi
-		CircuitElm.cirSim.stampVoltageSource(this.nodes[0], this.nodes[4], this.pins[4].voltSource, 0);
+		CircuitElm.cirSim.circuit.stampVoltageSource(this.nodes[0], this.nodes[4], this.pins[4].voltSource, 0);
 		// attach 5V to R2 pin so we get a current going
-		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[5], this.pins[5].voltSource, 5);
+		CircuitElm.cirSim.circuit.stampVoltageSource(0, this.nodes[5], this.pins[5].voltSource, 5);
 		// put resistor across cap pins to give current somewhere to go
 		// in case cap is not connected
-		CircuitElm.cirSim.stampResistor(this.nodes[2], this.nodes[3], this.cResistance);
-		CircuitElm.cirSim.stampNonLinear(this.nodes[2]);
-		CircuitElm.cirSim.stampNonLinear(this.nodes[3]);
+		CircuitElm.cirSim.circuit.stampResistor(this.nodes[2], this.nodes[3], this.cResistance);
+		CircuitElm.cirSim.circuit.stampNonLinear(this.nodes[2]);
+		CircuitElm.cirSim.circuit.stampNonLinear(this.nodes[3]);
 	}
 
 	final double cResistance = 1e6;
@@ -86,16 +86,16 @@ public class VCOElm extends ChipElm
 		}
 
 		// generate output voltage
-		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[1], this.pins[1].voltSource, vo);
+		CircuitElm.cirSim.circuit.updateVoltageSource(0, this.nodes[1], this.pins[1].voltSource, vo);
 		// now we set the current through the cap to be equal to the
 		// current through R1 and R2, so we can measure the voltage
 		// across the cap
 		int cur1 = CircuitElm.cirSim.circuit.nodeList.size() + this.pins[4].voltSource;
 		int cur2 = CircuitElm.cirSim.circuit.nodeList.size() + this.pins[5].voltSource;
-		CircuitElm.cirSim.stampMatrix(this.nodes[2], cur1, dir);
-		CircuitElm.cirSim.stampMatrix(this.nodes[2], cur2, dir);
-		CircuitElm.cirSim.stampMatrix(this.nodes[3], cur1, -dir);
-		CircuitElm.cirSim.stampMatrix(this.nodes[3], cur2, -dir);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[2], cur1, dir);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[2], cur2, dir);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[3], cur1, -dir);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[3], cur2, -dir);
 		this.cDir = dir;
 	}
 

@@ -145,8 +145,8 @@ public class Diode
 			}
 			double geq = this.vdcoef * this.leakage * eval;
 			double nc = (eval - 1) * this.leakage - geq * voltdiff;
-			this.sim.stampConductance(this.nodes[0], this.nodes[1], geq);
-			this.sim.stampCurrentSource(this.nodes[0], this.nodes[1], nc);
+			this.sim.circuit.stampConductance(this.nodes[0], this.nodes[1], geq);
+			this.sim.circuit.stampCurrentSource(this.nodes[0], this.nodes[1], nc);
 		}
 		else
 		{
@@ -165,8 +165,8 @@ public class Diode
 					* (Math.exp(voltdiff * this.vdcoef) - Math.exp((-voltdiff - this.zoffset) * this.vdcoef) - 1) + geq
 					* -voltdiff;
 
-			this.sim.stampConductance(this.nodes[0], this.nodes[1], geq);
-			this.sim.stampCurrentSource(this.nodes[0], this.nodes[1], nc);
+			this.sim.circuit.stampConductance(this.nodes[0], this.nodes[1], geq);
+			this.sim.circuit.stampCurrentSource(this.nodes[0], this.nodes[1], nc);
 		}
 	}
 

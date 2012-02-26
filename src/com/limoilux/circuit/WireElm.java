@@ -46,7 +46,7 @@ public class WireElm extends CircuitElm
 	@Override
 	public void stamp()
 	{
-		CircuitElm.cirSim.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, 0);
+		CircuitElm.cirSim.circuit.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, 0);
 	}
 
 	boolean mustShowCurrent()

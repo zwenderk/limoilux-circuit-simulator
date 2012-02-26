@@ -23,13 +23,13 @@ public class AntennaElm extends RailElm
 	@Override
 	public void stamp()
 	{
-		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[0], this.voltSource);
+		CircuitElm.cirSim.circuit.stampVoltageSource(0, this.nodes[0], this.voltSource);
 	}
 
 	@Override
 	public void doStep()
 	{
-		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
+		CircuitElm.cirSim.circuit.updateVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
 	}
 
 	@Override
