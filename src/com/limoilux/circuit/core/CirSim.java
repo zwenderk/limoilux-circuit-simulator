@@ -88,7 +88,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private static final int MODE_DRAG_SELECTED = 4;
 	private static final int MODE_DRAG_POST = 5;
 	private static final int MODE_SELECT = 6;
-	private static final int infoWidth = 120;
+	private static final int INFO_WIDTH = 120;
 	private static final int HINT_LC = 1;
 	private static final int HINT_RC = 2;
 	private static final int HINT_3DB_C = 3;
@@ -1085,7 +1085,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 
 		int colct = pos + 1;
-		int iw = CirSim.infoWidth;
+		int iw = CirSim.INFO_WIDTH;
 
 		if (colct <= 2)
 		{
