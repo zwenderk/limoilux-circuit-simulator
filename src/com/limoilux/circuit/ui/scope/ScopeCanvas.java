@@ -1,3 +1,4 @@
+
 package com.limoilux.circuit.ui.scope;
 
 import java.awt.Canvas;
@@ -8,6 +9,10 @@ import com.limoilux.circuit.core.CirSim;
 
 public class ScopeCanvas extends Canvas
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2970241997274498066L;
 	@Deprecated
 	private final CirSim cirSim;
 

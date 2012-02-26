@@ -72,6 +72,7 @@ import com.limoilux.circuit.ui.RowInfo;
 import com.limoilux.circuit.ui.io.MigrationWizard;
 import com.limoilux.circuit.ui.scope.Scope;
 import com.limoilux.circuit.ui.scope.ScopeCanvas;
+import com.limoilux.circuit.ui.scope.ScopeManager;
 
 public class CirSim extends JFrame implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
 {
@@ -762,7 +763,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			return;
 		}
-		
+
 		if (this.circuit.analyzeFlag)
 		{
 			this.analyzeCircuit();
@@ -875,7 +876,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			if (!cn.isInternal() && cn.getSize() == 1)
 			{
 				int bb = 0, j;
-				CircuitNodeLink cnl = (CircuitNodeLink) cn.elementAt(0);
+				CircuitNodeLink cnl = cn.elementAt(0);
 				for (j = 0; j != this.circuit.elmList.size(); j++)
 				{
 					if (cnl.elm != this.getElement(j) && this.getElement(j).boundingBox.contains(cn.x, cn.y))
@@ -2083,7 +2084,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 						CircuitNode cn = this.getCircuitNode(j + 1);
 						for (k = 0; k != cn.getSize(); k++)
 						{
-							CircuitNodeLink cnl = (CircuitNodeLink) cn.elementAt(k);
+							CircuitNodeLink cnl = cn.elementAt(k);
 							cnl.elm.setNodeVoltage(cnl.num, res);
 						}
 					}

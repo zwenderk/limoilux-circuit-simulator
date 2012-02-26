@@ -101,7 +101,7 @@ public class Circuit
 			}
 		}
 	}
-	
+
 	public String createDump()
 	{
 		String dump = "";
@@ -109,7 +109,7 @@ public class Circuit
 		{
 			dump += this.getElement(i).dump() + "\n";
 		}
-		
+
 		return dump;
 	}
 

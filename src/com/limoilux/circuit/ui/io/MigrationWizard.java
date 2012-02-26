@@ -129,6 +129,11 @@ public class MigrationWizard extends Dialog implements ActionListener
 
 	private class ImportAction extends AbstractAction
 	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 2780013728712155067L;
+
 		private ImportAction()
 		{
 			super("Import");
@@ -144,6 +149,11 @@ public class MigrationWizard extends Dialog implements ActionListener
 
 	private class ExportAction extends AbstractAction
 	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -4910456390199779851L;
+
 		private ExportAction()
 		{
 			super("Export");
@@ -159,6 +169,11 @@ public class MigrationWizard extends Dialog implements ActionListener
 
 	private class CancelAction extends AbstractAction
 	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -1340777074044545969L;
+
 		private CancelAction()
 		{
 			super("Close");

@@ -24,7 +24,7 @@ public class CircuitNode
 
 	public int getSize()
 	{
-		return links.size();
+		return this.links.size();
 	}
 
 	public CircuitNodeLink elementAt(int n)
