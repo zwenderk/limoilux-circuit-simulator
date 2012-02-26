@@ -191,11 +191,11 @@ public class OpAmpElm extends CircuitElm
 		double vd = this.volts[1] - this.volts[0];
 		if (Math.abs(this.lastvd - vd) > .1)
 		{
-			CircuitElm.cirSim.converged = false;
+			CircuitElm.cirSim.circuit.converged = false;
 		}
 		else if (this.volts[2] > this.maxOut + .1 || this.volts[2] < this.minOut - .1)
 		{
-			CircuitElm.cirSim.converged = false;
+			CircuitElm.cirSim.circuit.converged = false;
 		}
 		double x = 0;
 		int vn = CircuitElm.cirSim.circuit.nodeList.size() + this.voltSource;
