@@ -8,6 +8,10 @@ package com.limoilux.circuit.techno;
  */
 public class CircuitAnalysisException extends Exception
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4144813700108967724L;
 	private final String technicalMessage;
 	private final CircuitElm causeElement;
 

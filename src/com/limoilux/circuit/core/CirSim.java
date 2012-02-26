@@ -472,7 +472,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.mainContainer.add(this.titleLabel);
 
 		this.setGrid();
-		
+
 		this.undoStack = new Vector<String>();
 		this.redoStack = new Vector<String>();
 
@@ -1566,8 +1566,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		stack[stackptr++] = menu;
 		try
 		{
-			URL url = new URL(this.getCodeBase() + "setuplist.txt");
-			ByteArrayOutputStream ba = this.readUrlData(url);
+			URL url = new URL(CirSim.getCodeBase() + "setuplist.txt");
+			ByteArrayOutputStream ba = CirSim.readUrlData(url);
 			byte b[] = ba.toByteArray();
 			int len = ba.size();
 			int p;
