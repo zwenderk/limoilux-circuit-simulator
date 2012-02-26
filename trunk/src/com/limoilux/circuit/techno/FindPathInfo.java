@@ -1,9 +1,10 @@
-package com.limoilux.circuit.core;
+package com.limoilux.circuit.techno;
 
 import com.limoilux.circuit.CapacitorElm;
 import com.limoilux.circuit.CurrentElm;
 import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.VoltageElm;
+import com.limoilux.circuit.core.CircuitElm;
 
 public class FindPathInfo
 {
