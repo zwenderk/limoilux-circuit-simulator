@@ -132,9 +132,9 @@ public class CapacitorElm extends CircuitElm
 		{
 			this.compResistance = CircuitElm.cirSim.timeStep / this.capacitance;
 		}
-		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.compResistance);
-		CircuitElm.cirSim.stampRightSide(this.nodes[0]);
-		CircuitElm.cirSim.stampRightSide(this.nodes[1]);
+		CircuitElm.cirSim.circuit.stampResistor(this.nodes[0], this.nodes[1], this.compResistance);
+		CircuitElm.cirSim.circuit.stampRightSide(this.nodes[0]);
+		CircuitElm.cirSim.circuit.stampRightSide(this.nodes[1]);
 	}
 
 	@Override

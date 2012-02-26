@@ -197,17 +197,17 @@ public class TappedTransformerElm extends CircuitElm
 		{
 			this.a[i] *= CircuitElm.cirSim.timeStep / 2;
 		}
-		CircuitElm.cirSim.stampConductance(this.nodes[0], this.nodes[1], this.a[0]);
-		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[0], this.nodes[1], this.nodes[2], this.nodes[3], this.a[1]);
-		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[0], this.nodes[1], this.nodes[3], this.nodes[4], this.a[2]);
+		CircuitElm.cirSim.circuit.stampConductance(this.nodes[0], this.nodes[1], this.a[0]);
+		CircuitElm.cirSim.circuit.stampVCCurrentSource(this.nodes[0], this.nodes[1], this.nodes[2], this.nodes[3], this.a[1]);
+		CircuitElm.cirSim.circuit.stampVCCurrentSource(this.nodes[0], this.nodes[1], this.nodes[3], this.nodes[4], this.a[2]);
 
-		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[2], this.nodes[3], this.nodes[0], this.nodes[1], this.a[3]);
-		CircuitElm.cirSim.stampConductance(this.nodes[2], this.nodes[3], this.a[4]);
-		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[2], this.nodes[3], this.nodes[3], this.nodes[4], this.a[5]);
+		CircuitElm.cirSim.circuit.stampVCCurrentSource(this.nodes[2], this.nodes[3], this.nodes[0], this.nodes[1], this.a[3]);
+		CircuitElm.cirSim.circuit.stampConductance(this.nodes[2], this.nodes[3], this.a[4]);
+		CircuitElm.cirSim.circuit.stampVCCurrentSource(this.nodes[2], this.nodes[3], this.nodes[3], this.nodes[4], this.a[5]);
 
-		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[3], this.nodes[4], this.nodes[0], this.nodes[1], this.a[6]);
-		CircuitElm.cirSim.stampVCCurrentSource(this.nodes[3], this.nodes[4], this.nodes[2], this.nodes[3], this.a[7]);
-		CircuitElm.cirSim.stampConductance(this.nodes[3], this.nodes[4], this.a[8]);
+		CircuitElm.cirSim.circuit.stampVCCurrentSource(this.nodes[3], this.nodes[4], this.nodes[0], this.nodes[1], this.a[6]);
+		CircuitElm.cirSim.circuit.stampVCCurrentSource(this.nodes[3], this.nodes[4], this.nodes[2], this.nodes[3], this.a[7]);
+		CircuitElm.cirSim.circuit.stampConductance(this.nodes[3], this.nodes[4], this.a[8]);
 
 		for (i = 0; i != 5; i++)
 		{

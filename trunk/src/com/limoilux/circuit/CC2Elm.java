@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.core.CoreUtil;
 
 public class CC2Elm extends ChipElm
 {
@@ -56,9 +57,9 @@ public class CC2Elm extends ChipElm
 	public void getInfo(String arr[])
 	{
 		arr[0] = this.gain == 1 ? "CCII+" : "CCII-";
-		arr[1] = "X,Y = " + CircuitElm.getVoltageText(this.volts[0]);
-		arr[2] = "Z = " + CircuitElm.getVoltageText(this.volts[2]);
-		arr[3] = "I = " + CircuitElm.getCurrentText(this.pins[0].current);
+		arr[1] = "X,Y = " + CoreUtil.getVoltageText(this.volts[0]);
+		arr[2] = "Z = " + CoreUtil.getVoltageText(this.volts[2]);
+		arr[3] = "I = " + CoreUtil.getCurrentText(this.pins[0].current);
 	}
 
 	// boolean nonLinear() { return true; }
@@ -66,10 +67,10 @@ public class CC2Elm extends ChipElm
 	public void stamp()
 	{
 		// X voltage = Y voltage
-		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[0], this.pins[0].voltSource);
-		CircuitElm.cirSim.stampVCVS(0, this.nodes[1], 1, this.pins[0].voltSource);
+		CircuitElm.cirSim.circuit.stampVoltageSource(0, this.nodes[0], this.pins[0].voltSource);
+		CircuitElm.cirSim.circuit.stampVCVS(0, this.nodes[1], 1, this.pins[0].voltSource);
 		// Z current = gain * X current
-		CircuitElm.cirSim.stampCCCS(0, this.nodes[2], this.pins[0].voltSource, this.gain);
+		CircuitElm.cirSim.circuit.stampCCCS(0, this.nodes[2], this.pins[0].voltSource, this.gain);
 	}
 
 	@Override

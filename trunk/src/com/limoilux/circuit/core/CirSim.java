@@ -1353,7 +1353,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				if (!closure[i] && !this.circuit.getCircuitNode(i).isInternal())
 				{
 					System.out.println("node " + i + " unconnected");
-					this.stampResistor(0, i, 1e8);
+					this.circuit.stampResistor(0, i, 1e8);
 					closure[i] = true;
 					changed = true;
 					break;
@@ -1690,41 +1690,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.circuitCanvas.repaint();
 	}
 
-	@Deprecated
-	public void stampVCVS(int n1, int n2, double coef, int vs)
-	{
-		this.circuit.stampVCVS(n1, n2, coef, vs);
-	}
 
-	@Deprecated
-	public void stampVoltageSource(int n1, int n2, int vs, double v)
-	{
-		this.circuit.stampVoltageSource(n1, n2, vs, v);
-	}
 
-	@Deprecated
-	public void stampVoltageSource(int n1, int n2, int vs)
-	{
-		this.circuit.stampVoltageSource(n1, n2, vs);
-	}
-
-	@Deprecated
-	public void updateVoltageSource(int n1, int n2, int vs, double v)
-	{
-		this.circuit.updateVoltageSource(n1, n2, vs, v);
-	}
-
-	@Deprecated
-	public void stampResistor(int n1, int n2, double r)
-	{
-		this.circuit.stampResistor(n1, n2, r);
-	}
-
-	@Deprecated
-	public void stampConductance(int n1, int n2, double r0)
-	{
-		this.circuit.stampConductance(n1, n2, r0);
-	}
 
 	@Deprecated
 	public void stampVCCurrentSource(int cn1, int cn2, int vn1, int vn2, double g)
@@ -1785,6 +1752,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			this.circuit.circuitMatrix = null;
 			return;
 		}
+		
 		int iter;
 		// int maxIter = getIterCount();
 		boolean debugprint = this.dumpMatrix;
@@ -2075,45 +2043,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 
 		return dump;
-	}
-
-	private ByteArrayOutputStream readUrlData(URL url) throws IOException
-	{
-		Object o = url.getContent();
-		FilterInputStream fis = (FilterInputStream) o;
-		ByteArrayOutputStream ba = new ByteArrayOutputStream(fis.available());
-		int blen = 1024;
-		byte b[] = new byte[blen];
-		while (true)
-		{
-			int len = fis.read(b);
-			if (len <= 0)
-			{
-				break;
-			}
-			ba.write(b, 0, len);
-		}
-		return ba;
-	}
-
-	private URL getCodeBase()
-	{
-		URL out = null;
-		File f = null;
-
-		try
-		{
-			f = new File(".");
-			out = new URL("file:" + f.getCanonicalPath() + "/");
-		}
-		catch (MalformedURLException e)
-		{
-		}
-		catch (IOException e)
-		{
-		}
-
-		return out;
 	}
 
 	private void getSetupList(Menu menu, boolean retry)
@@ -3784,6 +3713,45 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			// System.out.println(n1 + " failed");
 			return false;
 		}
+	}
+
+	private static ByteArrayOutputStream readUrlData(URL url) throws IOException
+	{
+		Object o = url.getContent();
+		FilterInputStream fis = (FilterInputStream) o;
+		ByteArrayOutputStream ba = new ByteArrayOutputStream(fis.available());
+		int blen = 1024;
+		byte b[] = new byte[blen];
+		while (true)
+		{
+			int len = fis.read(b);
+			if (len <= 0)
+			{
+				break;
+			}
+			ba.write(b, 0, len);
+		}
+		return ba;
+	}
+
+	private static URL getCodeBase()
+	{
+		URL out = null;
+		File f = null;
+	
+		try
+		{
+			f = new File(".");
+			out = new URL("file:" + f.getCanonicalPath() + "/");
+		}
+		catch (MalformedURLException e)
+		{
+		}
+		catch (IOException e)
+		{
+		}
+	
+		return out;
 	}
 
 	public static void main(String args[])

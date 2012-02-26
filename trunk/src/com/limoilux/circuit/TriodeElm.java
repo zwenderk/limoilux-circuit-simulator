@@ -198,7 +198,7 @@ public class TriodeElm extends CircuitElm
 		this.currentg = 0;
 		if (vgk > .01)
 		{
-			CircuitElm.cirSim.stampResistor(this.nodes[grid], this.nodes[cath], this.gridCurrentR);
+			CircuitElm.cirSim.circuit.stampResistor(this.nodes[grid], this.nodes[cath], this.gridCurrentR);
 			this.currentg = vgk / this.gridCurrentR;
 		}
 		if (ival < 0)

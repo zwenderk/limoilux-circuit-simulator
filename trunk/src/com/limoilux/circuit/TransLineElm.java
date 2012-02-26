@@ -208,10 +208,10 @@ public class TransLineElm extends CircuitElm
 	@Override
 	public void stamp()
 	{
-		CircuitElm.cirSim.stampVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1);
-		CircuitElm.cirSim.stampVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2);
-		CircuitElm.cirSim.stampResistor(this.nodes[2], this.nodes[4], this.imped);
-		CircuitElm.cirSim.stampResistor(this.nodes[3], this.nodes[5], this.imped);
+		CircuitElm.cirSim.circuit.stampVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1);
+		CircuitElm.cirSim.circuit.stampVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2);
+		CircuitElm.cirSim.circuit.stampResistor(this.nodes[2], this.nodes[4], this.imped);
+		CircuitElm.cirSim.circuit.stampResistor(this.nodes[3], this.nodes[5], this.imped);
 	}
 
 	@Override
@@ -243,8 +243,8 @@ public class TransLineElm extends CircuitElm
 			CircuitElm.cirSim.stop("Transmission line delay too large!", this);
 			return;
 		}
-		CircuitElm.cirSim.updateVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1, -this.voltageR[this.ptr]);
-		CircuitElm.cirSim.updateVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2, -this.voltageL[this.ptr]);
+		CircuitElm.cirSim.circuit.updateVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1, -this.voltageR[this.ptr]);
+		CircuitElm.cirSim.circuit.updateVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2, -this.voltageL[this.ptr]);
 		if (Math.abs(this.volts[0]) > 1e-5 || Math.abs(this.volts[1]) > 1e-5)
 		{
 			CircuitElm.cirSim.stop("Need to ground transmission line!", this);

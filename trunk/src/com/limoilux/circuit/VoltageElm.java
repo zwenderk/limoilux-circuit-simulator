@@ -99,11 +99,11 @@ public class VoltageElm extends CircuitElm
 	{
 		if (this.waveform == VoltageElm.WF_DC)
 		{
-			CircuitElm.cirSim.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
+			CircuitElm.cirSim.circuit.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
 		}
 		else
 		{
-			CircuitElm.cirSim.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource);
+			CircuitElm.cirSim.circuit.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource);
 		}
 	}
 
@@ -112,7 +112,7 @@ public class VoltageElm extends CircuitElm
 	{
 		if (this.waveform != VoltageElm.WF_DC)
 		{
-			CircuitElm.cirSim.updateVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
+			CircuitElm.cirSim.circuit.updateVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
 		}
 	}
 

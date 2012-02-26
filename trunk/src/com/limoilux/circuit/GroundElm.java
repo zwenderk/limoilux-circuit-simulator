@@ -58,7 +58,7 @@ public class GroundElm extends CircuitElm
 	@Override
 	public void stamp()
 	{
-		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[0], this.voltSource, 0);
+		CircuitElm.cirSim.circuit.stampVoltageSource(0, this.nodes[0], this.voltSource, 0);
 	}
 
 	@Override

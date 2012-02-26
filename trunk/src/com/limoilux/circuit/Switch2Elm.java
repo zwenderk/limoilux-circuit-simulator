@@ -122,7 +122,7 @@ public class Switch2Elm extends SwitchElm
 		{
 			return;
 		}
-		CircuitElm.cirSim.stampVoltageSource(this.nodes[0], this.nodes[this.position + 1], this.voltSource, 0);
+		CircuitElm.cirSim.circuit.stampVoltageSource(this.nodes[0], this.nodes[this.position + 1], this.voltSource, 0);
 	}
 
 	@Override

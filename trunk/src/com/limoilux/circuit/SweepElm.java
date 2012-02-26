@@ -121,7 +121,7 @@ public class SweepElm extends CircuitElm
 	@Override
 	public void stamp()
 	{
-		CircuitElm.cirSim.stampVoltageSource(0, this.nodes[0], this.voltSource);
+		CircuitElm.cirSim.circuit.stampVoltageSource(0, this.nodes[0], this.voltSource);
 	}
 
 	double fadd, fmul, freqTime, savedTimeStep;
@@ -194,7 +194,7 @@ public class SweepElm extends CircuitElm
 	@Override
 	public void doStep()
 	{
-		CircuitElm.cirSim.updateVoltageSource(0, this.nodes[0], this.voltSource, this.v);
+		CircuitElm.cirSim.circuit.updateVoltageSource(0, this.nodes[0], this.voltSource, this.v);
 	}
 
 	@Override

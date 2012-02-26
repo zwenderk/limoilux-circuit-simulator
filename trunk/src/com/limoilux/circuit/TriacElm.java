@@ -213,11 +213,11 @@ public class TriacElm extends CircuitElm
 	@Override
 	public void stamp()
 	{
-		CircuitElm.cirSim.stampNonLinear(this.nodes[this.anode]);
-		CircuitElm.cirSim.stampNonLinear(this.nodes[this.cnode]);
-		CircuitElm.cirSim.stampNonLinear(this.nodes[this.gnode]);
-		CircuitElm.cirSim.stampNonLinear(this.nodes[this.inode]);
-		CircuitElm.cirSim.stampResistor(this.nodes[this.gnode], this.nodes[this.cnode], this.cresistance);
+		CircuitElm.cirSim.circuit.stampNonLinear(this.nodes[this.anode]);
+		CircuitElm.cirSim.circuit.stampNonLinear(this.nodes[this.cnode]);
+		CircuitElm.cirSim.circuit.stampNonLinear(this.nodes[this.gnode]);
+		CircuitElm.cirSim.circuit.stampNonLinear(this.nodes[this.inode]);
+		CircuitElm.cirSim.circuit.stampResistor(this.nodes[this.gnode], this.nodes[this.cnode], this.cresistance);
 		this.diode.stamp(this.nodes[this.inode], this.nodes[this.gnode]);
 	}
 
@@ -242,7 +242,7 @@ public class TriacElm extends CircuitElm
 		// System.out.println(vac + " " + vag + " " + sim.converged + " " + ic +
 		// " " + ia + " " + aresistance + " " + volts[inode] + " " +
 		// volts[gnode] + " " + volts[anode]);
-		CircuitElm.cirSim.stampResistor(this.nodes[this.anode], this.nodes[this.inode], this.aresistance);
+		CircuitElm.cirSim.circuit.stampResistor(this.nodes[this.anode], this.nodes[this.inode], this.aresistance);
 	}
 
 	@Override

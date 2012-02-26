@@ -121,14 +121,14 @@ public class SparkGapElm extends CircuitElm
 	public void doStep()
 	{
 		this.resistance = this.state ? this.onresistance : this.offresistance;
-		CircuitElm.cirSim.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
+		CircuitElm.cirSim.circuit.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
 	}
 
 	@Override
 	public void stamp()
 	{
-		CircuitElm.cirSim.stampNonLinear(this.nodes[0]);
-		CircuitElm.cirSim.stampNonLinear(this.nodes[1]);
+		CircuitElm.cirSim.circuit.stampNonLinear(this.nodes[0]);
+		CircuitElm.cirSim.circuit.stampNonLinear(this.nodes[1]);
 	}
 
 	@Override

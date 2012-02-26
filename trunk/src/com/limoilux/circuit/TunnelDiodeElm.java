@@ -143,8 +143,8 @@ public class TunnelDiodeElm extends CircuitElm
 				/ (TunnelDiodeElm.pvp * TunnelDiodeElm.pvp) + Math.exp(voltdiff - TunnelDiodeElm.pvv)
 				* TunnelDiodeElm.piv;
 		double nc = i - geq * voltdiff;
-		CircuitElm.cirSim.stampConductance(this.nodes[0], this.nodes[1], geq);
-		CircuitElm.cirSim.stampCurrentSource(this.nodes[0], this.nodes[1], nc);
+		CircuitElm.cirSim.circuit.stampConductance(this.nodes[0], this.nodes[1], geq);
+		CircuitElm.cirSim.circuit.stampCurrentSource(this.nodes[0], this.nodes[1], nc);
 	}
 
 	@Override
