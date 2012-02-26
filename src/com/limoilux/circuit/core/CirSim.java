@@ -70,7 +70,6 @@ import com.limoilux.circuit.ui.EditOptions;
 import com.limoilux.circuit.ui.RowInfo;
 import com.limoilux.circuit.ui.io.MigrationWizard;
 import com.limoilux.circuit.ui.scope.Scope;
-import com.limoilux.circuit.ui.scope.ScopeCanvas;
 import com.limoilux.circuit.ui.scope.ScopeManager;
 
 public class CirSim extends JFrame implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
@@ -99,7 +98,10 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public static final int MODE_DRAG_ROW = 2;
 	public static final int MODE_DRAG_COLUMN = 3;
 
-	private long lastTime = 0, lastFrameTime, lastIterTime, secTime = 0;
+	private long lastTime = 0;
+	private long lastFrameTime;
+	private long lastIterTime;
+	private long secTime = 0;
 
 	public final JFrame mainContainer;
 
@@ -125,7 +127,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private SwitchElm heldSwitchElm;
 	private double origRightSide[], origMatrix[][];
 	private int circuitPermute[];
-	
+
 	private boolean circuitNeedsMap;
 
 	private Class<?> dumpTypes[];
@@ -1690,9 +1692,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.circuitCanvas.repaint();
 	}
 
-
-
-
 	@Deprecated
 	public void stampVCCurrentSource(int cn1, int cn2, int vn1, int vn2, double g)
 	{
@@ -1710,11 +1709,11 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		this.circuit.stampCCCS(n1, n2, vs, gain);
 	}
-	
+
 	@Deprecated
 	public void stampMatrix(int i, int j, double x)
 	{
-		this.circuit.stampMatrix(i,j,x);
+		this.circuit.stampMatrix(i, j, x);
 	}
 
 	@Deprecated
@@ -1728,7 +1727,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		this.circuit.stampRightSide(i);
 	}
-	
+
 	@Deprecated
 	public void stampNonLinear(int i)
 	{
@@ -1752,7 +1751,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			this.circuit.circuitMatrix = null;
 			return;
 		}
-		
+
 		int iter;
 		// int maxIter = getIterCount();
 		boolean debugprint = this.dumpMatrix;
@@ -1832,7 +1831,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					{
 						break;
 					}
-					if (!CoreUtil.luFactor(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize, this.circuitPermute))
+					if (!CoreUtil.luFactor(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize,
+							this.circuitPermute))
 					{
 						this.stop("Singular matrix!", null);
 						return;
@@ -3738,7 +3738,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		URL out = null;
 		File f = null;
-	
+
 		try
 		{
 			f = new File(".");
@@ -3750,7 +3750,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		catch (IOException e)
 		{
 		}
-	
+
 		return out;
 	}
 
