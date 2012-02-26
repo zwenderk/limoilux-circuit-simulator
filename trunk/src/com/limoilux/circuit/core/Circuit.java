@@ -279,4 +279,6 @@ public class Circuit
 		this.stampMatrix(n1, vn, 1);
 		this.stampMatrix(n2, vn, -1);
 	}
+	
+	
 }

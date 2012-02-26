@@ -1646,10 +1646,12 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.circuit.circuitMatrix = newmatx;
 		this.circuit.circuitRightSide = newrs;
 		matrixSize = this.circuit.circuitMatrixSize = newsize;
+		
 		for (i = 0; i != matrixSize; i++)
 		{
 			this.circuit.origRightSide[i] = this.circuit.circuitRightSide[i];
 		}
+		
 		for (i = 0; i != matrixSize; i++)
 		{
 			for (j = 0; j != matrixSize; j++)
@@ -1657,6 +1659,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				this.circuit.origMatrix[i][j] = this.circuit.circuitMatrix[i][j];
 			}
 		}
+		
 		this.circuit.circuitNeedsMap = true;
 
 		/*
@@ -1678,6 +1681,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				return;
 			}
 		}
+		
 	}
 
 	@Deprecated
@@ -1691,8 +1695,11 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.circuit.stopMessage = msg;
 		this.circuit.circuitMatrix = null;
 		this.circuit.stopElm = ce;
+		
 		this.stoppedCheck.setState(true);
+		
 		this.circuit.analyzeFlag = false;
+		
 		this.circuitCanvas.repaint();
 	}
 
