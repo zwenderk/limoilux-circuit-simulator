@@ -66,7 +66,6 @@ public class Circuit
 
 		return this.elmList.elementAt(n);
 	}
-	
 
 	public int locateElm(CircuitElm elm)
 	{
@@ -138,7 +137,7 @@ public class Circuit
 
 		return dump;
 	}
-	
+
 	public void updateVoltageSource(int n1, int n2, int vs, double v)
 	{
 		int vn = this.nodeList.size() + vs;
@@ -212,7 +211,7 @@ public class Circuit
 			this.circuitMatrix[i][j] += x;
 		}
 	}
-	
+
 	// stamp a current source from n1 to n2 depending on current through vs
 	public void stampCCCS(int n1, int n2, int vs, double gain)
 	{
@@ -220,7 +219,7 @@ public class Circuit
 		this.stampMatrix(n1, vn, gain);
 		this.stampMatrix(n2, vn, -gain);
 	}
-	
+
 	public void stampConductance(int n1, int n2, double r0)
 	{
 		this.stampMatrix(n1, n1, r0);
@@ -243,7 +242,7 @@ public class Circuit
 		this.stampRightSide(n1, -i);
 		this.stampRightSide(n2, i);
 	}
-	
+
 	public void stampResistor(int n1, int n2, double r)
 	{
 		double r0 = 1 / r;
@@ -258,7 +257,6 @@ public class Circuit
 		this.stampMatrix(n1, n2, -r0);
 		this.stampMatrix(n2, n1, -r0);
 	}
-	
 
 	// control voltage source vs with voltage from n1 to n2 (must
 	// also call stampVoltageSource())
@@ -290,19 +288,19 @@ public class Circuit
 		this.stampMatrix(n1, vn, 1);
 		this.stampMatrix(n2, vn, -1);
 	}
-	
-	public CircuitAnalysisException analyzeCircuit()
+
+	public void analyzeCircuit() throws CircuitAnalysisException
 	{
 		CircuitAnalysisException stopDump = null;
-		
+
 		System.out.println("Analysing");
 		CircuitNode cn;
 
 		this.calcCircuitBottom();
-		
+
 		if (this.elmList.isEmpty())
 		{
-			return stopDump;
+			return;
 		}
 
 		this.stopMessage = null;
@@ -540,19 +538,17 @@ public class Circuit
 				FindPathInfo fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1), this);
 				if (!fpi.findPath(ce.getNode(0)))
 				{
-					stopDump = new CircuitAnalysisException("No path for current source!",ce); 
-					return stopDump;
+					throw new CircuitAnalysisException("No path for current source!", ce);
 				}
 			}
 			// look for voltage source loops
 			if (ce instanceof VoltageElm && ce.getPostCount() == 2 || ce instanceof WireElm)
 			{
 				FindPathInfo fpi = new FindPathInfo(FindPathInfo.VOLTAGE, ce, ce.getNode(1), this);
+				
 				if (fpi.findPath(ce.getNode(0)))
 				{
-					stopDump = new CircuitAnalysisException("Voltage source/wire loop with no resistance!",ce);
-					
-					return stopDump;
+					throw new CircuitAnalysisException("Voltage source/wire loop with no resistance!", ce);
 				}
 			}
 			// look for shorted caps, or caps w/ voltage but no R
@@ -569,8 +565,7 @@ public class Circuit
 					fpi = new FindPathInfo(FindPathInfo.CAP_V, ce, ce.getNode(1), this);
 					if (fpi.findPath(ce.getNode(0)))
 					{
-						stopDump = new CircuitAnalysisException( "Capacitor loop with no resistance!", ce);
-						return stopDump;
+						throw new CircuitAnalysisException("Capacitor loop with no resistance!", ce);
 					}
 				}
 			}
@@ -632,9 +627,7 @@ public class Circuit
 			{
 				if (qp == -1)
 				{
-					stopDump = new CircuitAnalysisException("Matrix error"); 
-					
-					return stopDump;
+					throw new CircuitAnalysisException("Matrix error");
 				}
 				RowInfo elt = this.circuitRowInfo[qp];
 				if (qm == -1)
@@ -828,15 +821,10 @@ public class Circuit
 		// needing to do it every frame
 		if (!this.circuitNonLinear)
 		{
-			if (!CoreUtil.luFactor(this.circuitMatrix, this.circuitMatrixSize,
-					this.circuitPermute))
+			if (!CoreUtil.luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute))
 			{
-				stopDump = new CircuitAnalysisException( "Singular matrix!");
-				
-				return stopDump;
+				throw new CircuitAnalysisException("Singular matrix!");
 			}
 		}
-
-		return stopDump;
 	}
 }
