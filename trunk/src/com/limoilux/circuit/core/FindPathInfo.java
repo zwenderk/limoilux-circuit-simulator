@@ -7,10 +7,6 @@ import com.limoilux.circuit.VoltageElm;
 
 class FindPathInfo
 {
-	/**
-	 * 
-	 */
-	private final CirSim cirSim;
 	static final int INDUCT = 1;
 	static final int VOLTAGE = 2;
 	static final int SHORT = 3;
@@ -21,14 +17,13 @@ class FindPathInfo
 	int type;
 	Circuit circuit;
 
-	FindPathInfo(CirSim cirSim, int t, CircuitElm e, int d, Circuit circuit)
-	{
-		this.cirSim = cirSim;
+	FindPathInfo( int t, CircuitElm e, int d, Circuit circuit)
+	{ 
 		this.circuit = circuit;
 		this.dest = d;
 		this.type = t;
 		this.firstElm = e;
-		this.used = new boolean[this.cirSim.circuit.nodeList.size()];
+		this.used = new boolean[this.circuit.nodeList.size()];
 	}
 
 	boolean findPath(int n1)
