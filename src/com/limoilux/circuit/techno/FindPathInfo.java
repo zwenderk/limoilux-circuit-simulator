@@ -1,3 +1,4 @@
+
 package com.limoilux.circuit.techno;
 
 import com.limoilux.circuit.CapacitorElm;
@@ -17,8 +18,8 @@ public class FindPathInfo
 	public int type;
 	public Circuit circuit;
 
-	public FindPathInfo( int t, CircuitElm e, int d, Circuit circuit)
-	{ 
+	public FindPathInfo(int t, CircuitElm e, int d, Circuit circuit)
+	{
 		this.circuit = circuit;
 		this.dest = d;
 		this.type = t;

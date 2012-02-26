@@ -28,7 +28,6 @@ public class Circuit
 	public int circuitMatrixSize;
 	public int circuitMatrixFullSize;
 
-	public String stopMessage;
 	public RowInfo circuitRowInfo[];
 	public int circuitPermute[];
 	public double origRightSide[];
@@ -290,8 +289,6 @@ public class Circuit
 
 	public void analyzeCircuit() throws CircuitAnalysisException
 	{
-		CircuitAnalysisException stopDump = null;
-
 		System.out.println("Analysing");
 		CircuitNode cn;
 
@@ -302,7 +299,6 @@ public class Circuit
 			return;
 		}
 
-		this.stopMessage = null;
 		this.stopElm = null;
 		int i, j;
 		int vscount = 0;
@@ -544,7 +540,7 @@ public class Circuit
 			if (ce instanceof VoltageElm && ce.getPostCount() == 2 || ce instanceof WireElm)
 			{
 				FindPathInfo fpi = new FindPathInfo(FindPathInfo.VOLTAGE, ce, ce.getNode(1), this);
-				
+
 				if (fpi.findPath(ce.getNode(0)))
 				{
 					throw new CircuitAnalysisException("Voltage source/wire loop with no resistance!", ce);

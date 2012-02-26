@@ -410,7 +410,7 @@ public class CoreUtil
 	{
 		return x1 == y1 && x2 == y2 || x1 == y2 && x2 == y1;
 	}
-	
+
 	public static ByteArrayOutputStream readUrlData(URL url) throws IOException
 	{
 		Object o = url.getContent();
@@ -419,9 +419,9 @@ public class CoreUtil
 		byte[] bytes = null;
 		int blen = 1024;
 		int len;
-		
+
 		bytes = new byte[blen];
-		
+
 		while (true)
 		{
 			len = fis.read(bytes);

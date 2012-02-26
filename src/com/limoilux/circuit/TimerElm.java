@@ -76,7 +76,8 @@ public class TimerElm extends ChipElm
 		CircuitElm.cirSim.circuit.stampResistor(this.nodes[TimerElm.N_VIN], this.nodes[TimerElm.N_CTL], 5000);
 		CircuitElm.cirSim.circuit.stampResistor(this.nodes[TimerElm.N_CTL], 0, 10000);
 		// output pin
-		CircuitElm.cirSim.circuit.stampVoltageSource(0, this.nodes[TimerElm.N_OUT], this.pins[TimerElm.N_OUT].voltSource);
+		CircuitElm.cirSim.circuit.stampVoltageSource(0, this.nodes[TimerElm.N_OUT],
+				this.pins[TimerElm.N_OUT].voltSource);
 		// discharge pin
 		CircuitElm.cirSim.circuit.stampNonLinear(this.nodes[TimerElm.N_DIS]);
 	}
@@ -121,8 +122,8 @@ public class TimerElm extends ChipElm
 			CircuitElm.cirSim.circuit.stampResistor(this.nodes[TimerElm.N_DIS], 0, 10);
 		}
 		// output
-		CircuitElm.cirSim.circuit.updateVoltageSource(0, this.nodes[TimerElm.N_OUT], this.pins[TimerElm.N_OUT].voltSource,
-				this.out ? this.volts[TimerElm.N_VIN] : 0);
+		CircuitElm.cirSim.circuit.updateVoltageSource(0, this.nodes[TimerElm.N_OUT],
+				this.pins[TimerElm.N_OUT].voltSource, this.out ? this.volts[TimerElm.N_VIN] : 0);
 	}
 
 	@Override

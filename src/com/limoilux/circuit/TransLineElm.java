@@ -219,12 +219,12 @@ public class TransLineElm extends CircuitElm
 	public void startIteration() throws CircuitAnalysisException
 	{
 		// calculate voltages, currents sent over wire
-		
+
 		if (this.voltageL == null)
 		{
 			throw new CircuitAnalysisException("Transmission line delay too large!", this);
 		}
-		
+
 		this.voltageL[this.ptr] = this.volts[2] - this.volts[0] + this.volts[2] - this.volts[4];
 		this.voltageR[this.ptr] = this.volts[3] - this.volts[1] + this.volts[3] - this.volts[5];
 		// System.out.println(volts[2] + " " + volts[0] + " " +
@@ -244,9 +244,11 @@ public class TransLineElm extends CircuitElm
 		{
 			throw new CircuitAnalysisException("Transmission line delay too large!", this);
 		}
-		CircuitElm.cirSim.circuit.updateVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1, -this.voltageR[this.ptr]);
-		CircuitElm.cirSim.circuit.updateVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2, -this.voltageL[this.ptr]);
-		
+		CircuitElm.cirSim.circuit.updateVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1,
+				-this.voltageR[this.ptr]);
+		CircuitElm.cirSim.circuit.updateVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2,
+				-this.voltageL[this.ptr]);
+
 		if (Math.abs(this.volts[0]) > 1e-5 || Math.abs(this.volts[1]) > 1e-5)
 		{
 			throw new CircuitAnalysisException("Need to ground transmission line!", this);

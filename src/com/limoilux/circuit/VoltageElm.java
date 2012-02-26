@@ -100,7 +100,8 @@ public class VoltageElm extends CircuitElm
 	{
 		if (this.waveform == VoltageElm.WF_DC)
 		{
-			CircuitElm.cirSim.circuit.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
+			CircuitElm.cirSim.circuit.stampVoltageSource(this.nodes[0], this.nodes[1], this.voltSource,
+					this.getVoltage());
 		}
 		else
 		{
@@ -113,7 +114,8 @@ public class VoltageElm extends CircuitElm
 	{
 		if (this.waveform != VoltageElm.WF_DC)
 		{
-			CircuitElm.cirSim.circuit.updateVoltageSource(this.nodes[0], this.nodes[1], this.voltSource, this.getVoltage());
+			CircuitElm.cirSim.circuit.updateVoltageSource(this.nodes[0], this.nodes[1], this.voltSource,
+					this.getVoltage());
 		}
 	}
 
@@ -127,9 +129,7 @@ public class VoltageElm extends CircuitElm
 		case WF_AC:
 			return Math.sin(w) * this.maxVoltage + this.bias;
 		case WF_SQUARE:
-			return this.bias
-					+ (w % (2 * Math.PI) > 2 * Math.PI * this.dutyCycle ? -this.maxVoltage
-							: this.maxVoltage);
+			return this.bias + (w % (2 * Math.PI) > 2 * Math.PI * this.dutyCycle ? -this.maxVoltage : this.maxVoltage);
 		case WF_TRIANGLE:
 			return this.bias + this.triangleFunc(w % (2 * Math.PI)) * this.maxVoltage;
 		case WF_SAWTOOTH:
