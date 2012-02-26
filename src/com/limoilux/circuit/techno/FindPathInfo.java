@@ -52,7 +52,7 @@ public class FindPathInfo
 
 		this.used[n1] = true;
 
-		for (int i = 0; i != this.circuit.elmList.size(); i++)
+		for (int i = 0; i != this.circuit.getElementCount(); i++)
 		{
 			CircuitElm circuitElement = this.circuit.getElement(i);
 

@@ -67,6 +67,11 @@ public class Circuit
 		this.analyzeFlag = analyzeFlag;
 		return true;
 	}
+	
+	public int getElementCount()
+	{
+		return this.elmList.size();
+	}
 
 	public CircuitNode getCircuitNode(int n)
 	{

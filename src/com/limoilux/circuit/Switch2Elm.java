@@ -138,7 +138,7 @@ public class Switch2Elm extends SwitchElm
 		if (this.link != 0)
 		{
 			int i;
-			for (i = 0; i != CircuitElm.cirSim.circuit.elmList.size(); i++)
+			for (i = 0; i != CircuitElm.cirSim.circuit.getElementCount(); i++)
 			{
 				Object o = CircuitElm.cirSim.circuit.elmList.elementAt(i);
 				if (o instanceof Switch2Elm)
