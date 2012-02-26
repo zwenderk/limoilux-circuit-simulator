@@ -1,6 +1,5 @@
 package com.limoilux.circuit.techno;
 
-import com.limoilux.circuit.core.CircuitElm;
 
 /**
  * @author David Bernard

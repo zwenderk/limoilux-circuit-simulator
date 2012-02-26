@@ -8,7 +8,7 @@ import java.awt.Graphics;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class TextElm extends CircuitElm

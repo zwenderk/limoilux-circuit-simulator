@@ -3,8 +3,8 @@ package com.limoilux.circuit;
 
 import java.util.StringTokenizer;
 
-import com.limoilux.circuit.core.CircuitElm;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
+import com.limoilux.circuit.techno.CircuitElm;
 
 public class PhaseCompElm extends ChipElm
 {
