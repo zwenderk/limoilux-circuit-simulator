@@ -291,9 +291,9 @@ public class Circuit
 		this.stampMatrix(n2, vn, -1);
 	}
 	
-	public StopDump analyzeCircuit()
+	public CircuitAnalysisException analyzeCircuit()
 	{
-		StopDump stopDump = null;
+		CircuitAnalysisException stopDump = null;
 		
 		System.out.println("Analysing");
 		CircuitNode cn;
@@ -540,7 +540,7 @@ public class Circuit
 				FindPathInfo fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1), this);
 				if (!fpi.findPath(ce.getNode(0)))
 				{
-					stopDump = new StopDump("No path for current source!",ce); 
+					stopDump = new CircuitAnalysisException("No path for current source!",ce); 
 					return stopDump;
 				}
 			}
@@ -550,7 +550,7 @@ public class Circuit
 				FindPathInfo fpi = new FindPathInfo(FindPathInfo.VOLTAGE, ce, ce.getNode(1), this);
 				if (fpi.findPath(ce.getNode(0)))
 				{
-					stopDump = new StopDump("Voltage source/wire loop with no resistance!",ce);
+					stopDump = new CircuitAnalysisException("Voltage source/wire loop with no resistance!",ce);
 					
 					return stopDump;
 				}
@@ -569,7 +569,7 @@ public class Circuit
 					fpi = new FindPathInfo(FindPathInfo.CAP_V, ce, ce.getNode(1), this);
 					if (fpi.findPath(ce.getNode(0)))
 					{
-						stopDump = new StopDump( "Capacitor loop with no resistance!", ce);
+						stopDump = new CircuitAnalysisException( "Capacitor loop with no resistance!", ce);
 						return stopDump;
 					}
 				}
@@ -632,7 +632,7 @@ public class Circuit
 			{
 				if (qp == -1)
 				{
-					stopDump = new StopDump("Matrix error"); 
+					stopDump = new CircuitAnalysisException("Matrix error"); 
 					
 					return stopDump;
 				}
@@ -831,7 +831,7 @@ public class Circuit
 			if (!CoreUtil.luFactor(this.circuitMatrix, this.circuitMatrixSize,
 					this.circuitPermute))
 			{
-				stopDump = new StopDump( "Singular matrix!");
+				stopDump = new CircuitAnalysisException( "Singular matrix!");
 				
 				return stopDump;
 			}
