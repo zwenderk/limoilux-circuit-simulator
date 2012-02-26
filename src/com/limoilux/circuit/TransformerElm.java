@@ -213,7 +213,7 @@ public class TransformerElm extends CircuitElm
 	}
 
 	@Override
-	public void startIteration()
+	public void startIteration() throws CircuitAnalysisException
 	{
 		double voltdiff1 = this.volts[0] - this.volts[2];
 		double voltdiff2 = this.volts[1] - this.volts[3];

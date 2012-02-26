@@ -216,13 +216,13 @@ public class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	public void startIteration()
+	public void startIteration() throws CircuitAnalysisException
 	{
 		// calculate voltages, currents sent over wire
+		
 		if (this.voltageL == null)
 		{
-			CircuitElm.cirSim.stop("Transmission line delay too large!", this);
-			return;
+			throw new CircuitAnalysisException("Transmission line delay too large!", this);
 		}
 		
 		this.voltageL[this.ptr] = this.volts[2] - this.volts[0] + this.volts[2] - this.volts[4];

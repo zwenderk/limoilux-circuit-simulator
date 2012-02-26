@@ -98,7 +98,7 @@ public class DiacElm extends CircuitElm
 	}
 
 	@Override
-	public void startIteration()
+	public void startIteration() throws CircuitAnalysisException
 	{
 		double vd = this.volts[0] - this.volts[1];
 		if (Math.abs(this.current) < this.holdcurrent)

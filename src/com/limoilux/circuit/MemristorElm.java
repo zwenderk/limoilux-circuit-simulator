@@ -119,7 +119,7 @@ public class MemristorElm extends CircuitElm
 	}
 
 	@Override
-	public void startIteration()
+	public void startIteration() throws CircuitAnalysisException
 	{
 		double wd = this.dopeWidth / this.totalWidth;
 		this.dopeWidth += CircuitElm.cirSim.timeStep * this.mobility * this.r_on * this.current / this.totalWidth;

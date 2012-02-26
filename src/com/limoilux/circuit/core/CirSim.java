@@ -1162,12 +1162,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	}
 
 	@Deprecated
-	private void analyzeCircuit() throws CircuitAnalysisException
-	{
-		this.circuit.analyzeCircuit();
-	}
-
-	@Deprecated
 	private void calcCircuitBottom()
 	{
 		this.circuit.calcCircuitBottom();
@@ -1269,7 +1263,16 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			for (i = 0; i != this.circuit.elmList.size(); i++)
 			{
 				CircuitElm ce = this.circuit.getElement(i);
-				ce.startIteration();
+
+				try
+				{
+					ce.startIteration();
+				}
+				catch (CircuitAnalysisException e)
+				{
+					this.handleAnalysisException(e);
+				}
+
 			}
 			final int subiterCount = 5000;
 			for (subiter = 0; subiter != subiterCount; subiter++)
@@ -1341,14 +1344,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					{
 						break;
 					}
-					
+
 					if (!CoreUtil.luFactor(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize,
 							this.circuit.circuitPermute))
 					{
 						throw new CircuitAnalysisException("Singular matrix!");
 					}
 				}
-				
+
 				CoreUtil.luSolve(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize,
 						this.circuit.circuitPermute, this.circuit.circuitRightSide);
 
@@ -1405,7 +1408,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				this.stop("Convergence failed!", null);
 				break;
 			}
-			
+
 			this.t += this.timeStep;
 			for (i = 0; i != this.scopeMan.scopeCount; i++)
 			{
@@ -1646,19 +1649,27 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private void readSetupFile(String str, String title)
 	{
 		this.t = 0;
-		System.out.println("CirSim, file loaded: " + str);
 
+		URL url;
 		try
 		{
-			URL url = new URL(CoreUtil.getCodeBase() + "circuits/" + str);
+			url = new URL(CoreUtil.getCodeBase() + "circuits/" + str);
 			ByteArrayOutputStream ba = CoreUtil.readUrlData(url);
+
 			this.readSetup(ba.toByteArray(), ba.size(), false);
+			System.out.println("CirSim, file loaded: " + str);
 		}
-		catch (Exception e)
+		catch (MalformedURLException e)
 		{
 			e.printStackTrace();
 			this.stop("Unable to read " + str + "!", null);
 		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			this.stop("Unable to read " + str + "!", null);
+		}
+
 		this.titleLabel.setText(title);
 	}
 

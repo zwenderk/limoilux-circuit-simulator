@@ -105,7 +105,7 @@ public class ThermistorElm extends CircuitElm
 	}
 
 	@Override
-	public void startIteration()
+	public void startIteration() throws CircuitAnalysisException
 	{
 		double vd = this.volts[0] - this.volts[1];
 		// FIXME set resistance as appropriate, using slider.getValue()

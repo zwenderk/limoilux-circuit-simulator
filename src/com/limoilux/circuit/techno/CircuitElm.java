@@ -160,7 +160,7 @@ public abstract class CircuitElm implements Editable
 
 	}
 
-	public void startIteration()
+	public void startIteration() throws CircuitAnalysisException
 	{
 
 	}

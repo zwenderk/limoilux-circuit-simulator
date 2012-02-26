@@ -257,7 +257,7 @@ public class RelayElm extends CircuitElm
 	}
 
 	@Override
-	public void startIteration()
+	public void startIteration() throws CircuitAnalysisException
 	{
 		this.ind.startIteration(this.volts[this.nCoil1] - this.volts[this.nCoil3]);
 

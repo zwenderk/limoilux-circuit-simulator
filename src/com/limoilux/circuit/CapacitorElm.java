@@ -139,7 +139,7 @@ public class CapacitorElm extends CircuitElm
 	}
 
 	@Override
-	public void startIteration()
+	public void startIteration() throws CircuitAnalysisException
 	{
 		if (this.isTrapezoidal())
 		{

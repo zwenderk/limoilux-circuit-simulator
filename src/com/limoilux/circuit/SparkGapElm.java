@@ -105,7 +105,7 @@ public class SparkGapElm extends CircuitElm
 	}
 
 	@Override
-	public void startIteration()
+	public void startIteration() throws CircuitAnalysisException
 	{
 		if (Math.abs(this.current) < this.holdcurrent)
 		{
