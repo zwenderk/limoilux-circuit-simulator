@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class TransLineElm extends CircuitElm
@@ -223,6 +224,7 @@ public class TransLineElm extends CircuitElm
 			CircuitElm.cirSim.stop("Transmission line delay too large!", this);
 			return;
 		}
+		
 		this.voltageL[this.ptr] = this.volts[2] - this.volts[0] + this.volts[2] - this.volts[4];
 		this.voltageR[this.ptr] = this.volts[3] - this.volts[1] + this.volts[3] - this.volts[5];
 		// System.out.println(volts[2] + " " + volts[0] + " " +
@@ -236,19 +238,19 @@ public class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		if (this.voltageL == null)
 		{
-			CircuitElm.cirSim.stop("Transmission line delay too large!", this);
-			return;
+			throw new CircuitAnalysisException("Transmission line delay too large!", this);
 		}
 		CircuitElm.cirSim.circuit.updateVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1, -this.voltageR[this.ptr]);
 		CircuitElm.cirSim.circuit.updateVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2, -this.voltageL[this.ptr]);
+		
 		if (Math.abs(this.volts[0]) > 1e-5 || Math.abs(this.volts[1]) > 1e-5)
 		{
-			CircuitElm.cirSim.stop("Need to ground transmission line!", this);
-			return;
+			throw new CircuitAnalysisException("Need to ground transmission line!", this);
+
 		}
 	}
 

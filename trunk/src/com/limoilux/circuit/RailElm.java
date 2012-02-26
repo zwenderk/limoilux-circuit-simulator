@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 
 public class RailElm extends VoltageElm
 {
@@ -110,7 +111,7 @@ public class RailElm extends VoltageElm
 	}
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		if (this.waveform != VoltageElm.WF_DC)
 		{

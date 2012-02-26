@@ -4,6 +4,7 @@ package com.limoilux.circuit;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 
 public class AntennaElm extends RailElm
 {
@@ -27,7 +28,7 @@ public class AntennaElm extends RailElm
 	}
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		CircuitElm.cirSim.circuit.updateVoltageSource(0, this.nodes[0], this.voltSource, this.getVoltage());
 	}

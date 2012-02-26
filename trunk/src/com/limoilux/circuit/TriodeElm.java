@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 
 public class TriodeElm extends CircuitElm
 {
@@ -156,7 +157,7 @@ public class TriodeElm extends CircuitElm
 	double lastv0, lastv1, lastv2;
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		double vs[] = new double[3];
 		vs[0] = this.volts[0];

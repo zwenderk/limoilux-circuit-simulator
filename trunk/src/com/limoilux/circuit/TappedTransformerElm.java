@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class TappedTransformerElm extends CircuitElm
@@ -237,7 +238,7 @@ public class TappedTransformerElm extends CircuitElm
 	double curSourceValue[], voltdiff[];
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		CircuitElm.cirSim.stampCurrentSource(this.nodes[0], this.nodes[1], this.curSourceValue[0]);
 		CircuitElm.cirSim.stampCurrentSource(this.nodes[2], this.nodes[3], this.curSourceValue[1]);

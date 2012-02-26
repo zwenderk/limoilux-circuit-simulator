@@ -9,6 +9,7 @@ import java.awt.Polygon;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class MosfetElm extends CircuitElm
@@ -232,7 +233,7 @@ public class MosfetElm extends CircuitElm
 	}
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		double vs[] = new double[3];
 		vs[0] = this.volts[0];
@@ -280,8 +281,7 @@ public class MosfetElm extends CircuitElm
 		double beta = this.getBeta();
 		if (vgs > .5 && this instanceof JfetElm)
 		{
-			CircuitElm.cirSim.stop("JFET is reverse biased!", this);
-			return;
+			throw new CircuitAnalysisException("JFET is reverse biased!", this);
 		}
 		if (vgs < this.vt)
 		{

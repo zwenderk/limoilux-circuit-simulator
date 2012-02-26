@@ -14,6 +14,7 @@ import java.util.StringTokenizer;
 import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CircuitElm;
 import com.limoilux.circuit.core.CoreUtil;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class ThermistorElm extends CircuitElm
@@ -113,7 +114,7 @@ public class ThermistorElm extends CircuitElm
 	}
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		CircuitElm.cirSim.circuit.stampResistor(this.nodes[0], this.nodes[1], this.resistance);
 	}

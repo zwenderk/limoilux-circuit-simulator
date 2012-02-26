@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class AnalogSwitchElm extends CircuitElm
@@ -108,7 +109,7 @@ public class AnalogSwitchElm extends CircuitElm
 	}
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		this.open = this.volts[2] < 2.5;
 		if ((this.flags & this.FLAG_INVERT) != 0)

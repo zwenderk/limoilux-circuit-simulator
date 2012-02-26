@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 import com.limoilux.circuit.core.CoreUtil;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
@@ -170,7 +171,7 @@ public abstract class GateElm extends CircuitElm
 	}
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		int i;
 		boolean f = this.calcFunction();

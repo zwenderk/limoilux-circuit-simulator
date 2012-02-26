@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CircuitElm;
 import com.limoilux.circuit.core.CoreUtil;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
@@ -231,7 +232,7 @@ public class TransformerElm extends CircuitElm
 	double curSourceValue1, curSourceValue2;
 
 	@Override
-	public void doStep()
+	public void doStep() throws CircuitAnalysisException
 	{
 		CircuitElm.cirSim.stampCurrentSource(this.nodes[0], this.nodes[2], this.curSourceValue1);
 		CircuitElm.cirSim.stampCurrentSource(this.nodes[1], this.nodes[3], this.curSourceValue2);

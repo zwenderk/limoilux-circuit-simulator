@@ -774,9 +774,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			this.mouseElm = this.circuit.stopElm;
 		}
 		this.setupScopes();
-		
+
 		Graphics g = null;
-		
+
 		g = this.dbimage.getGraphics();
 		CircuitElm.selectColor = Color.cyan;
 		if (this.printableCheckItem.getState())
@@ -1178,7 +1178,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.handleAnalysisException(new CircuitAnalysisException(msg, ce));
 	}
 
-	public void handleAnalysisException(CircuitAnalysisException e)
+	private void handleAnalysisException(CircuitAnalysisException e)
 	{
 		this.circuit.stopMessage = e.getTechnicalMessage();
 		this.circuit.circuitMatrix = null;
@@ -1292,16 +1292,25 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				for (i = 0; i != this.circuit.elmList.size(); i++)
 				{
 					CircuitElm ce = this.circuit.getElement(i);
-					ce.doStep();
+
+					try
+					{
+						ce.doStep();
+					}
+					catch (CircuitAnalysisException e)
+					{
+						this.handleAnalysisException(e);
+					}
 				}
-				
+
 				if (this.circuit.stopMessage != null)
 				{
 					return;
 				}
+
 				boolean printit = debugprint;
 				debugprint = false;
-				
+
 				for (j = 0; j != this.circuit.circuitMatrixSize; j++)
 				{
 					for (i = 0; i != this.circuit.circuitMatrixSize; i++)
@@ -1331,14 +1340,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					{
 						break;
 					}
+					
 					if (!CoreUtil.luFactor(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize,
 							this.circuit.circuitPermute))
 					{
-
-						this.stop("Singular matrix!", null);
-						return;
+						throw new CircuitAnalysisException("Singular matrix!");
 					}
 				}
+				
 				CoreUtil.luSolve(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize,
 						this.circuit.circuitPermute, this.circuit.circuitRightSide);
 
@@ -1395,6 +1404,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				this.stop("Convergence failed!", null);
 				break;
 			}
+			
 			this.t += this.timeStep;
 			for (i = 0; i != this.scopeMan.scopeCount; i++)
 			{
@@ -1616,6 +1626,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		catch (Exception e)
 		{
 			e.printStackTrace();
+
 			this.stop("Can't read setuplist.txt!", null);
 		}
 	}
@@ -1638,8 +1649,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		try
 		{
-			URL url = new URL(this.getCodeBase() + "circuits/" + str);
-			ByteArrayOutputStream ba = this.readUrlData(url);
+			URL url = new URL(CoreUtil.getCodeBase() + "circuits/" + str);
+			ByteArrayOutputStream ba = CoreUtil.readUrlData(url);
 			this.readSetup(ba.toByteArray(), ba.size(), false);
 		}
 		catch (Exception e)
