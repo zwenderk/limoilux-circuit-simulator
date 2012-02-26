@@ -300,21 +300,21 @@ public class TransistorElm extends CircuitElm
 		// stamps from page 302 of Pillage. Node 0 is the base,
 		// node 1 the collector, node 2 the emitter. Also stamp
 		// minimum conductance (gmin) between b,e and b,c
-		CircuitElm.cirSim.stampMatrix(this.nodes[0], this.nodes[0], -gee - gec - gce - gcc + this.gmin * 2);
-		CircuitElm.cirSim.stampMatrix(this.nodes[0], this.nodes[1], gec + gcc - this.gmin);
-		CircuitElm.cirSim.stampMatrix(this.nodes[0], this.nodes[2], gee + gce - this.gmin);
-		CircuitElm.cirSim.stampMatrix(this.nodes[1], this.nodes[0], gce + gcc - this.gmin);
-		CircuitElm.cirSim.stampMatrix(this.nodes[1], this.nodes[1], -gcc + this.gmin);
-		CircuitElm.cirSim.stampMatrix(this.nodes[1], this.nodes[2], -gce);
-		CircuitElm.cirSim.stampMatrix(this.nodes[2], this.nodes[0], gee + gec - this.gmin);
-		CircuitElm.cirSim.stampMatrix(this.nodes[2], this.nodes[1], -gec);
-		CircuitElm.cirSim.stampMatrix(this.nodes[2], this.nodes[2], -gee + this.gmin);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[0], this.nodes[0], -gee - gec - gce - gcc + this.gmin * 2);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[0], this.nodes[1], gec + gcc - this.gmin);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[0], this.nodes[2], gee + gce - this.gmin);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[1], this.nodes[0], gce + gcc - this.gmin);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[1], this.nodes[1], -gcc + this.gmin);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[1], this.nodes[2], -gce);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[2], this.nodes[0], gee + gec - this.gmin);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[2], this.nodes[1], -gec);
+		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[2], this.nodes[2], -gee + this.gmin);
 
 		// we are solving for v(k+1), not delta v, so we use formula
 		// 10.5.13, multiplying J by v(k)
-		CircuitElm.cirSim.stampRightSide(this.nodes[0], -this.ib - (gec + gcc) * vbc - (gee + gce) * vbe);
-		CircuitElm.cirSim.stampRightSide(this.nodes[1], -this.ic + gce * vbe + gcc * vbc);
-		CircuitElm.cirSim.stampRightSide(this.nodes[2], -this.ie + gee * vbe + gec * vbc);
+		CircuitElm.cirSim.circuit.stampRightSide(this.nodes[0], -this.ib - (gec + gcc) * vbc - (gee + gce) * vbe);
+		CircuitElm.cirSim.circuit.stampRightSide(this.nodes[1], -this.ic + gce * vbe + gcc * vbc);
+		CircuitElm.cirSim.circuit.stampRightSide(this.nodes[2], -this.ie + gee * vbe + gec * vbc);
 	}
 
 	@Override

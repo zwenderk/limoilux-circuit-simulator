@@ -220,10 +220,10 @@ public class OpAmpElm extends CircuitElm
 		}
 
 		// newton-raphson
-		CircuitElm.cirSim.stampMatrix(vn, this.nodes[0], dx);
-		CircuitElm.cirSim.stampMatrix(vn, this.nodes[1], -dx);
-		CircuitElm.cirSim.stampMatrix(vn, this.nodes[2], 1);
-		CircuitElm.cirSim.stampRightSide(vn, x);
+		CircuitElm.cirSim.circuit.stampMatrix(vn, this.nodes[0], dx);
+		CircuitElm.cirSim.circuit.stampMatrix(vn, this.nodes[1], -dx);
+		CircuitElm.cirSim.circuit.stampMatrix(vn, this.nodes[2], 1);
+		CircuitElm.cirSim.circuit.stampRightSide(vn, x);
 
 		this.lastvd = vd;
 		/*
