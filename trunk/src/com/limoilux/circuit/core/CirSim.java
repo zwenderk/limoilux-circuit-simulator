@@ -61,7 +61,7 @@ import com.limoilux.circuit.TextElm;
 import com.limoilux.circuit.VoltageElm;
 import com.limoilux.circuit.WireElm;
 import com.limoilux.circuit.techno.Circuit;
-import com.limoilux.circuit.techno.StopDump;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.ui.CircuitCanvas;
 import com.limoilux.circuit.ui.CircuitLayout;
 import com.limoilux.circuit.ui.CircuitNode;
@@ -751,7 +751,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		if (this.circuit.analyzeFlag)
 		{
-			StopDump stopDump = this.circuit.analyzeCircuit();
+			CircuitAnalysisException stopDump = this.circuit.analyzeCircuit();
 
 			if (stopDump != null)
 			{
@@ -1167,14 +1167,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	@Deprecated
 	public void stop(String msg, CircuitElm ce)
 	{
-		this.stop(new StopDump(msg, ce));
+		this.stop(new CircuitAnalysisException(msg, ce));
 	}
 
-	public void stop(StopDump stopDump)
+	public void stop(CircuitAnalysisException stopDump)
 	{
-		this.circuit.stopMessage = stopDump.msg;
+		this.circuit.stopMessage = stopDump.getTechnicalMessage();
 		this.circuit.circuitMatrix = null;
-		this.circuit.stopElm = stopDump.ce;
+		this.circuit.stopElm = stopDump.getCauseElement();
 
 		this.stoppedCheck.setState(true);
 
