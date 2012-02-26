@@ -60,6 +60,8 @@ import com.limoilux.circuit.SwitchElm;
 import com.limoilux.circuit.TextElm;
 import com.limoilux.circuit.VoltageElm;
 import com.limoilux.circuit.WireElm;
+import com.limoilux.circuit.techno.Circuit;
+import com.limoilux.circuit.techno.StopDump;
 import com.limoilux.circuit.ui.CircuitCanvas;
 import com.limoilux.circuit.ui.CircuitLayout;
 import com.limoilux.circuit.ui.CircuitNode;

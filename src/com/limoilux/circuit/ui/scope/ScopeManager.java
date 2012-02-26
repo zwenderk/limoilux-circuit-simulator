@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 
 import com.limoilux.circuit.core.CirSim;
-import com.limoilux.circuit.core.Circuit;
+import com.limoilux.circuit.techno.Circuit;
 
 public class ScopeManager
 {
