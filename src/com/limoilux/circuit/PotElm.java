@@ -11,6 +11,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CircuitElm;
+import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class PotElm extends CircuitElm implements AdjustmentListener
@@ -105,7 +106,7 @@ public class PotElm extends CircuitElm implements AdjustmentListener
 	{
 		super.setPoints();
 		int offset = 0;
-		if (CircuitElm.abs(this.dx) > CircuitElm.abs(this.dy))
+		if (Math.abs(this.dx) > Math.abs(this.dy))
 		{
 			this.dx = CircuitElm.cirSim.snapGrid(this.dx / 2) * 2;
 			this.point2.x = this.x2 = this.point1.x + this.dx;

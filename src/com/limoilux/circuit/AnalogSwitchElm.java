@@ -124,7 +124,7 @@ public class AnalogSwitchElm extends CircuitElm
 	{
 		xx = CircuitElm.cirSim.snapGrid(xx);
 		yy = CircuitElm.cirSim.snapGrid(yy);
-		if (CircuitElm.abs(this.x - xx) < CircuitElm.abs(this.y - yy))
+		if (Math.abs(this.x - xx) < Math.abs(this.y - yy))
 		{
 			xx = this.x;
 		}
@@ -132,7 +132,7 @@ public class AnalogSwitchElm extends CircuitElm
 		{
 			yy = this.y;
 		}
-		int q1 = CircuitElm.abs(this.x - xx) + CircuitElm.abs(this.y - yy);
+		int q1 = Math.abs(this.x - xx) + Math.abs(this.y - yy);
 		int q2 = q1 / 2 % CircuitElm.cirSim.gridSize;
 		if (q2 != 0)
 		{
