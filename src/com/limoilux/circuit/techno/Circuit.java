@@ -22,7 +22,6 @@ public class Circuit
 	public Vector<CircuitNode> nodeList;
 	public Vector<CircuitElm> elmList;
 
-	public CircuitElm stopElm;
 
 	public int circuitBottom;
 	public int circuitMatrixSize;
@@ -301,7 +300,7 @@ public class Circuit
 			return;
 		}
 
-		this.stopElm = null;
+		
 		int i, j;
 		int vscount = 0;
 		this.nodeList = new Vector<CircuitNode>();
