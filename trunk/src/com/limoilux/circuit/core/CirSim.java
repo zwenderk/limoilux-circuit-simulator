@@ -2998,7 +2998,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			int bestDist = 100000;
 			int bestArea = 100000;
 
-			for (i = 0; i < CirSim.this.circuit.elmList.size(); i++)
+			for (i = 0; i < CirSim.this.circuit.getElementCount(); i++)
 			{
 				CircuitElm currentElement = CirSim.this.circuit.getElement(i);
 				if (currentElement.boundingBox.contains(x, y))
@@ -3051,7 +3051,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				// the mouse pointer was not in any of the bounding boxes, but
 				// we
 				// might still be close to a post
-				for (i = 0; i != CirSim.this.circuit.elmList.size(); i++)
+				for (i = 0; i != CirSim.this.circuit.getElementCount(); i++)
 				{
 					CircuitElm ce = CirSim.this.circuit.getElement(i);
 					int j;
