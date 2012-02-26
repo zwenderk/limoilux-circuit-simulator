@@ -19,6 +19,8 @@ import com.limoilux.circuit.ui.RowInfo;
 
 public class Circuit
 {
+	private final Vector<CircuitElm> elementList;
+	
 	private int circuitMatrixFullSize;
 
 	private boolean circuitNonLinear;
@@ -26,7 +28,6 @@ public class Circuit
 	private boolean circuitNeedsMap;
 
 	public Vector<CircuitNode> nodeList;
-	public Vector<CircuitElm> elmList;
 
 	public int circuitBottom;
 	public int circuitMatrixSize;
@@ -44,7 +45,7 @@ public class Circuit
 
 	public Circuit()
 	{
-
+		this.elementList = new Vector<CircuitElm>();
 	}
 
 	public int getMatrixFullSize()
@@ -70,12 +71,27 @@ public class Circuit
 	
 	public int getElementCount()
 	{
-		return this.elmList.size();
+		return this.elementList.size();
+	}
+	
+	public void removeElementAt(int index)
+	{
+		this.elementList.removeElementAt(index);
 	}
 	
 	public CircuitElm getElementAt(int index)
 	{
-		return this.elmList.elementAt(index);
+		return this.elementList.elementAt(index);
+	}
+	
+	public void removeAllElements()
+	{
+		this.elementList.removeAllElements();
+	}
+	
+	public void addElement(CircuitElm element)
+	{
+		this.elementList.addElement(element);
 	}
 
 	public CircuitNode getCircuitNode(int n)
@@ -90,19 +106,19 @@ public class Circuit
 
 	public CircuitElm getElement(int n)
 	{
-		if (n >= this.elmList.size())
+		if (n >= this.elementList.size())
 		{
 			return null;
 		}
 
-		return this.elmList.elementAt(n);
+		return this.elementList.elementAt(n);
 	}
 
 	public int locateElm(CircuitElm elm)
 	{
-		for (int i = 0; i != this.elmList.size(); i++)
+		for (int i = 0; i != this.elementList.size(); i++)
 		{
-			if (elm == this.elmList.elementAt(i))
+			if (elm == this.elementList.elementAt(i))
 			{
 				return i;
 			}
@@ -112,7 +128,7 @@ public class Circuit
 
 	public void clearSelection()
 	{
-		for (int i = 0; i != this.elmList.size(); i++)
+		for (int i = 0; i != this.elementList.size(); i++)
 		{
 			CircuitElm ce = this.getElement(i);
 			ce.setSelected(false);
@@ -121,7 +137,7 @@ public class Circuit
 
 	public void doSelectAll()
 	{
-		for (int i = 0; i != this.elmList.size(); i++)
+		for (int i = 0; i != this.elementList.size(); i++)
 		{
 			CircuitElm ce = this.getElement(i);
 			ce.setSelected(true);
@@ -130,12 +146,12 @@ public class Circuit
 
 	public void removeZeroLengthElements()
 	{
-		for (int i = this.elmList.size() - 1; i >= 0; i--)
+		for (int i = this.elementList.size() - 1; i >= 0; i--)
 		{
 			CircuitElm ce = this.getElement(i);
 			if (ce.x == ce.x2 && ce.y == ce.y2)
 			{
-				this.elmList.removeElementAt(i);
+				this.elementList.removeElementAt(i);
 				ce.delete();
 			}
 		}
@@ -147,7 +163,7 @@ public class Circuit
 		int bottom = 0;
 
 		this.circuitBottom = 0;
-		for (int i = 0; i != this.elmList.size(); i++)
+		for (int i = 0; i != this.elementList.size(); i++)
 		{
 			rect = this.getElement(i).boundingBox;
 			bottom = rect.height + rect.y;
@@ -161,7 +177,7 @@ public class Circuit
 	public String createDump()
 	{
 		String dump = "";
-		for (int i = 0; i < this.elmList.size(); i++)
+		for (int i = 0; i < this.elementList.size(); i++)
 		{
 			dump += this.getElement(i).dump() + "\n";
 		}
@@ -327,7 +343,7 @@ public class Circuit
 
 		this.calcCircuitBottom();
 
-		if (this.elmList.isEmpty())
+		if (this.elementList.isEmpty())
 		{
 			return;
 		}
@@ -341,7 +357,7 @@ public class Circuit
 
 		// System.out.println("ac1");
 		// look for voltage or ground element
-		for (i = 0; i != this.elmList.size(); i++)
+		for (i = 0; i != this.elementList.size(); i++)
 		{
 			CircuitElm ce = this.getElement(i);
 			if (ce instanceof GroundElm)
@@ -380,7 +396,7 @@ public class Circuit
 		// System.out.println("ac2");
 
 		// allocate nodes and voltage sources
-		for (i = 0; i != this.elmList.size(); i++)
+		for (i = 0; i != this.elementList.size(); i++)
 		{
 			CircuitElm ce = this.getElement(i);
 			int inodes = ce.getInternalNodeCount();
@@ -444,7 +460,7 @@ public class Circuit
 		// System.out.println("ac3");
 
 		// determine if circuit is nonlinear
-		for (i = 0; i != this.elmList.size(); i++)
+		for (i = 0; i != this.elementList.size(); i++)
 		{
 			CircuitElm ce = this.getElement(i);
 			if (ce.nonLinear())
@@ -479,7 +495,7 @@ public class Circuit
 		this.circuitNeedsMap = false;
 
 		// stamp linear circuit elements
-		for (i = 0; i != this.elmList.size(); i++)
+		for (i = 0; i != this.elementList.size(); i++)
 		{
 			CircuitElm ce = this.getElement(i);
 			ce.stamp();
@@ -493,7 +509,7 @@ public class Circuit
 		while (changed)
 		{
 			changed = false;
-			for (i = 0; i != this.elmList.size(); i++)
+			for (i = 0; i != this.elementList.size(); i++)
 			{
 				CircuitElm ce = this.getElement(i);
 				// loop through all ce's nodes to see if they are connected
@@ -544,7 +560,7 @@ public class Circuit
 		}
 		// System.out.println("ac5");
 
-		for (i = 0; i != this.elmList.size(); i++)
+		for (i = 0; i != this.elementList.size(); i++)
 		{
 			CircuitElm ce = this.getElement(i);
 			// look for inductors with no current path

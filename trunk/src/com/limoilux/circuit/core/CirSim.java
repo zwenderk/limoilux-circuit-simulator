@@ -472,7 +472,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.mainContainer.add(this.titleLabel);
 
 		this.setGrid();
-		this.circuit.elmList = new Vector<CircuitElm>();
 		
 		this.undoStack = new Vector<String>();
 		this.redoStack = new Vector<String>();
@@ -1684,7 +1683,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				ce.delete();
 			}
 
-			this.circuit.elmList.removeAllElements();
+			this.circuit.removeAllElements();
 			this.hintType = -1;
 			this.timeStep = 5e-6;
 			this.dotsCheckItem.setState(true);
@@ -1789,7 +1788,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					oarr[5] = st;
 					ce = (CircuitElm) cstr.newInstance(oarr);
 					ce.setPoints();
-					this.circuit.elmList.addElement(ce);
+					this.circuit.addElement(ce);
 				}
 				catch (java.lang.reflect.InvocationTargetException ee)
 				{
@@ -2256,7 +2255,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			{
 				this.clipboard += ce.dump() + "\n";
 				ce.delete();
-				this.circuit.elmList.removeElementAt(i);
+				this.circuit.removeElementAt(i);
 			}
 		}
 		this.enablePaste();
@@ -2274,7 +2273,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			if (ce.isSelected())
 			{
 				ce.delete();
-				this.circuit.elmList.removeElementAt(i);
+				this.circuit.removeElementAt(i);
 			}
 		}
 
@@ -2877,7 +2876,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				}
 				else
 				{
-					CirSim.this.circuit.elmList.addElement(CirSim.this.dragElm);
+					CirSim.this.circuit.addElement(CirSim.this.dragElm);
 					circuitChanged = true;
 				}
 
