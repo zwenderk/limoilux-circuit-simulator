@@ -41,10 +41,10 @@ public class AntennaElm extends RailElm
 		double fm = 3 * Math.sin(this.fmphase);
 		return Math.sin(2 * Math.PI * CircuitElm.cirSim.t * 3000)
 				* (1.3 + Math.sin(2 * Math.PI * CircuitElm.cirSim.t * 12)) * 3
-				+ Math.sin(2 * Math.PI* CircuitElm.cirSim.t * 2710)
+				+ Math.sin(2 * Math.PI * CircuitElm.cirSim.t * 2710)
 				* (1.3 + Math.sin(2 * Math.PI * CircuitElm.cirSim.t * 13)) * 3
 				+ Math.sin(2 * Math.PI * CircuitElm.cirSim.t * 2433)
-				* (1.3 + Math.sin(2 *Math.PI * CircuitElm.cirSim.t * 14)) * 3 + fm;
+				* (1.3 + Math.sin(2 * Math.PI * CircuitElm.cirSim.t * 14)) * 3 + fm;
 	}
 
 	@Override

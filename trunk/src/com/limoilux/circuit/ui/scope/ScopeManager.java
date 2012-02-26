@@ -73,7 +73,7 @@ public class ScopeManager
 			this.scopes[s].position--;
 		}
 	}
-	
+
 	public void setupScopes(Circuit c, Dimension winSize, Rectangle circuitArea)
 	{
 		int i;

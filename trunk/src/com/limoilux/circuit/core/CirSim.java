@@ -511,7 +511,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			this.readSetup(this.startCircuitText);
 		}
-		else if (this.circuit.stopMessage == null && this.startCircuit != null)
+		else if (this.stopMessage == null && this.startCircuit != null)
 		{
 			this.readSetupFile(this.startCircuit, this.startLabel);
 		}
@@ -754,6 +754,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			try
 			{
+				this.stopMessage = null;
 				this.circuit.analyzeCircuit();
 			}
 			catch (CircuitAnalysisException e)
@@ -907,7 +908,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		int ct = this.scopeMan.scopeCount;
 
-		if (this.circuit.stopMessage != null)
+		if (this.stopMessage != null)
 		{
 			ct = 0;
 		}
@@ -918,9 +919,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 
 		g.setColor(CircuitElm.whiteColor);
-		if (this.circuit.stopMessage != null)
+		if (this.stopMessage != null)
 		{
-			g.drawString(this.circuit.stopMessage, 10, this.circuitArea.height);
+			g.drawString(this.stopMessage, 10, this.circuitArea.height);
 		}
 		else
 		{
@@ -1168,14 +1169,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	}
 
 	@Deprecated
-	public void stop(String msg, CircuitElm ce)
+	private void stop(String msg, CircuitElm ce)
 	{
 		this.handleAnalysisException(new CircuitAnalysisException(msg, ce));
 	}
 
 	private void handleAnalysisException(CircuitAnalysisException e)
 	{
-		this.circuit.stopMessage = e.getTechnicalMessage();
+		this.stopMessage = e.getTechnicalMessage();
 		this.circuit.circuitMatrix = null;
 		this.circuit.stopElm = e.getCauseElement();
 
@@ -1307,7 +1308,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					}
 				}
 
-				if (this.circuit.stopMessage != null)
+				if (this.stopMessage != null)
 				{
 					return;
 				}
@@ -1399,10 +1400,12 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					break;
 				}
 			}
+
 			if (subiter > 5)
 			{
 				System.out.print("converged after " + subiter + " iterations\n");
 			}
+
 			if (subiter == subiterCount)
 			{
 				this.stop("Convergence failed!", null);
