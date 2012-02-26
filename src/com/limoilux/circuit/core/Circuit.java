@@ -14,6 +14,10 @@ public class Circuit
 	public CircuitElm voltageSources[];
 
 	public int circuitBottom;
+	public int circuitMatrixSize;
+	public int circuitMatrixFullSize;
+	
+	public double circuitMatrix[][];
 	public boolean circuitNonLinear;
 	public boolean analyzeFlag;
 
