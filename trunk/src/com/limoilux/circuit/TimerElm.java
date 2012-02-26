@@ -92,7 +92,7 @@ public class TimerElm extends ChipElm
 	}
 
 	@Override
-	public void startIteration()
+	public void startIteration() throws CircuitAnalysisException
 	{
 		this.out = this.volts[TimerElm.N_OUT] > this.volts[TimerElm.N_VIN] / 2;
 		this.setOut = false;

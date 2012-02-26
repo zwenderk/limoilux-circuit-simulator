@@ -161,7 +161,7 @@ public class SweepElm extends CircuitElm
 	double v;
 
 	@Override
-	public void startIteration()
+	public void startIteration() throws CircuitAnalysisException
 	{
 		// has timestep been changed?
 		if (CircuitElm.cirSim.timeStep != this.savedTimeStep)

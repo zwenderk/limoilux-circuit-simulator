@@ -169,7 +169,7 @@ public class LampElm extends CircuitElm
 	}
 
 	@Override
-	public void startIteration()
+	public void startIteration() throws CircuitAnalysisException
 	{
 		// based on http://www.intusoft.com/nlpdf/nl11.pdf
 		double nom_r = this.nom_v * this.nom_v / this.nom_pow;

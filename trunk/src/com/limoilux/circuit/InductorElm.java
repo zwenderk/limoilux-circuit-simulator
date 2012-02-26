@@ -84,7 +84,7 @@ public class InductorElm extends CircuitElm
 	}
 
 	@Override
-	public void startIteration()
+	public void startIteration() throws CircuitAnalysisException
 	{
 		this.ind.startIteration(this.volts[0] - this.volts[1]);
 	}
