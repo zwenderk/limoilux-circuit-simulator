@@ -48,6 +48,11 @@ public class Circuit
 		this.elementList = new Vector<CircuitElm>();
 	}
 
+	public int getNodeCount()
+	{
+		return this.nodeList.size();
+	}
+
 	public int getMatrixFullSize()
 	{
 		return this.circuitMatrixFullSize;
@@ -79,11 +84,6 @@ public class Circuit
 		this.elementList.removeElementAt(index);
 	}
 
-	public CircuitElm getElementAt(int index)
-	{
-		return this.elementList.elementAt(index);
-	}
-
 	public void removeAllElements()
 	{
 		this.elementList.removeAllElements();
@@ -94,27 +94,33 @@ public class Circuit
 		this.elementList.addElement(element);
 	}
 
-	public CircuitNode getCircuitNode(int n)
+	public CircuitNode getNodeAt(int index)
 	{
-		if (n >= this.nodeList.size())
-		{
-			return null;
-		}
+		return this.nodeList.elementAt(index);
 
-		return this.nodeList.elementAt(n);
 	}
 
+	/**
+	 * @param index the index of the element
+	 * @return a element at the specied index.
+	 */
+	public CircuitElm getElementAt(int index)
+	{
+		return this.elementList.elementAt(index);
+	}
+
+	/**
+	 * @param n the index of the element
+	 * @return a element at the specied n.
+	 * @deprecated use {@link #getElementAt(int)}
+	 */
+	@Deprecated
 	public CircuitElm getElement(int n)
 	{
-		if (n >= this.elementList.size())
-		{
-			return null;
-		}
-
-		return this.elementList.elementAt(n);
+		return this.getElementAt(n);
 	}
 
-	public int locateElm(CircuitElm elm)
+	public int locateElement(CircuitElm elm)
 	{
 		for (int i = 0; i != this.elementList.size(); i++)
 		{
@@ -130,7 +136,7 @@ public class Circuit
 	{
 		for (int i = 0; i != this.elementList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.getElementAt(i);
 			ce.setSelected(false);
 		}
 	}
@@ -139,7 +145,7 @@ public class Circuit
 	{
 		for (int i = 0; i != this.elementList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.getElementAt(i);
 			ce.setSelected(true);
 		}
 	}
@@ -148,7 +154,7 @@ public class Circuit
 	{
 		for (int i = this.elementList.size() - 1; i >= 0; i--)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.getElementAt(i);
 			if (ce.x == ce.x2 && ce.y == ce.y2)
 			{
 				this.elementList.removeElementAt(i);
@@ -165,7 +171,7 @@ public class Circuit
 		this.circuitBottom = 0;
 		for (int i = 0; i != this.elementList.size(); i++)
 		{
-			rect = this.getElement(i).boundingBox;
+			rect = this.getElementAt(i).boundingBox;
 			bottom = rect.height + rect.y;
 			if (bottom > this.circuitBottom)
 			{
@@ -187,7 +193,7 @@ public class Circuit
 
 	public void updateVoltageSource(int n1, int n2, int vs, double v)
 	{
-		int vn = this.nodeList.size() + vs;
+		int vn = this.getNodeCount() + vs;
 		this.stampRightSide(vn, v);
 	}
 
@@ -262,7 +268,7 @@ public class Circuit
 	// stamp a current source from n1 to n2 depending on current through vs
 	public void stampCCCS(int n1, int n2, int vs, double gain)
 	{
-		int vn = this.nodeList.size() + vs;
+		int vn = this.getNodeCount() + vs;
 		this.stampMatrix(n1, vn, gain);
 		this.stampMatrix(n2, vn, -gain);
 	}
@@ -309,7 +315,7 @@ public class Circuit
 	// also call stampVoltageSource())
 	public void stampVCVS(int n1, int n2, double coef, int vs)
 	{
-		int vn = this.nodeList.size() + vs;
+		int vn = this.getNodeCount() + vs;
 		this.stampMatrix(vn, n1, coef);
 		this.stampMatrix(vn, n2, -coef);
 	}
@@ -317,7 +323,7 @@ public class Circuit
 	// stamp independent voltage source #vs, from n1 to n2, amount v
 	public void stampVoltageSource(int n1, int n2, int vs, double v)
 	{
-		int vn = this.nodeList.size() + vs;
+		int vn = this.getNodeCount() + vs;
 		this.stampMatrix(vn, n1, -1);
 		this.stampMatrix(vn, n2, 1);
 		this.stampRightSide(vn, v);
@@ -328,7 +334,7 @@ public class Circuit
 	// use this if the amount of voltage is going to be updated in doStep()
 	public void stampVoltageSource(int n1, int n2, int vs)
 	{
-		int vn = this.nodeList.size() + vs;
+		int vn = this.getNodeCount() + vs;
 		this.stampMatrix(vn, n1, -1);
 		this.stampMatrix(vn, n2, 1);
 		this.stampRightSide(vn);
@@ -408,28 +414,28 @@ public class Circuit
 			{
 				Point pt = ce.getPost(j);
 				int k;
-				for (k = 0; k != this.nodeList.size(); k++)
+				for (k = 0; k != this.getNodeCount(); k++)
 				{
-					cn = this.getCircuitNode(k);
+					cn = this.getNodeAt(k);
 					if (pt.x == cn.x && pt.y == cn.y)
 					{
 						break;
 					}
 				}
-				if (k == this.nodeList.size())
+				if (k == this.getNodeCount())
 				{
 					cn = new CircuitNode(false);
 					cn.x = pt.x;
 					cn.y = pt.y;
 					CircuitNodeLink cnl = new CircuitNodeLink(j, ce);
 					cn.addElement(cnl);
-					ce.setNode(j, this.nodeList.size());
+					ce.setNode(j, this.getNodeCount());
 					this.nodeList.addElement(cn);
 				}
 				else
 				{
 					CircuitNodeLink cnl = new CircuitNodeLink(j, ce);
-					this.getCircuitNode(k).addElement(cnl);
+					this.getNodeAt(k).addElement(cnl);
 					ce.setNode(j, k);
 					// if it's the ground node, make sure the node voltage is 0,
 					// cause it may not get set later
@@ -448,7 +454,7 @@ public class Circuit
 				CircuitNodeLink cnl = new CircuitNodeLink(j + posts, ce);
 
 				cn.addElement(cnl);
-				ce.setNode(cnl.num, this.nodeList.size());
+				ce.setNode(cnl.num, this.getNodeCount());
 				this.nodeList.addElement(cn);
 			}
 			vscount += ivs;
@@ -476,7 +482,7 @@ public class Circuit
 		}
 		// voltageSourceCount = vscount;
 
-		int matrixSize = this.nodeList.size() - 1 + vscount;
+		int matrixSize = this.getNodeCount() - 1 + vscount;
 		this.circuitMatrix = new double[matrixSize][matrixSize];
 		this.circuitRightSide = new double[matrixSize];
 		this.origMatrix = new double[matrixSize][matrixSize];
@@ -503,7 +509,7 @@ public class Circuit
 		// System.out.println("ac4");
 
 		// determine nodes that are unconnected
-		boolean closure[] = new boolean[this.nodeList.size()];
+		boolean closure[] = new boolean[this.getNodeCount()];
 		boolean changed = true;
 		closure[0] = true;
 		while (changed)
@@ -546,9 +552,9 @@ public class Circuit
 			}
 
 			// connect unconnected nodes
-			for (i = 0; i != this.nodeList.size(); i++)
+			for (i = 0; i != this.getNodeCount(); i++)
 			{
-				if (!closure[i] && !this.getCircuitNode(i).isInternal())
+				if (!closure[i] && !this.getNodeAt(i).isInternal())
 				{
 					System.out.println("node " + i + " unconnected");
 					this.stampResistor(0, i, 1e8);

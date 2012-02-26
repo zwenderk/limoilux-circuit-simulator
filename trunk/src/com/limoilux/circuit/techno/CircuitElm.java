@@ -426,7 +426,7 @@ public abstract class CircuitElm implements Editable
 	public void drawPost(Graphics g, int x0, int y0, int n)
 	{
 		if (CircuitElm.cirSim.dragElm == null && !this.needsHighlight()
-				&& CircuitElm.cirSim.circuit.getCircuitNode(n).getSize() == 2)
+				&& CircuitElm.cirSim.circuit.getNodeAt(n).getSize() == 2)
 		{
 			return;
 		}

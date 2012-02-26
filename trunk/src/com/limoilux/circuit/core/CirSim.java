@@ -867,9 +867,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		// find bad connections, nodes not connected to other elements which
 		// intersect other elements' bounding boxes
-		for (i = 0; i != this.circuit.nodeList.size(); i++)
+		for (i = 0; i != this.circuit.getNodeCount(); i++)
 		{
-			CircuitNode cn = this.circuit.getCircuitNode(i);
+			CircuitNode cn = this.circuit.getNodeAt(i);
 			if (!cn.isInternal() && cn.getSize() == 1)
 			{
 				int bb = 0, j;
@@ -1148,7 +1148,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	@Deprecated
 	public CircuitNode getCircuitNode(int n)
 	{
-		return this.circuit.getCircuitNode(n);
+		return this.circuit.getNodeAt(n);
 	}
 
 	@Deprecated
@@ -1374,9 +1374,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 						// debugprint = true;
 						break;
 					}
-					if (j < this.circuit.nodeList.size() - 1)
+					if (j < this.circuit.getNodeCount() - 1)
 					{
-						CircuitNode cn = this.circuit.getCircuitNode(j + 1);
+						CircuitNode cn = this.circuit.getNodeAt(j + 1);
 						for (k = 0; k != cn.getSize(); k++)
 						{
 							CircuitNodeLink cnl = cn.elementAt(k);
@@ -1385,7 +1385,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					}
 					else
 					{
-						int ji = j - (this.circuit.nodeList.size() - 1);
+						int ji = j - (this.circuit.getNodeCount() - 1);
 						// System.out.println("setting vsrc " + ji + " to " +
 						// res);
 						this.circuit.voltageSources[ji].setCurrent(ji, res);
@@ -3082,11 +3082,11 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 				}
 			}
+			
 			if (CirSim.this.mouseElm != origMouse)
 			{
 				CirSim.this.circuitCanvas.repaint();
 			}
-
 		}
 	}
 

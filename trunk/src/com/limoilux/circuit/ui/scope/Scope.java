@@ -761,12 +761,12 @@ public class Scope
 				(this.showFreq ? 8 : 0) | (this.lockScale ? 16 : 0) | (this.plot2d ? 64 : 0) | (this.plotXY ? 128 : 0)
 				| (this.showMin ? 256 : 0);
 		flags |= Scope.FLAG_YELM; // yelm present
-		int eno = this.sim.circuit.locateElm(this.elm);
+		int eno = this.sim.circuit.locateElement(this.elm);
 		if (eno < 0)
 		{
 			return null;
 		}
-		int yno = this.yElm == null ? -1 : this.sim.circuit.locateElm(this.yElm);
+		int yno = this.yElm == null ? -1 : this.sim.circuit.locateElement(this.yElm);
 		String x = "o " + eno + " " + this.speed + " " + this.value + " " + flags + " " + this.minMaxV + " "
 				+ this.minMaxI + " " + this.position + " " + yno;
 		if (this.text != null)
@@ -967,7 +967,7 @@ public class Scope
 
 	public void selectY()
 	{
-		int e = this.yElm == null ? -1 : this.sim.circuit.locateElm(this.yElm);
+		int e = this.yElm == null ? -1 : this.sim.circuit.locateElement(this.yElm);
 		int firstE = e;
 		while (true)
 		{

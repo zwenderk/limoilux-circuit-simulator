@@ -91,8 +91,8 @@ public class VCOElm extends ChipElm
 		// now we set the current through the cap to be equal to the
 		// current through R1 and R2, so we can measure the voltage
 		// across the cap
-		int cur1 = CircuitElm.cirSim.circuit.nodeList.size() + this.pins[4].voltSource;
-		int cur2 = CircuitElm.cirSim.circuit.nodeList.size() + this.pins[5].voltSource;
+		int cur1 = CircuitElm.cirSim.circuit.getNodeCount() + this.pins[4].voltSource;
+		int cur2 = CircuitElm.cirSim.circuit.getNodeCount() + this.pins[5].voltSource;
 		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[2], cur1, dir);
 		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[2], cur2, dir);
 		CircuitElm.cirSim.circuit.stampMatrix(this.nodes[3], cur1, -dir);

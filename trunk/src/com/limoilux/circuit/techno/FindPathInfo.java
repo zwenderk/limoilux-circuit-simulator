@@ -24,7 +24,7 @@ public class FindPathInfo
 		this.dest = d;
 		this.type = t;
 		this.firstElm = e;
-		this.used = new boolean[this.circuit.nodeList.size()];
+		this.used = new boolean[this.circuit.getNodeCount()];
 	}
 
 	public boolean findPath(int n1)
