@@ -38,8 +38,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FilterInputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -51,15 +49,10 @@ import java.util.Vector;
 import javax.swing.JFrame;
 
 import com.limoilux.circuit.CapacitorElm;
-import com.limoilux.circuit.CurrentElm;
-import com.limoilux.circuit.GroundElm;
 import com.limoilux.circuit.InductorElm;
-import com.limoilux.circuit.RailElm;
 import com.limoilux.circuit.ResistorElm;
 import com.limoilux.circuit.SwitchElm;
 import com.limoilux.circuit.TextElm;
-import com.limoilux.circuit.VoltageElm;
-import com.limoilux.circuit.WireElm;
 import com.limoilux.circuit.techno.Circuit;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
@@ -122,7 +115,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public CircuitElm plotXElm, plotYElm;
 	private int draggingPost;
 	private SwitchElm heldSwitchElm;
-	private double origMatrix[][];
 
 	private long lastTime = 0;
 	private long lastFrameTime;
