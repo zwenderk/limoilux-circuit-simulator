@@ -1292,7 +1292,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				}
 				for (i = 0; i != this.circuit.getElementCount(); i++)
 				{
-					CircuitElm ce = this.circuit.getElement(i);
+					CircuitElm ce = this.circuit.getElementAt(i);
 
 					try
 					{
