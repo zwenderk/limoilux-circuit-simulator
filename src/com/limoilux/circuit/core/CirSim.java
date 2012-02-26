@@ -88,13 +88,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private static final int MODE_DRAG_SELECTED = 4;
 	private static final int MODE_DRAG_POST = 5;
 	private static final int MODE_SELECT = 6;
-	private static final int INFO_WIDTH = 120;
+
 	private static final int HINT_LC = 1;
 	private static final int HINT_RC = 2;
 	private static final int HINT_3DB_C = 3;
 	private static final int HINT_TWINT = 4;
 	private static final int HINT_3DB_L = 5;
 
+	public static final int INFO_WIDTH = 120;
 	public static final int MODE_DRAG_ROW = 2;
 	public static final int MODE_DRAG_COLUMN = 3;
 
@@ -1015,113 +1016,16 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.lastFrameTime = this.lastTime;
 	}
 
+	@Deprecated
 	private void setupScopes()
 	{
-		this.setupScopes(this.circuit, this.winSize);
-	}
-
-	private void setupScopes(Circuit c, Dimension winSize)
-	{
-		int i;
-
-		// check scopes to make sure the elements still exist, and remove
-		// unused scopes/columns
-		int pos = -1;
-		for (i = 0; i < this.scopeMan.scopeCount; i++)
-		{
-			if (c.locateElm(this.scopeMan.scopes[i].elm) < 0)
-			{
-				this.scopeMan.scopes[i].setElm(null);
-			}
-
-			if (this.scopeMan.scopes[i].elm == null)
-			{
-				int j;
-				for (j = i; j != this.scopeMan.scopeCount; j++)
-				{
-					this.scopeMan.scopes[j] = this.scopeMan.scopes[j + 1];
-				}
-
-				this.scopeMan.scopeCount--;
-				i--;
-				continue;
-			}
-			if (this.scopeMan.scopes[i].position > pos + 1)
-			{
-				this.scopeMan.scopes[i].position = pos + 1;
-			}
-
-			pos = this.scopeMan.scopes[i].position;
-		}
-
-		while (this.scopeMan.scopeCount > 0 && this.scopeMan.scopes[this.scopeMan.scopeCount - 1].elm == null)
-		{
-			this.scopeMan.scopeCount--;
-		}
-
-		int h = winSize.height - this.circuitArea.height;
-		pos = 0;
-		for (i = 0; i != this.scopeMan.scopeCount; i++)
-		{
-			this.scopeMan.scopeColCount[i] = 0;
-		}
-
-		for (i = 0; i != this.scopeMan.scopeCount; i++)
-		{
-			pos = Math.max(this.scopeMan.scopes[i].position, pos);
-			this.scopeMan.scopeColCount[this.scopeMan.scopes[i].position]++;
-		}
-
-		int colct = pos + 1;
-		int iw = CirSim.INFO_WIDTH;
-
-		if (colct <= 2)
-		{
-			iw *= 3 / 2;
-		}
-
-		int w = (winSize.width - iw) / colct;
-		int marg = 10;
-		if (w < marg * 2)
-		{
-			w = marg * 2;
-		}
-
-		pos = -1;
-		int colh = 0;
-		int row = 0;
-		int speed = 0;
-
-		for (i = 0; i != this.scopeMan.scopeCount; i++)
-		{
-			Scope scope = this.scopeMan.scopes[i];
-			if (scope.position > pos)
-			{
-				pos = scope.position;
-				colh = h / this.scopeMan.scopeColCount[pos];
-				row = 0;
-				speed = scope.speed;
-			}
-			if (scope.speed != speed)
-			{
-				scope.speed = speed;
-				scope.resetGraph();
-			}
-
-			Rectangle r = new Rectangle(pos * w, winSize.height - h + colh * row, w - marg, colh);
-			row++;
-			if (!r.equals(scope.rect))
-			{
-				scope.setRect(r);
-			}
-
-		}
+		this.scopeMan.setupScopes(this.circuit, this.winSize, this.circuitArea);
 	}
 
 	private String getHint()
 	{
-		CircuitElm c1 = this.getElement(this.hintItem1);
-		CircuitElm c2 = this.getElement(this.hintItem2);
+		CircuitElm c1 = this.circuit.getElement(this.hintItem1);
+		CircuitElm c2 = this.circuit.getElement(this.hintItem2);
 		if (c1 == null || c2 == null)
 		{
 			return null;
@@ -1778,9 +1682,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.circuit.calcCircuitBottom();
 	}
 
-	public void stop(String s, CircuitElm ce)
+	public void stop(String msg, CircuitElm ce)
 	{
-		this.stopMessage = s;
+		this.stopMessage = msg;
 		this.circuitMatrix = null;
 		this.stopElm = ce;
 		this.stoppedCheck.setState(true);
@@ -1972,7 +1876,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			int i, j, k, subiter;
 			for (i = 0; i != this.circuit.elmList.size(); i++)
 			{
-				CircuitElm ce = this.getElement(i);
+				CircuitElm ce = this.circuit.getElement(i);
 				ce.startIteration();
 			}
 			final int subiterCount = 5000;
