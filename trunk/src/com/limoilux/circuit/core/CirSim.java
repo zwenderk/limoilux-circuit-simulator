@@ -3610,89 +3610,97 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			}
 
 			this.used[n1] = true;
-			int i;
-			for (i = 0; i != CirSim.this.circuit.elmList.size(); i++)
+			
+			for (int i = 0; i != CirSim.this.circuit.elmList.size(); i++)
 			{
-				CircuitElm ce = CirSim.this.circuit.getElement(i);
-				if (ce == this.firstElm)
+				CircuitElm circuitElement = CirSim.this.circuit.getElement(i);
+				
+				if (circuitElement == this.firstElm)
 				{
 					continue;
 				}
 				if (this.type == FindPathInfo.INDUCT)
 				{
-					if (ce instanceof CurrentElm)
+					if (circuitElement instanceof CurrentElm)
 					{
 						continue;
 					}
 				}
 				if (this.type == FindPathInfo.VOLTAGE)
 				{
-					if (!(ce.isWire() || ce instanceof VoltageElm))
+					if (!(circuitElement.isWire() || circuitElement instanceof VoltageElm))
 					{
 						continue;
 					}
 				}
-				if (this.type == FindPathInfo.SHORT && !ce.isWire())
+				if (this.type == FindPathInfo.SHORT && !circuitElement.isWire())
 				{
 					continue;
 				}
+				
 				if (this.type == FindPathInfo.CAP_V)
 				{
-					if (!(ce.isWire() || ce instanceof CapacitorElm || ce instanceof VoltageElm))
+					if (!(circuitElement.isWire() || circuitElement instanceof CapacitorElm || circuitElement instanceof VoltageElm))
 					{
 						continue;
 					}
 				}
+				
 				if (n1 == 0)
 				{
 					// look for posts which have a ground connection;
 					// our path can go through ground
 					int j;
-					for (j = 0; j != ce.getPostCount(); j++)
+					for (j = 0; j != circuitElement.getPostCount(); j++)
 					{
-						if (ce.hasGroundConnection(j) && this.findPath(ce.getNode(j), depth))
+						if (circuitElement.hasGroundConnection(j) && this.findPath(circuitElement.getNode(j), depth))
 						{
 							this.used[n1] = false;
 							return true;
 						}
 					}
 				}
+				
 				int j;
-				for (j = 0; j != ce.getPostCount(); j++)
+				
+				for (j = 0; j != circuitElement.getPostCount(); j++)
 				{
 					// System.out.println(ce + " " + ce.getNode(j));
-					if (ce.getNode(j) == n1)
+					if (circuitElement.getNode(j) == n1)
 					{
 						break;
 					}
 				}
-				if (j == ce.getPostCount())
+				
+				if (j == circuitElement.getPostCount())
 				{
 					continue;
 				}
-				if (ce.hasGroundConnection(j) && this.findPath(0, depth))
+				
+				if (circuitElement.hasGroundConnection(j) && this.findPath(0, depth))
 				{
 					// System.out.println(ce + " has ground");
 					this.used[n1] = false;
 					return true;
 				}
-				if (this.type == FindPathInfo.INDUCT && ce instanceof InductorElm)
+				
+				if (this.type == FindPathInfo.INDUCT && circuitElement instanceof InductorElm)
 				{
-					double c = ce.getCurrent();
+					double current = circuitElement.getCurrent();
 					if (j == 0)
 					{
-						c = -c;
+						current = -current;
 					}
 					// System.out.println("matching " + c + " to " +
 					// firstElm.getCurrent());
 					// System.out.println(ce + " " + firstElm);
-					if (Math.abs(c - this.firstElm.getCurrent()) > 1e-10)
+					if (Math.abs(current - this.firstElm.getCurrent()) > 1e-10)
 					{
 						continue;
 					}
 				}
-				int k;
-				for (k = 0; k != ce.getPostCount(); k++)
+				
+				for (int k = 0; k != circuitElement.getPostCount(); k++)
 				{
 					if (j == k)
 					{
@@ -3700,7 +3708,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					}
 					// System.out.println(ce + " " + ce.getNode(j) + "-" +
 					// ce.getNode(k));
-					if (ce.getConnection(j, k) && this.findPath(ce.getNode(k), depth))
+					if (circuitElement.getConnection(j, k) && this.findPath(circuitElement.getNode(k), depth))
 					{
 						// System.out.println("got findpath " + n1);
 						this.used[n1] = false;
