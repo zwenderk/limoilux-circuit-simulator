@@ -23,11 +23,13 @@ public class Circuit
 	public int circuitPermute[];
 	public double origRightSide[];
 	public double circuitMatrix[][];
+	public double origMatrix[][];
 	public double circuitRightSide[];
 	public boolean circuitNonLinear;
 	public boolean analyzeFlag;
 	public boolean converged;
 	public boolean circuitNeedsMap;
+	public CircuitElm stopElm;
 
 	public Circuit()
 	{
