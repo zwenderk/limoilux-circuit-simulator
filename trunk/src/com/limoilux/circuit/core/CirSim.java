@@ -1294,6 +1294,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					CircuitElm ce = this.circuit.getElement(i);
 					ce.doStep();
 				}
+				
 				if (this.circuit.stopMessage != null)
 				{
 					return;
