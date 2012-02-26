@@ -110,7 +110,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private String startCircuitText = null;
 	private Image dbimage;
 
-
 	public int subIterations;
 
 	public Dimension winSize;
@@ -120,7 +119,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public CircuitElm plotXElm, plotYElm;
 	private int draggingPost;
 	private SwitchElm heldSwitchElm;
-	private double  origMatrix[][];
+	private double origMatrix[][];
 
 	private long lastTime = 0;
 	private long lastFrameTime;
@@ -762,7 +761,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		realMouseElm = this.mouseElm;
 		if (this.mouseElm == null)
 		{
-			this.mouseElm = this.stopElm;
+			this.mouseElm = this.circuit.stopElm;
 		}
 		this.setupScopes();
 		Graphics g = null;
@@ -1155,7 +1154,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 
 		this.circuit.stopMessage = null;
-		this.stopElm = null;
+		this.circuit.stopElm = null;
 		int i, j;
 		int vscount = 0;
 		this.circuit.nodeList = new Vector<CircuitNode>();
@@ -1287,7 +1286,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		int matrixSize = this.circuit.nodeList.size() - 1 + vscount;
 		this.circuit.circuitMatrix = new double[matrixSize][matrixSize];
 		this.circuit.circuitRightSide = new double[matrixSize];
-		this.origMatrix = new double[matrixSize][matrixSize];
+		this.circuit.origMatrix = new double[matrixSize][matrixSize];
 		this.circuit.origRightSide = new double[matrixSize];
 		this.circuit.circuitMatrixSize = matrixSize;
 		this.circuit.circuitMatrixFullSize = matrixSize;
@@ -1655,7 +1654,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			for (j = 0; j != matrixSize; j++)
 			{
-				this.origMatrix[i][j] = this.circuit.circuitMatrix[i][j];
+				this.circuit.origMatrix[i][j] = this.circuit.circuitMatrix[i][j];
 			}
 		}
 		this.circuit.circuitNeedsMap = true;
@@ -1691,7 +1690,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		this.circuit.stopMessage = msg;
 		this.circuit.circuitMatrix = null;
-		this.stopElm = ce;
+		this.circuit.stopElm = ce;
 		this.stoppedCheck.setState(true);
 		this.circuit.analyzeFlag = false;
 		this.circuitCanvas.repaint();
@@ -1791,7 +1790,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					{
 						for (j = 0; j != this.circuit.circuitMatrixSize; j++)
 						{
-							this.circuit.circuitMatrix[i][j] = this.origMatrix[i][j];
+							this.circuit.circuitMatrix[i][j] = this.circuit.origMatrix[i][j];
 						}
 					}
 				}
