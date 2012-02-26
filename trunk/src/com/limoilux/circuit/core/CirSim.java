@@ -1772,54 +1772,17 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.stampMatrix(n1, vn, gain);
 		this.stampMatrix(n2, vn, -gain);
 	}
-
-	// stamp value x in row i, column j, meaning that a voltage change
-	// of dv in node j will increase the current into node i by x dv.
-	// (Unless i or j is a voltage source node.)
+	
+	@Deprecated
 	public void stampMatrix(int i, int j, double x)
 	{
-		if (i > 0 && j > 0)
-		{
-			if (this.circuit.circuitNeedsMap)
-			{
-				i = this.circuit.circuitRowInfo[i - 1].mapRow;
-				RowInfo ri = this.circuit.circuitRowInfo[j - 1];
-				if (ri.type == RowInfo.ROW_CONST)
-				{
-					// System.out.println("Stamping constant " + i + " " + j +
-					// " " + x);
-					this.circuit.circuitRightSide[i] -= x * ri.value;
-					return;
-				}
-				j = ri.mapCol;
-				// System.out.println("stamping " + i + " " + j + " " + x);
-			}
-			else
-			{
-				i--;
-				j--;
-			}
-			this.circuit.circuitMatrix[i][j] += x;
-		}
+		this.circuit.stampMatrix(i,j,x);
 	}
 
-	// stamp value x on the right side of row i, representing an
-	// independent current source flowing into node i
+	@Deprecated
 	public void stampRightSide(int i, double x)
 	{
-		if (i > 0)
-		{
-			if (this.circuit.circuitNeedsMap)
-			{
-				i = this.circuit.circuitRowInfo[i - 1].mapRow;
-				// System.out.println("stamping " + i + " " + x);
-			}
-			else
-			{
-				i--;
-			}
-			this.circuit.circuitRightSide[i] += x;
-		}
+		this.circuit.stampRightSide(i, x);
 	}
 
 	@Deprecated

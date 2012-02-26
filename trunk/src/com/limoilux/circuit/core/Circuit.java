@@ -17,7 +17,7 @@ public class Circuit
 	public int circuitBottom;
 	public int circuitMatrixSize;
 	public int circuitMatrixFullSize;
-	
+
 	public RowInfo circuitRowInfo[];
 	public double circuitMatrix[][];
 	public double circuitRightSide[];
@@ -130,13 +130,62 @@ public class Circuit
 			this.circuitRowInfo[i - 1].rsChanges = true;
 		}
 	}
-	
+
+	// stamp value x on the right side of row i, representing an
+	// independent current source flowing into node i
+	public void stampRightSide(int i, double x)
+	{
+		if (i > 0)
+		{
+			if (this.circuitNeedsMap)
+			{
+				i = this.circuitRowInfo[i - 1].mapRow;
+				// System.out.println("stamping " + i + " " + x);
+			}
+			else
+			{
+				i--;
+			}
+			this.circuitRightSide[i] += x;
+		}
+	}
+
 	// indicate that the values on the left side of row i change in doStep()
 	public void stampNonLinear(int i)
 	{
 		if (i > 0)
 		{
 			this.circuitRowInfo[i - 1].lsChanges = true;
+		}
+	}
+
+	// stamp value x in row i, column j, meaning that a voltage change
+	// of dv in node j will increase the current into node i by x dv.
+	// (Unless i or j is a voltage source node.)
+	public void stampMatrix(int i, int j, double x)
+	{
+		if (i > 0 && j > 0)
+		{
+			if (this.circuitNeedsMap)
+			{
+				i = this.circuitRowInfo[i - 1].mapRow;
+				RowInfo ri = this.circuitRowInfo[j - 1];
+				if (ri.type == RowInfo.ROW_CONST)
+				{
+					// System.out.println("Stamping constant " + i + " " + j +
+					// " " + x);
+					this.circuitRightSide[i] -= x * ri.value;
+					return;
+				}
+				j = ri.mapCol;
+				// System.out.println("stamping " + i + " " + j + " " + x);
+			}
+			else
+			{
+				i--;
+				j--;
+			}
+			this.circuitMatrix[i][j] += x;
 		}
 	}
 }
