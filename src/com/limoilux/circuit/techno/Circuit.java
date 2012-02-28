@@ -200,7 +200,7 @@ public class Circuit
 		// System.out.println("rschanges true " + (i-1));
 		if (i > 0)
 		{
-			this.circuitRowInfo[i - 1].rsChanges = true;
+			this.matrix.circuitRowInfo[i - 1].rsChanges = true;
 		}
 	}
 
@@ -212,7 +212,7 @@ public class Circuit
 		{
 			if (this.circuitNeedsMap)
 			{
-				i = this.circuitRowInfo[i - 1].mapRow;
+				i = this.matrix.circuitRowInfo[i - 1].mapRow;
 				// System.out.println("stamping " + i + " " + x);
 			}
 			else
@@ -228,7 +228,7 @@ public class Circuit
 	{
 		if (i > 0)
 		{
-			this.circuitRowInfo[i - 1].lsChanges = true;
+			this.matrix.circuitRowInfo[i - 1].lsChanges = true;
 		}
 	}
 
@@ -241,8 +241,8 @@ public class Circuit
 		{
 			if (this.circuitNeedsMap)
 			{
-				i = this.circuitRowInfo[i - 1].mapRow;
-				RowInfo ri = this.circuitRowInfo[j - 1];
+				i = this.matrix.circuitRowInfo[i - 1].mapRow;
+				RowInfo ri = this.matrix.circuitRowInfo[j - 1];
 				if (ri.type == RowInfo.ROW_CONST)
 				{
 					// System.out.println("Stamping constant " + i + " " + j +
@@ -351,7 +351,7 @@ public class Circuit
 			return;
 		}
 
-		int i, j;
+		int j;
 		int vscount = 0;
 		this.nodeList.clear();
 		boolean gotGround = false;
@@ -360,7 +360,7 @@ public class Circuit
 
 		// System.out.println("ac1");
 		// look for voltage or ground element
-		for (i = 0; i != this.elementList.size(); i++)
+		for (int i = 0; i != this.elementList.size(); i++)
 		{
 			CircuitElm ce = this.getElement(i);
 			if (ce instanceof GroundElm)
@@ -377,6 +377,8 @@ public class Circuit
 				volt = ce;
 			}
 		}
+		
+
 
 		// if no ground, and no rails, then the voltage elm's first terminal
 		// is ground
@@ -397,9 +399,9 @@ public class Circuit
 			this.nodeList.add(cn);
 		}
 		// System.out.println("ac2");
-
+	
 		// allocate nodes and voltage sources
-		for (i = 0; i != this.elementList.size(); i++)
+		for (int i = 0; i != this.elementList.size(); i++)
 		{
 			CircuitElm ce = this.getElement(i);
 			int inodes = ce.getInternalNodeCount();
@@ -464,7 +466,7 @@ public class Circuit
 		// System.out.println("ac3");
 
 		// determine if circuit is nonlinear
-		for (i = 0; i != this.elementList.size(); i++)
+		for (int i = 0; i != this.elementList.size(); i++)
 		{
 			CircuitElm ce = this.getElement(i);
 			if (ce.nonLinear())
@@ -489,19 +491,19 @@ public class Circuit
 		this.matrix.circuitMatrixSize = matrixSize;
 		this.matrix.circuitMatrixFullSize = matrixSize;
 		
-		this.circuitRowInfo = new RowInfo[matrixSize];
+		this.matrix.circuitRowInfo = new RowInfo[matrixSize];
 		this.circuitPermute = new int[matrixSize];
 		// int vs = 0;
-
-		for (i = 0; i != matrixSize; i++)
+	
+		for (int i = 0; i < matrixSize; i++)
 		{
-			this.circuitRowInfo[i] = new RowInfo();
+			this.matrix.circuitRowInfo[i] = new RowInfo();
 		}
 
 		this.circuitNeedsMap = false;
 
 		// stamp linear circuit elements
-		for (i = 0; i != this.elementList.size(); i++)
+		for (int i = 0; i != this.elementList.size(); i++)
 		{
 			CircuitElm ce = this.getElementAt(i);
 			ce.stamp();
@@ -515,7 +517,7 @@ public class Circuit
 		while (changed)
 		{
 			changed = false;
-			for (i = 0; i != this.elementList.size(); i++)
+			for (int i = 0; i != this.elementList.size(); i++)
 			{
 				CircuitElm ce = this.getElementAt(i);
 				// loop through all ce's nodes to see if they are connected
@@ -552,7 +554,7 @@ public class Circuit
 			}
 
 			// connect unconnected nodes
-			for (i = 0; i != this.getNodeCount(); i++)
+			for (int i = 0; i != this.getNodeCount(); i++)
 			{
 				if (!closure[i] && !this.getNodeAt(i).isInternal())
 				{
@@ -566,7 +568,7 @@ public class Circuit
 		}
 		// System.out.println("ac5");
 
-		for (i = 0; i != this.elementList.size(); i++)
+		for (int i = 0; i != this.elementList.size(); i++)
 		{
 			CircuitElm ce = this.getElementAt(i);
 			// look for inductors with no current path
@@ -622,11 +624,11 @@ public class Circuit
 		// System.out.println("ac6");
 
 		// simplify the matrix; this speeds things up quite a bit
-		for (i = 0; i != matrixSize; i++)
+		for (int i = 0; i != matrixSize; i++)
 		{
 			int qm = -1, qp = -1;
 			double qv = 0;
-			RowInfo re = this.circuitRowInfo[i];
+			RowInfo re = this.matrix.circuitRowInfo[i];
 			/*
 			 * System.out.println("row " + i + " " + re.lsChanges + " " +
 			 * re.rsChanges + " " + re.dropRow);
@@ -642,11 +644,11 @@ public class Circuit
 			{
 				double q = this.matrix.circuitMatrix[i][j];
 				
-				if (this.circuitRowInfo[j].type == RowInfo.ROW_CONST)
+				if (this.matrix.circuitRowInfo[j].type == RowInfo.ROW_CONST)
 				{
 					// keep a running total of const values that have been
 					// removed already
-					rsadd -= this.circuitRowInfo[j].value * q;
+					rsadd -= this.matrix.circuitRowInfo[j].value * q;
 					continue;
 				}
 				
@@ -682,7 +684,7 @@ public class Circuit
 				{
 					throw new CircuitAnalysisException("Matrix error");
 				}
-				RowInfo elt = this.circuitRowInfo[qp];
+				RowInfo elt = this.matrix.circuitRowInfo[qp];
 				if (qm == -1)
 				{
 					// we found a row with only one nonzero entry; that value
@@ -697,7 +699,7 @@ public class Circuit
 						 * + " " + qp + " to " + elt.nodeEq);
 						 */
 						qp = elt.nodeEq;
-						elt = this.circuitRowInfo[qp];
+						elt = this.matrix.circuitRowInfo[qp];
 					}
 					
 					if (elt.type == RowInfo.ROW_EQUAL)
@@ -716,7 +718,7 @@ public class Circuit
 					
 					elt.type = RowInfo.ROW_CONST;
 					elt.value = (this.matrix.circuitRightSide[i] + rsadd) / qv;
-					this.circuitRowInfo[i].dropRow = true;
+					this.matrix.circuitRowInfo[i].dropRow = true;
 					// System.out.println(qp + " * " + qv + " = const " +
 					// elt.value);
 					i = -1; // start over from scratch
@@ -731,7 +733,7 @@ public class Circuit
 						int qq = qm;
 						qm = qp;
 						qp = qq;
-						elt = this.circuitRowInfo[qp];
+						elt = this.matrix.circuitRowInfo[qp];
 						if (elt.type != RowInfo.ROW_NORMAL)
 						{
 							// we should follow the chain here, but this
@@ -743,7 +745,7 @@ public class Circuit
 					}
 					elt.type = RowInfo.ROW_EQUAL;
 					elt.nodeEq = qm;
-					this.circuitRowInfo[i].dropRow = true;
+					this.matrix.circuitRowInfo[i].dropRow = true;
 					// System.out.println(qp + " = " + qm);
 				}
 			}
@@ -752,9 +754,10 @@ public class Circuit
 
 		// find size of new matrix
 		int nn = 0;
-		for (i = 0; i != matrixSize; i++)
+		
+		for (int i = 0; i < matrixSize; i++)
 		{
-			RowInfo elt = this.circuitRowInfo[i];
+			RowInfo elt = this.matrix.circuitRowInfo[i];
 			if (elt.type == RowInfo.ROW_NORMAL)
 			{
 				elt.mapCol = nn++;
@@ -767,7 +770,7 @@ public class Circuit
 				// resolve chains of equality; 100 max steps to avoid loops
 				for (j = 0; j != 100; j++)
 				{
-					e2 = this.circuitRowInfo[elt.nodeEq];
+					e2 = this.matrix.circuitRowInfo[elt.nodeEq];
 					if (e2.type != RowInfo.ROW_EQUAL)
 					{
 						break;
@@ -784,12 +787,14 @@ public class Circuit
 				elt.mapCol = -1;
 			}
 		}
-		for (i = 0; i != matrixSize; i++)
+		
+		for (int i = 0; i != matrixSize; i++)
 		{
-			RowInfo elt = this.circuitRowInfo[i];
+			RowInfo elt = this.matrix.circuitRowInfo[i];
 			if (elt.type == RowInfo.ROW_EQUAL)
 			{
-				RowInfo e2 = this.circuitRowInfo[elt.nodeEq];
+				RowInfo e2 = this.matrix.circuitRowInfo[elt.nodeEq];
+				
 				if (e2.type == RowInfo.ROW_CONST)
 				{
 					// if something is equal to a const, it's a const
@@ -821,9 +826,9 @@ public class Circuit
 		double newmatx[][] = new double[newsize][newsize];
 		double newrs[] = new double[newsize];
 		int ii = 0;
-		for (i = 0; i != matrixSize; i++)
+		for (int i = 0; i != matrixSize; i++)
 		{
-			RowInfo rri = this.circuitRowInfo[i];
+			RowInfo rri = this.matrix.circuitRowInfo[i];
 			if (rri.dropRow)
 			{
 				rri.mapRow = -1;
@@ -835,7 +840,7 @@ public class Circuit
 			
 			for (j = 0; j != matrixSize; j++)
 			{
-				RowInfo ri = this.circuitRowInfo[j];
+				RowInfo ri = this.matrix.circuitRowInfo[j];
 				if (ri.type == RowInfo.ROW_CONST)
 				{
 					newrs[ii] -= ri.value * this.matrix.circuitMatrix[i][j];
@@ -854,7 +859,7 @@ public class Circuit
 		matrixSize = newsize;
 	    this.matrix.circuitMatrixSize = newsize;
 
-		for (i = 0; i != matrixSize; i++)
+		for (int i = 0; i != matrixSize; i++)
 		{
 			this.matrix.origRightSide[i] = this.matrix.circuitRightSide[i];
 		}
