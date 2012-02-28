@@ -119,6 +119,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private int draggingPost;
 	private SwitchElm heldSwitchElm;
 
+
 	private Class<?> dumpTypes[];
 
 	private int dragX, dragY, initDragX, initDragY;

@@ -24,10 +24,12 @@ public class ScopeManager
 
 	public void unstackAll()
 	{
-		for (int i = 0; i != this.scopeCount; i++)
+		Scope scope;
+		for (int i = 0; i < this.scopeCount; i++)
 		{
-			this.scopes[i].position = i;
-			this.scopes[i].showMax = true;
+			scope = this.scopes[i];
+			scope.position = i;
+			scope.showMax = true;
 		}
 	}
 

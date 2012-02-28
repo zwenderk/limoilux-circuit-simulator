@@ -396,6 +396,7 @@ public class Scope
 
 		int ll;
 		boolean sublines = maxy * gridStep / gridMax > 3;
+		
 		for (ll = -100; ll <= 100; ll++)
 		{
 			// don't show gridlines if plotting multiple values,
@@ -432,7 +433,7 @@ public class Scope
 		}
 		double tstart = this.sim.timer.time - this.sim.timer.timeStep * this.speed * this.rect.width;
 		double tx = this.sim.timer.time - this.sim.timer.time % gridStep;
-		int first = 1;
+
 		for (ll = 0;; ll++)
 		{
 			double tl = tx - gridStep * ll;
@@ -450,7 +451,7 @@ public class Scope
 				continue;
 			}
 			col = 0xFF202020;
-			first = 0;
+
 			if ((tl + gridStep / 4) % (gridStep * 10) < gridStep)
 			{
 				col = 0xFF909090;
@@ -459,6 +460,7 @@ public class Scope
 					col = 0xFF4040D0;
 				}
 			}
+			
 			for (i = 0; i < this.pixels.length; i += this.rect.width)
 			{
 				this.pixels[i + gx] = col;
