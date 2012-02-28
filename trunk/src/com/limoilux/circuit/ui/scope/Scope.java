@@ -396,7 +396,7 @@ public class Scope
 
 		int ll;
 		boolean sublines = maxy * gridStep / gridMax > 3;
-		
+
 		for (ll = -100; ll <= 100; ll++)
 		{
 			// don't show gridlines if plotting multiple values,
@@ -460,7 +460,7 @@ public class Scope
 					col = 0xFF4040D0;
 				}
 			}
-			
+
 			for (i = 0; i < this.pixels.length; i += this.rect.width)
 			{
 				this.pixels[i + gx] = col;
