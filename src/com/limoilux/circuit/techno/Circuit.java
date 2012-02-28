@@ -23,8 +23,6 @@ public class Circuit
 	private final ArrayList<CircuitElm> elementList;
 	private final ArrayList<CircuitNode> nodeList;
 
-	private int circuitMatrixFullSize;
-
 	private boolean circuitNonLinear;
 	private boolean analyzeFlag;
 	private boolean circuitNeedsMap;
@@ -37,16 +35,14 @@ public class Circuit
 	public CircuitElm[] voltageSources;
 	public RowInfo[] circuitRowInfo;
 	public int[] circuitPermute;
-	public double[] origRightSide;
-	public double[] circuitRightSide;
 
-	public double[][] circuitMatrix;
-	private double[][] originalMatrix;
+	public final Matrix matrix;
 
 	public Circuit()
 	{
 		this.elementList = new ArrayList<CircuitElm>();
 		this.nodeList = new ArrayList<CircuitNode>();
+		this.matrix = new Matrix();
 	}
 
 	public int getNodeCount()
@@ -56,7 +52,7 @@ public class Circuit
 
 	public int getMatrixFullSize()
 	{
-		return this.circuitMatrixFullSize;
+		return this.matrix.circuitMatrixFullSize;
 	}
 
 	public boolean isNonLinear()
@@ -223,7 +219,7 @@ public class Circuit
 			{
 				i--;
 			}
-			this.circuitRightSide[i] += x;
+			this.matrix.circuitRightSide[i] += x;
 		}
 	}
 
@@ -251,7 +247,7 @@ public class Circuit
 				{
 					// System.out.println("Stamping constant " + i + " " + j +
 					// " " + x);
-					this.circuitRightSide[i] -= x * ri.value;
+					this.matrix.circuitRightSide[i] -= x * ri.value;
 					return;
 				}
 				j = ri.mapCol;
@@ -262,7 +258,7 @@ public class Circuit
 				i--;
 				j--;
 			}
-			this.circuitMatrix[i][j] += x;
+			this.matrix.circuitMatrix[i][j] += x;
 		}
 	}
 
@@ -485,12 +481,12 @@ public class Circuit
 		// voltageSourceCount = vscount;
 
 		int matrixSize = this.getNodeCount() - 1 + vscount;
-		this.circuitMatrix = new double[matrixSize][matrixSize];
-		this.circuitRightSide = new double[matrixSize];
-		this.originalMatrix = new double[matrixSize][matrixSize];
-		this.origRightSide = new double[matrixSize];
-		this.circuitMatrixSize = matrixSize;
-		this.circuitMatrixFullSize = matrixSize;
+		this.matrix.circuitMatrix = new double[matrixSize][matrixSize];
+		this.matrix.circuitRightSide = new double[matrixSize];
+		this.matrix.originalMatrix = new double[matrixSize][matrixSize];
+		this.matrix.origRightSide = new double[matrixSize];
+		this.matrix.circuitMatrixSize = matrixSize;
+		this.matrix.circuitMatrixFullSize = matrixSize;
 		this.circuitRowInfo = new RowInfo[matrixSize];
 		this.circuitPermute = new int[matrixSize];
 		// int vs = 0;
@@ -642,7 +638,7 @@ public class Circuit
 			// look for rows that can be removed
 			for (j = 0; j != matrixSize; j++)
 			{
-				double q = this.circuitMatrix[i][j];
+				double q = this.matrix.circuitMatrix[i][j];
 				if (this.circuitRowInfo[j].type == RowInfo.ROW_CONST)
 				{
 					// keep a running total of const values that have been
@@ -709,13 +705,13 @@ public class Circuit
 						continue;
 					}
 					elt.type = RowInfo.ROW_CONST;
-					elt.value = (this.circuitRightSide[i] + rsadd) / qv;
+					elt.value = (this.matrix.circuitRightSide[i] + rsadd) / qv;
 					this.circuitRowInfo[i].dropRow = true;
 					// System.out.println(qp + " * " + qv + " = const " +
 					// elt.value);
 					i = -1; // start over from scratch
 				}
-				else if (this.circuitRightSide[i] + rsadd == 0)
+				else if (this.matrix.circuitRightSide[i] + rsadd == 0)
 				{
 					// we found a row with only two nonzero entries, and one
 					// is the negative of the other; the values are equal
@@ -823,7 +819,7 @@ public class Circuit
 				rri.mapRow = -1;
 				continue;
 			}
-			newrs[ii] = this.circuitRightSide[i];
+			newrs[ii] = this.matrix.circuitRightSide[i];
 			rri.mapRow = ii;
 			// System.out.println("Row " + i + " maps to " + ii);
 			for (j = 0; j != matrixSize; j++)
@@ -831,30 +827,32 @@ public class Circuit
 				RowInfo ri = this.circuitRowInfo[j];
 				if (ri.type == RowInfo.ROW_CONST)
 				{
-					newrs[ii] -= ri.value * this.circuitMatrix[i][j];
+					newrs[ii] -= ri.value * this.matrix.circuitMatrix[i][j];
 				}
 				else
 				{
-					newmatx[ii][ri.mapCol] += this.circuitMatrix[i][j];
+					newmatx[ii][ri.mapCol] += this.matrix.circuitMatrix[i][j];
 				}
 			}
 			ii++;
 		}
 
-		this.circuitMatrix = newmatx;
-		this.circuitRightSide = newrs;
-		matrixSize = this.circuitMatrixSize = newsize;
+		this.matrix.circuitMatrix = newmatx;
+		this.matrix.circuitRightSide = newrs;
+		
+		matrixSize = newsize;
+	    this.matrix.circuitMatrixSize = newsize;
 
 		for (i = 0; i != matrixSize; i++)
 		{
-			this.origRightSide[i] = this.circuitRightSide[i];
+			this.matrix.origRightSide[i] = this.matrix.circuitRightSide[i];
 		}
 
 		for (i = 0; i != matrixSize; i++)
 		{
 			for (j = 0; j != matrixSize; j++)
 			{
-				this.originalMatrix[i][j] = this.circuitMatrix[i][j];
+				this.matrix.originalMatrix[i][j] = this.matrix.circuitMatrix[i][j];
 			}
 		}
 
@@ -872,7 +870,7 @@ public class Circuit
 		// needing to do it every frame
 		if (!this.circuitNonLinear)
 		{
-			if (!CoreUtil.luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute))
+			if (!CoreUtil.luFactor(this.matrix.circuitMatrix, this.matrix.circuitMatrixSize, this.circuitPermute))
 			{
 				throw new CircuitAnalysisException("Singular matrix!");
 			}
@@ -885,33 +883,33 @@ public class Circuit
 	public void recopyMatrix()
 	{
 		// TODO à optimiser
-		for (int i = 0; i < this.circuitMatrixSize; i++)
+		for (int i = 0; i < this.matrix.circuitMatrixSize; i++)
 		{
-			for (int j = 0; j < this.circuitMatrixSize; j++)
+			for (int j = 0; j < this.matrix.circuitMatrixSize; j++)
 			{
-				this.circuitMatrix[i][j] = this.originalMatrix[i][j];
+				this.matrix.circuitMatrix[i][j] = this.matrix.originalMatrix[i][j];
 			}
 		}
 	}
 
 	public void clearMatrix()
 	{
-		this.circuitMatrix = null;
+		this.matrix.circuitMatrix = null;
 	}
 
 	public boolean matrixIsNull()
 	{
-		return this.circuitMatrix == null;
+		return this.matrix.circuitMatrix == null;
 	}
 
 	public boolean matrixIsInfiniteOrNAN()
 	{
 		double x;
-		for (int j = 0; j != this.circuitMatrixSize; j++)
+		for (int j = 0; j != this.matrix.circuitMatrixSize; j++)
 		{
-			for (int i = 0; i != this.circuitMatrixSize; i++)
+			for (int i = 0; i != this.matrix.circuitMatrixSize; i++)
 			{
-				x = this.circuitMatrix[i][j];
+				x = this.matrix.circuitMatrix[i][j];
 				if (Double.isNaN(x) || Double.isInfinite(x))
 				{
 					return true;
@@ -925,13 +923,14 @@ public class Circuit
 	public String matrixToString()
 	{
 		String out = "";
-		for (int j = 0; j != this.circuitMatrixSize; j++)
+		for (int j = 0; j != this.matrix.circuitMatrixSize; j++)
 		{
-			for (int i = 0; i != this.circuitMatrixSize; i++)
+			for (int i = 0; i != this.matrix.circuitMatrixSize; i++)
 			{
-				out += this.circuitMatrix[j][i] + ",";
+				out += this.matrix.circuitMatrix[j][i] + ",";
 			}
-			out += "  " + this.circuitRightSide[j] + "\n";
+			
+			out += "  " + this.matrix.circuitRightSide[j] + "\n";
 		}
 
 		out += "\n";
