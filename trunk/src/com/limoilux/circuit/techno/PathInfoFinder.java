@@ -6,7 +6,7 @@ import com.limoilux.circuit.CurrentElm;
 import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.VoltageElm;
 
-public class FindPathInfo
+public class PathInfoFinder
 {
 	public static final int INDUCT = 1;
 	public static final int VOLTAGE = 2;
@@ -18,7 +18,7 @@ public class FindPathInfo
 	public int type;
 	public Circuit circuit;
 
-	public FindPathInfo(int t, CircuitElm e, int d, Circuit circuit)
+	public PathInfoFinder(int t, CircuitElm e, int d, Circuit circuit)
 	{
 		this.circuit = circuit;
 		this.dest = d;
@@ -60,26 +60,26 @@ public class FindPathInfo
 			{
 				continue;
 			}
-			if (this.type == FindPathInfo.INDUCT)
+			if (this.type == PathInfoFinder.INDUCT)
 			{
 				if (circuitElement instanceof CurrentElm)
 				{
 					continue;
 				}
 			}
-			if (this.type == FindPathInfo.VOLTAGE)
+			if (this.type == PathInfoFinder.VOLTAGE)
 			{
 				if (!(circuitElement.isWire() || circuitElement instanceof VoltageElm))
 				{
 					continue;
 				}
 			}
-			if (this.type == FindPathInfo.SHORT && !circuitElement.isWire())
+			if (this.type == PathInfoFinder.SHORT && !circuitElement.isWire())
 			{
 				continue;
 			}
 
-			if (this.type == FindPathInfo.CAP_V)
+			if (this.type == PathInfoFinder.CAP_V)
 			{
 				if (!(circuitElement.isWire() || circuitElement instanceof CapacitorElm || circuitElement instanceof VoltageElm))
 				{
@@ -125,7 +125,7 @@ public class FindPathInfo
 				return true;
 			}
 
-			if (this.type == FindPathInfo.INDUCT && circuitElement instanceof InductorElm)
+			if (this.type == PathInfoFinder.INDUCT && circuitElement instanceof InductorElm)
 			{
 				double current = circuitElement.getCurrent();
 				if (j == 0)
