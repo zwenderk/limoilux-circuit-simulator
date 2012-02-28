@@ -341,6 +341,7 @@ public class Circuit
 
 	public void analyzeCircuit() throws CircuitAnalysisException
 	{
+		FindPathInfo fpi;
 		System.out.println("Analysing");
 		CircuitNode cn;
 
@@ -377,8 +378,6 @@ public class Circuit
 				volt = ce;
 			}
 		}
-		
-
 
 		// if no ground, and no rails, then the voltage elm's first terminal
 		// is ground
@@ -399,7 +398,7 @@ public class Circuit
 			this.nodeList.add(cn);
 		}
 		// System.out.println("ac2");
-	
+
 		// allocate nodes and voltage sources
 		for (int i = 0; i != this.elementList.size(); i++)
 		{
@@ -487,14 +486,14 @@ public class Circuit
 		this.matrix.circuitRightSide = new double[matrixSize];
 		this.matrix.originalMatrix = new double[matrixSize][matrixSize];
 		this.matrix.origRightSide = new double[matrixSize];
-		
+
 		this.matrix.circuitMatrixSize = matrixSize;
 		this.matrix.circuitMatrixFullSize = matrixSize;
-		
+
 		this.matrix.circuitRowInfo = new RowInfo[matrixSize];
 		this.circuitPermute = new int[matrixSize];
 		// int vs = 0;
-	
+
 		for (int i = 0; i < matrixSize; i++)
 		{
 			this.matrix.circuitRowInfo[i] = new RowInfo();
@@ -574,7 +573,7 @@ public class Circuit
 			// look for inductors with no current path
 			if (ce instanceof InductorElm)
 			{
-				FindPathInfo fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1), this);
+				fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1), this);
 				// first try findPath with maximum depth of 5, to avoid
 				// slowdowns
 				if (!fpi.findPath(ce.getNode(0), 5) && !fpi.findPath(ce.getNode(0)))
@@ -586,16 +585,17 @@ public class Circuit
 			// look for current sources with no current path
 			if (ce instanceof CurrentElm)
 			{
-				FindPathInfo fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1), this);
+				fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1), this);
 				if (!fpi.findPath(ce.getNode(0)))
 				{
 					throw new CircuitAnalysisException("No path for current source!", ce);
 				}
 			}
+
 			// look for voltage source loops
 			if (ce instanceof VoltageElm && ce.getPostCount() == 2 || ce instanceof WireElm)
 			{
-				FindPathInfo fpi = new FindPathInfo(FindPathInfo.VOLTAGE, ce, ce.getNode(1), this);
+				fpi = new FindPathInfo(FindPathInfo.VOLTAGE, ce, ce.getNode(1), this);
 
 				if (fpi.findPath(ce.getNode(0)))
 				{
@@ -605,7 +605,8 @@ public class Circuit
 			// look for shorted caps, or caps w/ voltage but no R
 			if (ce instanceof CapacitorElm)
 			{
-				FindPathInfo fpi = new FindPathInfo(FindPathInfo.SHORT, ce, ce.getNode(1), this);
+
+				fpi = new FindPathInfo(FindPathInfo.SHORT, ce, ce.getNode(1), this);
 				if (fpi.findPath(ce.getNode(0)))
 				{
 					System.out.println(ce + " shorted");
@@ -643,7 +644,7 @@ public class Circuit
 			for (j = 0; j != matrixSize; j++)
 			{
 				double q = this.matrix.circuitMatrix[i][j];
-				
+
 				if (this.matrix.circuitRowInfo[j].type == RowInfo.ROW_CONST)
 				{
 					// keep a running total of const values that have been
@@ -651,19 +652,19 @@ public class Circuit
 					rsadd -= this.matrix.circuitRowInfo[j].value * q;
 					continue;
 				}
-				
+
 				if (q == 0)
 				{
 					continue;
 				}
-				
+
 				if (qp == -1)
 				{
 					qp = j;
 					qv = q;
 					continue;
 				}
-				
+
 				if (qm == -1 && q == -qv)
 				{
 					qm = j;
@@ -690,7 +691,7 @@ public class Circuit
 					// we found a row with only one nonzero entry; that value
 					// is a constant
 					int k;
-					
+
 					for (k = 0; elt.type == RowInfo.ROW_EQUAL && k < 100; k++)
 					{
 						// follow the chain
@@ -701,7 +702,7 @@ public class Circuit
 						qp = elt.nodeEq;
 						elt = this.matrix.circuitRowInfo[qp];
 					}
-					
+
 					if (elt.type == RowInfo.ROW_EQUAL)
 					{
 						// break equal chains
@@ -709,13 +710,13 @@ public class Circuit
 						elt.type = RowInfo.ROW_NORMAL;
 						continue;
 					}
-					
+
 					if (elt.type != RowInfo.ROW_NORMAL)
 					{
 						System.out.println("type already " + elt.type + " for " + qp + "!");
 						continue;
 					}
-					
+
 					elt.type = RowInfo.ROW_CONST;
 					elt.value = (this.matrix.circuitRightSide[i] + rsadd) / qv;
 					this.matrix.circuitRowInfo[i].dropRow = true;
@@ -754,7 +755,7 @@ public class Circuit
 
 		// find size of new matrix
 		int nn = 0;
-		
+
 		for (int i = 0; i < matrixSize; i++)
 		{
 			RowInfo elt = this.matrix.circuitRowInfo[i];
@@ -787,14 +788,14 @@ public class Circuit
 				elt.mapCol = -1;
 			}
 		}
-		
+
 		for (int i = 0; i != matrixSize; i++)
 		{
 			RowInfo elt = this.matrix.circuitRowInfo[i];
 			if (elt.type == RowInfo.ROW_EQUAL)
 			{
 				RowInfo e2 = this.matrix.circuitRowInfo[elt.nodeEq];
-				
+
 				if (e2.type == RowInfo.ROW_CONST)
 				{
 					// if something is equal to a const, it's a const
@@ -837,7 +838,7 @@ public class Circuit
 			newrs[ii] = this.matrix.circuitRightSide[i];
 			rri.mapRow = ii;
 			// System.out.println("Row " + i + " maps to " + ii);
-			
+
 			for (j = 0; j != matrixSize; j++)
 			{
 				RowInfo ri = this.matrix.circuitRowInfo[j];
@@ -855,9 +856,9 @@ public class Circuit
 
 		this.matrix.circuitMatrix = newmatx;
 		this.matrix.circuitRightSide = newrs;
-		
+
 		matrixSize = newsize;
-	    this.matrix.circuitMatrixSize = newsize;
+		this.matrix.circuitMatrixSize = newsize;
 
 		for (int i = 0; i != matrixSize; i++)
 		{
