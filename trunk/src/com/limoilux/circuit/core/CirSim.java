@@ -1337,7 +1337,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 				for (j = 0; j != this.circuit.getMatrixFullSize(); j++)
 				{
-					RowInfo ri = this.circuit.circuitRowInfo[j];
+					RowInfo ri = this.circuit.matrix.circuitRowInfo[j];
 					double res = 0;
 					if (ri.type == RowInfo.ROW_CONST)
 					{

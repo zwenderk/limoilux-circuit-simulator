@@ -1,5 +1,7 @@
 package com.limoilux.circuit.techno;
 
+import com.limoilux.circuit.ui.RowInfo;
+
 public class Matrix
 {
 	public double[][] circuitMatrix;
@@ -10,6 +12,8 @@ public class Matrix
 	
 	public int circuitMatrixSize;
 	public int circuitMatrixFullSize;
+	
+	public RowInfo[] circuitRowInfo;
 	
 	public void clearMatrix()
 	{
