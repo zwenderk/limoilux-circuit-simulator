@@ -121,7 +121,7 @@ public class VoltageElm extends CircuitElm
 
 	double getVoltage()
 	{
-		double w = 2 * Math.PI * (CircuitElm.cirSim.time - this.freqTimeZero) * this.frequency + this.phaseShift;
+		double w = 2 * Math.PI * (CircuitElm.cirSim.timer.time - this.freqTimeZero) * this.frequency + this.phaseShift;
 		switch (this.waveform)
 		{
 		case WF_DC:
@@ -393,7 +393,7 @@ public class VoltageElm extends CircuitElm
 				this.frequency = maxfreq;
 			}
 			double adj = this.frequency - oldfreq;
-			this.freqTimeZero = CircuitElm.cirSim.time - oldfreq * (CircuitElm.cirSim.time - this.freqTimeZero)
+			this.freqTimeZero = CircuitElm.cirSim.timer.time - oldfreq * (CircuitElm.cirSim.timer.time - this.freqTimeZero)
 					/ this.frequency;
 		}
 		if (n == 1)

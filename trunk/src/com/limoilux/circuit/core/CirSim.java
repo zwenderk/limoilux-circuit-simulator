@@ -84,6 +84,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private static final int MODE_DRAG_SELECTED = 4;
 	private static final int MODE_DRAG_POST = 5;
 	private static final int MODE_SELECT = 6;
+	
+	private static final int PAUSE = 10;
 
 	private static final int HINT_LC = 1;
 	private static final int HINT_RC = 2;
@@ -131,8 +133,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private boolean dumpMatrix;
 	public boolean useBufferedImage;
 	private String ctrlMetaKey;
-	public double time;
-	private int pause = 10;
+
 	public int scopeSelected = -1;
 	private int menuScope = -1;
 	private int hintType = -1, hintItem1, hintItem2;
@@ -199,6 +200,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private final MouseListener mouseList;
 	private final KeyListener keyList;
 
+	public final Timer timer;
 	public final Circuit circuit;
 	public final ScopeManager scopeMan;
 
@@ -208,6 +210,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		super("Limoilux Circuit Simulator v1.1");
 
+		this.timer = new Timer();
 		this.circuit = new Circuit();
 		this.scopeMan = new ScopeManager();
 
@@ -947,7 +950,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			else
 			{
 				CircuitElm.showFormat.setMinimumFractionDigits(2);
-				info[0] = "t = " + CoreUtil.getUnitText(this.time, "s");
+				info[0] = "t = " + CoreUtil.getUnitText(this.timer.time, "s");
 				CircuitElm.showFormat.setMinimumFractionDigits(0);
 			}
 			if (this.hintType != -1)
@@ -1395,7 +1398,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				break;
 			}
 
-			this.time += this.timeStep;
+			this.timer.time += this.timeStep;
 			for (i = 0; i != this.scopeMan.scopeCount; i++)
 			{
 				this.scopeMan.scopes[i].timeStep();
@@ -1634,7 +1637,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void readSetupFile(String str, String title)
 	{
-		this.time = 0;
+		this.timer.time = 0;
 
 		URL url;
 		try
@@ -2415,7 +2418,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			}
 			
 			this.circuit.setNeedAnalysis(true);
-			this.time = 0;
+			this.timer.time = 0;
 			this.stoppedCheck.setState(false);
 			this.circuitCanvas.repaint();
 		}
@@ -2583,7 +2586,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	@Override
 	public void itemStateChanged(ItemEvent e)
 	{
-		this.circuitCanvas.repaint(this.pause);
+		this.circuitCanvas.repaint(this.PAUSE);
 		Object mi = e.getItemSelectable();
 		if (mi == this.stoppedCheck)
 		{
@@ -2962,7 +2965,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					CirSim.this.dragY = CirSim.this.snapGrid(e.getY());
 				}
 			}
-			CirSim.this.circuitCanvas.repaint(CirSim.this.pause);
+			CirSim.this.circuitCanvas.repaint(CirSim.this.PAUSE);
 		}
 
 		@Override
