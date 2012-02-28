@@ -337,47 +337,31 @@ public class Circuit
 		this.stampMatrix(n2, vn, -1);
 	}
 
-	public void analyzeCircuit() throws CircuitAnalysisException
+	private void setupFirstNode()
 	{
-
-		System.out.println("Analysing");
-		CircuitElm element;
+		CircuitElm element = null;
 		CircuitElm volt = null;
-		CircuitNode circuitNode;
-		PathInfoFinder pathInfoFinder;
-
-		int j;
-		int vscount = 0;
+		CircuitNode circuitNode = null;
 		boolean gotGround = false;
 		boolean gotRail = false;
-
-		this.calcCircuitBottom();
-
-		if (this.elementList.isEmpty())
-		{
-			return;
-		}
-
-		this.nodeList.clear();
-
-
-		// System.out.println("ac1");
+		Point pt = null;
+		
 		// look for voltage or ground element
 		for (int i = 0; i != this.elementList.size(); i++)
 		{
 			element = this.getElementAt(i);
-			
+
 			if (element instanceof GroundElm)
 			{
 				gotGround = true;
 				break;
 			}
-			
+
 			if (element instanceof RailElm)
 			{
 				gotRail = true;
 			}
-			
+
 			if (volt == null && element instanceof VoltageElm)
 			{
 				volt = element;
@@ -389,7 +373,7 @@ public class Circuit
 		if (!gotGround && volt != null && !gotRail)
 		{
 			circuitNode = new CircuitNode(false);
-			Point pt = volt.getPost(0);
+		    pt = volt.getPost(0);
 			circuitNode.x = pt.x;
 			circuitNode.y = pt.y;
 			this.nodeList.add(circuitNode);
@@ -398,10 +382,35 @@ public class Circuit
 		{
 			// otherwise allocate extra node for ground
 			circuitNode = new CircuitNode(false);
-			circuitNode.x = circuitNode.y = -1;
+			circuitNode.x = -1;
+			circuitNode.y = -1;
 
 			this.nodeList.add(circuitNode);
 		}
+	}
+
+	public void analyzeCircuit() throws CircuitAnalysisException
+	{
+
+		System.out.println("Analysing");
+		CircuitElm element;
+		CircuitNode circuitNode;
+		PathInfoFinder pathInfoFinder;
+
+		int j;
+		int vscount = 0;
+
+		this.calcCircuitBottom();
+
+		if (this.elementList.isEmpty())
+		{
+			return;
+		}
+
+		this.nodeList.clear();
+
+
+		this.setupFirstNode();
 		// System.out.println("ac2");
 
 		// allocate nodes and voltage sources
