@@ -119,11 +119,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private int draggingPost;
 	private SwitchElm heldSwitchElm;
 
-	private long lastTime = 0;
-	private long lastFrameTime;
-	private long lastIterTime;
-	private long secTime = 0;
-
 	private Class<?> dumpTypes[];
 
 	private int dragX, dragY, initDragX, initDragY;
@@ -138,7 +133,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private int menuScope = -1;
 	private int hintType = -1, hintItem1, hintItem2;
 	private String stopMessage;
-	public double timeStep;
 
 	private String clipboard;
 	private Rectangle circuitArea;
@@ -818,9 +812,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		if (!this.stoppedCheck.getState())
 		{
 			long sysTime = System.currentTimeMillis();
-			if (this.lastTime != 0)
+			if (this.timer.lastTime != 0)
 			{
-				int inc = (int) (sysTime - this.lastTime);
+				int inc = (int) (sysTime - this.timer.lastTime);
 				double c = this.currentBar.getValue();
 				c = java.lang.Math.exp(c / 3.5 - 14.2);
 				CircuitElm.currentMult = 1.7 * inc * c;
@@ -829,15 +823,15 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					CircuitElm.currentMult = -CircuitElm.currentMult;
 				}
 			}
-			if (sysTime - this.secTime >= 1000)
+			if (sysTime - this.timer.secTime >= 1000)
 			{
-				this.secTime = sysTime;
+				this.timer.secTime = sysTime;
 			}
-			this.lastTime = sysTime;
+			this.timer.lastTime = sysTime;
 		}
 		else
 		{
-			this.lastTime = 0;
+			this.timer.lastTime = 0;
 		}
 		CircuitElm.powerMult = Math.exp(this.powerBar.getValue() / 4.762 - 7);
 
@@ -853,7 +847,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			 * else if (conductanceCheckItem.getState())
 			 * g.setColor(Color.white);
 			 */
-			this.circuit.getElement(i).draw(g);
+			this.circuit.getElementAt(i).draw(g);
 		}
 
 		if (this.tempMouseMode == CirSim.MODE_DRAG_ROW || this.tempMouseMode == CirSim.MODE_DRAG_COLUMN
@@ -861,7 +855,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			for (i = 0; i != this.circuit.getElementCount(); i++)
 			{
-				CircuitElm ce = this.circuit.getElement(i);
+				CircuitElm ce = this.circuit.getElementAt(i);
 				DrawUtil.drawPost(g, ce.x, ce.y);
 				DrawUtil.drawPost(g, ce.x2, ce.y2);
 			}
@@ -880,8 +874,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				CircuitNodeLink cnl = cn.elementAt(0);
 				for (j = 0; j != this.circuit.getElementCount(); j++)
 				{
-					if (cnl.elm != this.circuit.getElement(j)
-							&& this.circuit.getElement(j).boundingBox.contains(cn.x, cn.y))
+					if (cnl.elm != this.circuit.getElementAt(j)
+							&& this.circuit.getElementAt(j).boundingBox.contains(cn.x, cn.y))
 					{
 						bb++;
 					}
@@ -1017,7 +1011,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		if (!this.stoppedCheck.getState() && !this.circuit.matrixIsNull())
 		{
 			// Limit to 50 fps (thanks to J�rgen Kl�tzer for this)
-			long delay = 1000 / 50 - (System.currentTimeMillis() - this.lastFrameTime);
+			long delay = 1000 / 50 - (System.currentTimeMillis() - this.timer.lastFrameTime);
 			// realg.drawString("delay: " + delay, 10, 90);
 			if (delay > 0)
 			{
@@ -1032,14 +1026,11 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 			this.circuitCanvas.repaint(0);
 		}
-		this.lastFrameTime = this.lastTime;
+		
+		this.timer.lastFrameTime = this.timer.lastTime;
 	}
 
-	@Deprecated
-	private void setupScopes()
-	{
-		this.scopeMan.setupScopes(this.circuit, this.winSize, this.circuitArea);
-	}
+
 
 	private String getHint()
 	{
@@ -1253,9 +1244,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.dumpMatrix = false;
 		long steprate = (long) (160 * this.getIterCount());
 		long tm = System.currentTimeMillis();
-		long lit = this.lastIterTime;
+		long lit = this.timer.lastIterTime;
 		
-		if (1000 >= steprate * (tm - this.lastIterTime))
+		if (1000 >= steprate * (tm - this.timer.lastIterTime))
 		{
 			return;
 		}
@@ -1398,19 +1389,19 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				break;
 			}
 
-			this.timer.time += this.timeStep;
+			this.timer.time += this.timer.timeStep;
 			for (i = 0; i != this.scopeMan.scopeCount; i++)
 			{
 				this.scopeMan.scopes[i].timeStep();
 			}
 			tm = System.currentTimeMillis();
 			lit = tm;
-			if (iter * 1000 >= steprate * (tm - this.lastIterTime) || tm - this.lastFrameTime > 500)
+			if (iter * 1000 >= steprate * (tm - this.timer.lastIterTime) || tm - this.timer.lastFrameTime > 500)
 			{
 				break;
 			}
 		}
-		this.lastIterTime = lit;
+		this.timer.lastIterTime = lit;
 		// System.out.println((System.currentTimeMillis()-lastFrameTime)/(double)
 		// iter);
 	}
@@ -1518,7 +1509,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		dump = "$ ";
 
 		dump += f + " ";
-		dump += this.timeStep + " ";
+		dump += this.timer.timeStep + " ";
 		dump += this.getIterCount() + " ";
 		dump += this.currentBar.getValue() + " ";
 		dump += CircuitElm.voltageRange + " ";
@@ -1664,18 +1655,18 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void readSetup(byte b[], int len, boolean retain)
 	{
-		int i;
+
 		if (!retain)
 		{
-			for (i = 0; i != this.circuit.getElementCount(); i++)
+			for (int i = 0; i != this.circuit.getElementCount(); i++)
 			{
-				CircuitElm ce = this.circuit.getElement(i);
+				CircuitElm ce = this.circuit.getElementAt(i);
 				ce.delete();
 			}
 
 			this.circuit.removeAllElements();
 			this.hintType = -1;
-			this.timeStep = 5e-6;
+			this.timer.timeStep = 5e-6;
 			this.dotsCheckItem.setState(true);
 			this.smallGridCheckItem.setState(false);
 			this.powerCheckItem.setState(false);
@@ -1819,7 +1810,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.voltsCheckItem.setState((flags & 4) == 0);
 		this.powerCheckItem.setState((flags & 8) == 8);
 		this.showValuesCheckItem.setState((flags & 16) == 0);
-		this.timeStep = new Double(st.nextToken()).doubleValue();
+		this.timer.timeStep = new Double(st.nextToken()).doubleValue();
 		double sp = new Double(st.nextToken()).doubleValue();
 		int sp2 = (int) (Math.log(10 * sp) * 24 + 61.5);
 		// int sp2 = (int) (Math.log(sp)*24+1.5);

@@ -138,15 +138,15 @@ public class SweepElm extends CircuitElm
 		}
 		if ((this.flags & this.FLAG_LOG) == 0)
 		{
-			this.fadd = this.dir * CircuitElm.cirSim.timeStep * (this.maxF - this.minF) / this.sweepTime;
+			this.fadd = this.dir * CircuitElm.cirSim.timer.timeStep * (this.maxF - this.minF) / this.sweepTime;
 			this.fmul = 1;
 		}
 		else
 		{
 			this.fadd = 0;
-			this.fmul = Math.pow(this.maxF / this.minF, this.dir * CircuitElm.cirSim.timeStep / this.sweepTime);
+			this.fmul = Math.pow(this.maxF / this.minF, this.dir * CircuitElm.cirSim.timer.timeStep / this.sweepTime);
 		}
-		this.savedTimeStep = CircuitElm.cirSim.timeStep;
+		this.savedTimeStep = CircuitElm.cirSim.timer.timeStep;
 	}
 
 	@Override
@@ -164,12 +164,12 @@ public class SweepElm extends CircuitElm
 	public void startIteration() throws CircuitAnalysisException
 	{
 		// has timestep been changed?
-		if (CircuitElm.cirSim.timeStep != this.savedTimeStep)
+		if (CircuitElm.cirSim.timer.timeStep != this.savedTimeStep)
 		{
 			this.setParams();
 		}
 		this.v = Math.sin(this.freqTime) * this.maxV;
-		this.freqTime += this.frequency * 2 * Math.PI * CircuitElm.cirSim.timeStep;
+		this.freqTime += this.frequency * 2 * Math.PI * CircuitElm.cirSim.timer.timeStep;
 		this.frequency = this.frequency * this.fmul + this.fadd;
 		if (this.frequency >= this.maxF && this.dir == 1)
 		{
@@ -265,7 +265,7 @@ public class SweepElm extends CircuitElm
 	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
-		double maxfreq = 1 / (8 * CircuitElm.cirSim.timeStep);
+		double maxfreq = 1 / (8 * CircuitElm.cirSim.timer.timeStep);
 		if (n == 0)
 		{
 			this.minF = ei.value;
