@@ -456,6 +456,31 @@ public class Circuit
 		
 		this.voltageSources = new CircuitElm[vscount];
 	}
+	
+	public int determineNonLinear()
+	{
+		// determine if circuit is nonlinear
+				int vscount = 0;
+				this.circuitNonLinear = false;
+				for (int i = 0; i != this.elementList.size(); i++)
+				{
+					CircuitElm ce = this.getElementAt(i);
+					if (ce.nonLinear())
+					{
+						this.circuitNonLinear = true;
+					}
+					
+					int ivs = ce.getVoltageSourceCount();
+					
+					for (int j = 0; j != ivs; j++)
+					{
+						this.voltageSources[vscount] = ce;
+						ce.setVoltageSource(j, vscount++);
+					}
+				}
+				
+				return vscount;
+	}
 
 	public void analyzeCircuit() throws CircuitAnalysisException
 	{
@@ -475,33 +500,14 @@ public class Circuit
 		}
 
 		this.nodeList.clear();
-
-
+		
 		this.setupFirstNode();
 		
 		this.allocNodeAndVoltageSource();
 		
-		vscount = 0;
-		this.circuitNonLinear = false;
-		// System.out.println("ac3");
-
-		// determine if circuit is nonlinear
-		for (int i = 0; i != this.elementList.size(); i++)
-		{
-			CircuitElm ce = this.getElementAt(i);
-			if (ce.nonLinear())
-			{
-				this.circuitNonLinear = true;
-			}
-			int ivs = ce.getVoltageSourceCount();
-			for (j = 0; j != ivs; j++)
-			{
-				this.voltageSources[vscount] = ce;
-				ce.setVoltageSource(j, vscount++);
-			}
-		}
-		// voltageSourceCount = vscount;
-
+		vscount = this.determineNonLinear();
+		
+		// voltageSourceCount = vscount; ???
 		int matrixSize = this.getNodeCount() - 1 + vscount;
 
 		this.matrix.init(matrixSize);
