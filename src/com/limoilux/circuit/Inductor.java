@@ -37,7 +37,7 @@ class Inductor
 		this.current = 0;
 	}
 
-	void stamp(int n0, int n1)
+	public void stamp(int n0, int n1)
 	{
 		// inductor companion model using trapezoidal or backward euler
 		// approximations (Norton equivalent) consists of a current
@@ -48,12 +48,12 @@ class Inductor
 		this.nodes[1] = n1;
 		if (this.isTrapezoidal())
 		{
-			this.compResistance = 2 * this.inductance / this.sim.timeStep;
+			this.compResistance = 2 * this.inductance / this.sim.timer.timeStep;
 		}
 		else
 		{
 			// backward euler
-			this.compResistance = this.inductance / this.sim.timeStep;
+			this.compResistance = this.inductance / this.sim.timer.timeStep;
 		}
 		this.sim.circuit.stampResistor(this.nodes[0], this.nodes[1], this.compResistance);
 		this.sim.circuit.stampRightSide(this.nodes[0]);

@@ -425,12 +425,12 @@ public class Scope
 		}
 
 		gridStep = 1e-15;
-		double ts = this.sim.timeStep * this.speed;
+		double ts = this.sim.timer.timeStep * this.speed;
 		while (gridStep < ts * 5)
 		{
 			gridStep *= 10;
 		}
-		double tstart = this.sim.timer.time - this.sim.timeStep * this.speed * this.rect.width;
+		double tstart = this.sim.timer.time - this.sim.timer.timeStep * this.speed * this.rect.width;
 		double tx = this.sim.timer.time - this.sim.timer.time % gridStep;
 		int first = 1;
 		for (ll = 0;; ll++)
@@ -629,7 +629,7 @@ public class Scope
 			avperiod /= periodct;
 			avperiod2 /= periodct;
 			double periodstd = Math.sqrt(avperiod2 - avperiod * avperiod);
-			freq = 1 / (avperiod * this.sim.timeStep * this.speed);
+			freq = 1 / (avperiod * this.sim.timer.timeStep * this.speed);
 			// don't show freq if standard deviation is too great
 			if (periodct < 1 || periodstd > 2)
 			{

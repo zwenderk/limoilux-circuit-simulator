@@ -197,7 +197,7 @@ public class TransformerElm extends CircuitElm
 		double m = this.couplingCoef * Math.sqrt(l1 * l2);
 		// build inverted matrix
 		double deti = 1 / (l1 * l2 - m * m);
-		double ts = this.isTrapezoidal() ? CircuitElm.cirSim.timeStep / 2 : CircuitElm.cirSim.timeStep;
+		double ts = this.isTrapezoidal() ? CircuitElm.cirSim.timer.timeStep / 2 : CircuitElm.cirSim.timer.timeStep;
 		this.a1 = l2 * deti * ts; // we multiply dt/2 into a1..a4 here
 		this.a2 = -m * deti * ts;
 		this.a3 = -m * deti * ts;

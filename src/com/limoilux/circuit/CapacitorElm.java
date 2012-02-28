@@ -127,11 +127,11 @@ public class CapacitorElm extends CircuitElm
 		// if RC is small relative to the timestep.
 		if (this.isTrapezoidal())
 		{
-			this.compResistance = CircuitElm.cirSim.timeStep / (2 * this.capacitance);
+			this.compResistance = CircuitElm.cirSim.timer.timeStep / (2 * this.capacitance);
 		}
 		else
 		{
-			this.compResistance = CircuitElm.cirSim.timeStep / this.capacitance;
+			this.compResistance = CircuitElm.cirSim.timer.timeStep / this.capacitance;
 		}
 		CircuitElm.cirSim.circuit.stampResistor(this.nodes[0], this.nodes[1], this.compResistance);
 		CircuitElm.cirSim.circuit.stampRightSide(this.nodes[0]);
