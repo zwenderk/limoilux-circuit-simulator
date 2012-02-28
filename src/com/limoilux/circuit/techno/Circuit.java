@@ -33,7 +33,7 @@ public class Circuit
 
 	public CircuitElm[] voltageSources;
 	public RowInfo[] circuitRowInfo;
-	
+
 	public final Matrix matrix;
 
 	public Circuit()
@@ -339,10 +339,17 @@ public class Circuit
 
 	public void analyzeCircuit() throws CircuitAnalysisException
 	{
-		CircuitElm element;
-		FindPathInfo fpi;
+
 		System.out.println("Analysing");
-		CircuitNode cn;
+		CircuitElm element;
+		CircuitElm volt = null;
+		CircuitNode circuitNode;
+		PathInfoFinder pathInfoFinder;
+
+		int j;
+		int vscount = 0;
+		boolean gotGround = false;
+		boolean gotRail = false;
 
 		this.calcCircuitBottom();
 
@@ -351,30 +358,29 @@ public class Circuit
 			return;
 		}
 
-		int j;
-		int vscount = 0;
 		this.nodeList.clear();
-		boolean gotGround = false;
-		boolean gotRail = false;
-		CircuitElm volt = null;
+
 
 		// System.out.println("ac1");
 		// look for voltage or ground element
 		for (int i = 0; i != this.elementList.size(); i++)
 		{
-			CircuitElm ce = this.getElementAt(i);
-			if (ce instanceof GroundElm)
+			element = this.getElementAt(i);
+			
+			if (element instanceof GroundElm)
 			{
 				gotGround = true;
 				break;
 			}
-			if (ce instanceof RailElm)
+			
+			if (element instanceof RailElm)
 			{
 				gotRail = true;
 			}
-			if (volt == null && ce instanceof VoltageElm)
+			
+			if (volt == null && element instanceof VoltageElm)
 			{
-				volt = ce;
+				volt = element;
 			}
 		}
 
@@ -382,19 +388,19 @@ public class Circuit
 		// is ground
 		if (!gotGround && volt != null && !gotRail)
 		{
-			cn = new CircuitNode(false);
+			circuitNode = new CircuitNode(false);
 			Point pt = volt.getPost(0);
-			cn.x = pt.x;
-			cn.y = pt.y;
-			this.nodeList.add(cn);
+			circuitNode.x = pt.x;
+			circuitNode.y = pt.y;
+			this.nodeList.add(circuitNode);
 		}
 		else
 		{
 			// otherwise allocate extra node for ground
-			cn = new CircuitNode(false);
-			cn.x = cn.y = -1;
+			circuitNode = new CircuitNode(false);
+			circuitNode.x = circuitNode.y = -1;
 
-			this.nodeList.add(cn);
+			this.nodeList.add(circuitNode);
 		}
 		// System.out.println("ac2");
 
@@ -413,21 +419,21 @@ public class Circuit
 				int k;
 				for (k = 0; k != this.getNodeCount(); k++)
 				{
-					cn = this.getNodeAt(k);
-					if (pt.x == cn.x && pt.y == cn.y)
+					circuitNode = this.getNodeAt(k);
+					if (pt.x == circuitNode.x && pt.y == circuitNode.y)
 					{
 						break;
 					}
 				}
 				if (k == this.getNodeCount())
 				{
-					cn = new CircuitNode(false);
-					cn.x = pt.x;
-					cn.y = pt.y;
+					circuitNode = new CircuitNode(false);
+					circuitNode.x = pt.x;
+					circuitNode.y = pt.y;
 					CircuitNodeLink cnl = new CircuitNodeLink(j, ce);
-					cn.addElement(cnl);
+					circuitNode.addElement(cnl);
 					ce.setNode(j, this.getNodeCount());
-					this.nodeList.add(cn);
+					this.nodeList.add(circuitNode);
 				}
 				else
 				{
@@ -445,15 +451,15 @@ public class Circuit
 
 			for (j = 0; j != inodes; j++)
 			{
-				cn = new CircuitNode(true);
-				cn.y = -1;
-				cn.x = -1;
+				circuitNode = new CircuitNode(true);
+				circuitNode.y = -1;
+				circuitNode.x = -1;
 
 				CircuitNodeLink cnl = new CircuitNodeLink(j + posts, ce);
 
-				cn.addElement(cnl);
+				circuitNode.addElement(cnl);
 				ce.setNode(cnl.num, this.getNodeCount());
-				this.nodeList.add(cn);
+				this.nodeList.add(circuitNode);
 			}
 			vscount += ivs;
 		}
@@ -481,9 +487,9 @@ public class Circuit
 		// voltageSourceCount = vscount;
 
 		int matrixSize = this.getNodeCount() - 1 + vscount;
-		
+
 		this.matrix.init(matrixSize);
-		
+
 		// int vs = 0;
 
 		this.circuitNeedsMap = false;
@@ -500,7 +506,7 @@ public class Circuit
 		boolean closure[] = new boolean[this.getNodeCount()];
 		boolean changed = true;
 		closure[0] = true;
-		
+
 		while (changed)
 		{
 			changed = false;
@@ -535,7 +541,7 @@ public class Circuit
 					}
 				}
 			}
-			
+
 			if (changed)
 			{
 				continue;
@@ -562,10 +568,10 @@ public class Circuit
 			// look for inductors with no current path
 			if (ce instanceof InductorElm)
 			{
-				fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1), this);
+				pathInfoFinder = new PathInfoFinder(PathInfoFinder.INDUCT, ce, ce.getNode(1), this);
 				// first try findPath with maximum depth of 5, to avoid
 				// slowdowns
-				if (!fpi.findPath(ce.getNode(0), 5) && !fpi.findPath(ce.getNode(0)))
+				if (!pathInfoFinder.findPath(ce.getNode(0), 5) && !pathInfoFinder.findPath(ce.getNode(0)))
 				{
 					System.out.println(ce + " no path");
 					ce.reset();
@@ -574,8 +580,8 @@ public class Circuit
 			// look for current sources with no current path
 			if (ce instanceof CurrentElm)
 			{
-				fpi = new FindPathInfo(FindPathInfo.INDUCT, ce, ce.getNode(1), this);
-				if (!fpi.findPath(ce.getNode(0)))
+				pathInfoFinder = new PathInfoFinder(PathInfoFinder.INDUCT, ce, ce.getNode(1), this);
+				if (!pathInfoFinder.findPath(ce.getNode(0)))
 				{
 					throw new CircuitAnalysisException("No path for current source!", ce);
 				}
@@ -584,9 +590,9 @@ public class Circuit
 			// look for voltage source loops
 			if (ce instanceof VoltageElm && ce.getPostCount() == 2 || ce instanceof WireElm)
 			{
-				fpi = new FindPathInfo(FindPathInfo.VOLTAGE, ce, ce.getNode(1), this);
+				pathInfoFinder = new PathInfoFinder(PathInfoFinder.VOLTAGE, ce, ce.getNode(1), this);
 
-				if (fpi.findPath(ce.getNode(0)))
+				if (pathInfoFinder.findPath(ce.getNode(0)))
 				{
 					throw new CircuitAnalysisException("Voltage source/wire loop with no resistance!", ce);
 				}
@@ -595,16 +601,16 @@ public class Circuit
 			if (ce instanceof CapacitorElm)
 			{
 
-				fpi = new FindPathInfo(FindPathInfo.SHORT, ce, ce.getNode(1), this);
-				if (fpi.findPath(ce.getNode(0)))
+				pathInfoFinder = new PathInfoFinder(PathInfoFinder.SHORT, ce, ce.getNode(1), this);
+				if (pathInfoFinder.findPath(ce.getNode(0)))
 				{
 					System.out.println(ce + " shorted");
 					ce.reset();
 				}
 				else
 				{
-					fpi = new FindPathInfo(FindPathInfo.CAP_V, ce, ce.getNode(1), this);
-					if (fpi.findPath(ce.getNode(0)))
+					pathInfoFinder = new PathInfoFinder(PathInfoFinder.CAP_V, ce, ce.getNode(1), this);
+					if (pathInfoFinder.findPath(ce.getNode(0)))
 					{
 						throw new CircuitAnalysisException("Capacitor loop with no resistance!", ce);
 					}
@@ -754,6 +760,7 @@ public class Circuit
 				// System.out.println("col " + i + " maps to " + elt.mapCol);
 				continue;
 			}
+
 			if (elt.type == RowInfo.ROW_EQUAL)
 			{
 				RowInfo e2 = null;
@@ -761,10 +768,12 @@ public class Circuit
 				for (j = 0; j != 100; j++)
 				{
 					e2 = this.matrix.circuitRowInfo[elt.nodeEq];
+
 					if (e2.type != RowInfo.ROW_EQUAL)
 					{
 						break;
 					}
+
 					if (i == e2.nodeEq)
 					{
 						break;
@@ -814,7 +823,7 @@ public class Circuit
 		// make the new, simplified matrix
 
 		int newsize = nn;
-		
+
 		matrixSize = this.matrix.simplifyMatrix(newsize, matrixSize);
 
 		this.matrix.recopyMatrixToOrginal(matrixSize);
@@ -831,12 +840,9 @@ public class Circuit
 
 		// if a matrix is linear, we can do the lu_factor here instead of
 		// needing to do it every frame
-		if (!this.circuitNonLinear)
+		if (!this.circuitNonLinear && !this.matrix.doLuFactor())
 		{
-			if (!this.matrix.doLuFactor())
-			{
-				throw new CircuitAnalysisException("Singular matrix!");
-			}
+			throw new CircuitAnalysisException("Singular matrix!");
 		}
 	}
 
