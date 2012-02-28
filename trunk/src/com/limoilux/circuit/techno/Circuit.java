@@ -4,7 +4,6 @@ package com.limoilux.circuit.techno;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Vector;
 
 import com.limoilux.circuit.CapacitorElm;
 import com.limoilux.circuit.CurrentElm;
@@ -34,8 +33,7 @@ public class Circuit
 
 	public CircuitElm[] voltageSources;
 	public RowInfo[] circuitRowInfo;
-	public int[] circuitPermute;
-
+	
 	public final Matrix matrix;
 
 	public Circuit()
@@ -341,6 +339,7 @@ public class Circuit
 
 	public void analyzeCircuit() throws CircuitAnalysisException
 	{
+		CircuitElm element;
 		FindPathInfo fpi;
 		System.out.println("Analysing");
 		CircuitNode cn;
@@ -363,7 +362,7 @@ public class Circuit
 		// look for voltage or ground element
 		for (int i = 0; i != this.elementList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.getElementAt(i);
 			if (ce instanceof GroundElm)
 			{
 				gotGround = true;
@@ -400,9 +399,9 @@ public class Circuit
 		// System.out.println("ac2");
 
 		// allocate nodes and voltage sources
-		for (int i = 0; i != this.elementList.size(); i++)
+		for (int i = 0; i < this.elementList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.getElementAt(i);
 			int inodes = ce.getInternalNodeCount();
 			int ivs = ce.getVoltageSourceCount();
 			int posts = ce.getPostCount();
@@ -467,7 +466,7 @@ public class Circuit
 		// determine if circuit is nonlinear
 		for (int i = 0; i != this.elementList.size(); i++)
 		{
-			CircuitElm ce = this.getElement(i);
+			CircuitElm ce = this.getElementAt(i);
 			if (ce.nonLinear())
 			{
 				this.circuitNonLinear = true;
@@ -482,30 +481,18 @@ public class Circuit
 		// voltageSourceCount = vscount;
 
 		int matrixSize = this.getNodeCount() - 1 + vscount;
-		this.matrix.circuitMatrix = new double[matrixSize][matrixSize];
-		this.matrix.circuitRightSide = new double[matrixSize];
-		this.matrix.originalMatrix = new double[matrixSize][matrixSize];
-		this.matrix.origRightSide = new double[matrixSize];
-
-		this.matrix.circuitMatrixSize = matrixSize;
-		this.matrix.circuitMatrixFullSize = matrixSize;
-
-		this.matrix.circuitRowInfo = new RowInfo[matrixSize];
-		this.circuitPermute = new int[matrixSize];
+		
+		this.matrix.init(matrixSize);
+		
 		// int vs = 0;
-
-		for (int i = 0; i < matrixSize; i++)
-		{
-			this.matrix.circuitRowInfo[i] = new RowInfo();
-		}
 
 		this.circuitNeedsMap = false;
 
 		// stamp linear circuit elements
-		for (int i = 0; i != this.elementList.size(); i++)
+		for (int i = 0; i < this.elementList.size(); i++)
 		{
-			CircuitElm ce = this.getElementAt(i);
-			ce.stamp();
+			element = this.getElementAt(i);
+			element.stamp();
 		}
 		// System.out.println("ac4");
 
@@ -513,6 +500,7 @@ public class Circuit
 		boolean closure[] = new boolean[this.getNodeCount()];
 		boolean changed = true;
 		closure[0] = true;
+		
 		while (changed)
 		{
 			changed = false;
@@ -547,6 +535,7 @@ public class Circuit
 					}
 				}
 			}
+			
 			if (changed)
 			{
 				continue;
@@ -823,47 +812,10 @@ public class Circuit
 		 */
 
 		// make the new, simplified matrix
+
 		int newsize = nn;
-		double newmatx[][] = new double[newsize][newsize];
-		double newrs[] = new double[newsize];
-		int ii = 0;
-		for (int i = 0; i != matrixSize; i++)
-		{
-			RowInfo rri = this.matrix.circuitRowInfo[i];
-			if (rri.dropRow)
-			{
-				rri.mapRow = -1;
-				continue;
-			}
-			newrs[ii] = this.matrix.circuitRightSide[i];
-			rri.mapRow = ii;
-			// System.out.println("Row " + i + " maps to " + ii);
-
-			for (j = 0; j != matrixSize; j++)
-			{
-				RowInfo ri = this.matrix.circuitRowInfo[j];
-				if (ri.type == RowInfo.ROW_CONST)
-				{
-					newrs[ii] -= ri.value * this.matrix.circuitMatrix[i][j];
-				}
-				else
-				{
-					newmatx[ii][ri.mapCol] += this.matrix.circuitMatrix[i][j];
-				}
-			}
-			ii++;
-		}
-
-		this.matrix.circuitMatrix = newmatx;
-		this.matrix.circuitRightSide = newrs;
-
-		matrixSize = newsize;
-		this.matrix.circuitMatrixSize = newsize;
-
-		for (int i = 0; i != matrixSize; i++)
-		{
-			this.matrix.origRightSide[i] = this.matrix.circuitRightSide[i];
-		}
+		
+		matrixSize = this.matrix.simplifyMatrix(newsize, matrixSize);
 
 		this.matrix.recopyMatrixToOrginal(matrixSize);
 
@@ -881,7 +833,7 @@ public class Circuit
 		// needing to do it every frame
 		if (!this.circuitNonLinear)
 		{
-			if (!CoreUtil.luFactor(this.matrix.circuitMatrix, this.matrix.circuitMatrixSize, this.circuitPermute))
+			if (!this.matrix.doLuFactor())
 			{
 				throw new CircuitAnalysisException("Singular matrix!");
 			}

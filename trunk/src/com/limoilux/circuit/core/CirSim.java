@@ -1326,14 +1326,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					}
 
 					if (!CoreUtil.luFactor(this.circuit.matrix.circuitMatrix, this.circuit.matrix.circuitMatrixSize,
-							this.circuit.circuitPermute))
+							this.circuit.matrix.circuitPermute))
 					{
 						throw new CircuitAnalysisException("Singular matrix!");
 					}
 				}
 
 				CoreUtil.luSolve(this.circuit.matrix.circuitMatrix, this.circuit.matrix.circuitMatrixSize,
-						this.circuit.circuitPermute, this.circuit.matrix.circuitRightSide);
+						this.circuit.matrix.circuitPermute, this.circuit.matrix.circuitRightSide);
 
 				for (j = 0; j != this.circuit.getMatrixFullSize(); j++)
 				{
