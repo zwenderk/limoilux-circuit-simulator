@@ -345,7 +345,7 @@ public class Circuit
 		boolean gotGround = false;
 		boolean gotRail = false;
 		Point pt = null;
-		
+
 		// look for voltage or ground element
 		for (int i = 0; i != this.elementList.size(); i++)
 		{
@@ -373,7 +373,7 @@ public class Circuit
 		if (!gotGround && volt != null && !gotRail)
 		{
 			circuitNode = new CircuitNode(false);
-		    pt = volt.getPost(0);
+			pt = volt.getPost(0);
 			circuitNode.x = pt.x;
 			circuitNode.y = pt.y;
 			this.nodeList.add(circuitNode);
@@ -388,12 +388,12 @@ public class Circuit
 			this.nodeList.add(circuitNode);
 		}
 	}
-	
+
 	private void allocNodeAndVoltageSource()
 	{
 		CircuitNode circuitNode;
 		int vscount = 0;
-		
+
 		// allocate nodes and voltage sources
 		for (int i = 0; i < this.elementList.size(); i++)
 		{
@@ -453,43 +453,95 @@ public class Circuit
 			}
 			vscount += ivs;
 		}
-		
+
 		this.voltageSources = new CircuitElm[vscount];
 	}
-	
+
 	public int determineNonLinear()
 	{
 		// determine if circuit is nonlinear
-				int vscount = 0;
-				this.circuitNonLinear = false;
-				for (int i = 0; i != this.elementList.size(); i++)
+		int vscount = 0;
+		this.circuitNonLinear = false;
+		for (int i = 0; i != this.elementList.size(); i++)
+		{
+			CircuitElm ce = this.getElementAt(i);
+			if (ce.nonLinear())
+			{
+				this.circuitNonLinear = true;
+			}
+
+			int ivs = ce.getVoltageSourceCount();
+
+			for (int j = 0; j != ivs; j++)
+			{
+				this.voltageSources[vscount] = ce;
+				ce.setVoltageSource(j, vscount++);
+			}
+		}
+
+		return vscount;
+	}
+
+	private void stampLinearElements()
+	{
+		CircuitElm element;
+		// stamp linear circuit elements
+		for (int i = 0; i < this.elementList.size(); i++)
+		{
+			element = this.getElementAt(i);
+			element.stamp();
+		}
+	}
+
+	private int findSizeNewMatrix(int matrixSize)
+	{
+		// find size of new matrix
+		int nn = 0;
+
+		for (int i = 0; i < matrixSize; i++)
+		{
+			RowInfo elt = this.matrix.circuitRowInfo[i];
+			if (elt.type == RowInfo.ROW_NORMAL)
+			{
+				elt.mapCol = nn++;
+				// System.out.println("col " + i + " maps to " + elt.mapCol);
+				continue;
+			}
+
+			if (elt.type == RowInfo.ROW_EQUAL)
+			{
+				RowInfo e2 = null;
+				// resolve chains of equality; 100 max steps to avoid loops
+				for (int j = 0; j != 100; j++)
 				{
-					CircuitElm ce = this.getElementAt(i);
-					if (ce.nonLinear())
+					e2 = this.matrix.circuitRowInfo[elt.nodeEq];
+
+					if (e2.type != RowInfo.ROW_EQUAL)
 					{
-						this.circuitNonLinear = true;
+						break;
 					}
-					
-					int ivs = ce.getVoltageSourceCount();
-					
-					for (int j = 0; j != ivs; j++)
+
+					if (i == e2.nodeEq)
 					{
-						this.voltageSources[vscount] = ce;
-						ce.setVoltageSource(j, vscount++);
+						break;
 					}
+					elt.nodeEq = e2.nodeEq;
 				}
-				
-				return vscount;
+			}
+			if (elt.type == RowInfo.ROW_CONST)
+			{
+				elt.mapCol = -1;
+			}
+		}
+		return nn;
 	}
 
 	public void analyzeCircuit() throws CircuitAnalysisException
 	{
 
 		System.out.println("Analysing");
-		CircuitElm element;
 		PathInfoFinder pathInfoFinder;
 
-		int j;
 		int vscount = 0;
 
 		this.calcCircuitBottom();
@@ -500,13 +552,13 @@ public class Circuit
 		}
 
 		this.nodeList.clear();
-		
+
 		this.setupFirstNode();
-		
+
 		this.allocNodeAndVoltageSource();
-		
+
 		vscount = this.determineNonLinear();
-		
+
 		// voltageSourceCount = vscount; ???
 		int matrixSize = this.getNodeCount() - 1 + vscount;
 
@@ -516,13 +568,7 @@ public class Circuit
 
 		this.circuitNeedsMap = false;
 
-		// stamp linear circuit elements
-		for (int i = 0; i < this.elementList.size(); i++)
-		{
-			element = this.getElementAt(i);
-			element.stamp();
-		}
-		// System.out.println("ac4");
+		this.stampLinearElements();
 
 		// determine nodes that are unconnected
 		boolean closure[] = new boolean[this.getNodeCount()];
@@ -537,7 +583,7 @@ public class Circuit
 				CircuitElm ce = this.getElementAt(i);
 				// loop through all ce's nodes to see if they are connected
 				// to other nodes not in closure
-				for (j = 0; j < ce.getPostCount(); j++)
+				for (int j = 0; j < ce.getPostCount(); j++)
 				{
 					if (!closure[ce.getNode(j)])
 					{
@@ -547,8 +593,8 @@ public class Circuit
 						}
 						continue;
 					}
-					int k;
-					for (k = 0; k != ce.getPostCount(); k++)
+
+					for (int k = 0; k != ce.getPostCount(); k++)
 					{
 						if (j == k)
 						{
@@ -658,6 +704,7 @@ public class Circuit
 			double rsadd = 0;
 
 			// look for rows that can be removed
+			int j;
 			for (j = 0; j != matrixSize; j++)
 			{
 				double q = this.matrix.circuitMatrix[i][j];
@@ -770,81 +817,9 @@ public class Circuit
 		}
 		// System.out.println("ac7");
 
-		// find size of new matrix
-		int nn = 0;
+		int newsize = this.findSizeNewMatrix(matrixSize);
 
-		for (int i = 0; i < matrixSize; i++)
-		{
-			RowInfo elt = this.matrix.circuitRowInfo[i];
-			if (elt.type == RowInfo.ROW_NORMAL)
-			{
-				elt.mapCol = nn++;
-				// System.out.println("col " + i + " maps to " + elt.mapCol);
-				continue;
-			}
-
-			if (elt.type == RowInfo.ROW_EQUAL)
-			{
-				RowInfo e2 = null;
-				// resolve chains of equality; 100 max steps to avoid loops
-				for (j = 0; j != 100; j++)
-				{
-					e2 = this.matrix.circuitRowInfo[elt.nodeEq];
-
-					if (e2.type != RowInfo.ROW_EQUAL)
-					{
-						break;
-					}
-
-					if (i == e2.nodeEq)
-					{
-						break;
-					}
-					elt.nodeEq = e2.nodeEq;
-				}
-			}
-			if (elt.type == RowInfo.ROW_CONST)
-			{
-				elt.mapCol = -1;
-			}
-		}
-
-		for (int i = 0; i != matrixSize; i++)
-		{
-			RowInfo elt = this.matrix.circuitRowInfo[i];
-			if (elt.type == RowInfo.ROW_EQUAL)
-			{
-				RowInfo e2 = this.matrix.circuitRowInfo[elt.nodeEq];
-
-				if (e2.type == RowInfo.ROW_CONST)
-				{
-					// if something is equal to a const, it's a const
-					elt.type = e2.type;
-					elt.value = e2.value;
-					elt.mapCol = -1;
-					// System.out.println(i + " = [late]const " + elt.value);
-				}
-				else
-				{
-					elt.mapCol = e2.mapCol;
-					// System.out.println(i + " maps to: " + e2.mapCol);
-				}
-			}
-		}
-		// System.out.println("ac8");
-
-		/*
-		 * System.out.println("matrixSize = " + matrixSize);
-		 * 
-		 * for (j = 0; j != circuitMatrixSize; j++) { System.out.println(j +
-		 * ": "); for (i = 0; i != circuitMatrixSize; i++)
-		 * System.out.print(circuitMatrix[j][i] + " "); System.out.print("  " +
-		 * circuitRightSide[j] + "\n"); } System.out.print("\n");
-		 */
-
-		// make the new, simplified matrix
-
-		int newsize = nn;
+		this.matrix.manageRowInfo(matrixSize);
 
 		matrixSize = this.matrix.simplifyMatrix(newsize, matrixSize);
 
@@ -853,15 +828,9 @@ public class Circuit
 		this.circuitNeedsMap = true;
 
 		/*
-		 * System.out.println("matrixSize = " + matrixSize + " " +
-		 * circuitNonLinear); for (j = 0; j != circuitMatrixSize; j++) { for (i
-		 * = 0; i != circuitMatrixSize; i++)
-		 * System.out.print(circuitMatrix[j][i] + " "); System.out.print("  " +
-		 * circuitRightSide[j] + "\n"); } System.out.print("\n");
+		 * if a matrix is linear, we can do the lu_factor here instead of
+		 * needing to do it every frame
 		 */
-
-		// if a matrix is linear, we can do the lu_factor here instead of
-		// needing to do it every frame
 		if (!this.circuitNonLinear && !this.matrix.doLuFactor())
 		{
 			throw new CircuitAnalysisException("Singular matrix!");

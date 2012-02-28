@@ -316,4 +316,35 @@ public class Matrix
 
 		return matrixSize;
 	}
+
+	/**
+	 * Utilité inconnue
+	 * 
+	 * @param matrixSize
+	 */
+	public void manageRowInfo(int matrixSize)
+	{
+		for (int i = 0; i != matrixSize; i++)
+		{
+			RowInfo elt = this.circuitRowInfo[i];
+			if (elt.type == RowInfo.ROW_EQUAL)
+			{
+				RowInfo e2 = this.circuitRowInfo[elt.nodeEq];
+
+				if (e2.type == RowInfo.ROW_CONST)
+				{
+					// if something is equal to a const, it's a const
+					elt.type = e2.type;
+					elt.value = e2.value;
+					elt.mapCol = -1;
+					// System.out.println(i + " = [late]const " + elt.value);
+				}
+				else
+				{
+					elt.mapCol = e2.mapCol;
+					// System.out.println(i + " maps to: " + e2.mapCol);
+				}
+			}
+		}
+	}
 }
