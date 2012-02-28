@@ -430,8 +430,8 @@ public class Scope
 		{
 			gridStep *= 10;
 		}
-		double tstart = this.sim.t - this.sim.timeStep * this.speed * this.rect.width;
-		double tx = this.sim.t - this.sim.t % gridStep;
+		double tstart = this.sim.time - this.sim.timeStep * this.speed * this.rect.width;
+		double tx = this.sim.time - this.sim.time % gridStep;
 		int first = 1;
 		for (ll = 0;; ll++)
 		{

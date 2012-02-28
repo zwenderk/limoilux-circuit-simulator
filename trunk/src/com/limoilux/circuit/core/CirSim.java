@@ -131,7 +131,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private boolean dumpMatrix;
 	public boolean useBufferedImage;
 	private String ctrlMetaKey;
-	public double t;
+	public double time;
 	private int pause = 10;
 	public int scopeSelected = -1;
 	private int menuScope = -1;
@@ -947,7 +947,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			else
 			{
 				CircuitElm.showFormat.setMinimumFractionDigits(2);
-				info[0] = "t = " + CoreUtil.getUnitText(this.t, "s");
+				info[0] = "t = " + CoreUtil.getUnitText(this.time, "s");
 				CircuitElm.showFormat.setMinimumFractionDigits(0);
 			}
 			if (this.hintType != -1)
@@ -1251,10 +1251,12 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		long steprate = (long) (160 * this.getIterCount());
 		long tm = System.currentTimeMillis();
 		long lit = this.lastIterTime;
+		
 		if (1000 >= steprate * (tm - this.lastIterTime))
 		{
 			return;
 		}
+		
 		for (iter = 1;; iter++)
 		{
 			int i, j, k, subiter;
@@ -1393,7 +1395,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				break;
 			}
 
-			this.t += this.timeStep;
+			this.time += this.timeStep;
 			for (i = 0; i != this.scopeMan.scopeCount; i++)
 			{
 				this.scopeMan.scopes[i].timeStep();
@@ -1632,7 +1634,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void readSetupFile(String str, String title)
 	{
-		this.t = 0;
+		this.time = 0;
 
 		URL url;
 		try
@@ -2404,14 +2406,16 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 			for (i = 0; i != this.circuit.getElementCount(); i++)
 			{
-				this.circuit.getElement(i).reset();
+				this.circuit.getElementAt(i).reset();
 			}
+			
 			for (i = 0; i != this.scopeMan.scopeCount; i++)
 			{
 				this.scopeMan.scopes[i].resetGraph();
 			}
+			
 			this.circuit.setNeedAnalysis(true);
-			this.t = 0;
+			this.time = 0;
 			this.stoppedCheck.setState(false);
 			this.circuitCanvas.repaint();
 		}
