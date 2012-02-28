@@ -84,7 +84,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private static final int MODE_DRAG_SELECTED = 4;
 	private static final int MODE_DRAG_POST = 5;
 	private static final int MODE_SELECT = 6;
-	
+
 	private static final int PAUSE = 10;
 
 	private static final int HINT_LC = 1;
@@ -119,11 +119,10 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public CircuitElm stopElm;
 	public CircuitElm plotXElm;
 	public CircuitElm plotYElm;
-	
+
 	private int mousePost = -1;
 	private int draggingPost;
 	private SwitchElm heldSwitchElm;
-
 
 	private Class<?> dumpTypes[];
 
@@ -1032,11 +1031,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 			this.circuitCanvas.repaint(0);
 		}
-		
+
 		this.timer.lastFrameTime = this.timer.lastTime;
 	}
-
-
 
 	private String getHint()
 	{
@@ -1251,12 +1248,12 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		long steprate = (long) (160 * this.getIterCount());
 		long tm = System.currentTimeMillis();
 		long lit = this.timer.lastIterTime;
-		
+
 		if (1000 >= steprate * (tm - this.timer.lastIterTime))
 		{
 			return;
 		}
-		
+
 		for (iter = 1;; iter++)
 		{
 			int i, j, k, subiter;
@@ -1274,15 +1271,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				}
 
 			}
-			
-			
+
 			for (subiter = 0; subiter != subiterCount; subiter++)
 			{
 				this.circuit.converged = true;
 				this.subIterations = subiter;
-				for (i = 0; i != this.circuit.circuitMatrixSize; i++)
+				for (i = 0; i != this.circuit.matrix.circuitMatrixSize; i++)
 				{
-					this.circuit.circuitRightSide[i] = this.circuit.origRightSide[i];
+					this.circuit.matrix.circuitRightSide[i] = this.circuit.matrix.origRightSide[i];
 				}
 
 				if (this.circuit.isNonLinear())
@@ -1329,15 +1325,15 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 						break;
 					}
 
-					if (!CoreUtil.luFactor(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize,
+					if (!CoreUtil.luFactor(this.circuit.matrix.circuitMatrix, this.circuit.matrix.circuitMatrixSize,
 							this.circuit.circuitPermute))
 					{
 						throw new CircuitAnalysisException("Singular matrix!");
 					}
 				}
 
-				CoreUtil.luSolve(this.circuit.circuitMatrix, this.circuit.circuitMatrixSize,
-						this.circuit.circuitPermute, this.circuit.circuitRightSide);
+				CoreUtil.luSolve(this.circuit.matrix.circuitMatrix, this.circuit.matrix.circuitMatrixSize,
+						this.circuit.circuitPermute, this.circuit.matrix.circuitRightSide);
 
 				for (j = 0; j != this.circuit.getMatrixFullSize(); j++)
 				{
@@ -1349,7 +1345,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					}
 					else
 					{
-						res = this.circuit.circuitRightSide[ri.mapCol];
+						res = this.circuit.matrix.circuitRightSide[ri.mapCol];
 					}
 					/*
 					 * System.out.println(j + " " + res + " " + ri.type + " " +
@@ -2408,12 +2404,12 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			{
 				this.circuit.getElementAt(i).reset();
 			}
-			
+
 			for (i = 0; i != this.scopeMan.scopeCount; i++)
 			{
 				this.scopeMan.scopes[i].resetGraph();
 			}
-			
+
 			this.circuit.setNeedAnalysis(true);
 			this.timer.time = 0;
 			this.stoppedCheck.setState(false);
