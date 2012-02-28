@@ -39,6 +39,7 @@ public class AntennaElm extends RailElm
 		this.fmphase += 2 * Math.PI * (2200 + Math.sin(2 * Math.PI * CircuitElm.cirSim.timer.time * 13) * 100)
 				* CircuitElm.cirSim.timer.timeStep;
 		double fm = 3 * Math.sin(this.fmphase);
+		
 		return Math.sin(2 * Math.PI * CircuitElm.cirSim.timer.time * 3000)
 				* (1.3 + Math.sin(2 * Math.PI * CircuitElm.cirSim.timer.time * 12)) * 3
 				+ Math.sin(2 * Math.PI * CircuitElm.cirSim.timer.time * 2710)
