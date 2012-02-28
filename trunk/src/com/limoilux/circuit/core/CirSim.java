@@ -113,9 +113,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	public Dimension winSize;
 	public Vector<CircuitElm> elmList;
-	public CircuitElm dragElm, menuElm, mouseElm, stopElm;
+	public CircuitElm dragElm;
+	public CircuitElm menuElm;
+	public CircuitElm mouseElm;
+	public CircuitElm stopElm;
+	public CircuitElm plotXElm;
+	public CircuitElm plotYElm;
+	
 	private int mousePost = -1;
-	public CircuitElm plotXElm, plotYElm;
 	private int draggingPost;
 	private SwitchElm heldSwitchElm;
 
