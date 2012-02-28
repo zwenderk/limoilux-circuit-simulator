@@ -1272,7 +1272,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 			}
 
-			for (subiter = 0; subiter != subiterCount; subiter++)
+			for (subiter = 0; subiter != CirSim.subiterCount; subiter++)
 			{
 				this.circuit.converged = true;
 				this.subIterations = subiter;
@@ -1385,7 +1385,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				System.out.print("converged after " + subiter + " iterations\n");
 			}
 
-			if (subiter == subiterCount)
+			if (subiter == CirSim.subiterCount)
 			{
 				this.stop("Convergence failed!", null);
 				break;
@@ -2579,7 +2579,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	@Override
 	public void itemStateChanged(ItemEvent e)
 	{
-		this.circuitCanvas.repaint(this.PAUSE);
+		this.circuitCanvas.repaint(CirSim.PAUSE);
 		Object mi = e.getItemSelectable();
 		if (mi == this.stoppedCheck)
 		{
@@ -2958,7 +2958,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					CirSim.this.dragY = CirSim.this.snapGrid(e.getY());
 				}
 			}
-			CirSim.this.circuitCanvas.repaint(CirSim.this.PAUSE);
+			CirSim.this.circuitCanvas.repaint(CirSim.PAUSE);
 		}
 
 		@Override

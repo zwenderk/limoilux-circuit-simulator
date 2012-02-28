@@ -1,7 +1,6 @@
 
 package com.limoilux.circuit.techno;
 
-import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.ui.RowInfo;
 
 public class Matrix
@@ -413,7 +412,7 @@ public class Matrix
 				{
 					throw new CircuitAnalysisException("Matrix error");
 				}
-				
+
 				RowInfo elt = this.circuitRowInfo[qp];
 				if (qm == -1)
 				{
