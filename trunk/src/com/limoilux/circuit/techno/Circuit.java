@@ -457,7 +457,7 @@ public class Circuit
 		this.voltageSources = new CircuitElm[vscount];
 	}
 
-	public int determineNonLinear()
+	private int determineNonLinear()
 	{
 		// determine if circuit is nonlinear
 		int vscount = 0;
@@ -536,40 +536,69 @@ public class Circuit
 		return nn;
 	}
 
-	public void analyzeCircuit() throws CircuitAnalysisException
+	private void findProblemInCircuit() throws CircuitAnalysisException
 	{
-
-		System.out.println("Analysing");
 		PathInfoFinder pathInfoFinder;
 
-		int vscount = 0;
-
-		this.calcCircuitBottom();
-
-		if (this.elementList.isEmpty())
+		for (int i = 0; i != this.elementList.size(); i++)
 		{
-			return;
+			CircuitElm ce = this.getElementAt(i);
+			// look for inductors with no current path
+			if (ce instanceof InductorElm)
+			{
+				pathInfoFinder = new PathInfoFinder(PathInfoFinder.INDUCT, ce, ce.getNode(1), this);
+				// first try findPath with maximum depth of 5, to avoid
+				// slowdowns
+				if (!pathInfoFinder.findPath(ce.getNode(0), 5) && !pathInfoFinder.findPath(ce.getNode(0)))
+				{
+					System.out.println(ce + " no path");
+					ce.reset();
+				}
+			}
+			// look for current sources with no current path
+			if (ce instanceof CurrentElm)
+			{
+				pathInfoFinder = new PathInfoFinder(PathInfoFinder.INDUCT, ce, ce.getNode(1), this);
+				if (!pathInfoFinder.findPath(ce.getNode(0)))
+				{
+					throw new CircuitAnalysisException("No path for current source!", ce);
+				}
+			}
+
+			// look for voltage source loops
+			if (ce instanceof VoltageElm && ce.getPostCount() == 2 || ce instanceof WireElm)
+			{
+				pathInfoFinder = new PathInfoFinder(PathInfoFinder.VOLTAGE, ce, ce.getNode(1), this);
+
+				if (pathInfoFinder.findPath(ce.getNode(0)))
+				{
+					throw new CircuitAnalysisException("Voltage source/wire loop with no resistance!", ce);
+				}
+			}
+			// look for shorted caps, or caps w/ voltage but no R
+			if (ce instanceof CapacitorElm)
+			{
+
+				pathInfoFinder = new PathInfoFinder(PathInfoFinder.SHORT, ce, ce.getNode(1), this);
+				if (pathInfoFinder.findPath(ce.getNode(0)))
+				{
+					System.out.println(ce + " shorted");
+					ce.reset();
+				}
+				else
+				{
+					pathInfoFinder = new PathInfoFinder(PathInfoFinder.CAP_V, ce, ce.getNode(1), this);
+					if (pathInfoFinder.findPath(ce.getNode(0)))
+					{
+						throw new CircuitAnalysisException("Capacitor loop with no resistance!", ce);
+					}
+				}
+			}
 		}
+	}
 
-		this.nodeList.clear();
-
-		this.setupFirstNode();
-
-		this.allocNodeAndVoltageSource();
-
-		vscount = this.determineNonLinear();
-
-		// voltageSourceCount = vscount; ???
-		int matrixSize = this.getNodeCount() - 1 + vscount;
-
-		this.matrix.init(matrixSize);
-
-		// int vs = 0;
-
-		this.circuitNeedsMap = false;
-
-		this.stampLinearElements();
-
+	private void determineUnconnectedNodes()
+	{
 		// determine nodes that are unconnected
 		boolean closure[] = new boolean[this.getNodeCount()];
 		boolean changed = true;
@@ -628,194 +657,46 @@ public class Circuit
 				}
 			}
 		}
+	}
+
+	public void analyzeCircuit() throws CircuitAnalysisException
+	{
+		System.out.println("Analysing");
+
+		int vscount = 0;
+
+		this.calcCircuitBottom();
+
+		if (this.elementList.isEmpty())
+		{
+			return;
+		}
+
+		this.nodeList.clear();
+
+		this.setupFirstNode();
+
+		this.allocNodeAndVoltageSource();
+
+		vscount = this.determineNonLinear();
+
+		// voltageSourceCount = vscount; ???
+		int matrixSize = this.getNodeCount() - 1 + vscount;
+
+		this.matrix.init(matrixSize);
+
+		// int vs = 0;
+
+		this.circuitNeedsMap = false;
+
+		this.stampLinearElements();
+
+		this.determineUnconnectedNodes();
 		// System.out.println("ac5");
 
-		for (int i = 0; i != this.elementList.size(); i++)
-		{
-			CircuitElm ce = this.getElementAt(i);
-			// look for inductors with no current path
-			if (ce instanceof InductorElm)
-			{
-				pathInfoFinder = new PathInfoFinder(PathInfoFinder.INDUCT, ce, ce.getNode(1), this);
-				// first try findPath with maximum depth of 5, to avoid
-				// slowdowns
-				if (!pathInfoFinder.findPath(ce.getNode(0), 5) && !pathInfoFinder.findPath(ce.getNode(0)))
-				{
-					System.out.println(ce + " no path");
-					ce.reset();
-				}
-			}
-			// look for current sources with no current path
-			if (ce instanceof CurrentElm)
-			{
-				pathInfoFinder = new PathInfoFinder(PathInfoFinder.INDUCT, ce, ce.getNode(1), this);
-				if (!pathInfoFinder.findPath(ce.getNode(0)))
-				{
-					throw new CircuitAnalysisException("No path for current source!", ce);
-				}
-			}
+		this.findProblemInCircuit();
 
-			// look for voltage source loops
-			if (ce instanceof VoltageElm && ce.getPostCount() == 2 || ce instanceof WireElm)
-			{
-				pathInfoFinder = new PathInfoFinder(PathInfoFinder.VOLTAGE, ce, ce.getNode(1), this);
-
-				if (pathInfoFinder.findPath(ce.getNode(0)))
-				{
-					throw new CircuitAnalysisException("Voltage source/wire loop with no resistance!", ce);
-				}
-			}
-			// look for shorted caps, or caps w/ voltage but no R
-			if (ce instanceof CapacitorElm)
-			{
-
-				pathInfoFinder = new PathInfoFinder(PathInfoFinder.SHORT, ce, ce.getNode(1), this);
-				if (pathInfoFinder.findPath(ce.getNode(0)))
-				{
-					System.out.println(ce + " shorted");
-					ce.reset();
-				}
-				else
-				{
-					pathInfoFinder = new PathInfoFinder(PathInfoFinder.CAP_V, ce, ce.getNode(1), this);
-					if (pathInfoFinder.findPath(ce.getNode(0)))
-					{
-						throw new CircuitAnalysisException("Capacitor loop with no resistance!", ce);
-					}
-				}
-			}
-		}
-		// System.out.println("ac6");
-
-		// simplify the matrix; this speeds things up quite a bit
-		for (int i = 0; i != matrixSize; i++)
-		{
-			int qm = -1, qp = -1;
-			double qv = 0;
-			RowInfo re = this.matrix.circuitRowInfo[i];
-			/*
-			 * System.out.println("row " + i + " " + re.lsChanges + " " +
-			 * re.rsChanges + " " + re.dropRow);
-			 */
-			if (re.lsChanges || re.dropRow || re.rsChanges)
-			{
-				continue;
-			}
-			double rsadd = 0;
-
-			// look for rows that can be removed
-			int j;
-			for (j = 0; j != matrixSize; j++)
-			{
-				double q = this.matrix.circuitMatrix[i][j];
-
-				if (this.matrix.circuitRowInfo[j].type == RowInfo.ROW_CONST)
-				{
-					// keep a running total of const values that have been
-					// removed already
-					rsadd -= this.matrix.circuitRowInfo[j].value * q;
-					continue;
-				}
-
-				if (q == 0)
-				{
-					continue;
-				}
-
-				if (qp == -1)
-				{
-					qp = j;
-					qv = q;
-					continue;
-				}
-
-				if (qm == -1 && q == -qv)
-				{
-					qm = j;
-					continue;
-				}
-				break;
-			}
-			// System.out.println("line " + i + " " + qp + " " + qm + " " + j);
-			/*
-			 * if (qp != -1 && circuitRowInfo[qp].lsChanges) {
-			 * System.out.println("lschanges"); continue; } if (qm != -1 &&
-			 * circuitRowInfo[qm].lsChanges) { System.out.println("lschanges");
-			 * continue; }
-			 */
-			if (j == matrixSize)
-			{
-				if (qp == -1)
-				{
-					throw new CircuitAnalysisException("Matrix error");
-				}
-				RowInfo elt = this.matrix.circuitRowInfo[qp];
-				if (qm == -1)
-				{
-					// we found a row with only one nonzero entry; that value
-					// is a constant
-					int k;
-
-					for (k = 0; elt.type == RowInfo.ROW_EQUAL && k < 100; k++)
-					{
-						// follow the chain
-						/*
-						 * System.out.println("following equal chain from " + i
-						 * + " " + qp + " to " + elt.nodeEq);
-						 */
-						qp = elt.nodeEq;
-						elt = this.matrix.circuitRowInfo[qp];
-					}
-
-					if (elt.type == RowInfo.ROW_EQUAL)
-					{
-						// break equal chains
-						// System.out.println("Break equal chain");
-						elt.type = RowInfo.ROW_NORMAL;
-						continue;
-					}
-
-					if (elt.type != RowInfo.ROW_NORMAL)
-					{
-						System.out.println("type already " + elt.type + " for " + qp + "!");
-						continue;
-					}
-
-					elt.type = RowInfo.ROW_CONST;
-					elt.value = (this.matrix.circuitRightSide[i] + rsadd) / qv;
-					this.matrix.circuitRowInfo[i].dropRow = true;
-					// System.out.println(qp + " * " + qv + " = const " +
-					// elt.value);
-					i = -1; // start over from scratch
-				}
-				else if (this.matrix.circuitRightSide[i] + rsadd == 0)
-				{
-					// we found a row with only two nonzero entries, and one
-					// is the negative of the other; the values are equal
-					if (elt.type != RowInfo.ROW_NORMAL)
-					{
-						// System.out.println("swapping");
-						int qq = qm;
-						qm = qp;
-						qp = qq;
-						elt = this.matrix.circuitRowInfo[qp];
-						if (elt.type != RowInfo.ROW_NORMAL)
-						{
-							// we should follow the chain here, but this
-							// hardly ever happens so it's not worth worrying
-							// about
-							System.out.println("swap failed");
-							continue;
-						}
-					}
-					elt.type = RowInfo.ROW_EQUAL;
-					elt.nodeEq = qm;
-					this.matrix.circuitRowInfo[i].dropRow = true;
-					// System.out.println(qp + " = " + qm);
-				}
-			}
-		}
-		// System.out.println("ac7");
+		this.matrix.simplifyMatrixForSpeed(matrixSize);
 
 		int newsize = this.findSizeNewMatrix(matrixSize);
 
