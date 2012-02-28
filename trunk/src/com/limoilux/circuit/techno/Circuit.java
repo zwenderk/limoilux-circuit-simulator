@@ -848,13 +848,7 @@ public class Circuit
 			this.matrix.origRightSide[i] = this.matrix.circuitRightSide[i];
 		}
 
-		for (i = 0; i != matrixSize; i++)
-		{
-			for (j = 0; j != matrixSize; j++)
-			{
-				this.matrix.originalMatrix[i][j] = this.matrix.circuitMatrix[i][j];
-			}
-		}
+		this.matrix.recopyMatrixToOrginal(matrixSize);
 
 		this.circuitNeedsMap = true;
 
@@ -877,63 +871,33 @@ public class Circuit
 		}
 	}
 
-	/**
-	 * ???? origMatrix to circuitMatrix
-	 */
+	@Deprecated
 	public void recopyMatrix()
 	{
-		// TODO à optimiser
-		for (int i = 0; i < this.matrix.circuitMatrixSize; i++)
-		{
-			for (int j = 0; j < this.matrix.circuitMatrixSize; j++)
-			{
-				this.matrix.circuitMatrix[i][j] = this.matrix.originalMatrix[i][j];
-			}
-		}
+		this.matrix.recopyMatrix();
 	}
 
+	@Deprecated
 	public void clearMatrix()
 	{
-		this.matrix.circuitMatrix = null;
+		this.matrix.clearMatrix();
 	}
 
+	@Deprecated
 	public boolean matrixIsNull()
 	{
-		return this.matrix.circuitMatrix == null;
+		return this.matrix.matrixIsNull();
 	}
 
+	@Deprecated
 	public boolean matrixIsInfiniteOrNAN()
 	{
-		double x;
-		for (int j = 0; j != this.matrix.circuitMatrixSize; j++)
-		{
-			for (int i = 0; i != this.matrix.circuitMatrixSize; i++)
-			{
-				x = this.matrix.circuitMatrix[i][j];
-				if (Double.isNaN(x) || Double.isInfinite(x))
-				{
-					return true;
-				}
-			}
-		}
-
-		return false;
+		return this.matrix.matrixIsInfiniteOrNAN();
 	}
 
+	@Deprecated
 	public String matrixToString()
 	{
-		String out = "";
-		for (int j = 0; j != this.matrix.circuitMatrixSize; j++)
-		{
-			for (int i = 0; i != this.matrix.circuitMatrixSize; i++)
-			{
-				out += this.matrix.circuitMatrix[j][i] + ",";
-			}
-			
-			out += "  " + this.matrix.circuitRightSide[j] + "\n";
-		}
-
-		out += "\n";
-		return out;
+		return this.matrix.matrixToString();
 	}
 }
