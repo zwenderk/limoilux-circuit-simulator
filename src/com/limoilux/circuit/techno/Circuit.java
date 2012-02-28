@@ -388,31 +388,12 @@ public class Circuit
 			this.nodeList.add(circuitNode);
 		}
 	}
-
-	public void analyzeCircuit() throws CircuitAnalysisException
+	
+	private void allocNodeAndVoltageSource()
 	{
-
-		System.out.println("Analysing");
-		CircuitElm element;
 		CircuitNode circuitNode;
-		PathInfoFinder pathInfoFinder;
-
-		int j;
 		int vscount = 0;
-
-		this.calcCircuitBottom();
-
-		if (this.elementList.isEmpty())
-		{
-			return;
-		}
-
-		this.nodeList.clear();
-
-
-		this.setupFirstNode();
-		// System.out.println("ac2");
-
+		
 		// allocate nodes and voltage sources
 		for (int i = 0; i < this.elementList.size(); i++)
 		{
@@ -422,7 +403,7 @@ public class Circuit
 			int posts = ce.getPostCount();
 
 			// allocate a node for each post and match posts to nodes
-			for (j = 0; j != posts; j++)
+			for (int j = 0; j < posts; j++)
 			{
 				Point pt = ce.getPost(j);
 				int k;
@@ -458,7 +439,7 @@ public class Circuit
 				}
 			}
 
-			for (j = 0; j != inodes; j++)
+			for (int j = 0; j < inodes; j++)
 			{
 				circuitNode = new CircuitNode(true);
 				circuitNode.y = -1;
@@ -472,8 +453,34 @@ public class Circuit
 			}
 			vscount += ivs;
 		}
-
+		
 		this.voltageSources = new CircuitElm[vscount];
+	}
+
+	public void analyzeCircuit() throws CircuitAnalysisException
+	{
+
+		System.out.println("Analysing");
+		CircuitElm element;
+		PathInfoFinder pathInfoFinder;
+
+		int j;
+		int vscount = 0;
+
+		this.calcCircuitBottom();
+
+		if (this.elementList.isEmpty())
+		{
+			return;
+		}
+
+		this.nodeList.clear();
+
+
+		this.setupFirstNode();
+		
+		this.allocNodeAndVoltageSource();
+		
 		vscount = 0;
 		this.circuitNonLinear = false;
 		// System.out.println("ac3");
