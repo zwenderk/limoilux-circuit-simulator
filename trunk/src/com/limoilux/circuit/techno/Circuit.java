@@ -667,54 +667,52 @@ public class Circuit
 
 		this.calcCircuitBottom();
 
-		if (this.elementList.isEmpty())
+		if (!this.elementList.isEmpty())
 		{
-			return;
-		}
+			this.nodeList.clear();
 
-		this.nodeList.clear();
+			this.setupFirstNode();
 
-		this.setupFirstNode();
+			this.allocNodeAndVoltageSource();
 
-		this.allocNodeAndVoltageSource();
+			vscount = this.determineNonLinear();
 
-		vscount = this.determineNonLinear();
+			// voltageSourceCount = vscount; ???
+			int matrixSize = this.getNodeCount() - 1 + vscount;
 
-		// voltageSourceCount = vscount; ???
-		int matrixSize = this.getNodeCount() - 1 + vscount;
+			this.matrix.init(matrixSize);
 
-		this.matrix.init(matrixSize);
+			// int vs = 0;
 
-		// int vs = 0;
+			this.circuitNeedsMap = false;
 
-		this.circuitNeedsMap = false;
+			this.stampLinearElements();
 
-		this.stampLinearElements();
+			this.determineUnconnectedNodes();
+			// System.out.println("ac5");
 
-		this.determineUnconnectedNodes();
-		// System.out.println("ac5");
+			this.findProblemInCircuit();
 
-		this.findProblemInCircuit();
+			this.matrix.simplifyMatrixForSpeed(matrixSize);
 
-		this.matrix.simplifyMatrixForSpeed(matrixSize);
+			int newsize = this.findSizeNewMatrix(matrixSize);
 
-		int newsize = this.findSizeNewMatrix(matrixSize);
+			this.matrix.manageRowInfo(matrixSize);
 
-		this.matrix.manageRowInfo(matrixSize);
+			matrixSize = this.matrix.simplifyMatrix(newsize, matrixSize);
 
-		matrixSize = this.matrix.simplifyMatrix(newsize, matrixSize);
+			this.matrix.recopyMatrixToOrginal(matrixSize);
 
-		this.matrix.recopyMatrixToOrginal(matrixSize);
+			this.circuitNeedsMap = true;
 
-		this.circuitNeedsMap = true;
-
-		/*
-		 * if a matrix is linear, we can do the lu_factor here instead of
-		 * needing to do it every frame
-		 */
-		if (!this.circuitNonLinear && !this.matrix.doLuFactor())
-		{
-			throw new CircuitAnalysisException("Singular matrix!");
+			/*
+			 * if a matrix is linear, we can do the lu_factor here instead of
+			 * needing to do it every frame
+			 */
+			if (!this.circuitNonLinear && !this.matrix.doLuFactor())
+			{
+				throw new CircuitAnalysisException("Singular matrix!");
+			}
 		}
 	}
 
