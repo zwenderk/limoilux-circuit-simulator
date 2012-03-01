@@ -15,6 +15,14 @@ public class ScopeManager
 	
 	public Scope scopes[];
 	
+	public ScopeManager()
+	{
+
+		this.scopes = new Scope[20];
+		this.scopeColCount = new int[20];
+		this.scopeCount = 0;
+	}
+	
 	public void drawScope(Graphics g)
 	{
 		// Dessinage des scopes
