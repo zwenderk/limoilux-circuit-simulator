@@ -234,7 +234,7 @@ public class CoreUtil
 
 	public static double updateDotCount(double cur, double cc)
 	{
-		if (CircuitElm.cirSim.stoppedCheck.getState())
+		if (CircuitElm.cirSim.stoppedCheck.isSelected())
 		{
 			return cc;
 		}

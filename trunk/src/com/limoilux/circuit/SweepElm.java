@@ -6,8 +6,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class SweepElm extends CircuitElm
@@ -88,7 +90,9 @@ public class SweepElm extends CircuitElm
 			tm = 2000 - tm;
 		}
 		double w = 1 + tm * .002;
-		if (!CircuitElm.cirSim.stoppedCheck.getState())
+		
+		// TODO enlever reference à stoppedCheck
+		if (!CircuitElm.cirSim.stoppedCheck.isSelected())
 		{
 			w = 1 + 2 * (this.frequency - this.minF) / (this.maxF - this.minF);
 		}
@@ -97,14 +101,14 @@ public class SweepElm extends CircuitElm
 			int yy = yc + (int) (.95 * Math.sin(i * Math.PI * w / xl) * wl);
 			if (ox != -1)
 			{
-				CircuitElm.drawThickLine(g, ox, oy, xc + i, yy);
+				DrawUtil.drawThickLine(g, ox, oy, xc + i, yy);
 			}
 			ox = xc + i;
 			oy = yy;
 		}
 		if (CircuitElm.cirSim.showValuesCheckItem.getState())
 		{
-			String s = CircuitElm.getShortUnitText(this.frequency, "Hz");
+			String s = CoreUtil.getShortUnitText(this.frequency, "Hz");
 			if (this.dx == 0 || this.dy == 0)
 			{
 				this.drawValues(g, s, this.circleSize);

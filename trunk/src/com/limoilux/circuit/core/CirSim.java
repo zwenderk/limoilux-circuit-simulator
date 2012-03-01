@@ -43,7 +43,9 @@ import java.net.URL;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
@@ -157,7 +159,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			optionsItem;
 
 	private Menu optionsMenu;
-	public Checkbox stoppedCheck;
+	public JCheckBox stoppedCheck;
 	public CheckboxMenuItem dotsCheckItem;
 	public CheckboxMenuItem voltsCheckItem;
 	public CheckboxMenuItem powerCheckItem;
@@ -233,11 +235,11 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.mainContainer = new JPanel();
 		this.mainContainer.setBackground(Color.BLACK);
 		this.mainContainer.setLayout(new BorderLayout());
-		this.cirFrame.add(this.mainContainer, BorderLayout.CENTER);
+
 
 		this.toolBar = new JToolBar();
 		this.toolBar.setFloatable(false);
-		this.mainContainer.add(toolBar, BorderLayout.NORTH);
+
 
 
 
@@ -298,6 +300,10 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.initStartCircuitText();
 
 		this.initScreen();
+		
+		this.cirFrame.add(this.mainContainer, BorderLayout.CENTER);
+		
+		this.mainContainer.add(this.toolBar, BorderLayout.NORTH);
 		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
 	}
 
@@ -369,43 +375,37 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	{
 		this.resetButton = new Button("Reset");
 		this.resetButton.addActionListener(this);
-
 		this.toolBar.add(this.resetButton);
 
-		this.stoppedCheck = new Checkbox("Stopped");
+		this.stoppedCheck = new JCheckBox("Stopped");
 		this.stoppedCheck.addItemListener(this);
 		this.toolBar.add(this.stoppedCheck);
 
-		this.toolBar.add(new Label("Simulation Speed", Label.CENTER));
-		// was max of 140
+		this.toolBar.add(new JLabel("Simulation Speed", JLabel.CENTER));
 		this.speedBar = new Scrollbar(Scrollbar.HORIZONTAL, 3, 1, 0, 260);
 		this.speedBar.addAdjustmentListener(this);
 		this.toolBar.add(this.speedBar);
 
-		this.toolBar.add(new Label("Current Speed", Label.CENTER));
+		this.toolBar.add(new JLabel("Current Speed", JLabel.CENTER));
 		this.currentBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100);
 		this.currentBar.addAdjustmentListener(this);
 		this.toolBar.add(this.currentBar);
 
-		this.toolBar.add(this.powerLabel = new Label("Power Brightness", Label.CENTER));
-		this.toolBar.add(this.powerBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100));
-		this.powerBar.addAdjustmentListener(this);
-		this.powerBar.setEnabled(false);
+		this.powerLabel = new Label("Power Brightness", Label.CENTER);
 		this.powerLabel.setEnabled(false);
+		//this.toolBar.add(this.powerLabel);
+		
+		this.powerBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100);
+		this.powerBar.setEnabled(false);
+		//this.powerBar.addAdjustmentListener(this);
+		//this.toolBar.add(this.powerBar);
+		
+
+		
+
+
 
 		// this.toolBar.add(new Label("www.falstad.com"));
-
-		this.toolBar.add(new Label(""));
-		Font f = new Font("SansSerif", 0, 10);
-		Label l;
-		l = new Label("Current Circuit:");
-		l.setFont(f);
-		this.titleLabel = new Label("Label");
-		this.titleLabel.setFont(f);
-
-		this.toolBar.add(l);
-		this.toolBar.add(this.titleLabel);
-
 	}
 
 	private Menu buildMenuBar()
@@ -824,7 +824,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 		g.fillRect(0, 0, this.winSize.width, this.winSize.height);
 
-		if (!this.stoppedCheck.getState())
+		if (!this.stoppedCheck.isSelected())
 		{
 			try
 			{
@@ -844,7 +844,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			}
 		}
 
-		if (!this.stoppedCheck.getState())
+		if (!this.stoppedCheck.isSelected())
 		{
 			long sysTime = System.currentTimeMillis();
 			if (this.timer.lastTime != 0)
@@ -1056,7 +1056,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 		realg.drawImage(this.dbimage, 0, 0, this.cirFrame);
 
-		if (!this.stoppedCheck.getState() && !this.circuit.matrix.matrixIsNull())
+		if (!this.stoppedCheck.isSelected() && !this.circuit.matrix.matrixIsNull())
 		{
 
 			long delay = this.timer.calculateDelay();
@@ -1216,7 +1216,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.stopMessage = e.getTechnicalMessage();
 		this.stopElm = e.getCauseElement();
 
-		this.stoppedCheck.setState(true);
+		this.stoppedCheck.setSelected(true);
 
 		this.circuit.setNeedAnalysis(false);
 
@@ -1670,7 +1670,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			this.stop("Unable to read " + str + "!", null);
 		}
 
-		this.titleLabel.setText(title);
+		this.cirFrame.setTitle(title);
 	}
 
 	private void readSetup(byte b[], int len, boolean retain)
@@ -2411,7 +2411,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 			this.circuit.setNeedAnalysis(true);
 			this.timer.time = 0;
-			this.stoppedCheck.setState(false);
+			this.stoppedCheck.setSelected(false);
 			this.circuitPanel.repaint();
 		}
 
