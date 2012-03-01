@@ -46,17 +46,19 @@ public class Matrix
 		return false;
 	}
 
-	
-	public void origRigthToRight()
+	public double getRightSide(int i)
 	{
-		
+		return this.circuitRightSide[i];
+	}
 
-	for (int i = 0; i < this.circuitMatrixSize; i++)
+	public void origRightToRight()
 	{
-		this.circuitRightSide[i] = this.origRightSide[i];
+		for (int i = 0; i < this.circuitMatrixSize; i++)
+		{
+			this.circuitRightSide[i] = this.origRightSide[i];
+		}
 	}
-	}
-	
+
 	public String matrixToString()
 	{
 		String out = "";

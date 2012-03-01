@@ -1254,8 +1254,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 
 		int iter;
-		// int maxIter = getIterCount();
-		boolean debugprint = this.dumpMatrix;
 		this.dumpMatrix = false;
 		long steprate = (long) (160 * this.getIterCount());
 		long presentTime = System.currentTimeMillis();
@@ -1289,7 +1287,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				this.circuit.converged = true;
 				this.subIterations = subiter;
 
-				this.circuit.matrix.origRigthToRight();
+				this.circuit.matrix.origRightToRight();
 
 				if (this.circuit.isNonLinear())
 				{
@@ -1315,17 +1313,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					return;
 				}
 
-				boolean printit = debugprint;
-				debugprint = false;
-
 				if (this.circuit.matrix.matrixIsInfiniteOrNAN())
 				{
 					throw new CircuitAnalysisException("nan/infinite matrix!");
-				}
-
-				if (printit)
-				{
-					System.out.print(this.circuit.matrix.matrixToString());
 				}
 
 				if (this.circuit.isNonLinear())
@@ -1353,7 +1343,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					}
 					else
 					{
-						res = this.circuit.matrix.circuitRightSide[ri.mapCol];
+						res = this.circuit.matrix.getRightSide(ri.mapCol);
 					}
 					/*
 					 * System.out.println(j + " " + res + " " + ri.type + " " +
@@ -1398,8 +1388,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				this.stop("Convergence failed!", null);
 				break;
 			}
-
-			this.timer.time += this.timer.timeStep;
+			
+			this.timer.doTimeStep();
 
 			this.scopeMan.doTimeStep();
 

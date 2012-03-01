@@ -12,18 +12,23 @@ public class Timer
 	private long lastFrameTime;
 	public long lastIterTime;
 	public long secTime = 0;
-	
+
 	public long calculateDelay()
 	{
 		// Limit to 50 fps (thanks to J�rgen Kl�tzer for this)
 		return 1000 / 50 - (System.currentTimeMillis() - this.lastFrameTime);
 	}
-	
+
 	public void nextCycle()
 	{
 		this.lastFrameTime = this.lastTime;
 	}
-	
+
+	public void doTimeStep()
+	{
+		this.time += this.timeStep;
+	}
+
 	public long getLastFrameTime()
 	{
 		return this.lastFrameTime;
