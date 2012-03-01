@@ -53,7 +53,7 @@ public class Circuit
 
 	public int getMatrixFullSize()
 	{
-		return this.matrix.circuitMatrixFullSize;
+		return this.matrix.fullSize;
 	}
 
 	public boolean isNonLinear()
@@ -220,7 +220,7 @@ public class Circuit
 			{
 				i--;
 			}
-			this.matrix.circuitRightSide[i] += x;
+			this.matrix.rightSide[i] += x;
 		}
 	}
 
@@ -248,7 +248,7 @@ public class Circuit
 				{
 					// System.out.println("Stamping constant " + i + " " + j +
 					// " " + x);
-					this.matrix.circuitRightSide[i] -= x * ri.value;
+					this.matrix.rightSide[i] -= x * ri.value;
 					return;
 				}
 				j = ri.mapCol;
@@ -259,7 +259,7 @@ public class Circuit
 				i--;
 				j--;
 			}
-			this.matrix.circuitMatrix[i][j] += x;
+			this.matrix.matrix[i][j] += x;
 		}
 	}
 
