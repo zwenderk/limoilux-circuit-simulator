@@ -793,9 +793,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 			int height = dim.height / 5;
 
-			
 			// if (h < 128 && winSize.height > 300) h = 128;
-			
+
 			this.circuitArea = new Rectangle(0, 0, dim.width, dim.height - height);
 
 			this.circuit.centerCircuit(this.gridMask, this.circuitArea);
@@ -833,7 +832,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	public void updateCircuit(Graphics realg)
 	{
+		Graphics g = null;
 		CircuitElm realMouseElm;
+		
 		if (this.winSize == null || this.winSize.width == 0)
 		{
 			return;
@@ -869,22 +870,10 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		this.scopeMan.setupScopes(this.circuit, this.winSize, this.circuitArea);
 
-		Graphics g = null;
+	
 
 		g = this.dbimage.getGraphics();
-
-		if (this.printableCheckItem.getState())
-		{
-			CircuitElm.whiteColor = Color.black;
-			CircuitElm.lightGrayColor = Color.black;
-			g.setColor(Color.white);
-		}
-		else
-		{
-			CircuitElm.whiteColor = Color.white;
-			CircuitElm.lightGrayColor = Color.lightGray;
-			g.setColor(Color.black);
-		}
+		g.setColor(Color.black);
 
 		g.fillRect(0, 0, this.winSize.width, this.winSize.height);
 
@@ -915,7 +904,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			{
 				int inc = (int) (sysTime - this.timer.lastTime);
 				double c = this.currentBar.getValue();
-				c = java.lang.Math.exp(c / 3.5 - 14.2);
+				c = Math.exp(c / 3.5 - 14.2);
 				CircuitElm.currentMult = 1.7 * inc * c;
 				if (!this.conventionCheckItem.getState())
 				{
