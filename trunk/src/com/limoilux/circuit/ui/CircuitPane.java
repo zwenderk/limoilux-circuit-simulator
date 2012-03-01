@@ -22,7 +22,7 @@ public class CircuitPane extends Panel
 		this.cirSim = cirSim;
 
 		this.setBackground(Color.BLACK);
-		this.setPreferredSize(new Dimension(350, 450));
+		this.setPreferredSize(new Dimension(555, 555));
 	}
 
 	@Override
@@ -30,5 +30,6 @@ public class CircuitPane extends Panel
 	{
 		super.update(g);
 		this.cirSim.updateCircuit(g);
+
 	}
 }

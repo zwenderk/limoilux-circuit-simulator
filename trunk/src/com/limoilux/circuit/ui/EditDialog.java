@@ -37,7 +37,7 @@ public class EditDialog extends Dialog implements AdjustmentListener, ActionList
 
 	public EditDialog(Editable ce, CirSim f)
 	{
-		super(f, "Edit Component", false);
+		super(f.cirFrame, "Edit Component", false);
 		this.cframe = f;
 		this.elm = ce;
 		this.setLayout(new EditDialogLayout());

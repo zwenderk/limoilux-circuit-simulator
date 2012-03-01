@@ -58,12 +58,12 @@ import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.techno.CircuitNode;
 import com.limoilux.circuit.techno.CircuitNodeLink;
 import com.limoilux.circuit.techno.matrix.MatrixRowInfo;
+import com.limoilux.circuit.ui.CircuitFrame;
 import com.limoilux.circuit.ui.CircuitPane;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditDialog;
 import com.limoilux.circuit.ui.EditOptions;
 import com.limoilux.circuit.ui.io.MigrationWizard;
-import com.limoilux.circuit.ui.layout.CircuitLayout;
 import com.limoilux.circuit.ui.scope.Scope;
 import com.limoilux.circuit.ui.scope.ScopeManager;
 
@@ -75,7 +75,7 @@ import com.limoilux.circuit.ui.scope.ScopeManager;
  * @author David Bernard
  * 
  */
-public class CirSim extends JFrame implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
+public class CirSim implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
 {
 	/**
 	 * 
@@ -153,7 +153,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private Label titleLabel;
 	private Button resetButton;
-	private Button dumpMatrixButton;
 	private MenuItem exportItem, importItem, exitItem, undoItem, redoItem, cutItem, copyItem, pasteItem, selectAllItem,
 			optionsItem;
 
@@ -212,29 +211,38 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public final ScopeManager scopeMan;
 	public final CircuitPane circuitPanel;
 
+	public final CircuitFrame cirFrame;
+	public final JPanel mainContainer2;
 	public final JPanel mainContainer;
-	JToolBar toolBar;
+	public final JToolBar toolBar;
 
 	public CirSim()
 	{
-		super("Limoilux Circuit Simulator v1.1");
-
-		this.setLayout(new BorderLayout());
-
-		this.mainContainer = new JPanel();
-		this.add(this.mainContainer, BorderLayout.CENTER);
+		super();
 		
-		this.toolBar = new JToolBar();
-		this.toolBar.setFloatable(false);
-		this.add(toolBar, BorderLayout.NORTH);
-
-
-
+		// this.mainContainer.setLayout(new BorderLayout());
+		this.circuitPanel = new CircuitPane(this);
+		
 		this.timer = new Timer();
 		this.circuit = new Circuit();
 		this.scopeMan = new ScopeManager();
+		this.cirFrame = new CircuitFrame(this.circuitPanel);
 
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		this.mainContainer2 = new JPanel();	
+		this.mainContainer = new JPanel();
+		//this.mainContainer.setLayout(new BorderLayout());
+		this.cirFrame.add(this.mainContainer, BorderLayout.CENTER);
+
+		this.toolBar = new JToolBar();
+		this.toolBar.setFloatable(false);
+		this.mainContainer.add(toolBar, BorderLayout.NORTH);
+
+		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
+
+
+
+		this.cirFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		this.mouseMotionList = new MyMouseMotionListener();
 		this.mouseList = new MyMouseListener();
@@ -257,16 +265,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		this.initDumpTypes();
 
-		// this.mainContainer.setLayout(new BorderLayout());
-		this.circuitPanel = new CircuitPane(this);
+
 
 		// Add Listener
 		this.circuitPanel.addComponentListener(this);
 		this.circuitPanel.addMouseMotionListener(this.mouseMotionList);
 		this.circuitPanel.addMouseListener(this.mouseList);
 		this.circuitPanel.addKeyListener(this.keyList);
-
-		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
 
 		Menu circuitsMenu = this.buildMenuBar();
 
@@ -310,14 +315,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void initScreen()
 	{
-		Dimension screen = this.getToolkit().getScreenSize();
+		Dimension screen = this.cirFrame.getToolkit().getScreenSize();
 
-		this.setSize(860, 640);
+
 
 		this.handleResize();
 
-		Dimension x = this.getSize();
-		this.setLocation((screen.width - x.width) / 2, (screen.height - x.height) / 2);
+		Dimension x = this.cirFrame.getSize();
+		this.cirFrame.setLocation((screen.width - x.width) / 2, (screen.height - x.height) / 2);
 	}
 
 	private void initStartCircuitText()
@@ -355,14 +360,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.elmMenu.add(this.elmCutMenuItem = this.getMenuItem("Cut"));
 		this.elmMenu.add(this.elmCopyMenuItem = this.getMenuItem("Copy"));
 		this.elmMenu.add(this.elmDeleteMenuItem = this.getMenuItem("Delete"));
-		this.mainContainer.add(this.elmMenu);
+		this.mainContainer2.add(this.elmMenu);
 	}
 
 	private void initLeftPanel()
 	{
 		this.resetButton = new Button("Reset");
 		this.resetButton.addActionListener(this);
-		
+
 		this.toolBar.add(this.resetButton);
 
 		this.stoppedCheck = new Checkbox("Stopped");
@@ -386,7 +391,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.powerBar.setEnabled(false);
 		this.powerLabel.setEnabled(false);
 
-		//this.toolBar.add(new Label("www.falstad.com"));
+		// this.toolBar.add(new Label("www.falstad.com"));
 
 		this.toolBar.add(new Label(""));
 		Font f = new Font("SansSerif", 0, 10);
@@ -469,7 +474,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		menubar.add(circuitsMenu);
 
-		this.setMenuBar(menubar);
+		this.cirFrame.setMenuBar(menubar);
 
 		return circuitsMenu;
 	}
@@ -504,7 +509,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		otherMenu.add(this.getCheckItem("Drag Post (" + this.ctrlMetaKey + "-drag)", "DragPost"));
 
 		this.mainMenu.add(this.getCheckItem("Select/Drag Selected (space or Shift-drag)", "Select"));
-		this.mainContainer.add(this.mainMenu);
+		this.mainContainer2.add(this.mainMenu);
 	}
 
 	private void buildGateMenu()
@@ -553,7 +558,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			m.add(this.scopeSelectYMenuItem = this.getMenuItem("Select Y", "selecty"));
 			m.add(this.scopeResistMenuItem = this.getCheckItem("Show Resistance"));
 		}
-		this.mainContainer.add(m);
+		this.mainContainer2.add(m);
 		return m;
 	}
 
@@ -715,7 +720,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void register(Class<?> c, CircuitElm elm)
 	{
-		Class<Scope> dumpClass = null;
+		Class<?> dumpClass = null;
 		int elementId = elm.getDumpType();
 		if (elementId == 0)
 		{
@@ -745,7 +750,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void buildDBImage(Dimension dim)
 	{
-		this.dbimage = this.mainContainer.createImage(dim.width, dim.height);
+		this.dbimage = this.circuitPanel.createImage(dim.width, dim.height);
 	}
 
 	private void handleResize()
@@ -771,13 +776,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 	}
 
-	@Override
-	public void paint(Graphics g)
-	{
-		super.paint(g);
-
-		this.circuitPanel.repaint();
-	}
 
 	public void updateCircuit(Graphics realg)
 	{
@@ -1054,7 +1052,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		 * g.drawString("iterc: " + (getIterCount()), 10, 70);
 		 */
 
-		realg.drawImage(this.dbimage, 0, 0, this);
+		realg.drawImage(this.dbimage, 0, 0, this.cirFrame);
 
 		if (!this.stoppedCheck.getState() && !this.circuit.matrix.matrixIsNull())
 		{
@@ -1456,7 +1454,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.pushUndo();
 		if (CirSim.editDialog != null)
 		{
-			this.requestFocus();
+			this.cirFrame.requestFocus();
 			CirSim.editDialog.setVisible(false);
 			CirSim.editDialog = null;
 		}
@@ -1470,7 +1468,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private void showMigrationDialog()
 	{
 		String dump = this.dumpCircuit();
-		MigrationWizard dialog = new MigrationWizard(this, dump, this.winSize);
+		MigrationWizard dialog = new MigrationWizard(this.cirFrame, dump, this.winSize);
 
 		// Appel bloquand du wizard.
 		dialog.setVisible(true);
@@ -2040,7 +2038,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		this.circuit.removeZeroLengthElements();
 
-		this.repaint();
+		this.cirFrame.repaint();
 	}
 
 	private CircuitElm constructElement(Class<?> classType, int x0, int y0)
@@ -2470,7 +2468,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		if (e.getSource() == this.exitItem)
 		{
-			this.dispose();
+			this.cirFrame.dispose();
 			return;
 		}
 
@@ -3073,8 +3071,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		CirSim c = new CirSim();
 
-		c.setVisible(true);
-		c.requestFocus();
+		c.cirFrame.setVisible(true);
+		
+		c.cirFrame.requestFocus();
 
 	}
 }
