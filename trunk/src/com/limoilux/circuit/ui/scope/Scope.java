@@ -2,6 +2,7 @@
 package com.limoilux.circuit.ui.scope;
 
 import java.awt.Graphics;
+import java.awt.Panel;
 import java.awt.PopupMenu;
 import java.awt.Rectangle;
 import java.awt.event.ItemEvent;
@@ -21,7 +22,7 @@ import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.techno.CircuitElm;
 
-public class Scope
+public class Scope extends Panel
 {
 	static final int FLAG_YELM = 32;
 	static final int VAL_POWER = 1;
@@ -65,6 +66,8 @@ public class Scope
 
 	public Scope(CirSim s)
 	{
+		super();
+		
 		this.rect = new Rectangle();
 		this.reset();
 		this.sim = s;
