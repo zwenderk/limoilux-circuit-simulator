@@ -299,4 +299,11 @@ public class CoreUtil
 
 		return out;
 	}
+	
+	public static boolean isMac()
+	{
+		String os = System.getProperty("os.name");
+		return os.indexOf("Mac ") == 0;
+		 
+	}
 }
