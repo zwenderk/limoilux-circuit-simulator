@@ -1,3 +1,4 @@
+
 package com.limoilux.circuit.ui;
 
 import java.awt.BorderLayout;
@@ -8,25 +9,25 @@ import javax.swing.JFrame;
 public class CircuitFrame extends JFrame
 {
 	private CircuitPane circuitPanel;
-	
+
 	public CircuitFrame(CircuitPane circuitPanel)
 	{
 		super();
-		
 
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
-		this.circuitPanel = circuitPanel;
 
 		this.setSize(860, 640);
-		
+
+		this.circuitPanel = circuitPanel;
 	}
-	
+
 	@Override
 	public void setTitle(String title)
 	{
 		super.setTitle("Limoilux Circuit Simulator v1.1 - " + title);
 	}
-	
+
 	@Override
 	public void paint(Graphics g)
 	{

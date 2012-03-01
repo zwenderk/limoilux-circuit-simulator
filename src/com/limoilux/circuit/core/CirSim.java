@@ -240,7 +240,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.toolBar = new JToolBar();
 		this.toolBar.setFloatable(false);
 
-		this.cirFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 
 		this.mouseMotionList = new MyMouseMotionListener();
 		this.mouseList = new MyMouseListener();
