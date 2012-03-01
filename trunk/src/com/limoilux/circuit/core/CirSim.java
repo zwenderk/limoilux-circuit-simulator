@@ -993,7 +993,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 			if (badnodes > 0)
 			{
-				info[i++] = badnodes + (badnodes == 1 ? " bad connection" : " bad connections");
+				if (badnodes == 1)
+				{
+					info[i++] = badnodes + " bad connection" ;
+				}
+				else
+				{
+					info[i++] = badnodes + " bad connections" ;
+				}
 			}
 
 			// find where to show data; below circuit, not too high unless we

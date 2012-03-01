@@ -92,7 +92,7 @@ public class Scope
 		this.showMin = b;
 	}
 
-	public void showFreq(boolean b)
+	public void setFrequencyVisible(boolean b)
 	{
 		this.showFreq = b;
 	}
@@ -908,7 +908,7 @@ public class Scope
 		}
 		if (mi == this.sim.scopeFreqMenuItem)
 		{
-			this.showFreq(this.sim.scopeFreqMenuItem.getState());
+			this.setFrequencyVisible(this.sim.scopeFreqMenuItem.getState());
 		}
 		if (mi == this.sim.scopePowerMenuItem)
 		{
