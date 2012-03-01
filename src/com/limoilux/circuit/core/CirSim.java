@@ -134,13 +134,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private Class<?> dumpTypes[];
 
 	private int dragX, dragY, initDragX, initDragY;
-	
+
 	private Rectangle selectedArea;
-	
+
 	public int gridSize, gridMask, gridRound;
-	
+
 	public boolean analyzeFlag;
-	
+
 	public boolean useBufferedImage;
 	private String ctrlMetaKey;
 
@@ -738,27 +738,24 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		return "Circuit by Paul Falstad";
 	}
 
-	private void handleResize()
+	private void buildDBImage(Dimension dim)
 	{
-		this.winSize = this.circuitPanel.getSize();
+		this.dbimage = this.mainContainer.createImage(dim.width, dim.height);
+	}
 
-		if (this.winSize.width == 0)
-		{
-			return;
-		}
+	private void centerCircuit(int gridMask)
+	{
+		int minx = 1000;
+		int maxx = 0;
+		int miny = 1000;
+		int maxy = 0;
 
-		this.dbimage = this.mainContainer.createImage(this.winSize.width, this.winSize.height);
-		int h = this.winSize.height / 5;
-		/*
-		 * if (h < 128 && winSize.height > 300) h = 128;
-		 */
-		this.circuitArea = new Rectangle(0, 0, this.winSize.width, this.winSize.height - h);
-		int i;
-		int minx = 1000, maxx = 0, miny = 1000, maxy = 0;
-		for (i = 0; i != this.circuit.getElementCount(); i++)
+		for (int i = 0; i != this.circuit.getElementCount(); i++)
 		{
 			CircuitElm ce = this.circuit.getElementAt(i);
-			// centered text causes problems when trying to center the circuit,
+
+			// centered text causes problems when trying to center the
+			// circuit,
 			// so we special-case it here
 			if (!ce.isCenteredText())
 			{
@@ -768,7 +765,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			miny = Math.min(ce.y, Math.min(ce.y2, miny));
 			maxy = Math.max(ce.y, Math.max(ce.y2, maxy));
 		}
-		// center circuit; we don't use snapGrid() because that rounds
+
+		this.circuit.centerCircuit(this.gridMask, this.circuitArea);
+
 		int dx = this.gridMask & (this.circuitArea.width - (maxx - minx)) / 2 - minx;
 		int dy = this.gridMask & (this.circuitArea.height - (maxy - miny)) / 2 - miny;
 
@@ -781,17 +780,30 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			dy = this.gridMask & -miny;
 		}
+	}
 
-		for (i = 0; i != this.circuit.getElementCount(); i++)
+	private void handleResize()
+	{
+		Dimension dim = this.circuitPanel.getSize();
+		this.winSize = dim;
+
+		if (dim.width != 0)
 		{
-			CircuitElm ce = this.circuit.getElement(i);
-			ce.move(dx, dy);
+			this.buildDBImage(dim);
+
+			int height = dim.height / 5;
+
+			
+			// if (h < 128 && winSize.height > 300) h = 128;
+			
+			this.circuitArea = new Rectangle(0, 0, dim.width, dim.height - height);
+
+			this.circuit.centerCircuit(this.gridMask, this.circuitArea);
+
+			this.circuitPanel.repaint();
+
+			this.circuit.setCircuitBottom(0);
 		}
-
-		// after moving elements, need this to avoid singular matrix probs
-		this.needAnalyze();
-
-		this.circuit.circuitBottom = 0;
 	}
 
 	private void destroyFrame()
@@ -860,7 +872,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		Graphics g = null;
 
 		g = this.dbimage.getGraphics();
-		//CircuitElm.selectColor = Color.cyan;
+
 		if (this.printableCheckItem.getState())
 		{
 			CircuitElm.whiteColor = Color.black;
@@ -1232,6 +1244,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 	}
 
+	@Deprecated
 	public void needAnalyze()
 	{
 		this.circuit.setNeedAnalysis(true);
@@ -2427,7 +2440,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 			for (i = oldsz; i != this.circuit.getElementCount(); i++)
 			{
-				CircuitElm ce = this.circuit.getElement(i);
+				CircuitElm ce = this.circuit.getElementAt(i);
 				ce.move(dx, dy);
 			}
 			// center circuit
@@ -2478,10 +2491,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		if (e.getSource() == this.resetButton)
 		{
 			int i;
-
-			// on IE, drawImage() stops working inexplicably every once in
-			// a while. Recreating it fixes the problem, so we do that here.
-			this.dbimage = this.mainContainer.createImage(this.winSize.width, this.winSize.height);
 
 			for (i = 0; i != this.circuit.getElementCount(); i++)
 			{

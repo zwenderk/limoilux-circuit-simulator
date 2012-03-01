@@ -97,6 +97,63 @@ public class Circuit
 		return this.nodeList.get(index);
 
 	}
+	
+	public void centerCircuit(int gridMask, Rectangle circuitArea)
+	{
+		int minx = 1000;
+		int maxx = 0;
+		int miny = 1000;
+		int maxy = 0;
+		
+		for (int i = 0; i != this.getElementCount(); i++)
+		{
+			CircuitElm ce = this.getElementAt(i);
+			
+			// centered text causes problems when trying to center the
+			// circuit,
+			// so we special-case it here
+			if (!ce.isCenteredText())
+			{
+				minx = Math.min(ce.x, Math.min(ce.x2, minx));
+				maxx = Math.max(ce.x, Math.max(ce.x2, maxx));
+			}
+			miny = Math.min(ce.y, Math.min(ce.y2, miny));
+			maxy = Math.max(ce.y, Math.max(ce.y2, maxy));
+		}
+		
+		int dx = gridMask & (circuitArea.width - (maxx - minx)) / 2 - minx;
+		int dy = gridMask & (circuitArea.height - (maxy - miny)) / 2 - miny;
+		
+		if (dx + minx < 0)
+		{
+			dx = gridMask & -minx;
+		}
+
+		if (dy + miny < 0)
+		{
+			dy = gridMask & -miny;
+		}
+		
+		this.moveElements(dx, dy);
+		
+		// after moving elements, need this to avoid singular matrix probs
+		this.setNeedAnalysis(true);
+	}
+	
+	public boolean setCircuitBottom(int bottom)
+	{
+		this.circuitBottom = bottom;
+		return true;
+	}
+
+	public void moveElements(int dx, int dy)
+	{
+		for (int i = 0; i < this.getElementCount(); i++)
+		{
+			CircuitElm ce = this.getElementAt(i);
+			ce.move(dx, dy);
+		}
+	}
 
 	/**
 	 * @param index the index of the element
