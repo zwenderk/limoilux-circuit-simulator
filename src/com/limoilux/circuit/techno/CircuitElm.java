@@ -25,6 +25,7 @@ public abstract class CircuitElm implements Editable
 	@Deprecated
 	public static final double PI = 3.14159265358979323846;
 	public static final Font unitsFont = new Font("SansSerif", 0, 10);
+	public final static Color selectColor = Color.cyan;
 
 	public static double voltageRange = 5;
 
@@ -37,7 +38,7 @@ public abstract class CircuitElm implements Editable
 
 	public static CirSim cirSim;
 	public static Color whiteColor;
-	public static Color selectColor;
+
 	public static Color lightGrayColor;
 	public static NumberFormat showFormat;
 	public static NumberFormat shortFormat;
