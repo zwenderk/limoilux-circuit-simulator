@@ -22,7 +22,7 @@ import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.techno.CircuitElm;
 
-public class Scope extends Panel
+public class Scope
 {
 	static final int FLAG_YELM = 32;
 	static final int VAL_POWER = 1;

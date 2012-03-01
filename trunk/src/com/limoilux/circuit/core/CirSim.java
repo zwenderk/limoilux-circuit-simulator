@@ -2,6 +2,7 @@
 
 package com.limoilux.circuit.core;
 
+import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Checkbox;
 import java.awt.CheckboxMenuItem;
@@ -16,6 +17,7 @@ import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
 import java.awt.MenuShortcut;
+import java.awt.Panel;
 import java.awt.Point;
 import java.awt.PopupMenu;
 import java.awt.Rectangle;
@@ -265,14 +267,16 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.dumpTypes['?'] = Scope.class;
 		this.dumpTypes['B'] = Scope.class;
 
-		this.mainContainer.setLayout(new CircuitLayout());
+		this.setLayout(new CircuitLayout());
+		
+		//this.mainContainer.setLayout(new BorderLayout());
 		this.circuitPanel = new CircuitPane(this);
 		this.circuitPanel.addComponentListener(this);
 		this.circuitPanel.addMouseMotionListener(this.mouseMotionList);
 		this.circuitPanel.addMouseListener(this.mouseList);
 		this.circuitPanel.addKeyListener(this.keyList);
 
-		this.mainContainer.add(this.circuitPanel);
+		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
 
 		this.mainMenu = new PopupMenu();
 		MenuBar menubar = null;
@@ -463,8 +467,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.mainContainer.add(this.powerLabel = new Label("Power Brightness", Label.CENTER));
 		this.mainContainer.add(this.powerBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100));
 		this.powerBar.addAdjustmentListener(this);
-		this.powerBar.disable();
-		this.powerLabel.disable();
+		
+		this.powerBar.setEnabled(false);
+		this.powerLabel.setEnabled(false);
 
 		this.mainContainer.add(new Label("www.falstad.com"));
 
@@ -524,7 +529,12 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		Dimension x = this.getSize();
 		this.setLocation((screen.width - x.width) / 2, (screen.height - x.height) / 2);
+		
+		Panel tb = new Panel();
+		tb.setPreferredSize(new Dimension(0,300));
+		this.add(tb,  BorderLayout.SOUTH);
 	}
+
 
 	private PopupMenu buildScopeMenu(boolean t)
 	{
@@ -2808,7 +2818,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					&& CirSim.this.tempMouseMode != CirSim.MODE_DRAG_SELECTED)
 			{
 				System.out.println("clear selection");
-				CirSim.this.clearSelection();
+				CirSim.this.circuit.clearSelection();
 			}
 
 			if (CirSim.this.doSwitch(x, y))
