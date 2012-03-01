@@ -223,29 +223,22 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	public CirSim()
 	{
 		super();
-		
+
 		// this.mainContainer.setLayout(new BorderLayout());
 		this.circuitPanel = new CircuitPane(this);
-		
+
 		this.timer = new Timer();
 		this.circuit = new Circuit();
 		this.scopeMan = new ScopeManager();
 		this.cirFrame = new CircuitFrame(this.circuitPanel);
 
-
-		this.mainContainer2 = new JPanel();	
+		this.mainContainer2 = new JPanel();
 		this.mainContainer = new JPanel();
 		this.mainContainer.setBackground(Color.BLACK);
 		this.mainContainer.setLayout(new BorderLayout());
 
-
 		this.toolBar = new JToolBar();
 		this.toolBar.setFloatable(false);
-
-
-
-
-
 
 		this.cirFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -269,8 +262,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.manageJavaVersion();
 
 		this.initDumpTypes();
-
-
 
 		// Add Listener
 		this.circuitPanel.addComponentListener(this);
@@ -302,9 +293,9 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.initStartCircuitText();
 
 		this.initScreen();
-		
+
 		this.cirFrame.add(this.mainContainer, BorderLayout.CENTER);
-		
+
 		this.mainContainer.add(this.toolBar, BorderLayout.NORTH);
 		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
 	}
@@ -326,8 +317,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	private void initScreen()
 	{
 		Dimension screen = this.cirFrame.getToolkit().getScreenSize();
-
-
 
 		this.handleResize();
 
@@ -395,17 +384,12 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 		this.powerLabel = new Label("Power Brightness", Label.CENTER);
 		this.powerLabel.setEnabled(false);
-		//this.toolBar.add(this.powerLabel);
-		
+		// this.toolBar.add(this.powerLabel);
+
 		this.powerBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100);
 		this.powerBar.setEnabled(false);
-		//this.powerBar.addAdjustmentListener(this);
-		//this.toolBar.add(this.powerBar);
-		
-
-		
-
-
+		// this.powerBar.addAdjustmentListener(this);
+		// this.toolBar.add(this.powerBar);
 
 		// this.toolBar.add(new Label("www.falstad.com"));
 	}
@@ -779,7 +763,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			this.circuit.setCircuitBottom(0);
 		}
 	}
-
 
 	public void updateCircuit(Graphics realg)
 	{
@@ -3076,7 +3059,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		CirSim c = new CirSim();
 
 		c.cirFrame.setVisible(true);
-		
+
 		c.cirFrame.requestFocus();
 
 	}
