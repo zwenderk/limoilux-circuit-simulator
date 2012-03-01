@@ -12,6 +12,14 @@ public class ScopeManager
 	public int scopeCount;
 	public Scope scopes[];
 	public int scopeColCount[];
+	
+	public void doTimeStep()
+	{
+		for (int i = 0; i < this.scopeCount; i++)
+		{
+			this.scopes[i].doTimeStep();
+		}
+	}
 
 	public void stackAll()
 	{

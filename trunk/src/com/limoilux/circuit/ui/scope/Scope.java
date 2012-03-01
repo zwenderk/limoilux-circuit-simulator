@@ -155,7 +155,7 @@ public class Scope
 		this.reset();
 	}
 
-	public void timeStep()
+	public void doTimeStep()
 	{
 		if (this.elm == null)
 		{
