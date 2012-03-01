@@ -2,6 +2,7 @@
 package com.limoilux.circuit.ui.scope;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Rectangle;
 
 import com.limoilux.circuit.core.CirSim;
@@ -13,6 +14,15 @@ public class ScopeManager
 	public int scopeColCount[];
 	
 	public Scope scopes[];
+	
+	public void drawScope(Graphics g)
+	{
+		// Dessinage des scopes
+		for (int i = 0; i < this.scopeCount; i++)
+		{
+			this.scopes[i].draw(g);
+		}
+	}
 
 	public void doTimeStep()
 	{
