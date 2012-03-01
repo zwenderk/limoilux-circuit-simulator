@@ -278,7 +278,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
 
-		this.mainMenu = new PopupMenu();
+
 
 		Menu circuitsMenu = this.buildMenuBar(euro, printable, convention);
 
@@ -444,7 +444,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void buildPopUpMainMenu(boolean isMac)
 	{
-
+		this.mainMenu = new PopupMenu();
 		this.mainMenu.add(this.getClassCheckItem("Add Wire", "WireElm"));
 		this.mainMenu.add(this.getClassCheckItem("Add Resistor", "ResistorElm"));
 
