@@ -10,9 +10,10 @@ import com.limoilux.circuit.techno.Circuit;
 public class ScopeManager
 {
 	public int scopeCount;
-	public Scope scopes[];
 	public int scopeColCount[];
 	
+	public Scope scopes[];
+
 	public void doTimeStep()
 	{
 		for (int i = 0; i < this.scopeCount; i++)
