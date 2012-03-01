@@ -81,10 +81,6 @@ import com.limoilux.circuit.ui.scope.ScopeManager;
  */
 public class CirSim implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1165604792341204140L;
 	@Deprecated
 	private static final double PI = Math.PI;
 
@@ -175,7 +171,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	private JScrollBar currentBar;
 	private Label powerLabel;
 	private Scrollbar powerBar;
-	private PopupMenu elmMenu;
+	private PopupMenu elementsPopUp;
 	private MenuItem elmEditMenuItem;
 	private MenuItem elmCutMenuItem;
 	private MenuItem elmCopyMenuItem;
@@ -216,7 +212,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	public final CircuitPane circuitPanel;
 
 	public final CircuitFrame cirFrame;
-	public final JPanel mainContainer2;
 	public final JPanel mainContainer;
 	public final JToolBar toolBar;
 
@@ -232,7 +227,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.scopeMan = new ScopeManager();
 		this.cirFrame = new CircuitFrame(this.circuitPanel);
 
-		this.mainContainer2 = new JPanel();
 		this.mainContainer = new JPanel();
 		this.mainContainer.setBackground(Color.BLACK);
 		this.mainContainer.setLayout(new BorderLayout());
@@ -352,14 +346,15 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 	private void initPopupMenu()
 	{
-		this.elmMenu = new PopupMenu();
+		this.elementsPopUp = new PopupMenu();
 		this.elmEditMenuItem = this.getMenuItem("Edit");
-		this.elmMenu.add(this.elmEditMenuItem);
-		this.elmMenu.add(this.elmScopeMenuItem = this.getMenuItem("View in Scope"));
-		this.elmMenu.add(this.elmCutMenuItem = this.getMenuItem("Cut"));
-		this.elmMenu.add(this.elmCopyMenuItem = this.getMenuItem("Copy"));
-		this.elmMenu.add(this.elmDeleteMenuItem = this.getMenuItem("Delete"));
-		this.mainContainer2.add(this.elmMenu);
+		this.elementsPopUp.add(this.elmEditMenuItem);
+		this.elementsPopUp.add(this.elmScopeMenuItem = this.getMenuItem("View in Scope"));
+		this.elementsPopUp.add(this.elmCutMenuItem = this.getMenuItem("Cut"));
+		this.elementsPopUp.add(this.elmCopyMenuItem = this.getMenuItem("Copy"));
+		this.elementsPopUp.add(this.elmDeleteMenuItem = this.getMenuItem("Delete"));
+		
+		this.circuitPanel.add(this.elementsPopUp);
 	}
 
 	private void initToolBar()
@@ -497,7 +492,8 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		otherMenu.add(this.getCheckItem("Drag Post (" + this.ctrlMetaKey + "-drag)", "DragPost"));
 
 		this.mainMenu.add(this.getCheckItem("Select/Drag Selected (space or Shift-drag)", "Select"));
-		this.mainContainer2.add(this.mainMenu);
+
+		this.circuitPanel.add(this.mainMenu);
 	}
 
 	private void buildGateMenu()
@@ -512,42 +508,45 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		gateMenu.add(this.getClassCheckItem("Add XOR Gate", "XorGateElm"));
 	}
 
+	
 	private PopupMenu buildScopeMenu(boolean t)
 	{
-		PopupMenu m = new PopupMenu();
-		m.add(this.getMenuItem("Remove", "remove"));
-		m.add(this.getMenuItem("Speed 2x", "speed2"));
-		m.add(this.getMenuItem("Speed 1/2x", "speed1/2"));
-		m.add(this.getMenuItem("Scale 2x", "scale"));
-		m.add(this.getMenuItem("Max Scale", "maxscale"));
-		m.add(this.getMenuItem("Stack", "stack"));
-		m.add(this.getMenuItem("Unstack", "unstack"));
-		m.add(this.getMenuItem("Reset", "reset"));
+		PopupMenu scopePopUp;
+	    scopePopUp = new PopupMenu();
+		scopePopUp.add(this.getMenuItem("Remove", "remove"));
+		scopePopUp.add(this.getMenuItem("Speed 2x", "speed2"));
+		scopePopUp.add(this.getMenuItem("Speed 1/2x", "speed1/2"));
+		scopePopUp.add(this.getMenuItem("Scale 2x", "scale"));
+		scopePopUp.add(this.getMenuItem("Max Scale", "maxscale"));
+		scopePopUp.add(this.getMenuItem("Stack", "stack"));
+		scopePopUp.add(this.getMenuItem("Unstack", "unstack"));
+		scopePopUp.add(this.getMenuItem("Reset", "reset"));
 		if (t)
 		{
-			m.add(this.scopeIbMenuItem = this.getCheckItem("Show Ib"));
-			m.add(this.scopeIcMenuItem = this.getCheckItem("Show Ic"));
-			m.add(this.scopeIeMenuItem = this.getCheckItem("Show Ie"));
-			m.add(this.scopeVbeMenuItem = this.getCheckItem("Show Vbe"));
-			m.add(this.scopeVbcMenuItem = this.getCheckItem("Show Vbc"));
-			m.add(this.scopeVceMenuItem = this.getCheckItem("Show Vce"));
-			m.add(this.scopeVceIcMenuItem = this.getCheckItem("Show Vce vs Ic"));
+			scopePopUp.add(this.scopeIbMenuItem = this.getCheckItem("Show Ib"));
+			scopePopUp.add(this.scopeIcMenuItem = this.getCheckItem("Show Ic"));
+			scopePopUp.add(this.scopeIeMenuItem = this.getCheckItem("Show Ie"));
+			scopePopUp.add(this.scopeVbeMenuItem = this.getCheckItem("Show Vbe"));
+			scopePopUp.add(this.scopeVbcMenuItem = this.getCheckItem("Show Vbc"));
+			scopePopUp.add(this.scopeVceMenuItem = this.getCheckItem("Show Vce"));
+			scopePopUp.add(this.scopeVceIcMenuItem = this.getCheckItem("Show Vce vs Ic"));
 		}
 		else
 		{
-			m.add(this.scopeVMenuItem = this.getCheckItem("Show Voltage"));
-			m.add(this.scopeIMenuItem = this.getCheckItem("Show Current"));
-			m.add(this.scopePowerMenuItem = this.getCheckItem("Show Power Consumed"));
-			m.add(this.scopeMaxMenuItem = this.getCheckItem("Show Peak Value"));
-			m.add(this.scopeMinMenuItem = this.getCheckItem("Show Negative Peak Value"));
-			m.add(this.scopeFreqMenuItem = this.getCheckItem("Show Frequency"));
-			m.add(this.scopeVIMenuItem = this.getCheckItem("Show V vs I"));
-			m.add(this.scopeXYMenuItem = this.getCheckItem("Plot X/Y"));
-			m.add(this.scopeSelectYMenuItem = this.getMenuItem("Select Y", "selecty"));
-			m.add(this.scopeResistMenuItem = this.getCheckItem("Show Resistance"));
+			scopePopUp.add(this.scopeVMenuItem = this.getCheckItem("Show Voltage"));
+			scopePopUp.add(this.scopeIMenuItem = this.getCheckItem("Show Current"));
+			scopePopUp.add(this.scopePowerMenuItem = this.getCheckItem("Show Power Consumed"));
+			scopePopUp.add(this.scopeMaxMenuItem = this.getCheckItem("Show Peak Value"));
+			scopePopUp.add(this.scopeMinMenuItem = this.getCheckItem("Show Negative Peak Value"));
+			scopePopUp.add(this.scopeFreqMenuItem = this.getCheckItem("Show Frequency"));
+			scopePopUp.add(this.scopeVIMenuItem = this.getCheckItem("Show V vs I"));
+			scopePopUp.add(this.scopeXYMenuItem = this.getCheckItem("Plot X/Y"));
+			scopePopUp.add(this.scopeSelectYMenuItem = this.getMenuItem("Select Y", "selecty"));
+			scopePopUp.add(this.scopeResistMenuItem = this.getCheckItem("Show Resistance"));
 		}
-		this.mainContainer2.add(m);
-		return m;
+		
+this.circuitPanel.add(scopePopUp);
+		return scopePopUp;
 	}
 
 	private void buildIOMenu()
@@ -2096,7 +2095,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		{
 			this.elmEditMenuItem.setEnabled(this.mouseElm.getEditInfo(0) != null);
 			this.elmScopeMenuItem.setEnabled(this.mouseElm.canViewInScope());
-			this.elmMenu.show(e.getComponent(), e.getX(), e.getY());
+			this.elementsPopUp.show(e.getComponent(), e.getX(), e.getY());
 		}
 		else
 		{
