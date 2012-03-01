@@ -44,6 +44,8 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
 
 import com.limoilux.circuit.CapacitorElm;
 import com.limoilux.circuit.InductorElm;
@@ -101,8 +103,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public static final int INFO_WIDTH = 120;
 	public static final int MODE_DRAG_ROW = 2;
 	public static final int MODE_DRAG_COLUMN = 3;
-
-	public final JFrame mainContainer;
 
 	public static String muString = "u";
 	public static String ohmString = "ohm";
@@ -210,15 +210,25 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public final Timer timer;
 	public final Circuit circuit;
 	public final ScopeManager scopeMan;
-
 	public final CircuitPane circuitPanel;
+
+	public final JPanel mainContainer;
+	JToolBar toolBar;
 
 	public CirSim()
 	{
 		super("Limoilux Circuit Simulator v1.1");
 
-		// Artéfacte de la version Falstad
-		this.mainContainer = this;
+		this.setLayout(new BorderLayout());
+
+		this.mainContainer = new JPanel();
+		this.add(this.mainContainer, BorderLayout.CENTER);
+		
+		this.toolBar = new JToolBar();
+		this.toolBar.setFloatable(false);
+		this.add(toolBar, BorderLayout.NORTH);
+
+
 
 		this.timer = new Timer();
 		this.circuit = new Circuit();
@@ -246,8 +256,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.manageJavaVersion();
 
 		this.initDumpTypes();
-
-		this.setLayout(new CircuitLayout());
 
 		// this.mainContainer.setLayout(new BorderLayout());
 		this.circuitPanel = new CircuitPane(this);
@@ -352,36 +360,35 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void initLeftPanel()
 	{
-		this.mainContainer.add(this.resetButton = new Button("Reset"));
+		this.resetButton = new Button("Reset");
 		this.resetButton.addActionListener(this);
-		this.dumpMatrixButton = new Button("Dump Matrix");
-		// main.add(dumpMatrixButton);
-		this.dumpMatrixButton.addActionListener(this);
+		
+		this.toolBar.add(this.resetButton);
+
 		this.stoppedCheck = new Checkbox("Stopped");
 		this.stoppedCheck.addItemListener(this);
-		this.mainContainer.add(this.stoppedCheck);
+		this.toolBar.add(this.stoppedCheck);
 
-		this.mainContainer.add(new Label("Simulation Speed", Label.CENTER));
-
+		this.toolBar.add(new Label("Simulation Speed", Label.CENTER));
 		// was max of 140
-		this.mainContainer.add(this.speedBar = new Scrollbar(Scrollbar.HORIZONTAL, 3, 1, 0, 260));
+		this.speedBar = new Scrollbar(Scrollbar.HORIZONTAL, 3, 1, 0, 260);
 		this.speedBar.addAdjustmentListener(this);
+		this.toolBar.add(this.speedBar);
 
-		this.mainContainer.add(new Label("Current Speed", Label.CENTER));
+		this.toolBar.add(new Label("Current Speed", Label.CENTER));
 		this.currentBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100);
 		this.currentBar.addAdjustmentListener(this);
-		this.mainContainer.add(this.currentBar);
+		this.toolBar.add(this.currentBar);
 
-		this.mainContainer.add(this.powerLabel = new Label("Power Brightness", Label.CENTER));
-		this.mainContainer.add(this.powerBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100));
+		this.toolBar.add(this.powerLabel = new Label("Power Brightness", Label.CENTER));
+		this.toolBar.add(this.powerBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100));
 		this.powerBar.addAdjustmentListener(this);
-
 		this.powerBar.setEnabled(false);
 		this.powerLabel.setEnabled(false);
 
-		this.mainContainer.add(new Label("www.falstad.com"));
+		//this.toolBar.add(new Label("www.falstad.com"));
 
-		this.mainContainer.add(new Label(""));
+		this.toolBar.add(new Label(""));
 		Font f = new Font("SansSerif", 0, 10);
 		Label l;
 		l = new Label("Current Circuit:");
@@ -389,8 +396,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.titleLabel = new Label("Label");
 		this.titleLabel.setFont(f);
 
-		this.mainContainer.add(l);
-		this.mainContainer.add(this.titleLabel);
+		this.toolBar.add(l);
+		this.toolBar.add(this.titleLabel);
 
 	}
 
@@ -776,7 +783,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		Graphics g = null;
 		CircuitElm realMouseElm;
-		
+
 		if (this.winSize == null || this.winSize.width == 0)
 		{
 			return;
@@ -811,8 +818,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 
 		this.scopeMan.setupScopes(this.circuit, this.winSize, this.circuitArea);
-
-	
 
 		g = this.dbimage.getGraphics();
 		g.setColor(Color.black);
@@ -1176,8 +1181,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	}
 
 	/**
-	 * @deprecated Replace with {@link Circuit#setNeedAnalysis(boolean)} and 
-	 * repaint() instructions
+	 * @deprecated Replace with {@link Circuit#setNeedAnalysis(boolean)} and
+	 *             repaint() instructions
 	 */
 	@Deprecated
 	public void needAnalyze()
@@ -1445,7 +1450,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.scopeMan.unstackScope(s);
 	}
 
-
 	private void doEdit(Editable eable)
 	{
 		this.circuit.clearSelection();
@@ -1466,7 +1470,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private void showMigrationDialog()
 	{
 		String dump = this.dumpCircuit();
-		MigrationWizard dialog = new MigrationWizard(this.mainContainer, dump, this.winSize);
+		MigrationWizard dialog = new MigrationWizard(this, dump, this.winSize);
 
 		// Appel bloquand du wizard.
 		dialog.setVisible(true);
@@ -2035,7 +2039,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private void removeZeroLengthElements()
 	{
 		this.circuit.removeZeroLengthElements();
-		
+
 		this.repaint();
 	}
 
@@ -2355,7 +2359,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			this.handleResize();
 		}
 		this.needAnalyze();
-		
+
 	}
 
 	@Deprecated
@@ -3064,8 +3068,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			}
 		}
 	}
-
-
 
 	public static void main(String args[])
 	{
