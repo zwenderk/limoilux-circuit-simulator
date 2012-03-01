@@ -366,12 +366,14 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.resetButton = new JButton("Reset");
 		this.resetButton.addActionListener(this);
 		this.toolBar.add(this.resetButton);
-
+		this.toolBar.addSeparator();
+		
 		this.playButton = new JButton(this.activityManager.getPlayAction());
 		this.toolBar.add(this.playButton);
 		
 		this.stopButton = new JButton(this.activityManager.getStopAction());
 		this.toolBar.add(this.stopButton);
+		this.toolBar.addSeparator();
 
 		this.toolBar.add(new JLabel("Simulation Speed", JLabel.CENTER));
 		this.speedBar = new JScrollBar(JScrollBar.HORIZONTAL, 3, 1, 0, 260);
