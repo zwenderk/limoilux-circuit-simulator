@@ -1984,7 +1984,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		int i;
 		for (i = 0; i != this.circuit.getElementCount(); i++)
 		{
-			CircuitElm ce = this.circuit.getElement(i);
+			CircuitElm ce = this.circuit.getElementAt(i);
 			if (ce.x == this.dragX)
 			{
 				ce.movePoint(0, dx, 0);
