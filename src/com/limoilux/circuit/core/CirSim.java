@@ -257,6 +257,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 
 		this.dumpTypes = new Class[300];
+		
 		// these characters are reserved
 		this.dumpTypes['o'] = Scope.class;
 		this.dumpTypes['h'] = Scope.class;
@@ -269,14 +270,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		// this.mainContainer.setLayout(new BorderLayout());
 		this.circuitPanel = new CircuitPane(this);
+		
+		// Add Listener
 		this.circuitPanel.addComponentListener(this);
 		this.circuitPanel.addMouseMotionListener(this.mouseMotionList);
 		this.circuitPanel.addMouseListener(this.mouseList);
 		this.circuitPanel.addKeyListener(this.keyList);
 
 		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
-
-
 
 		Menu circuitsMenu = this.buildMenuBar(printable, convention);
 
@@ -289,21 +290,10 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.undoStack = new Vector<String>();
 		this.redoStack = new Vector<String>();
 
-		this.scopeMan.scopes = new Scope[20];
-		this.scopeMan.scopeColCount = new int[20];
-		this.scopeMan.scopeCount = 0;
-
 		this.circuitPanel.setBackground(Color.black);
 		this.circuitPanel.setForeground(Color.lightGray);
 
-		this.elmMenu = new PopupMenu();
-		this.elmEditMenuItem = this.getMenuItem("Edit");
-		this.elmMenu.add(this.elmEditMenuItem);
-		this.elmMenu.add(this.elmScopeMenuItem = this.getMenuItem("View in Scope"));
-		this.elmMenu.add(this.elmCutMenuItem = this.getMenuItem("Cut"));
-		this.elmMenu.add(this.elmCopyMenuItem = this.getMenuItem("Copy"));
-		this.elmMenu.add(this.elmDeleteMenuItem = this.getMenuItem("Delete"));
-		this.mainContainer.add(this.elmMenu);
+		this.initPopupMenu();
 
 		this.scopeMenu = this.buildScopeMenu(false);
 		this.transScopeMenu = this.buildScopeMenu(true);
@@ -331,6 +321,18 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		Panel tb = new Panel();
 		tb.setPreferredSize(new Dimension(0, 300));
 		this.add(tb, BorderLayout.SOUTH);
+	}
+	
+	private void initPopupMenu()
+	{
+		this.elmMenu = new PopupMenu();
+		this.elmEditMenuItem = this.getMenuItem("Edit");
+		this.elmMenu.add(this.elmEditMenuItem);
+		this.elmMenu.add(this.elmScopeMenuItem = this.getMenuItem("View in Scope"));
+		this.elmMenu.add(this.elmCutMenuItem = this.getMenuItem("Cut"));
+		this.elmMenu.add(this.elmCopyMenuItem = this.getMenuItem("Copy"));
+		this.elmMenu.add(this.elmDeleteMenuItem = this.getMenuItem("Delete"));
+		this.mainContainer.add(this.elmMenu);
 	}
 	
 	private void initLeftPanel()
