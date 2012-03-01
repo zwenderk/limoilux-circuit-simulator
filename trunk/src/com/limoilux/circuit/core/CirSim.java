@@ -226,18 +226,16 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.mouseList = new MyMouseListener();
 		this.keyList = new MyKeyListener();
 
-		String euroResistor = null;
+
 		boolean printable = false;
 		boolean convention = true;
 
 		CircuitElm.initClass(this);
-
-		boolean euro = euroResistor != null && euroResistor.equalsIgnoreCase("true");
-
+		
+		boolean isMac = CoreUtil.isMac();
+		
 		this.mainContainer = this;
 
-		String os = System.getProperty("os.name");
-		boolean isMac = os.indexOf("Mac ") == 0;
 
 		if (isMac)
 		{
@@ -280,7 +278,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 
 
-		Menu circuitsMenu = this.buildMenuBar(euro, printable, convention);
+		Menu circuitsMenu = this.buildMenuBar(printable, convention);
 
 		this.buildPopUpMainMenu(isMac);
 
@@ -373,7 +371,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.add(tb, BorderLayout.SOUTH);
 	}
 
-	private Menu buildMenuBar(boolean euro, boolean printable, boolean convention)
+	private Menu buildMenuBar(boolean printable, boolean convention)
 	{
 		MenuBar menubar = null;
 
@@ -426,7 +424,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		// m.add(conductanceCheckItem = getCheckItem("Show Conductance"));
 		m.add(this.smallGridCheckItem = this.getCheckItem("Small Grid"));
 		m.add(this.euroResistorCheckItem = this.getCheckItem("European Resistors"));
-		this.euroResistorCheckItem.setState(euro);
+		this.euroResistorCheckItem.setState(false);
 		m.add(this.printableCheckItem = this.getCheckItem("White Background"));
 		this.printableCheckItem.setState(printable);
 		m.add(this.conventionCheckItem = this.getCheckItem("Conventional Current Motion"));
