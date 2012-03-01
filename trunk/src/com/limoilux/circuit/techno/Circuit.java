@@ -216,6 +216,8 @@ public class Circuit
 				ce.delete();
 			}
 		}
+		
+		this.setNeedAnalysis(true);
 	}
 
 	public void calcCircuitBottom()

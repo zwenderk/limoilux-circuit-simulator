@@ -805,6 +805,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 	}
 
+	@Deprecated
 	private void destroyFrame()
 	{
 		this.dispose();
@@ -1223,6 +1224,10 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 	}
 
+	/**
+	 * @deprecated Replace with {@link Circuit#setNeedAnalysis(boolean)} and 
+	 * repaint() instructions
+	 */
 	@Deprecated
 	public void needAnalyze()
 	{
@@ -2106,8 +2111,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private void removeZeroLengthElements()
 	{
 		this.circuit.removeZeroLengthElements();
-
-		this.needAnalyze();
+		
+		this.repaint();
 	}
 
 	private CircuitElm constructElement(Class<?> classType, int x0, int y0)
@@ -2426,18 +2431,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			this.handleResize();
 		}
 		this.needAnalyze();
+		
 	}
 
 	@Deprecated
 	private void clearSelection()
 	{
 		this.circuit.clearSelection();
-	}
-
-	@Deprecated
-	private void doSelectAll()
-	{
-		this.circuit.doSelectAll();
 	}
 
 	@Override
@@ -2537,23 +2537,23 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		if (e.getSource() == this.selectAllItem)
 		{
-			this.doSelectAll();
+			this.circuit.doSelectAll();
 		}
 
 		if (e.getSource() == this.exitItem)
 		{
-			this.destroyFrame();
+			this.dispose();
 			return;
 		}
 
 		if (ac.compareTo("stackAll") == 0)
 		{
-			this.stackAll();
+			this.scopeMan.stackAll();
 		}
 
 		if (ac.compareTo("unstackAll") == 0)
 		{
-			this.unstackAll();
+			this.scopeMan.unstackAll();
 		}
 
 		if (e.getSource() == this.elmEditMenuItem)
