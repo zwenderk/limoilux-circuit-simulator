@@ -18,7 +18,7 @@ public class Matrix
 
 	public RowInfo[] circuitRowInfo;
 
-	public void clearMatrix()
+	public void clear()
 	{
 		this.circuitMatrix = null;
 	}

@@ -39,6 +39,11 @@ public class Circuit
 		this.nodeList = new ArrayList<CircuitNode>();
 		this.matrix = new Matrix();
 	}
+	
+	public boolean isEmpty()
+	{
+		return this.matrix.matrixIsNull() || this.getElementCount() == 0;
+	}
 
 	public int getNodeCount()
 	{
@@ -721,7 +726,7 @@ public class Circuit
 	@Deprecated
 	public void clearMatrix()
 	{
-		this.matrix.clearMatrix();
+		this.matrix.clear();
 	}
 
 	@Deprecated

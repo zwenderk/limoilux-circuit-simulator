@@ -1247,9 +1247,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void runCircuit() throws CircuitAnalysisException
 	{
-		if (this.circuit.matrixIsNull() || this.circuit.getElementCount() == 0)
+		if (this.circuit.isEmpty())
 		{
-			this.circuit.clearMatrix();
+			this.circuit.matrix.clear();
 			return;
 		}
 
@@ -1258,10 +1258,10 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		boolean debugprint = this.dumpMatrix;
 		this.dumpMatrix = false;
 		long steprate = (long) (160 * this.getIterCount());
-		long tm = System.currentTimeMillis();
+		long presentTime = System.currentTimeMillis();
 		long lit = this.timer.lastIterTime;
 
-		if (1000 >= steprate * (tm - this.timer.lastIterTime))
+		if (1000 >= steprate * (presentTime - this.timer.lastIterTime))
 		{
 			return;
 		}
@@ -1271,7 +1271,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			int i, j, k, subiter;
 			for (i = 0; i != this.circuit.getElementCount(); i++)
 			{
-				CircuitElm ce = this.circuit.getElement(i);
+				CircuitElm ce = this.circuit.getElementAt(i);
 
 				try
 				{
@@ -1288,14 +1288,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			{
 				this.circuit.converged = true;
 				this.subIterations = subiter;
-				
+
 				this.circuit.matrix.origRigthToRight();
 
 				if (this.circuit.isNonLinear())
 				{
 					this.circuit.matrix.recopyMatrix();
 				}
-				
+
 				for (i = 0; i != this.circuit.getElementCount(); i++)
 				{
 					CircuitElm ce = this.circuit.getElementAt(i);
@@ -1400,14 +1400,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			}
 
 			this.timer.time += this.timer.timeStep;
-			for (i = 0; i != this.scopeMan.scopeCount; i++)
-			{
-				this.scopeMan.scopes[i].timeStep();
-			}
-			tm = System.currentTimeMillis();
-			lit = tm;
 
-			if (iter * 1000 >= steprate * (tm - this.timer.lastIterTime) || tm - this.timer.getLastFrameTime() > 500)
+			this.scopeMan.doTimeStep();
+
+			presentTime = System.currentTimeMillis();
+			lit = presentTime;
+
+			if (iter * 1000 >= steprate * (presentTime - this.timer.lastIterTime)
+					|| presentTime - this.timer.getLastFrameTime() > 500)
 			{
 				break;
 			}
