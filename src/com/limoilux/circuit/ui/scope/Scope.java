@@ -51,13 +51,15 @@ public class Scope
 	public boolean lockScale;
 	public boolean plot2d;
 	public boolean plotXY;
+	
 	public CircuitElm elm;
 	public CircuitElm xElm;
 	public CircuitElm yElm;
 	public MemoryImageSource imageSource;
 	public BufferedImage image;
 	public int pixels[];
-	public int draw_ox, draw_oy;
+	public int draw_ox;
+	public int draw_oy;
 	public float dpixels[];
 	public CirSim sim;
 
