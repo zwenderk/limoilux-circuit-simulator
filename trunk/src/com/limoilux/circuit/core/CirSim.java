@@ -43,10 +43,12 @@ import java.net.URL;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JToolBar;
 
 import com.limoilux.circuit.CapacitorElm;
@@ -154,7 +156,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	private Vector<String> undoStack, redoStack;
 
 	private Label titleLabel;
-	private Button resetButton;
+	private JButton resetButton;
 	private MenuItem exportItem, importItem, exitItem, undoItem, redoItem, cutItem, copyItem, pasteItem, selectAllItem,
 			optionsItem;
 
@@ -169,8 +171,8 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	public CheckboxMenuItem euroResistorCheckItem;
 	public CheckboxMenuItem printableCheckItem;
 	public CheckboxMenuItem conventionCheckItem;
-	private Scrollbar speedBar;
-	private Scrollbar currentBar;
+	private JScrollBar speedBar;
+	private JScrollBar currentBar;
 	private Label powerLabel;
 	private Scrollbar powerBar;
 	private PopupMenu elmMenu;
@@ -280,7 +282,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 		this.buildPopUpMainMenu(isMac);
 
-		this.initLeftPanel();
+		this.initToolBar();
 
 		this.setGrid();
 
@@ -371,9 +373,9 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.mainContainer2.add(this.elmMenu);
 	}
 
-	private void initLeftPanel()
+	private void initToolBar()
 	{
-		this.resetButton = new Button("Reset");
+		this.resetButton = new JButton("Reset");
 		this.resetButton.addActionListener(this);
 		this.toolBar.add(this.resetButton);
 
@@ -382,12 +384,12 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.toolBar.add(this.stoppedCheck);
 
 		this.toolBar.add(new JLabel("Simulation Speed", JLabel.CENTER));
-		this.speedBar = new Scrollbar(Scrollbar.HORIZONTAL, 3, 1, 0, 260);
+		this.speedBar = new JScrollBar(JScrollBar.HORIZONTAL, 3, 1, 0, 260);
 		this.speedBar.addAdjustmentListener(this);
 		this.toolBar.add(this.speedBar);
 
 		this.toolBar.add(new JLabel("Current Speed", JLabel.CENTER));
-		this.currentBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100);
+		this.currentBar = new JScrollBar(JScrollBar.HORIZONTAL, 50, 1, 1, 100);
 		this.currentBar.addAdjustmentListener(this);
 		this.toolBar.add(this.currentBar);
 
@@ -2657,7 +2659,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	@Override
 	public void adjustmentValueChanged(AdjustmentEvent e)
 	{
-		System.out.print(((Scrollbar) e.getSource()).getValue() + "\n");
+		System.out.print(((JScrollBar) e.getSource()).getValue() + "\n");
 	}
 
 	private class MyKeyListener implements KeyListener
