@@ -282,45 +282,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		this.buildPopUpMainMenu(isMac);
 
-		this.mainContainer.add(this.resetButton = new Button("Reset"));
-		this.resetButton.addActionListener(this);
-		this.dumpMatrixButton = new Button("Dump Matrix");
-		// main.add(dumpMatrixButton);
-		this.dumpMatrixButton.addActionListener(this);
-		this.stoppedCheck = new Checkbox("Stopped");
-		this.stoppedCheck.addItemListener(this);
-		this.mainContainer.add(this.stoppedCheck);
-
-		this.mainContainer.add(new Label("Simulation Speed", Label.CENTER));
-
-		// was max of 140
-		this.mainContainer.add(this.speedBar = new Scrollbar(Scrollbar.HORIZONTAL, 3, 1, 0, 260));
-		this.speedBar.addAdjustmentListener(this);
-
-		this.mainContainer.add(new Label("Current Speed", Label.CENTER));
-		this.currentBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100);
-		this.currentBar.addAdjustmentListener(this);
-		this.mainContainer.add(this.currentBar);
-
-		this.mainContainer.add(this.powerLabel = new Label("Power Brightness", Label.CENTER));
-		this.mainContainer.add(this.powerBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100));
-		this.powerBar.addAdjustmentListener(this);
-
-		this.powerBar.setEnabled(false);
-		this.powerLabel.setEnabled(false);
-
-		this.mainContainer.add(new Label("www.falstad.com"));
-
-		this.mainContainer.add(new Label(""));
-		Font f = new Font("SansSerif", 0, 10);
-		Label l;
-		l = new Label("Current Circuit:");
-		l.setFont(f);
-		this.titleLabel = new Label("Label");
-		this.titleLabel.setFont(f);
-
-		this.mainContainer.add(l);
-		this.mainContainer.add(this.titleLabel);
+		this.initLeftPanel();
 
 		this.setGrid();
 
@@ -369,6 +331,50 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		Panel tb = new Panel();
 		tb.setPreferredSize(new Dimension(0, 300));
 		this.add(tb, BorderLayout.SOUTH);
+	}
+	
+	private void initLeftPanel()
+	{
+		this.mainContainer.add(this.resetButton = new Button("Reset"));
+		this.resetButton.addActionListener(this);
+		this.dumpMatrixButton = new Button("Dump Matrix");
+		// main.add(dumpMatrixButton);
+		this.dumpMatrixButton.addActionListener(this);
+		this.stoppedCheck = new Checkbox("Stopped");
+		this.stoppedCheck.addItemListener(this);
+		this.mainContainer.add(this.stoppedCheck);
+
+		this.mainContainer.add(new Label("Simulation Speed", Label.CENTER));
+
+		// was max of 140
+		this.mainContainer.add(this.speedBar = new Scrollbar(Scrollbar.HORIZONTAL, 3, 1, 0, 260));
+		this.speedBar.addAdjustmentListener(this);
+
+		this.mainContainer.add(new Label("Current Speed", Label.CENTER));
+		this.currentBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100);
+		this.currentBar.addAdjustmentListener(this);
+		this.mainContainer.add(this.currentBar);
+
+		this.mainContainer.add(this.powerLabel = new Label("Power Brightness", Label.CENTER));
+		this.mainContainer.add(this.powerBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100));
+		this.powerBar.addAdjustmentListener(this);
+
+		this.powerBar.setEnabled(false);
+		this.powerLabel.setEnabled(false);
+
+		this.mainContainer.add(new Label("www.falstad.com"));
+
+		this.mainContainer.add(new Label(""));
+		Font f = new Font("SansSerif", 0, 10);
+		Label l;
+		l = new Label("Current Circuit:");
+		l.setFont(f);
+		this.titleLabel = new Label("Label");
+		this.titleLabel.setFont(f);
+
+		this.mainContainer.add(l);
+		this.mainContainer.add(this.titleLabel);
+
 	}
 
 	private Menu buildMenuBar(boolean printable, boolean convention)
