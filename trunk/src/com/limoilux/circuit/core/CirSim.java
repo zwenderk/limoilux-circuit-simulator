@@ -55,11 +55,11 @@ import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.techno.CircuitNode;
 import com.limoilux.circuit.techno.CircuitNodeLink;
+import com.limoilux.circuit.techno.matrix.MatrixRowInfo;
 import com.limoilux.circuit.ui.CircuitPane;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditDialog;
 import com.limoilux.circuit.ui.EditOptions;
-import com.limoilux.circuit.ui.RowInfo;
 import com.limoilux.circuit.ui.io.MigrationWizard;
 import com.limoilux.circuit.ui.layout.CircuitLayout;
 import com.limoilux.circuit.ui.scope.Scope;
@@ -1335,15 +1335,15 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 				for (j = 0; j != this.circuit.getMatrixFullSize(); j++)
 				{
-					RowInfo ri = this.circuit.matrix.circuitRowInfo[j];
+					MatrixRowInfo rowInfo = this.circuit.matrix.circuitRowInfo[j];
 					double res = 0;
-					if (ri.type == RowInfo.ROW_CONST)
+					if (rowInfo.type == MatrixRowInfo.ROW_CONST)
 					{
-						res = ri.value;
+						res = rowInfo.value;
 					}
 					else
 					{
-						res = this.circuit.matrix.getRightSide(ri.mapCol);
+						res = this.circuit.matrix.getRightSide(rowInfo.mapCol);
 					}
 					/*
 					 * System.out.println(j + " " + res + " " + ri.type + " " +

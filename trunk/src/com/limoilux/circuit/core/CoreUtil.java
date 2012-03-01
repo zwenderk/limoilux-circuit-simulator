@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.Random;
 
 import com.limoilux.circuit.techno.CircuitElm;
-import com.limoilux.circuit.techno.Matrix;
+import com.limoilux.circuit.techno.matrix.Matrix;
 
 public class CoreUtil
 {
@@ -27,17 +27,7 @@ public class CoreUtil
 		return CoreUtil.RANDOM_GENERATOR.nextInt(0 + 1) % Math.abs(max);
 	}
 
-	@Deprecated
-	public static void luSolve(double a[][], int n, int ipvt[], double b[])
-	{
-		Matrix.lowUpSolve(a, n, ipvt, b);
-	}
 
-	@Deprecated
-	public static boolean luFactor(double a[][], int n, int ipvt[])
-	{
-		return Matrix.lowUpFactor(a, n, ipvt);
-	}
 
 	public static int distanceSq(int x1, int y1, int x2, int y2)
 	{
