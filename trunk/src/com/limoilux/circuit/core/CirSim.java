@@ -62,6 +62,7 @@ import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.techno.CircuitNode;
 import com.limoilux.circuit.techno.CircuitNodeLink;
 import com.limoilux.circuit.techno.matrix.MatrixRowInfo;
+import com.limoilux.circuit.ui.ActivityManager;
 import com.limoilux.circuit.ui.CircuitFrame;
 import com.limoilux.circuit.ui.CircuitPane;
 import com.limoilux.circuit.ui.DrawUtil;
@@ -214,6 +215,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	public final CircuitFrame cirFrame;
 	public final JPanel mainContainer;
 	public final JToolBar toolBar;
+	public final ActivityManager activityManager;
 
 	public CirSim()
 	{
@@ -223,6 +225,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.circuitPanel = new CircuitPane(this);
 
 		this.timer = new Timer();
+		this.activityManager = new ActivityManager();
 		this.circuit = new Circuit();
 		this.scopeMan = new ScopeManager();
 		this.cirFrame = new CircuitFrame(this.circuitPanel);
