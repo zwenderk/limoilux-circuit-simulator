@@ -868,6 +868,7 @@ public class Scope
 				DataBuffer dbu = raster.getDataBuffer();
 				DataBufferInt dbi = (DataBufferInt) dbu;
 				this.pixels = dbi.getData();
+				System.out.println("BUFFERED");
 			}
 
 			if (this.pixels == null)
