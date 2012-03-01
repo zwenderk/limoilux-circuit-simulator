@@ -6,36 +6,37 @@ import com.limoilux.circuit.techno.CircuitAnalysisException;
 
 public class MatrixManager
 {
-	public double[][] circuitMatrix;
+	public double[][] matrix;
 	public double[][] originalMatrix;
-	public double[] origRightSide;
-	public double[] circuitRightSide;
+	public double[] originalRightSide;
+	public double[] rightSide;
 
 	public int[] circuitPermute;
 
-	public int circuitMatrixSize;
-	public int circuitMatrixFullSize;
+	public int size;
+	public int fullSize;
 
 	public MatrixRowInfo[] circuitRowInfo;
 
 	public void clear()
 	{
-		this.circuitMatrix = null;
+		this.matrix = null;
 	}
 
 	public boolean matrixIsNull()
 	{
-		return this.circuitMatrix == null;
+		return this.matrix == null;
 	}
 
 	public boolean matrixIsInfiniteOrNAN()
 	{
 		double x;
-		for (int j = 0; j != this.circuitMatrixSize; j++)
+		for (int j = 0; j != this.size; j++)
 		{
-			for (int i = 0; i != this.circuitMatrixSize; i++)
+			for (int i = 0; i != this.size; i++)
 			{
-				x = this.circuitMatrix[i][j];
+				x = this.matrix[i][j];
+				
 				if (Double.isNaN(x) || Double.isInfinite(x))
 				{
 					return true;
@@ -48,28 +49,28 @@ public class MatrixManager
 
 	public double getRightSide(int i)
 	{
-		return this.circuitRightSide[i];
+		return this.rightSide[i];
 	}
 
 	public void origRightToRight()
 	{
-		for (int i = 0; i < this.circuitMatrixSize; i++)
+		for (int i = 0; i < this.size; i++)
 		{
-			this.circuitRightSide[i] = this.origRightSide[i];
+			this.rightSide[i] = this.originalRightSide[i];
 		}
 	}
 
 	public String matrixToString()
 	{
 		String out = "";
-		for (int j = 0; j != this.circuitMatrixSize; j++)
+		for (int j = 0; j != this.size; j++)
 		{
-			for (int i = 0; i != this.circuitMatrixSize; i++)
+			for (int i = 0; i != this.size; i++)
 			{
-				out += this.circuitMatrix[j][i] + ",";
+				out += this.matrix[j][i] + ",";
 			}
 
-			out += "  " + this.circuitRightSide[j] + "\n";
+			out += "  " + this.rightSide[j] + "\n";
 		}
 
 		out += "\n";
@@ -82,11 +83,11 @@ public class MatrixManager
 	public void recopyMatrix()
 	{
 		// TODO à optimiser
-		for (int i = 0; i < this.circuitMatrixSize; i++)
+		for (int i = 0; i < this.size; i++)
 		{
-			for (int j = 0; j < this.circuitMatrixSize; j++)
+			for (int j = 0; j < this.size; j++)
 			{
-				this.circuitMatrix[i][j] = this.originalMatrix[i][j];
+				this.matrix[i][j] = this.originalMatrix[i][j];
 			}
 		}
 	}
@@ -97,20 +98,20 @@ public class MatrixManager
 		{
 			for (int j = 0; j < matrixSize; j++)
 			{
-				this.originalMatrix[i][j] = this.circuitMatrix[i][j];
+				this.originalMatrix[i][j] = this.matrix[i][j];
 			}
 		}
 	}
 
 	public void init(int matrixSize)
 	{
-		this.circuitMatrix = new double[matrixSize][matrixSize];
-		this.circuitRightSide = new double[matrixSize];
+		this.matrix = new double[matrixSize][matrixSize];
+		this.rightSide = new double[matrixSize];
 		this.originalMatrix = new double[matrixSize][matrixSize];
-		this.origRightSide = new double[matrixSize];
+		this.originalRightSide = new double[matrixSize];
 
-		this.circuitMatrixSize = matrixSize;
-		this.circuitMatrixFullSize = matrixSize;
+		this.size = matrixSize;
+		this.fullSize = matrixSize;
 
 		this.circuitRowInfo = new MatrixRowInfo[matrixSize];
 		this.circuitPermute = new int[matrixSize];
@@ -124,12 +125,12 @@ public class MatrixManager
 	// TODO Trouver nom significatif
 	public boolean doLowUpFactor()
 	{
-		return MatrixUtil.lowUpFactor(this.circuitMatrix, this.circuitPermute);
+		return MatrixUtil.lowUpFactor(this.matrix, this.circuitPermute);
 	}
 
 	public void doLowUpSolve()
 	{
-		MatrixUtil.lowUpSolve(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute, this.circuitRightSide);
+		MatrixUtil.lowUpSolve(this.matrix, this.size, this.circuitPermute, this.rightSide);
 	}
 
 	public int simplifyMatrix(int newsize, int matrixSize)
@@ -146,7 +147,7 @@ public class MatrixManager
 				rri.mapRow = -1;
 				continue;
 			}
-			newrs[ii] = this.circuitRightSide[i];
+			newrs[ii] = this.rightSide[i];
 			rri.mapRow = ii;
 			// System.out.println("Row " + i + " maps to " + ii);
 
@@ -155,25 +156,25 @@ public class MatrixManager
 				MatrixRowInfo ri = this.circuitRowInfo[j];
 				if (ri.type == MatrixRowInfo.ROW_CONST)
 				{
-					newrs[ii] -= ri.value * this.circuitMatrix[i][j];
+					newrs[ii] -= ri.value * this.matrix[i][j];
 				}
 				else
 				{
-					newmatx[ii][ri.mapCol] += this.circuitMatrix[i][j];
+					newmatx[ii][ri.mapCol] += this.matrix[i][j];
 				}
 			}
 			ii++;
 		}
 
-		this.circuitMatrix = newmatx;
-		this.circuitRightSide = newrs;
+		this.matrix = newmatx;
+		this.rightSide = newrs;
 
 		matrixSize = newsize;
-		this.circuitMatrixSize = newsize;
+		this.size = newsize;
 
 		for (int i = 0; i < matrixSize; i++)
 		{
-			this.origRightSide[i] = this.circuitRightSide[i];
+			this.originalRightSide[i] = this.rightSide[i];
 		}
 
 		return matrixSize;
@@ -233,7 +234,7 @@ public class MatrixManager
 			int j;
 			for (j = 0; j != matrixSize; j++)
 			{
-				double q = this.circuitMatrix[i][j];
+				double q = this.matrix[i][j];
 
 				if (this.circuitRowInfo[j].type == MatrixRowInfo.ROW_CONST)
 				{
@@ -309,13 +310,13 @@ public class MatrixManager
 					}
 
 					elt.type = MatrixRowInfo.ROW_CONST;
-					elt.value = (this.circuitRightSide[i] + rsadd) / qv;
+					elt.value = (this.rightSide[i] + rsadd) / qv;
 					this.circuitRowInfo[i].dropRow = true;
 					// System.out.println(qp + " * " + qv + " = const " +
 					// elt.value);
 					i = -1; // start over from scratch
 				}
-				else if (this.circuitRightSide[i] + rsadd == 0)
+				else if (this.rightSide[i] + rsadd == 0)
 				{
 					// we found a row with only two nonzero entries, and one
 					// is the negative of the other; the values are equal
