@@ -226,17 +226,16 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.mouseList = new MyMouseListener();
 		this.keyList = new MyKeyListener();
 
-
 		boolean printable = false;
 		boolean convention = true;
 
 		CircuitElm.initClass(this);
+
+	
+
+		this.mainContainer = this;
 		
 		boolean isMac = CoreUtil.isMac();
-		
-		this.mainContainer = this;
-
-
 		if (isMac)
 		{
 			this.ctrlMetaKey = "\u2318";
@@ -256,21 +255,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			this.useBufferedImage = true;
 		}
 
-		this.dumpTypes = new Class[300];
-		
-		// these characters are reserved
-		this.dumpTypes['o'] = Scope.class;
-		this.dumpTypes['h'] = Scope.class;
-		this.dumpTypes['$'] = Scope.class;
-		this.dumpTypes['%'] = Scope.class;
-		this.dumpTypes['?'] = Scope.class;
-		this.dumpTypes['B'] = Scope.class;
+		this.initDumpTypes();
 
 		this.setLayout(new CircuitLayout());
 
 		// this.mainContainer.setLayout(new BorderLayout());
 		this.circuitPanel = new CircuitPane(this);
-		
+
 		// Add Listener
 		this.circuitPanel.addComponentListener(this);
 		this.circuitPanel.addMouseMotionListener(this.mouseMotionList);
@@ -322,7 +313,21 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		tb.setPreferredSize(new Dimension(0, 300));
 		this.add(tb, BorderLayout.SOUTH);
 	}
-	
+
+	private void initDumpTypes()
+	{
+
+		this.dumpTypes = new Class[300];
+
+		// these characters are reserved
+		this.dumpTypes['o'] = Scope.class;
+		this.dumpTypes['h'] = Scope.class;
+		this.dumpTypes['$'] = Scope.class;
+		this.dumpTypes['%'] = Scope.class;
+		this.dumpTypes['?'] = Scope.class;
+		this.dumpTypes['B'] = Scope.class;
+	}
+
 	private void initPopupMenu()
 	{
 		this.elmMenu = new PopupMenu();
@@ -334,7 +339,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.elmMenu.add(this.elmDeleteMenuItem = this.getMenuItem("Delete"));
 		this.mainContainer.add(this.elmMenu);
 	}
-	
+
 	private void initLeftPanel()
 	{
 		this.mainContainer.add(this.resetButton = new Button("Reset"));
