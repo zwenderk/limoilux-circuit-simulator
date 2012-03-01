@@ -44,8 +44,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -158,7 +156,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			optionsItem;
 
 	private Menu optionsMenu;
-	public JCheckBox stoppedCheck;
+
 	public CheckboxMenuItem dotsCheckItem;
 	public CheckboxMenuItem voltsCheckItem;
 	public CheckboxMenuItem powerCheckItem;
@@ -202,6 +200,9 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	public int mouseMode = CirSim.MODE_SELECT;
 	private int tempMouseMode = CirSim.MODE_SELECT;
 	private String mouseModeStr = "Select";
+	
+	public JButton playButton;
+	public JButton stopButton;
 
 	private final MouseMotionListener mouseMotionList;
 	private final MouseListener mouseList;
@@ -366,9 +367,11 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.resetButton.addActionListener(this);
 		this.toolBar.add(this.resetButton);
 
-		this.stoppedCheck = new JCheckBox("Stopped");
-		this.stoppedCheck.addItemListener(this);
-		this.toolBar.add(this.stoppedCheck);
+		this.playButton = new JButton(this.activityManager.getPlayAction());
+		this.toolBar.add(this.playButton);
+		
+		this.stopButton = new JButton(this.activityManager.getStopAction());
+		this.toolBar.add(this.stopButton);
 
 		this.toolBar.add(new JLabel("Simulation Speed", JLabel.CENTER));
 		this.speedBar = new JScrollBar(JScrollBar.HORIZONTAL, 3, 1, 0, 260);
@@ -811,7 +814,7 @@ this.circuitPanel.add(scopePopUp);
 
 		g.fillRect(0, 0, this.winSize.width, this.winSize.height);
 
-		if (!this.stoppedCheck.isSelected())
+		if (this.activityManager.isPlaying())
 		{
 			try
 			{
@@ -831,7 +834,7 @@ this.circuitPanel.add(scopePopUp);
 			}
 		}
 
-		if (!this.stoppedCheck.isSelected())
+		if (!this.playButton.isSelected())
 		{
 			long sysTime = System.currentTimeMillis();
 			if (this.timer.lastTime != 0)
@@ -1043,7 +1046,7 @@ this.circuitPanel.add(scopePopUp);
 
 		realg.drawImage(this.dbimage, 0, 0, this.cirFrame);
 
-		if (!this.stoppedCheck.isSelected() && !this.circuit.matrix.matrixIsNull())
+		if (!this.playButton.isSelected() && !this.circuit.matrix.matrixIsNull())
 		{
 
 			long delay = this.timer.calculateDelay();
@@ -1203,7 +1206,7 @@ this.circuitPanel.add(scopePopUp);
 		this.stopMessage = e.getTechnicalMessage();
 		this.stopElm = e.getCauseElement();
 
-		this.stoppedCheck.setSelected(true);
+		this.activityManager.setPlaying(false);
 
 		this.circuit.setNeedAnalysis(false);
 
@@ -2398,7 +2401,7 @@ this.circuitPanel.add(scopePopUp);
 
 			this.circuit.setNeedAnalysis(true);
 			this.timer.time = 0;
-			this.stoppedCheck.setSelected(false);
+			this.activityManager.setPlaying(true);
 			this.circuitPanel.repaint();
 		}
 
@@ -2562,10 +2565,7 @@ this.circuitPanel.add(scopePopUp);
 	{
 		this.circuitPanel.repaint(CirSim.PAUSE);
 		Object mi = e.getItemSelectable();
-		if (mi == this.stoppedCheck)
-		{
-			return;
-		}
+
 		if (mi == this.smallGridCheckItem)
 		{
 			this.setGrid();

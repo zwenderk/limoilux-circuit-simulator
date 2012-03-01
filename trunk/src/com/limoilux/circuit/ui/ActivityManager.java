@@ -26,8 +26,9 @@ public class ActivityManager
 
 	public void setPlaying(boolean playing)
 	{
-		this.play.setEnabled(playing);
-		this.stop.setEnabled(!playing);
+		this.play.setEnabled(!playing);
+		this.stop.setEnabled(playing);
+		this.playing = playing;
 	}
 
 	public boolean isPlaying()
