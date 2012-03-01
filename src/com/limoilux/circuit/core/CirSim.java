@@ -54,15 +54,15 @@ import com.limoilux.circuit.TextElm;
 import com.limoilux.circuit.techno.Circuit;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.techno.CircuitNode;
+import com.limoilux.circuit.techno.CircuitNodeLink;
 import com.limoilux.circuit.ui.CircuitPane;
-import com.limoilux.circuit.ui.CircuitLayout;
-import com.limoilux.circuit.ui.CircuitNode;
-import com.limoilux.circuit.ui.CircuitNodeLink;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditDialog;
 import com.limoilux.circuit.ui.EditOptions;
 import com.limoilux.circuit.ui.RowInfo;
 import com.limoilux.circuit.ui.io.MigrationWizard;
+import com.limoilux.circuit.ui.layout.CircuitLayout;
 import com.limoilux.circuit.ui.scope.Scope;
 import com.limoilux.circuit.ui.scope.ScopeManager;
 

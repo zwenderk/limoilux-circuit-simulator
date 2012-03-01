@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.ui;
+package com.limoilux.circuit.ui.layout;
 
 import java.awt.Choice;
 import java.awt.Component;
