@@ -3,7 +3,6 @@ package com.limoilux.circuit.techno;
 
 import java.util.Vector;
 
-
 public class CircuitNode
 {
 	private final Vector<CircuitNodeLink> links;

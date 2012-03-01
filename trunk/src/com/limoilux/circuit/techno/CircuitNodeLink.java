@@ -1,7 +1,6 @@
 
 package com.limoilux.circuit.techno;
 
-
 public class CircuitNodeLink
 {
 	public final int num;

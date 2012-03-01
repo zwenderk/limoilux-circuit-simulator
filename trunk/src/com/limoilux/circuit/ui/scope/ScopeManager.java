@@ -12,9 +12,9 @@ public class ScopeManager
 {
 	public int scopeCount;
 	public int scopeColCount[];
-	
+
 	public Scope scopes[];
-	
+
 	public ScopeManager()
 	{
 
@@ -22,7 +22,7 @@ public class ScopeManager
 		this.scopeColCount = new int[20];
 		this.scopeCount = 0;
 	}
-	
+
 	public void drawScope(Graphics g)
 	{
 		// Dessinage des scopes

@@ -216,6 +216,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		super("Limoilux Circuit Simulator v1.1");
 
+		// Artéfacte de la version Falstad
+		this.mainContainer = this;
+
 		this.timer = new Timer();
 		this.circuit = new Circuit();
 		this.scopeMan = new ScopeManager();
@@ -226,15 +229,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.mouseList = new MyMouseListener();
 		this.keyList = new MyKeyListener();
 
-		boolean printable = false;
-		boolean convention = true;
-
 		CircuitElm.initClass(this);
 
-	
-
-		this.mainContainer = this;
-		
+		// Gère les contrôles lier au mac.
 		boolean isMac = CoreUtil.isMac();
 		if (isMac)
 		{
@@ -245,15 +242,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			this.ctrlMetaKey = "Ctrl";
 		}
 
-		String jv = System.getProperty("java.class.version");
-		double jvf = new Double(jv).doubleValue();
-
-		if (jvf >= 48)
-		{
-			CirSim.muString = "\u03bc";
-			CirSim.ohmString = "\u03a9";
-			this.useBufferedImage = true;
-		}
+		this.manageJavaVersion();
 
 		this.initDumpTypes();
 
@@ -270,7 +259,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
 
-		Menu circuitsMenu = this.buildMenuBar(printable, convention);
+		Menu circuitsMenu = this.buildMenuBar();
 
 		this.buildPopUpMainMenu(isMac);
 
@@ -289,17 +278,33 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.scopeMenu = this.buildScopeMenu(false);
 		this.transScopeMenu = this.buildScopeMenu(true);
 
-		this.getSetupList(circuitsMenu, false);
+		this.fetchSetupList(circuitsMenu, false);
 
-		if (this.startCircuitText != null)
-		{
-			this.readSetup(this.startCircuitText);
-		}
-		else if (this.stopMessage == null && this.startCircuit != null)
-		{
-			this.readSetupFile(this.startCircuit, this.startLabel);
-		}
+		this.initStartCircuitText();
 
+		this.initScreen();
+
+		Panel tb = new Panel();
+		tb.setPreferredSize(new Dimension(0, 300));
+		this.add(tb, BorderLayout.SOUTH);
+	}
+
+	private void manageJavaVersion()
+	{
+		String jv = System.getProperty("java.class.version");
+		double jvf = new Double(jv).doubleValue();
+
+		if (jvf >= 48)
+		{
+			System.out.println(jv);
+			CirSim.muString = "\u03bc";
+			CirSim.ohmString = "\u03a9";
+			this.useBufferedImage = true;
+		}
+	}
+
+	private void initScreen()
+	{
 		Dimension screen = this.getToolkit().getScreenSize();
 
 		this.setSize(860, 640);
@@ -308,10 +313,18 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		Dimension x = this.getSize();
 		this.setLocation((screen.width - x.width) / 2, (screen.height - x.height) / 2);
+	}
 
-		Panel tb = new Panel();
-		tb.setPreferredSize(new Dimension(0, 300));
-		this.add(tb, BorderLayout.SOUTH);
+	private void initStartCircuitText()
+	{
+		if (this.startCircuitText != null)
+		{
+			this.readSetup(this.startCircuitText);
+		}
+		else if (this.stopMessage == null && this.startCircuit != null)
+		{
+			this.readSetupFile(this.startCircuit, this.startLabel);
+		}
 	}
 
 	private void initDumpTypes()
@@ -384,8 +397,12 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	}
 
-	private Menu buildMenuBar(boolean printable, boolean convention)
+	private Menu buildMenuBar()
 	{
+		// Artéfacte de la version Falstad.
+		final boolean printable = false;
+		final boolean convention = true;
+
 		MenuBar menubar = null;
 
 		menubar = new MenuBar();
@@ -1609,22 +1626,22 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		return dump;
 	}
 
-	private void getSetupList(Menu menu, boolean retry)
+	private void fetchSetupList(Menu menu, boolean retry)
 	{
 		Menu stack[] = new Menu[6];
 		int stackptr = 0;
 		stack[stackptr++] = menu;
 		try
 		{
-			URL url = new URL(CirSim.getCodeBase() + "setuplist.txt");
-			ByteArrayOutputStream ba = CirSim.readUrlData(url);
+			URL url = new URL(CoreUtil.getCodeBase() + "setuplist.txt");
+			ByteArrayOutputStream ba = CoreUtil.readUrlData(url);
 			byte b[] = ba.toByteArray();
 			int len = ba.size();
 			int p;
 			if (len == 0 || b[0] != '#')
 			{
 				// got a redirect, try again
-				this.getSetupList(menu, true);
+				this.fetchSetupList(menu, true);
 				return;
 			}
 			for (p = 0; p < len;)

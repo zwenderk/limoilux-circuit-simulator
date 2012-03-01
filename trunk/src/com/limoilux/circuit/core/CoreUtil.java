@@ -26,8 +26,6 @@ public class CoreUtil
 		return CoreUtil.RANDOM_GENERATOR.nextInt(0 + 1) % Math.abs(max);
 	}
 
-
-
 	public static int distanceSq(int x1, int y1, int x2, int y2)
 	{
 		x2 -= x1;
@@ -299,11 +297,11 @@ public class CoreUtil
 
 		return out;
 	}
-	
+
 	public static boolean isMac()
 	{
 		String os = System.getProperty("os.name");
 		return os.indexOf("Mac ") == 0;
-		 
+
 	}
 }
