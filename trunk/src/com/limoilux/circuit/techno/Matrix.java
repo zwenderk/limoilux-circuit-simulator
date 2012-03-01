@@ -112,7 +112,7 @@ public class Matrix
 	 * performed by lu_factor. On input, b[0..n-1] is the right hand side of the
 	 * equations, and on output, contains the solution.
 	 **/
-	public static void luSolve(double a[][], int n, int ipvt[], double b[])
+	public static void lowUpSolve(double a[][], int n, int ipvt[], double b[])
 	{
 		int i;
 
@@ -167,7 +167,7 @@ public class Matrix
 	 * ipvt[] returns an integer vector of pivot indices, used in the lu_solve()
 	 * routine.
 	 **/
-	public static boolean luFactor(double a[][], int n, int ipvt[])
+	public static boolean lowUpFactor(double a[][], int n, int ipvt[])
 	{
 		double scaleFactors[];
 		int i, j, k;
@@ -266,7 +266,7 @@ public class Matrix
 	// TODO Trouver nom significatif
 	public boolean doLuFactor()
 	{
-		return Matrix.luFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute);
+		return Matrix.lowUpFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute);
 	}
 
 	public int simplifyMatrix(int newsize, int matrixSize)
