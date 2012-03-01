@@ -12,7 +12,8 @@ import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.RailElm;
 import com.limoilux.circuit.VoltageElm;
 import com.limoilux.circuit.WireElm;
-import com.limoilux.circuit.ui.RowInfo;
+import com.limoilux.circuit.techno.matrix.Matrix;
+import com.limoilux.circuit.techno.matrix.MatrixRowInfo;
 
 public class Circuit
 {
@@ -29,7 +30,7 @@ public class Circuit
 	public boolean converged;
 
 	public CircuitElm[] voltageSources;
-	public RowInfo[] circuitRowInfo;
+	public MatrixRowInfo[] circuitRowInfo;
 
 	public final Matrix matrix;
 
@@ -200,7 +201,7 @@ public class Circuit
 		// System.out.println("rschanges true " + (i-1));
 		if (i > 0)
 		{
-			this.matrix.circuitRowInfo[i - 1].rsChanges = true;
+			this.matrix.circuitRowInfo[i - 1].rightSideChanges = true;
 		}
 	}
 
@@ -228,7 +229,7 @@ public class Circuit
 	{
 		if (i > 0)
 		{
-			this.matrix.circuitRowInfo[i - 1].lsChanges = true;
+			this.matrix.circuitRowInfo[i - 1].leftSideChanges = true;
 		}
 	}
 
@@ -242,8 +243,8 @@ public class Circuit
 			if (this.circuitNeedsMap)
 			{
 				i = this.matrix.circuitRowInfo[i - 1].mapRow;
-				RowInfo ri = this.matrix.circuitRowInfo[j - 1];
-				if (ri.type == RowInfo.ROW_CONST)
+				MatrixRowInfo ri = this.matrix.circuitRowInfo[j - 1];
+				if (ri.type == MatrixRowInfo.ROW_CONST)
 				{
 					// System.out.println("Stamping constant " + i + " " + j +
 					// " " + x);
@@ -502,23 +503,23 @@ public class Circuit
 
 		for (int i = 0; i < matrixSize; i++)
 		{
-			RowInfo elt = this.matrix.circuitRowInfo[i];
-			if (elt.type == RowInfo.ROW_NORMAL)
+			MatrixRowInfo elt = this.matrix.circuitRowInfo[i];
+			if (elt.type == MatrixRowInfo.ROW_NORMAL)
 			{
 				elt.mapCol = nn++;
 				// System.out.println("col " + i + " maps to " + elt.mapCol);
 				continue;
 			}
 
-			if (elt.type == RowInfo.ROW_EQUAL)
+			if (elt.type == MatrixRowInfo.ROW_EQUAL)
 			{
-				RowInfo e2 = null;
+				MatrixRowInfo e2 = null;
 				// resolve chains of equality; 100 max steps to avoid loops
 				for (int j = 0; j != 100; j++)
 				{
 					e2 = this.matrix.circuitRowInfo[elt.nodeEq];
 
-					if (e2.type != RowInfo.ROW_EQUAL)
+					if (e2.type != MatrixRowInfo.ROW_EQUAL)
 					{
 						break;
 					}
@@ -530,7 +531,7 @@ public class Circuit
 					elt.nodeEq = e2.nodeEq;
 				}
 			}
-			if (elt.type == RowInfo.ROW_CONST)
+			if (elt.type == MatrixRowInfo.ROW_CONST)
 			{
 				elt.mapCol = -1;
 			}
