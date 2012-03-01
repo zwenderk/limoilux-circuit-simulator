@@ -62,12 +62,16 @@ public class MatrixUtil
 	 * ipvt[] returns an integer vector of pivot indices, used in the lu_solve()
 	 * routine.
 	 **/
-	public static boolean lowUpFactor(double a[][], int n, int ipvt[])
+	public static boolean lowUpFactor(double a[][], int ipvt[])
 	{
 		double scaleFactors[];
 		int i, j, k;
+		
+		// The column count
+		int n = a[0].length;
 
 		scaleFactors = new double[n];
+
 
 		// divide each row by its largest element, keeping track of the
 		// scaling factors
