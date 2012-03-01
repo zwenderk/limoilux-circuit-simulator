@@ -705,7 +705,7 @@ public class Circuit
 			 * if a matrix is linear, we can do the lu_factor here instead of
 			 * needing to do it every frame
 			 */
-			if (!this.circuitNonLinear && !this.matrix.doLuFactor())
+			if (!this.circuitNonLinear && !this.matrix.doLowUpFactor())
 			{
 				throw new CircuitAnalysisException("Singular matrix!");
 			}

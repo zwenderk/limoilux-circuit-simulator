@@ -1,4 +1,3 @@
-
 //CirSim.java (c) 2010 by Paul Falstad
 
 package com.limoilux.circuit.core;
@@ -741,7 +740,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public void paint(Graphics g)
 	{
 		super.paint(g);
-		
+
 		this.circuitPanel.repaint();
 	}
 
@@ -846,6 +845,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			this.timer.lastTime = 0;
 		}
+
 		CircuitElm.powerMult = Math.exp(this.powerBar.getValue() / 4.762 - 7);
 
 		int i;
@@ -977,6 +977,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				}
 			}
 			int x = 0;
+
 			if (ct != 0)
 			{
 				x = this.scopeMan.scopes[ct - 1].rightEdge() + 20;
@@ -1007,11 +1008,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			}
 
 		}
+
 		if (this.selectedArea != null)
 		{
 			g.setColor(CircuitElm.selectColor);
 			g.drawRect(this.selectedArea.x, this.selectedArea.y, this.selectedArea.width, this.selectedArea.height);
 		}
+
 		this.mouseElm = realMouseElm;
 		/*
 		 * g.setColor(Color.white); g.drawString("Framerate: " + framerate, 10,
@@ -1021,11 +1024,12 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		 */
 
 		realg.drawImage(this.dbimage, 0, 0, this);
-		if (!this.stoppedCheck.getState() && !this.circuit.matrixIsNull())
+
+		if (!this.stoppedCheck.getState() && !this.circuit.matrix.matrixIsNull())
 		{
-			// Limit to 50 fps (thanks to J�rgen Kl�tzer for this)
-			long delay = 1000 / 50 - (System.currentTimeMillis() - this.timer.lastFrameTime);
-			// realg.drawString("delay: " + delay, 10, 90);
+
+			long delay = this.timer.calculateDelay();
+
 			if (delay > 0)
 			{
 				try
@@ -1037,10 +1041,10 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				}
 			}
 
-			this.circuitPanel.repaint(0);
+			this.circuitPanel.repaint();
 		}
 
-		this.timer.lastFrameTime = this.timer.lastTime;
+		this.timer.nextCycle();
 	}
 
 	private String getHint()
@@ -1284,16 +1288,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			{
 				this.circuit.converged = true;
 				this.subIterations = subiter;
-				for (i = 0; i != this.circuit.matrix.circuitMatrixSize; i++)
-				{
-					this.circuit.matrix.circuitRightSide[i] = this.circuit.matrix.origRightSide[i];
-				}
+				
+				this.circuit.matrix.origRigthToRight();
 
 				if (this.circuit.isNonLinear())
 				{
-					this.circuit.recopyMatrix();
-
+					this.circuit.matrix.recopyMatrix();
 				}
+				
 				for (i = 0; i != this.circuit.getElementCount(); i++)
 				{
 					CircuitElm ce = this.circuit.getElementAt(i);
@@ -1316,14 +1318,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				boolean printit = debugprint;
 				debugprint = false;
 
-				if (this.circuit.matrixIsInfiniteOrNAN())
+				if (this.circuit.matrix.matrixIsInfiniteOrNAN())
 				{
 					throw new CircuitAnalysisException("nan/infinite matrix!");
 				}
 
 				if (printit)
 				{
-					System.out.print(this.circuit.matrixToString());
+					System.out.print(this.circuit.matrix.matrixToString());
 				}
 
 				if (this.circuit.isNonLinear())
@@ -1333,15 +1335,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 						break;
 					}
 
-					if (!CoreUtil.luFactor(this.circuit.matrix.circuitMatrix, this.circuit.matrix.circuitMatrixSize,
-							this.circuit.matrix.circuitPermute))
+					if (!this.circuit.matrix.doLowUpFactor())
 					{
 						throw new CircuitAnalysisException("Singular matrix!");
 					}
 				}
 
-				CoreUtil.luSolve(this.circuit.matrix.circuitMatrix, this.circuit.matrix.circuitMatrixSize,
-						this.circuit.matrix.circuitPermute, this.circuit.matrix.circuitRightSide);
+				this.circuit.matrix.doLowUpSolve();
 
 				for (j = 0; j != this.circuit.getMatrixFullSize(); j++)
 				{
@@ -1406,11 +1406,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			}
 			tm = System.currentTimeMillis();
 			lit = tm;
-			if (iter * 1000 >= steprate * (tm - this.timer.lastIterTime) || tm - this.timer.lastFrameTime > 500)
+
+			if (iter * 1000 >= steprate * (tm - this.timer.lastIterTime) || tm - this.timer.getLastFrameTime() > 500)
 			{
 				break;
 			}
 		}
+
 		this.timer.lastIterTime = lit;
 		// System.out.println((System.currentTimeMillis()-lastFrameTime)/(double)
 		// iter);
