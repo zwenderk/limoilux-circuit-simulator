@@ -1,9 +1,7 @@
 
+//CirSim.java (c) 2010 by Paul Falstad
+
 package com.limoilux.circuit.core;
-
-// CirSim.java (c) 2010 by Paul Falstad
-
-// For information about the theory behind this, see Electronic Circuit & System Simulation Methods by Pillage
 
 import java.awt.Button;
 import java.awt.Checkbox;
@@ -68,6 +66,14 @@ import com.limoilux.circuit.ui.io.MigrationWizard;
 import com.limoilux.circuit.ui.scope.Scope;
 import com.limoilux.circuit.ui.scope.ScopeManager;
 
+/**
+ * For information about the theory behind this, see Electronic Circuit & System
+ * Simulation Methods by Pillage
+ * 
+ * @author Paul Falstad (2011 version)
+ * @author David Bernard
+ * 
+ */
 public class CirSim extends JFrame implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
 {
 	/**
