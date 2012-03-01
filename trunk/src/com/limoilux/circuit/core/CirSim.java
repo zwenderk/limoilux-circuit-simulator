@@ -134,10 +134,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	private Class<?> dumpTypes[];
 
 	private int dragX, dragY, initDragX, initDragY;
+	
 	private Rectangle selectedArea;
+	
 	public int gridSize, gridMask, gridRound;
+	
 	public boolean analyzeFlag;
-	private boolean dumpMatrix;
+	
 	public boolean useBufferedImage;
 	private String ctrlMetaKey;
 
@@ -283,10 +286,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.initStartCircuitText();
 
 		this.initScreen();
-
-		Panel tb = new Panel();
-		tb.setPreferredSize(new Dimension(0, 300));
-		this.add(tb, BorderLayout.SOUTH);
 	}
 
 	private void manageJavaVersion()
@@ -758,7 +757,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		int minx = 1000, maxx = 0, miny = 1000, maxy = 0;
 		for (i = 0; i != this.circuit.getElementCount(); i++)
 		{
-			CircuitElm ce = this.circuit.getElement(i);
+			CircuitElm ce = this.circuit.getElementAt(i);
 			// centered text causes problems when trying to center the circuit,
 			// so we special-case it here
 			if (!ce.isCenteredText())
@@ -861,7 +860,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		Graphics g = null;
 
 		g = this.dbimage.getGraphics();
-		CircuitElm.selectColor = Color.cyan;
+		//CircuitElm.selectColor = Color.cyan;
 		if (this.printableCheckItem.getState())
 		{
 			CircuitElm.whiteColor = Color.black;
@@ -1338,7 +1337,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		}
 
 		int iter;
-		this.dumpMatrix = false;
+
 		long steprate = (long) (160 * this.getIterCount());
 		long presentTime = System.currentTimeMillis();
 		long lit = this.timer.lastIterTime;
@@ -2097,7 +2096,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		for (int i = 0; i != this.circuit.getElementCount(); i++)
 		{
-			CircuitElm ce = this.circuit.getElement(i);
+			CircuitElm ce = this.circuit.getElementAt(i);
 			ce.selectRect(this.selectedArea);
 		}
 	}
@@ -2106,7 +2105,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	{
 		for (int i = 0; i != this.circuit.getElementCount(); i++)
 		{
-			CircuitElm ce = this.circuit.getElement(i);
+			CircuitElm ce = this.circuit.getElementAt(i);
 			ce.setSelected(ce == cs);
 		}
 		this.mouseElm = cs;
@@ -2498,11 +2497,6 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			this.timer.time = 0;
 			this.stoppedCheck.setState(false);
 			this.circuitPanel.repaint();
-		}
-
-		if (e.getSource() == this.dumpMatrixButton)
-		{
-			this.dumpMatrix = true;
 		}
 
 		if (e.getSource() == this.exportItem)
