@@ -912,15 +912,12 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		g.setFont(oldfont);
 
-		int ct = this.scopeMan.scopeCount;
-
-		// Dessinage des scopes.
+		// Dessinage des scopes
 		if (this.stopMessage == null)
 		{
 			this.scopeMan.drawScope(g);
 		}
-		
-		
+
 		g.setColor(CircuitElm.whiteColor);
 		if (this.stopMessage != null)
 		{
@@ -975,6 +972,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			}
 			int x = 0;
 
+			int ct = this.scopeMan.scopeCount;
+
+			if (this.stopMessage != null)
+			{
+				ct = 0;
+			}
+
 			if (ct != 0)
 			{
 				x = this.scopeMan.scopes[ct - 1].rightEdge() + 20;
@@ -992,11 +996,11 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			{
 				if (badnodes == 1)
 				{
-					info[i++] = badnodes + " bad connection" ;
+					info[i++] = badnodes + " bad connection";
 				}
 				else
 				{
-					info[i++] = badnodes + " bad connections" ;
+					info[i++] = badnodes + " bad connections";
 				}
 			}
 
@@ -1392,7 +1396,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				this.stop("Convergence failed!", null);
 				break;
 			}
-			
+
 			this.timer.doTimeStep();
 
 			this.scopeMan.doTimeStep();
