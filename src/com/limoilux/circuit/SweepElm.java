@@ -91,8 +91,8 @@ public class SweepElm extends CircuitElm
 		}
 		double w = 1 + tm * .002;
 		
-		// TODO enlever reference à stoppedCheck
-		if (!CircuitElm.cirSim.stoppedCheck.isSelected())
+
+		if (CircuitElm.cirSim.activityManager.isPlaying())
 		{
 			w = 1 + 2 * (this.frequency - this.minF) / (this.maxF - this.minF);
 		}
