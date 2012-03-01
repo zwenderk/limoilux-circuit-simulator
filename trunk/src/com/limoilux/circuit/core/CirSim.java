@@ -914,16 +914,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		int ct = this.scopeMan.scopeCount;
 
-		if (this.stopMessage != null)
+		// Dessinage des scopes.
+		if (this.stopMessage == null)
 		{
-			ct = 0;
+			this.scopeMan.drawScope(g);
 		}
-
-		for (i = 0; i != ct; i++)
-		{
-			this.scopeMan.scopes[i].draw(g);
-		}
-
+		
+		
 		g.setColor(CircuitElm.whiteColor);
 		if (this.stopMessage != null)
 		{
