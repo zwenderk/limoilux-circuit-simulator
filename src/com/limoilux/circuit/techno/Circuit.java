@@ -40,7 +40,7 @@ public class Circuit
 		this.nodeList = new ArrayList<CircuitNode>();
 		this.matrix = new MatrixManager();
 	}
-	
+
 	public boolean isEmpty()
 	{
 		return this.matrix.matrixIsNull() || this.getElementCount() == 0;

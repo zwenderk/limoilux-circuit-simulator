@@ -1,7 +1,6 @@
 
 package com.limoilux.circuit.ui;
 
-import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Panel;
@@ -18,7 +17,7 @@ public class CircuitPane extends Panel
 	public CircuitPane(CirSim cirSim)
 	{
 		this.cirSim = cirSim;
-		
+
 		this.setPreferredSize(new Dimension(350, 450));
 	}
 

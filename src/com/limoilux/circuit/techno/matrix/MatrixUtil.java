@@ -1,3 +1,4 @@
+
 package com.limoilux.circuit.techno.matrix;
 
 public class MatrixUtil
@@ -66,12 +67,11 @@ public class MatrixUtil
 	{
 		double scaleFactors[];
 		int i, j, k;
-		
+
 		// The column count
 		int n = a[0].length;
 
 		scaleFactors = new double[n];
-
 
 		// divide each row by its largest element, keeping track of the
 		// scaling factors

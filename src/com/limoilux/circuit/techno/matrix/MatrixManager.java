@@ -1,7 +1,6 @@
 
 package com.limoilux.circuit.techno.matrix;
 
-
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 
 public class MatrixManager
@@ -36,7 +35,7 @@ public class MatrixManager
 			for (int i = 0; i != this.size; i++)
 			{
 				x = this.matrix[i][j];
-				
+
 				if (Double.isNaN(x) || Double.isInfinite(x))
 				{
 					return true;

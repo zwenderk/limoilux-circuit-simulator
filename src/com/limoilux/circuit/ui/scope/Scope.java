@@ -2,7 +2,6 @@
 package com.limoilux.circuit.ui.scope;
 
 import java.awt.Graphics;
-import java.awt.Panel;
 import java.awt.PopupMenu;
 import java.awt.Rectangle;
 import java.awt.event.ItemEvent;
@@ -52,7 +51,7 @@ public class Scope
 	public boolean lockScale;
 	public boolean plot2d;
 	public boolean plotXY;
-	
+
 	public CircuitElm elm;
 	public CircuitElm xElm;
 	public CircuitElm yElm;
@@ -67,7 +66,7 @@ public class Scope
 	public Scope(CirSim s)
 	{
 		super();
-		
+
 		this.rect = new Rectangle();
 		this.reset();
 		this.sim = s;
