@@ -1,7 +1,6 @@
 
-package com.limoilux.circuit.ui;
+package com.limoilux.circuit.techno;
 
-import com.limoilux.circuit.techno.CircuitElm;
 
 public class CircuitNodeLink
 {

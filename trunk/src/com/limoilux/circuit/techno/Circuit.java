@@ -12,8 +12,6 @@ import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.RailElm;
 import com.limoilux.circuit.VoltageElm;
 import com.limoilux.circuit.WireElm;
-import com.limoilux.circuit.ui.CircuitNode;
-import com.limoilux.circuit.ui.CircuitNodeLink;
 import com.limoilux.circuit.ui.RowInfo;
 
 public class Circuit

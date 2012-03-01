@@ -1,7 +1,8 @@
 
-package com.limoilux.circuit.ui;
+package com.limoilux.circuit.techno;
 
 import java.util.Vector;
+
 
 public class CircuitNode
 {
