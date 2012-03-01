@@ -38,10 +38,19 @@ public class Scope
 	public int ptr, ctr;
 	public int speed;
 	public int position;
-	public int value, ivalue;
+	public int value;
+	public int ivalue;
+
 	public String text;
 	public Rectangle rect;
-	public boolean showI, showV, showMax, showMin, showFreq, lockScale, plot2d, plotXY;
+	public boolean showI;
+	public boolean showV;
+	public boolean showMax;
+	public boolean showMin;
+	public boolean showFreq;
+	public boolean lockScale;
+	public boolean plot2d;
+	public boolean plotXY;
 	public CircuitElm elm;
 	public CircuitElm xElm;
 	public CircuitElm yElm;
