@@ -810,17 +810,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.dispose();
 	}
 
-	@Override
-	public boolean handleEvent(Event ev)
-	{
-		if (ev.id == Event.WINDOW_DESTROY)
-		{
-			this.destroyFrame();
-			return true;
-		}
 
-		return super.handleEvent(ev);
-	}
 
 	@Override
 	public void paint(Graphics g)
