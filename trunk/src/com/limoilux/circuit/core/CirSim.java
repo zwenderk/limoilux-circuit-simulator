@@ -231,14 +231,15 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 		this.mainContainer2 = new JPanel();	
 		this.mainContainer = new JPanel();
-		//this.mainContainer.setLayout(new BorderLayout());
+		this.mainContainer.setBackground(Color.BLACK);
+		this.mainContainer.setLayout(new BorderLayout());
 		this.cirFrame.add(this.mainContainer, BorderLayout.CENTER);
 
 		this.toolBar = new JToolBar();
 		this.toolBar.setFloatable(false);
 		this.mainContainer.add(toolBar, BorderLayout.NORTH);
 
-		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
+
 
 
 
@@ -297,6 +298,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.initStartCircuitText();
 
 		this.initScreen();
+		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
 	}
 
 	private void manageJavaVersion()
