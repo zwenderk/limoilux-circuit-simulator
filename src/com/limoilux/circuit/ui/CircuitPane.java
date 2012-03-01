@@ -4,10 +4,11 @@ package com.limoilux.circuit.ui;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Panel;
 
 import com.limoilux.circuit.core.CirSim;
 
-public class CircuitCanvas extends Canvas
+public class CircuitPane extends Panel
 {
 	/**
 	 * 
@@ -17,15 +18,11 @@ public class CircuitCanvas extends Canvas
 	@Deprecated
 	private final CirSim cirSim;
 
-	public CircuitCanvas(CirSim cirSim)
+	public CircuitPane(CirSim cirSim)
 	{
 		this.cirSim = cirSim;
-	}
-
-	@Override
-	public Dimension getPreferredSize()
-	{
-		return new Dimension(350, 450);
+		
+		this.setPreferredSize(new Dimension(350, 450));
 	}
 
 	@Override
@@ -35,8 +32,10 @@ public class CircuitCanvas extends Canvas
 	}
 
 	@Override
-	public void paint(Graphics g)
+	public void paintComponents(Graphics g)
 	{
+		super.paintComponents(g);
+		
 		this.cirSim.updateCircuit(g);
 	}
 }
