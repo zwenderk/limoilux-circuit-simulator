@@ -1,6 +1,7 @@
 
 package com.limoilux.circuit.techno;
 
+import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.ui.RowInfo;
 
 public class Matrix
@@ -45,6 +46,17 @@ public class Matrix
 		return false;
 	}
 
+	
+	public void origRigthToRight()
+	{
+		
+
+	for (int i = 0; i < this.circuitMatrixSize; i++)
+	{
+		this.circuitRightSide[i] = this.origRightSide[i];
+	}
+	}
+	
 	public String matrixToString()
 	{
 		String out = "";
@@ -264,9 +276,14 @@ public class Matrix
 	}
 
 	// TODO Trouver nom significatif
-	public boolean doLuFactor()
+	public boolean doLowUpFactor()
 	{
 		return Matrix.lowUpFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute);
+	}
+
+	public void doLowUpSolve()
+	{
+		Matrix.lowUpSolve(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute, this.circuitRightSide);
 	}
 
 	public int simplifyMatrix(int newsize, int matrixSize)
