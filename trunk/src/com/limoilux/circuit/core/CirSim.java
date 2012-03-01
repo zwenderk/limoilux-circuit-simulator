@@ -54,7 +54,7 @@ import com.limoilux.circuit.TextElm;
 import com.limoilux.circuit.techno.Circuit;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
-import com.limoilux.circuit.ui.CircuitCanvas;
+import com.limoilux.circuit.ui.CircuitPane;
 import com.limoilux.circuit.ui.CircuitLayout;
 import com.limoilux.circuit.ui.CircuitNode;
 import com.limoilux.circuit.ui.CircuitNodeLink;
@@ -209,7 +209,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public final Circuit circuit;
 	public final ScopeManager scopeMan;
 
-	public final CircuitCanvas circuitCanvas;
+	public final CircuitPane circuitPanel;
 
 	public CirSim()
 	{
@@ -267,13 +267,13 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.dumpTypes['B'] = Scope.class;
 
 		this.mainContainer.setLayout(new CircuitLayout());
-		this.circuitCanvas = new CircuitCanvas(this);
-		this.circuitCanvas.addComponentListener(this);
-		this.circuitCanvas.addMouseMotionListener(this.mouseMotionList);
-		this.circuitCanvas.addMouseListener(this.mouseList);
-		this.circuitCanvas.addKeyListener(this.keyList);
+		this.circuitPanel = new CircuitPane(this);
+		this.circuitPanel.addComponentListener(this);
+		this.circuitPanel.addMouseMotionListener(this.mouseMotionList);
+		this.circuitPanel.addMouseListener(this.mouseList);
+		this.circuitPanel.addKeyListener(this.keyList);
 
-		this.mainContainer.add(this.circuitCanvas);
+		this.mainContainer.add(this.circuitPanel);
 
 		this.mainMenu = new PopupMenu();
 		MenuBar menubar = null;
@@ -489,8 +489,8 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.scopeMan.scopeColCount = new int[20];
 		this.scopeMan.scopeCount = 0;
 
-		this.circuitCanvas.setBackground(Color.black);
-		this.circuitCanvas.setForeground(Color.lightGray);
+		this.circuitPanel.setBackground(Color.black);
+		this.circuitPanel.setForeground(Color.lightGray);
 
 		this.elmMenu = new PopupMenu();
 		this.elmEditMenuItem = this.getMenuItem("Edit");
@@ -666,7 +666,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 	private void handleResize()
 	{
-		this.winSize = this.circuitCanvas.getSize();
+		this.winSize = this.circuitPanel.getSize();
 
 		if (this.winSize.width == 0)
 		{
@@ -740,7 +740,9 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	@Override
 	public void paint(Graphics g)
 	{
-		this.circuitCanvas.repaint();
+		super.paint(g);
+		
+		this.circuitPanel.repaint();
 	}
 
 	public void updateCircuit(Graphics realg)
@@ -814,7 +816,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			{
 				e.printStackTrace();
 				this.circuit.setNeedAnalysis(true);
-				this.circuitCanvas.repaint();
+				this.circuitPanel.repaint();
 
 				return;
 			}
@@ -1035,7 +1037,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 				}
 			}
 
-			this.circuitCanvas.repaint(0);
+			this.circuitPanel.repaint(0);
 		}
 
 		this.timer.lastFrameTime = this.timer.lastTime;
@@ -1136,7 +1138,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					((SwitchElm) ce).toggle();
 					this.circuit.setNeedAnalysis(true);
 
-					this.circuitCanvas.repaint();
+					this.circuitPanel.repaint();
 					return;
 				}
 			}
@@ -1146,7 +1148,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	public void needAnalyze()
 	{
 		this.circuit.setNeedAnalysis(true);
-		this.circuitCanvas.repaint();
+		this.circuitPanel.repaint();
 	}
 
 	@Deprecated
@@ -1184,7 +1186,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		this.circuit.setNeedAnalysis(false);
 
-		this.circuitCanvas.repaint();
+		this.circuitPanel.repaint();
 	}
 
 	@Deprecated
@@ -1688,7 +1690,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			this.scopeMan.scopeCount = 0;
 		}
 
-		this.circuitCanvas.repaint();
+		this.circuitPanel.repaint();
 
 		int p;
 		for (p = 0; p < len;)
@@ -2239,7 +2241,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		for (int i = this.circuit.getElementCount() - 1; i >= 0; i--)
 		{
-			CircuitElm ce = this.circuit.getElement(i);
+			CircuitElm ce = this.circuit.getElementAt(i);
 			if (ce.isSelected())
 			{
 				this.clipboard += ce.dump() + "\n";
@@ -2258,7 +2260,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 		for (int i = this.circuit.getElementCount() - 1; i >= 0; i--)
 		{
-			CircuitElm ce = this.circuit.getElement(i);
+			CircuitElm ce = this.circuit.getElementAt(i);
 			if (ce.isSelected())
 			{
 				ce.delete();
@@ -2275,7 +2277,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		this.setMenuSelection();
 		for (int i = this.circuit.getElementCount() - 1; i >= 0; i--)
 		{
-			CircuitElm ce = this.circuit.getElement(i);
+			CircuitElm ce = this.circuit.getElementAt(i);
 			if (ce.isSelected())
 			{
 				this.clipboard += ce.dump() + "\n";
@@ -2299,7 +2301,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		Rectangle oldbb = null;
 		for (i = 0; i != this.circuit.getElementCount(); i++)
 		{
-			CircuitElm ce = this.circuit.getElement(i);
+			CircuitElm ce = this.circuit.getElementAt(i);
 			Rectangle bb = ce.getBoundingBox();
 			if (oldbb != null)
 			{
@@ -2384,14 +2386,14 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	@Override
 	public void componentShown(ComponentEvent e)
 	{
-		this.circuitCanvas.repaint();
+		this.circuitPanel.repaint();
 	}
 
 	@Override
 	public void componentResized(ComponentEvent e)
 	{
 		this.handleResize();
-		this.circuitCanvas.repaint(100);
+		this.circuitPanel.repaint(100);
 	}
 
 	@Override
@@ -2419,7 +2421,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			this.circuit.setNeedAnalysis(true);
 			this.timer.time = 0;
 			this.stoppedCheck.setState(false);
-			this.circuitCanvas.repaint();
+			this.circuitPanel.repaint();
 		}
 
 		if (e.getSource() == this.dumpMatrixButton)
@@ -2572,7 +2574,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			{
 				this.scopeMan.scopes[this.menuScope].resetGraph();
 			}
-			this.circuitCanvas.repaint();
+			this.circuitPanel.repaint();
 		}
 
 		if (ac.indexOf("setup ") == 0)
@@ -2585,7 +2587,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 	@Override
 	public void itemStateChanged(ItemEvent e)
 	{
-		this.circuitCanvas.repaint(CirSim.PAUSE);
+		this.circuitPanel.repaint(CirSim.PAUSE);
 		Object mi = e.getItemSelectable();
 		if (mi == this.stoppedCheck)
 		{
@@ -2743,7 +2745,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 		{
 			CirSim.this.scopeSelected = -1;
 			CirSim.this.mouseElm = CirSim.this.plotXElm = CirSim.this.plotYElm = null;
-			CirSim.this.circuitCanvas.repaint();
+			CirSim.this.circuitPanel.repaint();
 		}
 
 		@Override
@@ -2885,7 +2887,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 			}
 
 			CirSim.this.dragElm = null;
-			CirSim.this.circuitCanvas.repaint();
+			CirSim.this.circuitPanel.repaint();
 		}
 
 	}
@@ -2964,7 +2966,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 					CirSim.this.dragY = CirSim.this.snapGrid(e.getY());
 				}
 			}
-			CirSim.this.circuitCanvas.repaint(CirSim.PAUSE);
+			CirSim.this.circuitPanel.repaint(CirSim.PAUSE);
 		}
 
 		@Override
@@ -3076,7 +3078,7 @@ public class CirSim extends JFrame implements ComponentListener, ActionListener,
 
 			if (CirSim.this.mouseElm != origMouse)
 			{
-				CirSim.this.circuitCanvas.repaint();
+				CirSim.this.circuitPanel.repaint();
 			}
 		}
 	}

@@ -869,7 +869,7 @@ public class Scope
 				this.imageSource = new MemoryImageSource(w, h, this.pixels, 0, w);
 				this.imageSource.setAnimated(true);
 				this.imageSource.setFullBufferUpdates(true);
-				this.image = (BufferedImage) this.sim.circuitCanvas.createImage(this.imageSource);
+				this.image = (BufferedImage) this.sim.circuitPanel.createImage(this.imageSource);
 			}
 
 			this.dpixels = new float[size];
