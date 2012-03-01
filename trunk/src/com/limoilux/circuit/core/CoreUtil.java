@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.Random;
 
 import com.limoilux.circuit.techno.CircuitElm;
-import com.limoilux.circuit.techno.matrix.Matrix;
+import com.limoilux.circuit.techno.matrix.MatrixManager;
 
 public class CoreUtil
 {

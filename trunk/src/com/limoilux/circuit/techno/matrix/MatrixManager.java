@@ -1,10 +1,10 @@
 
 package com.limoilux.circuit.techno.matrix;
 
-import com.limoilux.circuit.core.CoreUtil;
+
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 
-public class Matrix
+public class MatrixManager
 {
 	public double[][] circuitMatrix;
 	public double[][] originalMatrix;
@@ -124,7 +124,7 @@ public class Matrix
 	// TODO Trouver nom significatif
 	public boolean doLowUpFactor()
 	{
-		return MatrixUtil.lowUpFactor(this.circuitMatrix, this.circuitMatrixSize, this.circuitPermute);
+		return MatrixUtil.lowUpFactor(this.circuitMatrix, this.circuitPermute);
 	}
 
 	public void doLowUpSolve()

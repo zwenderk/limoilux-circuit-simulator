@@ -12,7 +12,7 @@ import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.RailElm;
 import com.limoilux.circuit.VoltageElm;
 import com.limoilux.circuit.WireElm;
-import com.limoilux.circuit.techno.matrix.Matrix;
+import com.limoilux.circuit.techno.matrix.MatrixManager;
 import com.limoilux.circuit.techno.matrix.MatrixRowInfo;
 
 public class Circuit
@@ -32,13 +32,13 @@ public class Circuit
 	public CircuitElm[] voltageSources;
 	public MatrixRowInfo[] circuitRowInfo;
 
-	public final Matrix matrix;
+	public final MatrixManager matrix;
 
 	public Circuit()
 	{
 		this.elementList = new ArrayList<CircuitElm>();
 		this.nodeList = new ArrayList<CircuitNode>();
-		this.matrix = new Matrix();
+		this.matrix = new MatrixManager();
 	}
 	
 	public boolean isEmpty()
