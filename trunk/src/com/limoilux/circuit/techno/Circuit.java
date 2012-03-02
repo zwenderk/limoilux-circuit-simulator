@@ -17,6 +17,7 @@ import com.limoilux.circuit.techno.matrix.MatrixRowInfo;
 
 public class Circuit
 {
+
 	private final ArrayList<CircuitElm> elementList;
 	private final ArrayList<CircuitNode> nodeList;
 
@@ -29,6 +30,7 @@ public class Circuit
 
 	public boolean converged;
 
+	public Rectangle circuitArea;
 	public CircuitElm[] voltageSources;
 	public MatrixRowInfo[] circuitRowInfo;
 
@@ -39,6 +41,7 @@ public class Circuit
 		this.elementList = new ArrayList<CircuitElm>();
 		this.nodeList = new ArrayList<CircuitNode>();
 		this.matrix = new MatrixManager();
+		this.circuitArea = new Rectangle();
 	}
 
 	public boolean isEmpty()

@@ -12,6 +12,8 @@ import java.awt.image.MemoryImageSource;
 import java.awt.image.Raster;
 import java.util.StringTokenizer;
 
+import javax.swing.JPanel;
+
 import com.limoilux.circuit.LogicOutputElm;
 import com.limoilux.circuit.MemristorElm;
 import com.limoilux.circuit.OutputElm;
@@ -21,7 +23,7 @@ import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.techno.CircuitElm;
 
-public class Scope
+public class Scope extends JPanel
 {
 	static final int FLAG_YELM = 32;
 	static final int VAL_POWER = 1;

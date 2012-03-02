@@ -147,7 +147,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	private String stopMessage;
 
 	private String clipboard;
-	private Rectangle circuitArea;
 	private Vector<String> undoStack, redoStack;
 
 	private Label titleLabel;
@@ -228,7 +227,9 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.timer = new Timer();
 		this.activityManager = new ActivityManager();
 		this.circuit = new Circuit();
-		this.scopeMan = new ScopeManager();
+		
+		
+		this.scopeMan = new ScopeManager(this.circuit);
 		this.cirFrame = new CircuitFrame(this.circuitPanel);
 
 		this.mainContainer = new JPanel();
@@ -293,9 +294,25 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.initScreen();
 
 		this.cirFrame.add(this.mainContainer, BorderLayout.CENTER);
-
-		this.mainContainer.add(this.toolBar, BorderLayout.NORTH);
+		this.cirFrame.add(this.toolBar, BorderLayout.NORTH);
+		
 		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
+		this.mainContainer.add(this.scopeMan.getScopePane(), BorderLayout.SOUTH);
+		
+	}
+	
+	private void start() 
+	{
+		this.handleResize();
+
+		this.cirFrame.setVisible(true);
+		System.out.println("winSize "  + this.winSize);
+		System.out.println("cirArea " + this.circuit.circuitArea);
+		
+		this.scopeMan.setupScopes(this.winSize);
+		
+		this.cirFrame.requestFocus();
+
 	}
 
 	private void manageJavaVersion()
@@ -316,7 +333,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	{
 		Dimension screen = this.cirFrame.getToolkit().getScreenSize();
 
-		this.handleResize();
+	
 
 		Dimension x = this.cirFrame.getSize();
 		this.cirFrame.setLocation((screen.width - x.width) / 2, (screen.height - x.height) / 2);
@@ -761,9 +778,9 @@ this.circuitPanel.add(scopePopUp);
 
 			// if (h < 128 && winSize.height > 300) h = 128;
 
-			this.circuitArea = new Rectangle(0, 0, dim.width, dim.height - height);
+			this.circuit.circuitArea.setBounds(0, 0, dim.width, dim.height - height);
 
-			this.circuit.centerCircuit(this.gridMask, this.circuitArea);
+			this.circuit.centerCircuit(this.gridMask, this.circuit.circuitArea);
 
 			this.circuitPanel.repaint();
 
@@ -809,7 +826,7 @@ this.circuitPanel.add(scopePopUp);
 			this.mouseElm = this.stopElm;
 		}
 
-		this.scopeMan.setupScopes(this.circuit, this.winSize, this.circuitArea);
+		this.scopeMan.setupScopes(this.winSize);
 
 		g = this.dbimage.getGraphics();
 		g.setColor(Color.black);
@@ -936,7 +953,7 @@ this.circuitPanel.add(scopePopUp);
 		g.setColor(CircuitElm.whiteColor);
 		if (this.stopMessage != null)
 		{
-			g.drawString(this.stopMessage, 10, this.circuitArea.height);
+			g.drawString(this.stopMessage, 10, this.circuit.circuitArea.height);
 		}
 		else
 		{
@@ -1022,7 +1039,7 @@ this.circuitPanel.add(scopePopUp);
 			// find where to show data; below circuit, not too high unless we
 			// need it
 			int ybase = this.winSize.height - 15 * i - 5;
-			ybase = Math.min(ybase, this.circuitArea.height);
+			ybase = Math.min(ybase, this.circuit.circuitArea.height);
 			ybase = Math.max(ybase, this.circuit.circuitBottom);
 
 			for (i = 0; info[i] != null; i++)
@@ -2331,8 +2348,8 @@ this.circuitPanel.add(scopePopUp);
 			// find a place for new items
 			int dx = 0;
 			int dy = 0;
-			int spacew = this.circuitArea.width - oldbb.width - newbb.width;
-			int spaceh = this.circuitArea.height - oldbb.height - newbb.height;
+			int spacew = this.circuit.circuitArea.width - oldbb.width - newbb.width;
+			int spaceh = this.circuit.circuitArea.height - oldbb.height - newbb.height;
 			if (spacew > spaceh)
 			{
 				dx = this.snapGrid(oldbb.x + oldbb.width - newbb.x + this.gridSize);
@@ -2804,7 +2821,7 @@ this.circuitPanel.add(scopePopUp);
 			int x0 = CirSim.this.snapGrid(x);
 			int y0 = CirSim.this.snapGrid(y);
 
-			if (!CirSim.this.circuitArea.contains(x0, y0))
+			if (!CirSim.this.circuit.circuitArea.contains(x0, y0))
 			{
 				return;
 			}
@@ -3062,9 +3079,6 @@ this.circuitPanel.add(scopePopUp);
 	{
 		CirSim c = new CirSim();
 
-		c.cirFrame.setVisible(true);
-
-		c.cirFrame.requestFocus();
-
+		c.start();
 	}
 }

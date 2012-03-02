@@ -15,12 +15,23 @@ public class ScopeManager
 
 	public Scope scopes[];
 
-	public ScopeManager()
+	private final ScopePane scopePane;
+	private final Circuit circuit;
+
+	public ScopeManager(Circuit circuit)
 	{
+		this.circuit = circuit;
+		this.scopePane = new ScopePane();
 
 		this.scopes = new Scope[20];
 		this.scopeColCount = new int[20];
 		this.scopeCount = 0;
+		
+	}
+
+	public ScopePane getScopePane()
+	{
+		return this.scopePane;
 	}
 
 	public void drawScope(Graphics g)
@@ -103,24 +114,22 @@ public class ScopeManager
 		}
 	}
 
-	public void setupScopes(Circuit c, Dimension winSize, Rectangle circuitArea)
+	private void removeUnused()
 	{
-		int i;
-
 		// check scopes to make sure the elements still exist, and remove
 		// unused scopes/columns
 		int pos = -1;
-		for (i = 0; i < this.scopeCount; i++)
+		for (int i = 0; i < this.scopeCount; i++)
 		{
-			if (c.locateElement(this.scopes[i].elm) < 0)
+			if (this.circuit.locateElement(this.scopes[i].elm) < 0)
 			{
 				this.scopes[i].setElm(null);
 			}
 
 			if (this.scopes[i].elm == null)
 			{
-				int j;
-				for (j = i; j != this.scopeCount; j++)
+
+				for (int j = i; j != this.scopeCount; j++)
 				{
 					this.scopes[j] = this.scopes[j + 1];
 				}
@@ -141,15 +150,23 @@ public class ScopeManager
 		{
 			this.scopeCount--;
 		}
+	}
 
-		int h = winSize.height - circuitArea.height;
-		pos = 0;
-		for (i = 0; i != this.scopeCount; i++)
+	public void setupScopes(Dimension winSize)
+	{
+		this.removeUnused();
+
+		int height = winSize.height - this.circuit.circuitArea.height;
+
+		this.scopePane.setPreferredSize(new Dimension(0, height));
+
+		int pos = 0;
+		for (int i = 0; i < this.scopeCount; i++)
 		{
 			this.scopeColCount[i] = 0;
 		}
 
-		for (i = 0; i != this.scopeCount; i++)
+		for (int i = 0; i != this.scopeCount; i++)
 		{
 			pos = Math.max(this.scopes[i].position, pos);
 			this.scopeColCount[this.scopes[i].position]++;
@@ -175,13 +192,13 @@ public class ScopeManager
 		int row = 0;
 		int speed = 0;
 
-		for (i = 0; i != this.scopeCount; i++)
+		for (int i = 0; i != this.scopeCount; i++)
 		{
 			Scope scope = this.scopes[i];
 			if (scope.position > pos)
 			{
 				pos = scope.position;
-				colh = h / this.scopeColCount[pos];
+				colh = height / this.scopeColCount[pos];
 				row = 0;
 				speed = scope.speed;
 			}
@@ -191,7 +208,7 @@ public class ScopeManager
 				scope.resetGraph();
 			}
 
-			Rectangle r = new Rectangle(pos * w, winSize.height - h + colh * row, w - marg, colh);
+			Rectangle r = new Rectangle(pos * w, winSize.height - height + colh * row, w - marg, colh);
 			row++;
 			if (!r.equals(scope.rect))
 			{
