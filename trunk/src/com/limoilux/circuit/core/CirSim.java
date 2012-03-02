@@ -2237,7 +2237,7 @@ this.circuitPanel.add(scopePopUp);
 				return;
 			}
 
-			this.clearSelection();
+			this.circuit.clearSelection();
 			this.menuElm.setSelected(true);
 		}
 	}
