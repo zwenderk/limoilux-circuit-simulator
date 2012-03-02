@@ -116,10 +116,10 @@ public class SweepElm extends CircuitElm
 		}
 
 		this.drawPosts(g);
-		this.curcount = CircuitElm.updateDotCount(-this.current, this.curcount);
+		this.curcount = CoreUtil.updateDotCount(-this.current, this.curcount);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
-			CircuitElm.drawDots(g, this.point1, this.lead1, this.curcount);
+			DrawUtil.drawDots(g, this.point1, this.lead1, this.curcount);
 		}
 	}
 
