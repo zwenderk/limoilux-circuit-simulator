@@ -158,8 +158,6 @@ public class ScopeManager
 
 		int height = winSize.height - this.circuit.circuitArea.height;
 
-		this.scopePane.setPreferredSize(new Dimension(0, height));
-
 
 		for (int i = 0; i < this.scopeCount; i++)
 		{

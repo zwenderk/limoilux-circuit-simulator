@@ -25,8 +25,8 @@ import com.limoilux.circuit.techno.CircuitElm;
 
 public class Scope extends JPanel
 {
-	static final int FLAG_YELM = 32;
-	static final int VAL_POWER = 1;
+	public static final int FLAG_YELM = 32;
+	public static final int VAL_POWER = 1;
 	public static final int VAL_IB = 1;
 	public static final int VAL_IC = 2;
 	public static final int VAL_IE = 3;
