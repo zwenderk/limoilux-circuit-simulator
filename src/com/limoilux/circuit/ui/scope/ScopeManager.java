@@ -160,12 +160,13 @@ public class ScopeManager
 
 		this.scopePane.setPreferredSize(new Dimension(0, height));
 
-		int pos = 0;
+
 		for (int i = 0; i < this.scopeCount; i++)
 		{
 			this.scopeColCount[i] = 0;
 		}
 
+		int pos = 0;
 		for (int i = 0; i != this.scopeCount; i++)
 		{
 			pos = Math.max(this.scopes[i].position, pos);
