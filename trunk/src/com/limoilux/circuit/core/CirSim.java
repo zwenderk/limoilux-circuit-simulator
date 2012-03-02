@@ -375,15 +375,15 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.toolBar.add(this.stopButton);
 		this.toolBar.addSeparator();
 
-		this.toolBar.add(new JLabel("Simulation Speed", JLabel.CENTER));
+		this.toolBar.add(new JLabel("Speed", JLabel.CENTER));
 		this.speedBar = new JScrollBar(JScrollBar.HORIZONTAL, 3, 1, 0, 260);
 		this.speedBar.addAdjustmentListener(this);
 		this.toolBar.add(this.speedBar);
 
-		this.toolBar.add(new JLabel("Current Speed", JLabel.CENTER));
+		//this.toolBar.add(new JLabel("Current Speed", JLabel.CENTER));
 		this.currentBar = new JScrollBar(JScrollBar.HORIZONTAL, 50, 1, 1, 100);
-		this.currentBar.addAdjustmentListener(this);
-		this.toolBar.add(this.currentBar);
+		//this.currentBar.addAdjustmentListener(this);
+		//this.toolBar.add(this.currentBar);
 
 		this.powerLabel = new Label("Power Brightness", Label.CENTER);
 		this.powerLabel.setEnabled(false);
@@ -836,7 +836,7 @@ this.circuitPanel.add(scopePopUp);
 			}
 		}
 
-		if (!this.playButton.isSelected())
+		if (this.activityManager.isPlaying())
 		{
 			long sysTime = System.currentTimeMillis();
 			if (this.timer.lastTime != 0)
@@ -1048,7 +1048,7 @@ this.circuitPanel.add(scopePopUp);
 
 		realg.drawImage(this.dbimage, 0, 0, this.cirFrame);
 
-		if (!this.playButton.isSelected() && !this.circuit.matrix.matrixIsNull())
+		if (this.activityManager.isPlaying() && !this.circuit.matrix.matrixIsNull())
 		{
 
 			long delay = this.timer.calculateDelay();
