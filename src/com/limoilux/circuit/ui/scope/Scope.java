@@ -147,6 +147,12 @@ public class Scope extends JPanel
 			this.value = Scope.VAL_VCE;
 		}
 	}
+	
+	@Override
+	public void paintComponents(Graphics g)
+	{
+		super.paintComponents(g);
+	}
 
 	public void setRect(Rectangle r)
 	{

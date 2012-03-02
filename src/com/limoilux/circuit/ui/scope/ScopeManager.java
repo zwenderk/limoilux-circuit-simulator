@@ -40,6 +40,7 @@ public class ScopeManager
 		for (int i = 0; i < this.scopeCount; i++)
 		{
 			this.scopes[i].draw(g);
+			this.scopes[i].repaint();
 		}
 	}
 
