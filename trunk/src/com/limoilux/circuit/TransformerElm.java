@@ -101,7 +101,7 @@ public class TransformerElm extends CircuitElm
 			this.drawCoil(g, this.dsign * (i == 1 ? -6 : 6), this.ptCoil[i], this.ptCoil[i + 2], this.volts[i],
 					this.volts[i + 2]);
 		}
-		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
+		g.setColor(this.needsHighlight() ? CircuitElm.SELECT_COLOR : CircuitElm.LIGHT_GRAY_COLOR);
 		for (i = 0; i != 2; i++)
 		{
 			CircuitElm.drawThickLine(g, this.ptCore[i], this.ptCore[i + 2]);

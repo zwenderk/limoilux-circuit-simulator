@@ -466,7 +466,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			this.scopeMan.drawScope(g);
 		}
 
-		g.setColor(CircuitElm.whiteColor);
+		g.setColor(CircuitElm.WHITE_COLOR);
 		if (this.stopMessage != null)
 		{
 			g.drawString(this.stopMessage, 10, this.circuit.circuitArea.height);
@@ -567,7 +567,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 		if (this.selectedArea != null)
 		{
-			g.setColor(CircuitElm.selectColor);
+			g.setColor(CircuitElm.SELECT_COLOR);
 			g.drawRect(this.selectedArea.x, this.selectedArea.y, this.selectedArea.width, this.selectedArea.height);
 		}
 

@@ -338,7 +338,7 @@ public class Scope extends JPanel
 			this.dpixels[i] *= .997;
 		}
 		g.drawImage(this.image, this.rect.x, this.rect.y, null);
-		g.setColor(CircuitElm.whiteColor);
+		g.setColor(CircuitElm.WHITE_COLOR);
 		g.fillOval(this.rect.x + this.draw_ox - 2, this.rect.y + this.draw_oy - 2, 5, 5);
 		int yt = this.rect.y + 10;
 		int x = this.rect.x;
@@ -666,7 +666,7 @@ public class Scope extends JPanel
 			}
 		}
 		g.drawImage(this.image, this.rect.x, this.rect.y, null);
-		g.setColor(CircuitElm.whiteColor);
+		g.setColor(CircuitElm.WHITE_COLOR);
 		int yt = this.rect.y + 10;
 		x += this.rect.x;
 		if (this.showMax)

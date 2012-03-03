@@ -89,7 +89,7 @@ public class TextElm extends CircuitElm
 	@Override
 	public void draw(Graphics g)
 	{
-		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
+		g.setColor(this.needsHighlight() ? CircuitElm.SELECT_COLOR : CircuitElm.LIGHT_GRAY_COLOR);
 		Font f = new Font("SansSerif", 0, this.size);
 		g.setFont(f);
 		FontMetrics fm = g.getFontMetrics();

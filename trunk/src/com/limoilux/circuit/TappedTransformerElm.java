@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class TappedTransformerElm extends CircuitElm
@@ -75,7 +76,7 @@ public class TappedTransformerElm extends CircuitElm
 			CircuitElm.setPowerColor(g, this.current[i] * (this.volts[i] - this.volts[i + 1]));
 			this.drawCoil(g, i > 1 ? -6 : 6, this.ptCoil[i], this.ptCoil[i + 1], this.volts[i], this.volts[i + 1]);
 		}
-		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
+		g.setColor(this.needsHighlight() ? CircuitElm.SELECT_COLOR : CircuitElm.LIGHT_GRAY_COLOR);
 		for (i = 0; i != 4; i += 2)
 		{
 			CircuitElm.drawThickLine(g, this.ptCore[i], this.ptCore[i + 1]);
@@ -88,16 +89,16 @@ public class TappedTransformerElm extends CircuitElm
 		}
 
 		// primary dots
-		CircuitElm.drawDots(g, this.ptEnds[0], this.ptCoil[0], this.curcount[0]);
-		CircuitElm.drawDots(g, this.ptCoil[0], this.ptCoil[1], this.curcount[0]);
-		CircuitElm.drawDots(g, this.ptCoil[1], this.ptEnds[1], this.curcount[0]);
+		DrawUtil.drawDots(g, this.ptEnds[0], this.ptCoil[0], this.curcount[0]);
+		DrawUtil.drawDots(g, this.ptCoil[0], this.ptCoil[1], this.curcount[0]);
+		DrawUtil.drawDots(g, this.ptCoil[1], this.ptEnds[1], this.curcount[0]);
 
 		// secondary dots
-		CircuitElm.drawDots(g, this.ptEnds[2], this.ptCoil[2], this.curcount[1]);
-		CircuitElm.drawDots(g, this.ptCoil[2], this.ptCoil[3], this.curcount[1]);
-		CircuitElm.drawDots(g, this.ptCoil[3], this.ptEnds[3], this.curcount[3]);
-		CircuitElm.drawDots(g, this.ptCoil[3], this.ptCoil[4], this.curcount[2]);
-		CircuitElm.drawDots(g, this.ptCoil[4], this.ptEnds[4], this.curcount[2]);
+		DrawUtil.drawDots(g, this.ptEnds[2], this.ptCoil[2], this.curcount[1]);
+		DrawUtil.drawDots(g, this.ptCoil[2], this.ptCoil[3], this.curcount[1]);
+		DrawUtil.drawDots(g, this.ptCoil[3], this.ptEnds[3], this.curcount[3]);
+		DrawUtil.drawDots(g, this.ptCoil[3], this.ptCoil[4], this.curcount[2]);
+		DrawUtil.drawDots(g, this.ptCoil[4], this.ptEnds[4], this.curcount[2]);
 
 		this.drawPosts(g);
 		this.setBbox(this.ptEnds[0], this.ptEnds[4], 0);

@@ -81,7 +81,7 @@ public class Switch2Elm extends SwitchElm
 		// draw switch
 		if (!this.needsHighlight())
 		{
-			g.setColor(CircuitElm.whiteColor);
+			g.setColor(CircuitElm.WHITE_COLOR);
 		}
 		CircuitElm.drawThickLine(g, this.lead1, this.swpoles[this.position]);
 

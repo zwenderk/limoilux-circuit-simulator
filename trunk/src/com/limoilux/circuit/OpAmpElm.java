@@ -82,7 +82,7 @@ public class OpAmpElm extends CircuitElm
 		CircuitElm.drawThickLine(g, this.in1p[0], this.in1p[1]);
 		this.setVoltageColor(g, this.volts[1]);
 		CircuitElm.drawThickLine(g, this.in2p[0], this.in2p[1]);
-		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
+		g.setColor(this.needsHighlight() ? CircuitElm.SELECT_COLOR : CircuitElm.LIGHT_GRAY_COLOR);
 		this.setPowerColor(g, true);
 		CircuitElm.drawThickPolygon(g, this.triangle);
 		g.setFont(this.plusFont);

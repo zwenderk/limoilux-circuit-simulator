@@ -116,7 +116,7 @@ public abstract class GateElm extends CircuitElm
 		}
 		this.setVoltageColor(g, this.volts[this.inputCount]);
 		DrawUtil.drawThickLine(g, this.lead2, this.point2);
-		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
+		g.setColor(this.needsHighlight() ? CircuitElm.SELECT_COLOR : CircuitElm.LIGHT_GRAY_COLOR);
 		DrawUtil.drawThickPolygon(g, this.gatePoly);
 		if (this.linePoints != null)
 		{

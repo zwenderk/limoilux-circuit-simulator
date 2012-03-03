@@ -50,7 +50,7 @@ public class OutputElm extends CircuitElm
 		boolean selected = this.needsHighlight() || CircuitElm.cirSim.plotYElm == this;
 		Font f = new Font("SansSerif", selected ? Font.BOLD : 0, 14);
 		g.setFont(f);
-		g.setColor(selected ? CircuitElm.selectColor : CircuitElm.whiteColor);
+		g.setColor(selected ? CircuitElm.SELECT_COLOR : CircuitElm.WHITE_COLOR);
 		String s = (this.flags & this.FLAG_VALUE) != 0 ? CircuitElm.getVoltageText(this.volts[0]) : "out";
 		FontMetrics fm = g.getFontMetrics();
 		if (this == CircuitElm.cirSim.plotXElm)
@@ -67,7 +67,7 @@ public class OutputElm extends CircuitElm
 		this.setVoltageColor(g, this.volts[0]);
 		if (selected)
 		{
-			g.setColor(CircuitElm.selectColor);
+			g.setColor(CircuitElm.SELECT_COLOR);
 		}
 		CircuitElm.drawThickLine(g, this.point1, this.lead1);
 		this.drawPosts(g);

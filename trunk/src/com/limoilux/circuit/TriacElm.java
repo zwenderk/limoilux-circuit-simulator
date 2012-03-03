@@ -10,8 +10,10 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
 // Silicon-Controlled Rectifier
@@ -126,13 +128,13 @@ public class TriacElm extends CircuitElm
 			dir = 1;
 		}
 		this.calcLeads(16);
-		this.cathode = CircuitElm.newPointArray(2);
-		Point pa[] = CircuitElm.newPointArray(2);
-		CircuitElm.interpPoint2(this.lead1, this.lead2, pa[0], pa[1], 0, this.hs);
-		CircuitElm.interpPoint2(this.lead1, this.lead2, this.cathode[0], this.cathode[1], 1, this.hs);
-		this.poly = CircuitElm.createPolygon(pa[0], pa[1], this.lead2);
+		this.cathode = CoreUtil.newPointArray(2);
+		Point pa[] = CoreUtil.newPointArray(2);
+		CoreUtil.interpPoint2(this.lead1, this.lead2, pa[0], pa[1], 0, this.hs);
+		CoreUtil.interpPoint2(this.lead1, this.lead2, this.cathode[0], this.cathode[1], 1, this.hs);
+		this.poly = CoreUtil.createPolygon(pa[0], pa[1], this.lead2);
 
-		this.gate = CircuitElm.newPointArray(2);
+		this.gate = CoreUtil.newPointArray(2);
 		double leadlen = (this.dn - 16) / 2;
 		int gatelen = CircuitElm.cirSim.gridSize;
 		gatelen += leadlen % CircuitElm.cirSim.gridSize;
@@ -142,8 +144,8 @@ public class TriacElm extends CircuitElm
 			this.y2 = this.y;
 			return;
 		}
-		CircuitElm.interpPoint(this.lead2, this.point2, this.gate[0], gatelen / leadlen, gatelen * dir);
-		CircuitElm.interpPoint(this.lead2, this.point2, this.gate[1], gatelen / leadlen, CircuitElm.cirSim.gridSize * 2
+		CoreUtil.interpPoint(this.lead2, this.point2, this.gate[0], gatelen / leadlen, gatelen * dir);
+		CoreUtil.interpPoint(this.lead2, this.point2, this.gate[1], gatelen / leadlen, CircuitElm.cirSim.gridSize * 2
 				* dir);
 	}
 
@@ -165,21 +167,21 @@ public class TriacElm extends CircuitElm
 
 		// draw thing arrow is pointing to
 		this.setVoltageColor(g, v2);
-		CircuitElm.drawThickLine(g, this.cathode[0], this.cathode[1]);
+		DrawUtil.drawThickLine(g, this.cathode[0], this.cathode[1]);
 
-		CircuitElm.drawThickLine(g, this.lead2, this.gate[0]);
-		CircuitElm.drawThickLine(g, this.gate[0], this.gate[1]);
+		DrawUtil.drawThickLine(g, this.lead2, this.gate[0]);
+		DrawUtil.drawThickLine(g, this.gate[0], this.gate[1]);
 
-		this.curcount_a = CircuitElm.updateDotCount(this.ia, this.curcount_a);
-		this.curcount_c = CircuitElm.updateDotCount(this.ic, this.curcount_c);
-		this.curcount_g = CircuitElm.updateDotCount(this.ig, this.curcount_g);
+		this.curcount_a = CoreUtil.updateDotCount(this.ia, this.curcount_a);
+		this.curcount_c = CoreUtil.updateDotCount(this.ic, this.curcount_c);
+		this.curcount_g = CoreUtil.updateDotCount(this.ig, this.curcount_g);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
-			CircuitElm.drawDots(g, this.point1, this.lead2, this.curcount_a);
-			CircuitElm.drawDots(g, this.point2, this.lead2, this.curcount_c);
-			CircuitElm.drawDots(g, this.gate[1], this.gate[0], this.curcount_g);
-			CircuitElm.drawDots(g, this.gate[0], this.lead2,
-					this.curcount_g + CircuitElm.distance(this.gate[1], this.gate[0]));
+			DrawUtil.drawDots(g, this.point1, this.lead2, this.curcount_a);
+			DrawUtil.drawDots(g, this.point2, this.lead2, this.curcount_c);
+			DrawUtil.drawDots(g, this.gate[1], this.gate[0], this.curcount_g);
+			DrawUtil.drawDots(g, this.gate[0], this.lead2,
+					this.curcount_g + CoreUtil.distance(this.gate[1], this.gate[0]));
 		}
 		this.drawPosts(g);
 	}

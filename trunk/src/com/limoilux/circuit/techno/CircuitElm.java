@@ -22,12 +22,10 @@ import com.limoilux.circuit.ui.EditInfo;
 public abstract class CircuitElm implements Editable
 {
 	private static final int COLOR_SCALE_COUNT = 32;
-	@Deprecated
-	public static final double PI = 3.14159265358979323846;
-	public static final Font unitsFont = new Font("SansSerif", 0, 10);
-	public static final Color selectColor = Color.cyan;
-	public static final Color whiteColor = Color.white;
-	public static final Color lightGrayColor = Color.lightGray;
+	public static final Font UNIT_FONT = new Font("courier", 0, 12);
+	public static final Color SELECT_COLOR = Color.cyan;
+	public static final Color WHITE_COLOR = Color.white;
+	public static final Color LIGHT_GRAY_COLOR = Color.lightGray;
 
 	public static double voltageRange = 5;
 
@@ -521,10 +519,10 @@ public abstract class CircuitElm implements Editable
 		{
 			return;
 		}
-		g.setFont(CircuitElm.unitsFont);
+		g.setFont(CircuitElm.UNIT_FONT);
 		FontMetrics fm = g.getFontMetrics();
 		int w = fm.stringWidth(s);
-		g.setColor(CircuitElm.whiteColor);
+		g.setColor(CircuitElm.WHITE_COLOR);
 		int ya = fm.getAscent() / 2;
 		int xc, yc;
 		if (this instanceof RailElm || this instanceof SweepElm)
@@ -688,7 +686,7 @@ public abstract class CircuitElm implements Editable
 	{
 		if (this.needsHighlight())
 		{
-			g.setColor(CircuitElm.selectColor);
+			g.setColor(CircuitElm.SELECT_COLOR);
 			return;
 		}
 		if (!CircuitElm.cirSim.voltsCheckItem.getState())
@@ -696,7 +694,7 @@ public abstract class CircuitElm implements Editable
 			if (!CircuitElm.cirSim.powerCheckItem.getState())
 			{
 				// !conductanceCheckItem.getState())
-				g.setColor(CircuitElm.whiteColor);
+				g.setColor(CircuitElm.WHITE_COLOR);
 			}
 			return;
 		}

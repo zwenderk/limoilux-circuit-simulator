@@ -87,7 +87,7 @@ public class DrawUtil
 
 	public static void drawPost(Graphics g, int x0, int y0)
 	{
-		g.setColor(CircuitElm.whiteColor);
+		g.setColor(CircuitElm.WHITE_COLOR);
 		g.fillOval(x0 - 3, y0 - 3, 7, 7);
 	}
 

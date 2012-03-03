@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class TransLineElm extends CircuitElm
@@ -163,17 +164,17 @@ public class TransLineElm extends CircuitElm
 			}
 		}
 		this.setVoltageColor(g, this.volts[0]);
-		CircuitElm.drawThickLine(g, this.inner[0], this.inner[1]);
+		DrawUtil.drawThickLine(g, this.inner[0], this.inner[1]);
 		this.drawPosts(g);
 
 		this.curCount1 = CircuitElm.updateDotCount(-this.current1, this.curCount1);
 		this.curCount2 = CircuitElm.updateDotCount(this.current2, this.curCount2);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
-			CircuitElm.drawDots(g, this.posts[0], this.inner[0], this.curCount1);
-			CircuitElm.drawDots(g, this.posts[2], this.inner[2], -this.curCount1);
-			CircuitElm.drawDots(g, this.posts[1], this.inner[1], -this.curCount2);
-			CircuitElm.drawDots(g, this.posts[3], this.inner[3], this.curCount2);
+			DrawUtil.drawDots(g, this.posts[0], this.inner[0], this.curCount1);
+			DrawUtil.drawDots(g, this.posts[2], this.inner[2], -this.curCount1);
+			DrawUtil.drawDots(g, this.posts[1], this.inner[1], -this.curCount2);
+			DrawUtil.drawDots(g, this.posts[3], this.inner[3], this.curCount2);
 		}
 	}
 

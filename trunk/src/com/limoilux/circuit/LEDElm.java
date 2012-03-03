@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class LEDElm extends DiodeElm
@@ -68,13 +69,13 @@ public class LEDElm extends DiodeElm
 			return;
 		}
 		this.setVoltageColor(g, this.volts[0]);
-		CircuitElm.drawThickLine(g, this.point1, this.ledLead1);
+		DrawUtil.drawThickLine(g, this.point1, this.ledLead1);
 		this.setVoltageColor(g, this.volts[1]);
-		CircuitElm.drawThickLine(g, this.ledLead2, this.point2);
+		DrawUtil.drawThickLine(g, this.ledLead2, this.point2);
 
 		g.setColor(Color.gray);
 		int cr = 12;
-		CircuitElm.drawThickCircle(g, this.ledCenter.x, this.ledCenter.y, cr);
+		DrawUtil.drawThickCircle(g, this.ledCenter.x, this.ledCenter.y, cr);
 		cr -= 4;
 		double w = 255 * this.current / .01;
 		if (w > 255)
@@ -86,8 +87,8 @@ public class LEDElm extends DiodeElm
 		g.fillOval(this.ledCenter.x - cr, this.ledCenter.y - cr, cr * 2, cr * 2);
 		this.setBbox(this.point1, this.point2, cr);
 		this.updateDotCount();
-		CircuitElm.drawDots(g, this.point1, this.ledLead1, this.curcount);
-		CircuitElm.drawDots(g, this.point2, this.ledLead2, -this.curcount);
+		DrawUtil.drawDots(g, this.point1, this.ledLead1, this.curcount);
+		DrawUtil.drawDots(g, this.point2, this.ledLead2, -this.curcount);
 		this.drawPosts(g);
 	}
 
