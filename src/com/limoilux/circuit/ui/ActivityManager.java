@@ -34,13 +34,13 @@ public class ActivityManager
 	{
 		ListIterator<ActivityListener> ite;
 		ActivityListener listener;
-		
+
 		this.play.setEnabled(!playing);
 		this.stop.setEnabled(playing);
 		this.playing = playing;
-		
+
 		ite = this.listeners.listIterator();
-		while(ite.hasNext())
+		while (ite.hasNext())
 		{
 			listener = ite.next();
 			listener.stateChanged(playing);
@@ -69,6 +69,11 @@ public class ActivityManager
 
 	private class PlayAction extends AbstractAction
 	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -3347059575351358150L;
+
 		private PlayAction()
 		{
 			super(">");
@@ -83,6 +88,11 @@ public class ActivityManager
 
 	private class StopAction extends AbstractAction
 	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 6308434130444520010L;
+
 		private StopAction()
 		{
 			super("||");

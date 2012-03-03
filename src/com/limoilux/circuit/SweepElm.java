@@ -90,7 +90,6 @@ public class SweepElm extends CircuitElm
 			tm = 2000 - tm;
 		}
 		double w = 1 + tm * .002;
-		
 
 		if (CircuitElm.cirSim.activityManager.isPlaying())
 		{

@@ -26,7 +26,7 @@ public class ScopeManager
 		this.scopes = new Scope[20];
 		this.scopeColCount = new int[20];
 		this.scopeCount = 0;
-		
+
 	}
 
 	public ScopePane getScopePane()
@@ -158,7 +158,6 @@ public class ScopeManager
 		this.removeUnused();
 
 		int height = winSize.height - this.circuit.circuitArea.height;
-
 
 		for (int i = 0; i < this.scopeCount; i++)
 		{
