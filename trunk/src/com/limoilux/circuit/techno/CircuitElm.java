@@ -44,7 +44,7 @@ public abstract class CircuitElm implements Editable
 
 	public Rectangle boundingBox;
 	
-	static Color colorScale[];
+	static Color[] colorScale;
 
 	public Point point1;
 	public Point point2;
@@ -205,36 +205,6 @@ public abstract class CircuitElm implements Editable
 		this.lead2 = CoreUtil.interpPoint(this.point1, this.point2, (this.dn + len) / (2 * this.dn));
 	}
 
-	@Deprecated
-	public static Point interpPoint(Point a, Point b, double f)
-	{
-		return CoreUtil.interpPoint(a, b, f);
-	}
-
-	@Deprecated
-	public static void interpPoint(Point a, Point b, Point c, double f)
-	{
-		CoreUtil.interpPoint(a, b, c, f);
-	}
-
-	@Deprecated
-	public static void interpPoint(Point a, Point b, Point c, double f, double g)
-	{
-		CoreUtil.interpPoint(a, b, c, f, g);
-	}
-
-	@Deprecated
-	public static Point interpPoint(Point a, Point b, double f, double g)
-	{
-		return CoreUtil.interpPoint(a, b, f, g);
-	}
-
-	@Deprecated
-	public static void interpPoint2(Point a, Point b, Point c, Point d, double f, double g)
-	{
-		CoreUtil.interpPoint2(a, b, c, d, f, g);
-	}
-
 	public void draw2Leads(Graphics g)
 	{
 		// draw first lead
@@ -244,51 +214,6 @@ public abstract class CircuitElm implements Editable
 		// draw second lead
 		this.setVoltageColor(g, this.volts[1]);
 		DrawUtil.drawThickLine(g, this.lead2, this.point2);
-	}
-
-	@Deprecated
-	public static Point[] newPointArray(int n)
-	{
-		return CoreUtil.newPointArray(n);
-	}
-
-	@Deprecated
-	public static void drawDots(Graphics g, Point pa, Point pb, double pos)
-	{
-		DrawUtil.drawDots(g, pa, pb, pos);
-	}
-
-	public static Polygon calcArrow(Point a, Point b, double al, double aw)
-	{
-		Polygon poly = new Polygon();
-		Point p1 = new Point();
-		Point p2 = new Point();
-		int adx = b.x - a.x;
-		int ady = b.y - a.y;
-		double l = Math.sqrt(adx * adx + ady * ady);
-		poly.addPoint(b.x, b.y);
-		CoreUtil.interpPoint2(a, b, p1, p2, 1 - al / l, aw);
-		poly.addPoint(p1.x, p1.y);
-		poly.addPoint(p2.x, p2.y);
-		return poly;
-	}
-
-	@Deprecated
-	public static Polygon createPolygon(Point a, Point b, Point c)
-	{
-		return CoreUtil.createPolygon(a, b, c);
-	}
-
-	@Deprecated
-	public static Polygon createPolygon(Point a, Point b, Point c, Point d)
-	{
-		return CoreUtil.createPolygon(a, b, c, d);
-	}
-
-	@Deprecated
-	public static Polygon createPolygon(Point a[])
-	{
-		return CoreUtil.createPolygon(a);
 	}
 
 	public void drag(int xx, int yy)
@@ -332,7 +257,7 @@ public abstract class CircuitElm implements Editable
 		int i;
 		for (i = 0; i != CircuitElm.cirSim.circuit.getElementCount(); i++)
 		{
-			CircuitElm ce = CircuitElm.cirSim.circuit.getElement(i);
+			CircuitElm ce = CircuitElm.cirSim.circuit.getElementAt(i);
 			if (ce.x == nx && ce.y == ny && ce.x2 == nx2 && ce.y2 == ny2)
 			{
 				return false;
@@ -436,12 +361,6 @@ public abstract class CircuitElm implements Editable
 		{
 			return;
 		}
-		DrawUtil.drawPost(g, x0, y0);
-	}
-
-	@Deprecated
-	public static void drawPost(Graphics g, int x0, int y0)
-	{
 		DrawUtil.drawPost(g, x0, y0);
 	}
 
@@ -556,16 +475,17 @@ public abstract class CircuitElm implements Editable
 
 	public void drawCoil(Graphics g, int hs, Point p1, Point p2, double v1, double v2)
 	{
-		double len = CoreUtil.distance(p1, p2);
 		int segments = 30; // 10*(int) (len/10);
-		int i;
 		double segf = 1. / segments;
+		double cx;
+		double hsx;
+		
 
 		CircuitElm.ps1.setLocation(p1);
-		for (i = 0; i != segments; i++)
+		for (int i = 0; i != segments; i++)
 		{
-			double cx = (i + 1) * 6. * segf % 2 - 1;
-			double hsx = Math.sqrt(1 - cx * cx);
+			cx = (i + 1) * 6. * segf % 2 - 1;
+			hsx = Math.sqrt(1 - cx * cx);
 			if (hsx < 0)
 			{
 				hsx = -hsx;
@@ -578,6 +498,162 @@ public abstract class CircuitElm implements Editable
 		}
 	}
 
+	public void updateDotCount()
+	{
+		this.curcount = CoreUtil.updateDotCount(this.current, this.curcount);
+	}
+
+	public void doDots(Graphics g)
+	{
+		this.updateDotCount();
+		if (CircuitElm.cirSim.dragElm != this)
+		{
+			DrawUtil.drawDots(g, this.point1, this.point2, this.curcount);
+		}
+	}
+
+	public void doAdjust()
+	{
+	}
+
+	public void setupAdjust()
+	{
+	}
+
+	public void getInfo(String arr[])
+	{
+	}
+
+	public int getBasicInfo(String arr[])
+	{
+		arr[1] = "I = " + CoreUtil.getCurrentDText(this.getCurrent());
+		arr[2] = "Vd = " + CoreUtil.getVoltageDText(this.getVoltageDiff());
+		return 3;
+	}
+
+	public void setVoltageColor(Graphics g, double volts)
+	{
+		if (this.needsHighlight())
+		{
+			g.setColor(CircuitElm.SELECT_COLOR);
+			return;
+		}
+		if (!CircuitElm.cirSim.voltsCheckItem.getState())
+		{
+			if (!CircuitElm.cirSim.powerCheckItem.getState())
+			{
+				// !conductanceCheckItem.getState())
+				g.setColor(CircuitElm.WHITE_COLOR);
+			}
+			return;
+		}
+		int c = (int) ((volts + CircuitElm.voltageRange) * (CircuitElm.COLOR_SCALE_COUNT - 1) / (CircuitElm.voltageRange * 2));
+		if (c < 0)
+		{
+			c = 0;
+		}
+		if (c >= CircuitElm.COLOR_SCALE_COUNT)
+		{
+			c = CircuitElm.COLOR_SCALE_COUNT - 1;
+		}
+		g.setColor(CircuitElm.colorScale[c]);
+	}
+
+	public void setPowerColor(Graphics g, boolean yellow)
+	{
+		/*
+		 * if (conductanceCheckItem.getState()) { setConductanceColor(g,
+		 * current/getVoltageDiff()); return; }
+		 */
+		if (!CircuitElm.cirSim.powerCheckItem.getState())
+		{
+			return;
+		}
+		DrawUtil.setPowerColor(g, this.getPower());
+	}
+
+	public double getPower()
+	{
+		return this.getVoltageDiff() * this.current;
+	}
+
+	public double getScopeValue(int x)
+	{
+		return x == 1 ? this.getPower() : this.getVoltageDiff();
+	}
+
+	public String getScopeUnits(int x)
+	{
+		return x == 1 ? "W" : "V";
+	}
+
+	@Override
+	public EditInfo getEditInfo(int n)
+	{
+		return null;
+	}
+
+	@Override
+	public void setEditValue(int n, EditInfo ei)
+	{
+	}
+
+	public boolean getConnection(int n1, int n2)
+	{
+		return true;
+	}
+
+	public boolean hasGroundConnection(int n1)
+	{
+		return false;
+	}
+
+	public boolean isWire()
+	{
+		return false;
+	}
+
+	public boolean canViewInScope()
+	{
+		return this.getPostCount() <= 2;
+	}
+
+	public boolean needsHighlight()
+	{
+		return CircuitElm.cirSim.mouseElm == this || this.selected;
+	}
+
+	public boolean isSelected()
+	{
+		return this.selected;
+	}
+
+	public void setSelected(boolean x)
+	{
+		this.selected = x;
+	}
+
+	public void selectRect(Rectangle r)
+	{
+		this.selected = r.intersects(this.boundingBox);
+	}
+
+	public Rectangle getBoundingBox()
+	{
+		return this.boundingBox;
+	}
+
+	public boolean needsShortcut()
+	{
+		return false;
+	}
+
+	@Deprecated
+	public static void drawPost(Graphics g, int x0, int y0)
+	{
+		DrawUtil.drawPost(g, x0, y0);
+	}
+
 	@Deprecated
 	public static void drawThickLine(Graphics g, int x, int y, int x2, int y2)
 	{
@@ -588,7 +664,7 @@ public abstract class CircuitElm implements Editable
 	public static void drawThickLine(Graphics g, Point pa, Point pb)
 	{
 		DrawUtil.drawThickLine(g, pa, pb);
-
+	
 	}
 
 	@Deprecated
@@ -645,84 +721,10 @@ public abstract class CircuitElm implements Editable
 		return CoreUtil.getCurrentDText(i);
 	}
 
-	public void updateDotCount()
-	{
-		this.curcount = CoreUtil.updateDotCount(this.current, this.curcount);
-	}
-
 	@Deprecated
 	public static double updateDotCount(double cur, double cc)
 	{
 		return CoreUtil.updateDotCount(cur, cc);
-	}
-
-	public void doDots(Graphics g)
-	{
-		this.updateDotCount();
-		if (CircuitElm.cirSim.dragElm != this)
-		{
-			DrawUtil.drawDots(g, this.point1, this.point2, this.curcount);
-		}
-	}
-
-	public void doAdjust()
-	{
-	}
-
-	public void setupAdjust()
-	{
-	}
-
-	public void getInfo(String arr[])
-	{
-	}
-
-	public int getBasicInfo(String arr[])
-	{
-		arr[1] = "I = " + CircuitElm.getCurrentDText(this.getCurrent());
-		arr[2] = "Vd = " + CircuitElm.getVoltageDText(this.getVoltageDiff());
-		return 3;
-	}
-
-	public void setVoltageColor(Graphics g, double volts)
-	{
-		if (this.needsHighlight())
-		{
-			g.setColor(CircuitElm.SELECT_COLOR);
-			return;
-		}
-		if (!CircuitElm.cirSim.voltsCheckItem.getState())
-		{
-			if (!CircuitElm.cirSim.powerCheckItem.getState())
-			{
-				// !conductanceCheckItem.getState())
-				g.setColor(CircuitElm.WHITE_COLOR);
-			}
-			return;
-		}
-		int c = (int) ((volts + CircuitElm.voltageRange) * (CircuitElm.COLOR_SCALE_COUNT - 1) / (CircuitElm.voltageRange * 2));
-		if (c < 0)
-		{
-			c = 0;
-		}
-		if (c >= CircuitElm.COLOR_SCALE_COUNT)
-		{
-			c = CircuitElm.COLOR_SCALE_COUNT - 1;
-		}
-		g.setColor(CircuitElm.colorScale[c]);
-	}
-
-	public void setPowerColor(Graphics g, boolean yellow)
-	{
-		/*
-		 * if (conductanceCheckItem.getState()) { setConductanceColor(g,
-		 * current/getVoltageDiff()); return; }
-		 */
-		if (!CircuitElm.cirSim.powerCheckItem.getState())
-		{
-			return;
-		}
-		DrawUtil.setPowerColor(g, this.getPower());
 	}
 
 	@Deprecated
@@ -737,80 +739,39 @@ public abstract class CircuitElm implements Editable
 		DrawUtil.setConductanceColor(g, w0);
 	}
 
-	public double getPower()
-	{
-		return this.getVoltageDiff() * this.current;
-	}
-
-	public double getScopeValue(int x)
-	{
-		return x == 1 ? this.getPower() : this.getVoltageDiff();
-	}
-
-	public String getScopeUnits(int x)
-	{
-		return x == 1 ? "W" : "V";
-	}
-
-	@Override
-	public EditInfo getEditInfo(int n)
-	{
-		return null;
-	}
-
-	@Override
-	public void setEditValue(int n, EditInfo ei)
-	{
-	}
-
-	public boolean getConnection(int n1, int n2)
-	{
-		return true;
-	}
-
-	public boolean hasGroundConnection(int n1)
-	{
-		return false;
-	}
-
-	public boolean isWire()
-	{
-		return false;
-	}
-
-	public boolean canViewInScope()
-	{
-		return this.getPostCount() <= 2;
-	}
-
 	public static boolean comparePair(int x1, int x2, int y1, int y2)
 	{
 		return CoreUtil.comparePair(x1, x2, y1, y2);
 	}
 
-	public boolean needsHighlight()
+	@Deprecated
+	public static Point interpPoint(Point a, Point b, double f)
 	{
-		return CircuitElm.cirSim.mouseElm == this || this.selected;
+		return CoreUtil.interpPoint(a, b, f);
 	}
 
-	public boolean isSelected()
+	@Deprecated
+	public static void interpPoint(Point a, Point b, Point c, double f)
 	{
-		return this.selected;
+		CoreUtil.interpPoint(a, b, c, f);
 	}
 
-	public void setSelected(boolean x)
+	@Deprecated
+	public static void interpPoint(Point a, Point b, Point c, double f, double g)
 	{
-		this.selected = x;
+		CoreUtil.interpPoint(a, b, c, f, g);
 	}
 
-	public void selectRect(Rectangle r)
+	@Deprecated
+	public static Point interpPoint(Point a, Point b, double f, double g)
 	{
-		this.selected = r.intersects(this.boundingBox);
+		return CoreUtil.interpPoint(a, b, f, g);
 	}
 
-	public Rectangle getBoundingBox()
+	@Deprecated
+	public static void interpPoint2(Point a, Point b, Point c, Point d, double f, double g)
 	{
-		return this.boundingBox;
+		CoreUtil.interpPoint2(a, b, c, d, f, g);
 	}
 
 	@Deprecated
@@ -823,6 +784,51 @@ public abstract class CircuitElm implements Editable
 	public static int sign(int x)
 	{
 		return CoreUtil.sign(x);
+	}
+
+	@Deprecated
+	public static Point[] newPointArray(int n)
+	{
+		return CoreUtil.newPointArray(n);
+	}
+
+	@Deprecated
+	public static void drawDots(Graphics g, Point pa, Point pb, double pos)
+	{
+		DrawUtil.drawDots(g, pa, pb, pos);
+	}
+
+	public static Polygon calcArrow(Point a, Point b, double al, double aw)
+	{
+		Polygon poly = new Polygon();
+		Point p1 = new Point();
+		Point p2 = new Point();
+		int adx = b.x - a.x;
+		int ady = b.y - a.y;
+		double l = Math.sqrt(adx * adx + ady * ady);
+		poly.addPoint(b.x, b.y);
+		CoreUtil.interpPoint2(a, b, p1, p2, 1 - al / l, aw);
+		poly.addPoint(p1.x, p1.y);
+		poly.addPoint(p2.x, p2.y);
+		return poly;
+	}
+
+	@Deprecated
+	public static Polygon createPolygon(Point a, Point b, Point c)
+	{
+		return CoreUtil.createPolygon(a, b, c);
+	}
+
+	@Deprecated
+	public static Polygon createPolygon(Point a, Point b, Point c, Point d)
+	{
+		return CoreUtil.createPolygon(a, b, c, d);
+	}
+
+	@Deprecated
+	public static Polygon createPolygon(Point a[])
+	{
+		return CoreUtil.createPolygon(a);
 	}
 
 	@Deprecated
@@ -875,10 +881,5 @@ public abstract class CircuitElm implements Editable
 		CircuitElm.noCommaFormat = NumberFormat.getInstance();
 		CircuitElm.noCommaFormat.setMaximumFractionDigits(10);
 		CircuitElm.noCommaFormat.setGroupingUsed(false);
-	}
-
-	public boolean needsShortcut()
-	{
-		return false;
 	}
 }
