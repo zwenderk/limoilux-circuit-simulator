@@ -29,7 +29,7 @@ public abstract class CircuitElm implements Editable
 
 	public static double voltageRange = 5;
 
-	static Color colorScale[];
+
 	public static double currentMult;
 	public static double powerMult;
 
@@ -43,6 +43,8 @@ public abstract class CircuitElm implements Editable
 	public static NumberFormat noCommaFormat;
 
 	public Rectangle boundingBox;
+	
+	static Color colorScale[];
 
 	public Point point1;
 	public Point point2;
