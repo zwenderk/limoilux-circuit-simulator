@@ -25,6 +25,10 @@ import com.limoilux.circuit.techno.CircuitElm;
 
 public class Scope extends JPanel
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6940300427081564374L;
 	public static final int FLAG_YELM = 32;
 	public static final int VAL_POWER = 1;
 	public static final int VAL_IB = 1;
@@ -147,7 +151,7 @@ public class Scope extends JPanel
 			this.value = Scope.VAL_VCE;
 		}
 	}
-	
+
 	@Override
 	public void paintComponents(Graphics g)
 	{
@@ -160,6 +164,7 @@ public class Scope extends JPanel
 		this.resetGraph();
 	}
 
+	@Override
 	public int getWidth()
 	{
 		return this.rect.width;

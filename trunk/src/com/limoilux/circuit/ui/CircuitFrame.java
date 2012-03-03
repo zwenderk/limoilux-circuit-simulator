@@ -8,6 +8,10 @@ import javax.swing.JFrame;
 
 public class CircuitFrame extends JFrame
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2501086205361457967L;
 	private CircuitPane circuitPanel;
 
 	public CircuitFrame(CircuitPane circuitPanel)

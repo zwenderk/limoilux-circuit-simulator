@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Panel;
 
-
 import com.limoilux.circuit.core.CirSim;
 
 public class CircuitPane extends Panel

@@ -2,9 +2,8 @@
 
 package com.limoilux.circuit.core;
 
+import java.awt.Adjustable;
 import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.Checkbox;
 import java.awt.CheckboxMenuItem;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -48,6 +47,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
 
 import com.limoilux.circuit.CapacitorElm;
 import com.limoilux.circuit.InductorElm;
@@ -200,7 +200,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	public int mouseMode = CirSim.MODE_SELECT;
 	private int tempMouseMode = CirSim.MODE_SELECT;
 	private String mouseModeStr = "Select";
-	
+
 	public JButton playButton;
 	public JButton stopButton;
 
@@ -216,7 +216,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	public final CircuitFrame cirFrame;
 	public final JPanel mainContainer;
 	public final JToolBar toolBar;
-	
+
 	public final ActivityManager activityManager;
 	private final ActivityListener activityListener;
 
@@ -229,12 +229,11 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 		this.timer = new Timer();
 		this.circuit = new Circuit();
-		
+
 		this.activityManager = new ActivityManager();
 		this.activityListener = new ActivityList();
 		this.activityManager.addActivityListener(this.activityListener);
-		
-		
+
 		this.scopeMan = new ScopeManager(this.circuit);
 		this.cirFrame = new CircuitFrame(this.circuitPanel);
 
@@ -244,8 +243,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 		this.toolBar = new JToolBar();
 		this.toolBar.setFloatable(false);
-
-
 
 		this.mouseMotionList = new MyMouseMotionListener();
 		this.mouseList = new MyMouseListener();
@@ -301,57 +298,57 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 		this.cirFrame.add(this.mainContainer, BorderLayout.CENTER);
 		this.cirFrame.add(this.toolBar, BorderLayout.NORTH);
-		
+
 		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
 		this.mainContainer.add(this.scopeMan.getScopePane(), BorderLayout.SOUTH);
-		
+
 	}
-	
+
 	public void updateCircuit(Graphics realg)
 	{
 		Graphics g = null;
 		CircuitElm realMouseElm;
-	
+
 		if (this.winSize == null || this.winSize.width == 0)
 		{
 			return;
 		}
-	
+
 		if (this.circuit.needAnalysis())
 		{
 			try
 			{
 				this.stopMessage = null;
 				this.stopElm = null;
-	
+
 				this.circuit.analyzeCircuit();
 			}
 			catch (CircuitAnalysisException e)
 			{
 				this.handleAnalysisException(e);
 			}
-	
+
 			this.circuit.setNeedAnalysis(false);
 		}
-	
+
 		if (CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElm)
 		{
 			this.mouseElm = (CircuitElm) CirSim.editDialog.elm;
 		}
-	
+
 		realMouseElm = this.mouseElm;
 		if (this.mouseElm == null)
 		{
 			this.mouseElm = this.stopElm;
 		}
-	
+
 		this.scopeMan.setupScopes(this.winSize);
-	
+
 		g = this.dbimage.getGraphics();
 		g.setColor(Color.black);
-	
+
 		g.fillRect(0, 0, this.winSize.width, this.winSize.height);
-	
+
 		if (this.activityManager.isPlaying())
 		{
 			try
@@ -367,11 +364,11 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 				e.printStackTrace();
 				this.circuit.setNeedAnalysis(true);
 				this.circuitPanel.repaint();
-	
+
 				return;
 			}
 		}
-	
+
 		if (this.activityManager.isPlaying())
 		{
 			long sysTime = System.currentTimeMillis();
@@ -396,9 +393,9 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		{
 			this.timer.lastTime = 0;
 		}
-	
+
 		CircuitElm.powerMult = Math.exp(this.powerBar.getValue() / 4.762 - 7);
-	
+
 		int i;
 		Font oldfont = g.getFont();
 		for (i = 0; i != this.circuit.getElementCount(); i++)
@@ -413,7 +410,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			 */
 			this.circuit.getElementAt(i).draw(g);
 		}
-	
+
 		if (this.tempMouseMode == CirSim.MODE_DRAG_ROW || this.tempMouseMode == CirSim.MODE_DRAG_COLUMN
 				|| this.tempMouseMode == CirSim.MODE_DRAG_POST || this.tempMouseMode == CirSim.MODE_DRAG_SELECTED)
 		{
@@ -424,9 +421,9 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 				DrawUtil.drawPost(g, ce.x2, ce.y2);
 			}
 		}
-	
+
 		int badnodes = 0;
-	
+
 		// find bad connections, nodes not connected to other elements which
 		// intersect other elements' bounding boxes
 		for (i = 0; i != this.circuit.getNodeCount(); i++)
@@ -460,15 +457,15 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		{
 			this.dragElm.draw(g);
 		}
-	
+
 		g.setFont(oldfont);
-	
+
 		// Dessinage des scopes
 		if (this.stopMessage == null)
 		{
 			this.scopeMan.drawScope(g);
 		}
-	
+
 		g.setColor(CircuitElm.whiteColor);
 		if (this.stopMessage != null)
 		{
@@ -497,7 +494,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 					 * (mouseElm.getVoltageSource()+nodeList.size());
 					 */
 				}
-	
+
 			}
 			else
 			{
@@ -522,27 +519,27 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 				}
 			}
 			int x = 0;
-	
+
 			int ct = this.scopeMan.scopeCount;
-	
+
 			if (this.stopMessage != null)
 			{
 				ct = 0;
 			}
-	
+
 			if (ct != 0)
 			{
 				x = this.scopeMan.scopes[ct - 1].rightEdge() + 20;
 			}
-	
+
 			x = Math.max(x, this.winSize.width * 2 / 3);
-	
+
 			// count lines of data
 			for (i = 0; info[i] != null; i++)
 			{
-	
+
 			}
-	
+
 			if (badnodes > 0)
 			{
 				if (badnodes == 1)
@@ -554,26 +551,26 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 					info[i++] = badnodes + " bad connections";
 				}
 			}
-	
+
 			// find where to show data; below circuit, not too high unless we
 			// need it
 			int ybase = this.winSize.height - 15 * i - 5;
 			ybase = Math.min(ybase, this.circuit.circuitArea.height);
 			ybase = Math.max(ybase, this.circuit.circuitBottom);
-	
+
 			for (i = 0; info[i] != null; i++)
 			{
 				g.drawString(info[i], x, ybase + 15 * (i + 1));
 			}
-	
+
 		}
-	
+
 		if (this.selectedArea != null)
 		{
 			g.setColor(CircuitElm.selectColor);
 			g.drawRect(this.selectedArea.x, this.selectedArea.y, this.selectedArea.width, this.selectedArea.height);
 		}
-	
+
 		this.mouseElm = realMouseElm;
 		/*
 		 * g.setColor(Color.white); g.drawString("Framerate: " + framerate, 10,
@@ -581,14 +578,14 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		 * g.drawString("Steprate/iter: " + (steprate/getIterCount()), 10, 50);
 		 * g.drawString("iterc: " + (getIterCount()), 10, 70);
 		 */
-	
+
 		realg.drawImage(this.dbimage, 0, 0, this.cirFrame);
-	
+
 		if (this.activityManager.isPlaying() && !this.circuit.matrix.matrixIsNull())
 		{
-	
+
 			long delay = this.timer.calculateDelay();
-	
+
 			if (delay > 0)
 			{
 				try
@@ -599,10 +596,10 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 				{
 				}
 			}
-	
+
 			this.circuitPanel.repaint();
 		}
-	
+
 		this.timer.nextCycle();
 	}
 
@@ -613,25 +610,25 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			this.circuit.matrix.clear();
 			return;
 		}
-	
+
 		int iter;
-	
+
 		long steprate = (long) (160 * this.getIterCount());
 		long presentTime = System.currentTimeMillis();
 		long lit = this.timer.lastIterTime;
-	
+
 		if (1000 >= steprate * (presentTime - this.timer.lastIterTime))
 		{
 			return;
 		}
-	
+
 		for (iter = 1;; iter++)
 		{
 			int i, j, k, subiter;
 			for (i = 0; i != this.circuit.getElementCount(); i++)
 			{
 				CircuitElm ce = this.circuit.getElementAt(i);
-	
+
 				try
 				{
 					ce.startIteration();
@@ -640,25 +637,25 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 				{
 					this.handleAnalysisException(e);
 				}
-	
+
 			}
-	
+
 			for (subiter = 0; subiter != CirSim.subiterCount; subiter++)
 			{
 				this.circuit.converged = true;
 				this.subIterations = subiter;
-	
+
 				this.circuit.matrix.origRightToRight();
-	
+
 				if (this.circuit.isNonLinear())
 				{
 					this.circuit.matrix.recopyMatrix();
 				}
-	
+
 				for (i = 0; i != this.circuit.getElementCount(); i++)
 				{
 					CircuitElm ce = this.circuit.getElementAt(i);
-	
+
 					try
 					{
 						ce.doStep();
@@ -668,32 +665,32 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 						this.handleAnalysisException(e);
 					}
 				}
-	
+
 				if (this.stopMessage != null)
 				{
 					return;
 				}
-	
+
 				if (this.circuit.matrix.matrixIsInfiniteOrNAN())
 				{
 					throw new CircuitAnalysisException("nan/infinite matrix!");
 				}
-	
+
 				if (this.circuit.isNonLinear())
 				{
 					if (this.circuit.converged && subiter > 0)
 					{
 						break;
 					}
-	
+
 					if (!this.circuit.matrix.doLowUpFactor())
 					{
 						throw new CircuitAnalysisException("Singular matrix!");
 					}
 				}
-	
+
 				this.circuit.matrix.doLowUpSolve();
-	
+
 				for (j = 0; j != this.circuit.getMatrixFullSize(); j++)
 				{
 					MatrixRowInfo rowInfo = this.circuit.matrix.circuitRowInfo[j];
@@ -738,47 +735,46 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 					break;
 				}
 			}
-	
+
 			if (subiter > 5)
 			{
 				System.out.print("converged after " + subiter + " iterations\n");
 			}
-	
+
 			if (subiter == CirSim.subiterCount)
 			{
 				this.stop("Convergence failed!", null);
 				break;
 			}
-	
+
 			this.timer.doTimeStep();
-	
+
 			this.scopeMan.doTimeStep();
-	
+
 			presentTime = System.currentTimeMillis();
 			lit = presentTime;
-	
+
 			if (iter * 1000 >= steprate * (presentTime - this.timer.lastIterTime)
 					|| presentTime - this.timer.getLastFrameTime() > 500)
 			{
 				break;
 			}
 		}
-	
+
 		this.timer.lastIterTime = lit;
 		// System.out.println((System.currentTimeMillis()-lastFrameTime)/(double)
 		// iter);
 	}
 
-	private void start() 
+	private void start()
 	{
 
-
 		this.cirFrame.setVisible(true);
-		
+
 		this.scopeMan.setupScopes(this.winSize);
-		
+
 		this.handleResize();
-		
+
 		this.cirFrame.requestFocus();
 
 	}
@@ -800,8 +796,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	private void initScreen()
 	{
 		Dimension screen = this.cirFrame.getToolkit().getScreenSize();
-
-	
 
 		Dimension x = this.cirFrame.getSize();
 		this.cirFrame.setLocation((screen.width - x.width) / 2, (screen.height - x.height) / 2);
@@ -842,7 +836,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.elementsPopUp.add(this.elmCutMenuItem = this.getMenuItem("Cut"));
 		this.elementsPopUp.add(this.elmCopyMenuItem = this.getMenuItem("Copy"));
 		this.elementsPopUp.add(this.elmDeleteMenuItem = this.getMenuItem("Delete"));
-		
+
 		this.circuitPanel.add(this.elementsPopUp);
 	}
 
@@ -852,23 +846,23 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.resetButton.addActionListener(this);
 		this.toolBar.add(this.resetButton);
 		this.toolBar.addSeparator();
-		
+
 		this.playButton = new JButton(this.activityManager.getPlayAction());
 		this.toolBar.add(this.playButton);
-		
+
 		this.stopButton = new JButton(this.activityManager.getStopAction());
 		this.toolBar.add(this.stopButton);
 		this.toolBar.addSeparator();
 
-		this.toolBar.add(new JLabel("Speed", JLabel.CENTER));
-		this.speedBar = new JScrollBar(JScrollBar.HORIZONTAL, 3, 1, 0, 260);
+		this.toolBar.add(new JLabel("Speed", SwingConstants.CENTER));
+		this.speedBar = new JScrollBar(Adjustable.HORIZONTAL, 3, 1, 0, 260);
 		this.speedBar.addAdjustmentListener(this);
 		this.toolBar.add(this.speedBar);
 
-		//this.toolBar.add(new JLabel("Current Speed", JLabel.CENTER));
-		this.currentBar = new JScrollBar(JScrollBar.HORIZONTAL, 50, 1, 1, 100);
-		//this.currentBar.addAdjustmentListener(this);
-		//this.toolBar.add(this.currentBar);
+		// this.toolBar.add(new JLabel("Current Speed", JLabel.CENTER));
+		this.currentBar = new JScrollBar(Adjustable.HORIZONTAL, 50, 1, 1, 100);
+		// this.currentBar.addAdjustmentListener(this);
+		// this.toolBar.add(this.currentBar);
 
 		this.powerLabel = new Label("Power Brightness", Label.CENTER);
 		this.powerLabel.setEnabled(false);
@@ -1001,11 +995,10 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		gateMenu.add(this.getClassCheckItem("Add XOR Gate", "XorGateElm"));
 	}
 
-	
 	private PopupMenu buildScopeMenu(boolean t)
 	{
 		PopupMenu scopePopUp;
-	    scopePopUp = new PopupMenu();
+		scopePopUp = new PopupMenu();
 		scopePopUp.add(this.getMenuItem("Remove", "remove"));
 		scopePopUp.add(this.getMenuItem("Speed 2x", "speed2"));
 		scopePopUp.add(this.getMenuItem("Speed 1/2x", "speed1/2"));
@@ -1037,8 +1030,8 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			scopePopUp.add(this.scopeSelectYMenuItem = this.getMenuItem("Select Y", "selecty"));
 			scopePopUp.add(this.scopeResistMenuItem = this.getCheckItem("Show Resistance"));
 		}
-		
-this.circuitPanel.add(scopePopUp);
+
+		this.circuitPanel.add(scopePopUp);
 		return scopePopUp;
 	}
 
@@ -3080,7 +3073,7 @@ this.circuitPanel.add(scopePopUp);
 			}
 		}
 	}
-	
+
 	private class ActivityList implements ActivityListener
 	{
 		@Override
@@ -3093,9 +3086,8 @@ this.circuitPanel.add(scopePopUp);
 			}
 
 		}
-		
+
 	}
-	
 
 	public static void main(String args[])
 	{
