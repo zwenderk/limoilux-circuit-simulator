@@ -2,11 +2,9 @@
 package com.limoilux.circuit.ui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Panel;
 
-import javax.swing.JPanel;
 
 import com.limoilux.circuit.core.CirSim;
 

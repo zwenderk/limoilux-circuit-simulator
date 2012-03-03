@@ -60,6 +60,7 @@ import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.techno.CircuitNode;
 import com.limoilux.circuit.techno.CircuitNodeLink;
 import com.limoilux.circuit.techno.matrix.MatrixRowInfo;
+import com.limoilux.circuit.ui.ActivityListener;
 import com.limoilux.circuit.ui.ActivityManager;
 import com.limoilux.circuit.ui.CircuitFrame;
 import com.limoilux.circuit.ui.CircuitPane;
@@ -215,7 +216,9 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	public final CircuitFrame cirFrame;
 	public final JPanel mainContainer;
 	public final JToolBar toolBar;
+	
 	public final ActivityManager activityManager;
+	private final ActivityListener activityListener;
 
 	public CirSim()
 	{
@@ -225,8 +228,11 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.circuitPanel = new CircuitPane(this);
 
 		this.timer = new Timer();
-		this.activityManager = new ActivityManager();
 		this.circuit = new Circuit();
+		
+		this.activityManager = new ActivityManager();
+		this.activityListener = new ActivityList();
+		this.activityManager.addActivityListener(this.activityListener);
 		
 		
 		this.scopeMan = new ScopeManager(this.circuit);
@@ -301,15 +307,477 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		
 	}
 	
+	public void updateCircuit(Graphics realg)
+	{
+		Graphics g = null;
+		CircuitElm realMouseElm;
+	
+		if (this.winSize == null || this.winSize.width == 0)
+		{
+			return;
+		}
+	
+		if (this.circuit.needAnalysis())
+		{
+			try
+			{
+				this.stopMessage = null;
+				this.stopElm = null;
+	
+				this.circuit.analyzeCircuit();
+			}
+			catch (CircuitAnalysisException e)
+			{
+				this.handleAnalysisException(e);
+			}
+	
+			this.circuit.setNeedAnalysis(false);
+		}
+	
+		if (CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElm)
+		{
+			this.mouseElm = (CircuitElm) CirSim.editDialog.elm;
+		}
+	
+		realMouseElm = this.mouseElm;
+		if (this.mouseElm == null)
+		{
+			this.mouseElm = this.stopElm;
+		}
+	
+		this.scopeMan.setupScopes(this.winSize);
+	
+		g = this.dbimage.getGraphics();
+		g.setColor(Color.black);
+	
+		g.fillRect(0, 0, this.winSize.width, this.winSize.height);
+	
+		if (this.activityManager.isPlaying())
+		{
+			try
+			{
+				this.runCircuit();
+			}
+			catch (CircuitAnalysisException e)
+			{
+				this.handleAnalysisException(e);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				this.circuit.setNeedAnalysis(true);
+				this.circuitPanel.repaint();
+	
+				return;
+			}
+		}
+	
+		if (this.activityManager.isPlaying())
+		{
+			long sysTime = System.currentTimeMillis();
+			if (this.timer.lastTime != 0)
+			{
+				int inc = (int) (sysTime - this.timer.lastTime);
+				double c = this.currentBar.getValue();
+				c = Math.exp(c / 3.5 - 14.2);
+				CircuitElm.currentMult = 1.7 * inc * c;
+				if (!this.conventionCheckItem.getState())
+				{
+					CircuitElm.currentMult = -CircuitElm.currentMult;
+				}
+			}
+			if (sysTime - this.timer.secTime >= 1000)
+			{
+				this.timer.secTime = sysTime;
+			}
+			this.timer.lastTime = sysTime;
+		}
+		else
+		{
+			this.timer.lastTime = 0;
+		}
+	
+		CircuitElm.powerMult = Math.exp(this.powerBar.getValue() / 4.762 - 7);
+	
+		int i;
+		Font oldfont = g.getFont();
+		for (i = 0; i != this.circuit.getElementCount(); i++)
+		{
+			if (this.powerCheckItem.getState())
+			{
+				g.setColor(Color.gray);
+			}
+			/*
+			 * else if (conductanceCheckItem.getState())
+			 * g.setColor(Color.white);
+			 */
+			this.circuit.getElementAt(i).draw(g);
+		}
+	
+		if (this.tempMouseMode == CirSim.MODE_DRAG_ROW || this.tempMouseMode == CirSim.MODE_DRAG_COLUMN
+				|| this.tempMouseMode == CirSim.MODE_DRAG_POST || this.tempMouseMode == CirSim.MODE_DRAG_SELECTED)
+		{
+			for (i = 0; i != this.circuit.getElementCount(); i++)
+			{
+				CircuitElm ce = this.circuit.getElementAt(i);
+				DrawUtil.drawPost(g, ce.x, ce.y);
+				DrawUtil.drawPost(g, ce.x2, ce.y2);
+			}
+		}
+	
+		int badnodes = 0;
+	
+		// find bad connections, nodes not connected to other elements which
+		// intersect other elements' bounding boxes
+		for (i = 0; i != this.circuit.getNodeCount(); i++)
+		{
+			CircuitNode cn = this.circuit.getNodeAt(i);
+			if (!cn.isInternal() && cn.getSize() == 1)
+			{
+				int bb = 0, j;
+				CircuitNodeLink cnl = cn.elementAt(0);
+				for (j = 0; j != this.circuit.getElementCount(); j++)
+				{
+					if (cnl.elm != this.circuit.getElementAt(j)
+							&& this.circuit.getElementAt(j).boundingBox.contains(cn.x, cn.y))
+					{
+						bb++;
+					}
+				}
+				if (bb > 0)
+				{
+					g.setColor(Color.red);
+					g.fillOval(cn.x - 3, cn.y - 3, 7, 7);
+					badnodes++;
+				}
+			}
+		}
+		/*
+		 * if (mouseElm != null) { g.setFont(oldfont); g.drawString("+",
+		 * mouseElm.x+10, mouseElm.y); }
+		 */
+		if (this.dragElm != null && (this.dragElm.x != this.dragElm.x2 || this.dragElm.y != this.dragElm.y2))
+		{
+			this.dragElm.draw(g);
+		}
+	
+		g.setFont(oldfont);
+	
+		// Dessinage des scopes
+		if (this.stopMessage == null)
+		{
+			this.scopeMan.drawScope(g);
+		}
+	
+		g.setColor(CircuitElm.whiteColor);
+		if (this.stopMessage != null)
+		{
+			g.drawString(this.stopMessage, 10, this.circuit.circuitArea.height);
+		}
+		else
+		{
+			if (this.circuit.circuitBottom == 0)
+			{
+				this.circuit.calcCircuitBottom();
+			}
+			String info[] = new String[10];
+			if (this.mouseElm != null)
+			{
+				if (this.mousePost == -1)
+				{
+					this.mouseElm.getInfo(info);
+				}
+				else
+				{
+					info[0] = "V = " + CoreUtil.getUnitText(this.mouseElm.getPostVoltage(this.mousePost), "V");
+					/*
+					 * //shownodes for (i = 0; i != mouseElm.getPostCount();
+					 * i++) info[0] += " " + mouseElm.nodes[i]; if
+					 * (mouseElm.getVoltageSourceCount() > 0) info[0] += ";" +
+					 * (mouseElm.getVoltageSource()+nodeList.size());
+					 */
+				}
+	
+			}
+			else
+			{
+				CircuitElm.showFormat.setMinimumFractionDigits(2);
+				info[0] = "t = " + CoreUtil.getUnitText(this.timer.time, "s");
+				CircuitElm.showFormat.setMinimumFractionDigits(0);
+			}
+			if (this.hintType != -1)
+			{
+				for (i = 0; info[i] != null; i++)
+				{
+					;
+				}
+				String s = this.getHint();
+				if (s == null)
+				{
+					this.hintType = -1;
+				}
+				else
+				{
+					info[i] = s;
+				}
+			}
+			int x = 0;
+	
+			int ct = this.scopeMan.scopeCount;
+	
+			if (this.stopMessage != null)
+			{
+				ct = 0;
+			}
+	
+			if (ct != 0)
+			{
+				x = this.scopeMan.scopes[ct - 1].rightEdge() + 20;
+			}
+	
+			x = Math.max(x, this.winSize.width * 2 / 3);
+	
+			// count lines of data
+			for (i = 0; info[i] != null; i++)
+			{
+	
+			}
+	
+			if (badnodes > 0)
+			{
+				if (badnodes == 1)
+				{
+					info[i++] = badnodes + " bad connection";
+				}
+				else
+				{
+					info[i++] = badnodes + " bad connections";
+				}
+			}
+	
+			// find where to show data; below circuit, not too high unless we
+			// need it
+			int ybase = this.winSize.height - 15 * i - 5;
+			ybase = Math.min(ybase, this.circuit.circuitArea.height);
+			ybase = Math.max(ybase, this.circuit.circuitBottom);
+	
+			for (i = 0; info[i] != null; i++)
+			{
+				g.drawString(info[i], x, ybase + 15 * (i + 1));
+			}
+	
+		}
+	
+		if (this.selectedArea != null)
+		{
+			g.setColor(CircuitElm.selectColor);
+			g.drawRect(this.selectedArea.x, this.selectedArea.y, this.selectedArea.width, this.selectedArea.height);
+		}
+	
+		this.mouseElm = realMouseElm;
+		/*
+		 * g.setColor(Color.white); g.drawString("Framerate: " + framerate, 10,
+		 * 10); g.drawString("Steprate: " + steprate, 10, 30);
+		 * g.drawString("Steprate/iter: " + (steprate/getIterCount()), 10, 50);
+		 * g.drawString("iterc: " + (getIterCount()), 10, 70);
+		 */
+	
+		realg.drawImage(this.dbimage, 0, 0, this.cirFrame);
+	
+		if (this.activityManager.isPlaying() && !this.circuit.matrix.matrixIsNull())
+		{
+	
+			long delay = this.timer.calculateDelay();
+	
+			if (delay > 0)
+			{
+				try
+				{
+					Thread.sleep(delay);
+				}
+				catch (InterruptedException e)
+				{
+				}
+			}
+	
+			this.circuitPanel.repaint();
+		}
+	
+		this.timer.nextCycle();
+	}
+
+	private void runCircuit() throws CircuitAnalysisException
+	{
+		if (this.circuit.isEmpty())
+		{
+			this.circuit.matrix.clear();
+			return;
+		}
+	
+		int iter;
+	
+		long steprate = (long) (160 * this.getIterCount());
+		long presentTime = System.currentTimeMillis();
+		long lit = this.timer.lastIterTime;
+	
+		if (1000 >= steprate * (presentTime - this.timer.lastIterTime))
+		{
+			return;
+		}
+	
+		for (iter = 1;; iter++)
+		{
+			int i, j, k, subiter;
+			for (i = 0; i != this.circuit.getElementCount(); i++)
+			{
+				CircuitElm ce = this.circuit.getElementAt(i);
+	
+				try
+				{
+					ce.startIteration();
+				}
+				catch (CircuitAnalysisException e)
+				{
+					this.handleAnalysisException(e);
+				}
+	
+			}
+	
+			for (subiter = 0; subiter != CirSim.subiterCount; subiter++)
+			{
+				this.circuit.converged = true;
+				this.subIterations = subiter;
+	
+				this.circuit.matrix.origRightToRight();
+	
+				if (this.circuit.isNonLinear())
+				{
+					this.circuit.matrix.recopyMatrix();
+				}
+	
+				for (i = 0; i != this.circuit.getElementCount(); i++)
+				{
+					CircuitElm ce = this.circuit.getElementAt(i);
+	
+					try
+					{
+						ce.doStep();
+					}
+					catch (CircuitAnalysisException e)
+					{
+						this.handleAnalysisException(e);
+					}
+				}
+	
+				if (this.stopMessage != null)
+				{
+					return;
+				}
+	
+				if (this.circuit.matrix.matrixIsInfiniteOrNAN())
+				{
+					throw new CircuitAnalysisException("nan/infinite matrix!");
+				}
+	
+				if (this.circuit.isNonLinear())
+				{
+					if (this.circuit.converged && subiter > 0)
+					{
+						break;
+					}
+	
+					if (!this.circuit.matrix.doLowUpFactor())
+					{
+						throw new CircuitAnalysisException("Singular matrix!");
+					}
+				}
+	
+				this.circuit.matrix.doLowUpSolve();
+	
+				for (j = 0; j != this.circuit.getMatrixFullSize(); j++)
+				{
+					MatrixRowInfo rowInfo = this.circuit.matrix.circuitRowInfo[j];
+					double res = 0;
+					if (rowInfo.type == MatrixRowInfo.ROW_CONST)
+					{
+						res = rowInfo.value;
+					}
+					else
+					{
+						res = this.circuit.matrix.getRightSide(rowInfo.mapCol);
+					}
+					/*
+					 * System.out.println(j + " " + res + " " + ri.type + " " +
+					 * ri.mapCol);
+					 */
+					if (Double.isNaN(res))
+					{
+						this.circuit.converged = false;
+						// debugprint = true;
+						break;
+					}
+					if (j < this.circuit.getNodeCount() - 1)
+					{
+						CircuitNode cn = this.circuit.getNodeAt(j + 1);
+						for (k = 0; k != cn.getSize(); k++)
+						{
+							CircuitNodeLink cnl = cn.elementAt(k);
+							cnl.elm.setNodeVoltage(cnl.num, res);
+						}
+					}
+					else
+					{
+						int ji = j - (this.circuit.getNodeCount() - 1);
+						// System.out.println("setting vsrc " + ji + " to " +
+						// res);
+						this.circuit.voltageSources[ji].setCurrent(ji, res);
+					}
+				}
+				if (!this.circuit.isNonLinear())
+				{
+					break;
+				}
+			}
+	
+			if (subiter > 5)
+			{
+				System.out.print("converged after " + subiter + " iterations\n");
+			}
+	
+			if (subiter == CirSim.subiterCount)
+			{
+				this.stop("Convergence failed!", null);
+				break;
+			}
+	
+			this.timer.doTimeStep();
+	
+			this.scopeMan.doTimeStep();
+	
+			presentTime = System.currentTimeMillis();
+			lit = presentTime;
+	
+			if (iter * 1000 >= steprate * (presentTime - this.timer.lastIterTime)
+					|| presentTime - this.timer.getLastFrameTime() > 500)
+			{
+				break;
+			}
+		}
+	
+		this.timer.lastIterTime = lit;
+		// System.out.println((System.currentTimeMillis()-lastFrameTime)/(double)
+		// iter);
+	}
+
 	private void start() 
 	{
-		this.handleResize();
+
 
 		this.cirFrame.setVisible(true);
-		System.out.println("winSize "  + this.winSize);
-		System.out.println("cirArea " + this.circuit.circuitArea);
 		
 		this.scopeMan.setupScopes(this.winSize);
+		
+		this.handleResize();
 		
 		this.cirFrame.requestFocus();
 
@@ -788,305 +1256,6 @@ this.circuitPanel.add(scopePopUp);
 		}
 	}
 
-	public void updateCircuit(Graphics realg)
-	{
-		Graphics g = null;
-		CircuitElm realMouseElm;
-
-		if (this.winSize == null || this.winSize.width == 0)
-		{
-			return;
-		}
-
-		if (this.circuit.needAnalysis())
-		{
-			try
-			{
-				this.stopMessage = null;
-				this.stopElm = null;
-
-				this.circuit.analyzeCircuit();
-			}
-			catch (CircuitAnalysisException e)
-			{
-				this.handleAnalysisException(e);
-			}
-
-			this.circuit.setNeedAnalysis(false);
-		}
-
-		if (CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElm)
-		{
-			this.mouseElm = (CircuitElm) CirSim.editDialog.elm;
-		}
-
-		realMouseElm = this.mouseElm;
-		if (this.mouseElm == null)
-		{
-			this.mouseElm = this.stopElm;
-		}
-
-		this.scopeMan.setupScopes(this.winSize);
-
-		g = this.dbimage.getGraphics();
-		g.setColor(Color.black);
-
-		g.fillRect(0, 0, this.winSize.width, this.winSize.height);
-
-		if (this.activityManager.isPlaying())
-		{
-			try
-			{
-				this.runCircuit();
-			}
-			catch (CircuitAnalysisException e)
-			{
-				this.handleAnalysisException(e);
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				this.circuit.setNeedAnalysis(true);
-				this.circuitPanel.repaint();
-
-				return;
-			}
-		}
-
-		if (this.activityManager.isPlaying())
-		{
-			long sysTime = System.currentTimeMillis();
-			if (this.timer.lastTime != 0)
-			{
-				int inc = (int) (sysTime - this.timer.lastTime);
-				double c = this.currentBar.getValue();
-				c = Math.exp(c / 3.5 - 14.2);
-				CircuitElm.currentMult = 1.7 * inc * c;
-				if (!this.conventionCheckItem.getState())
-				{
-					CircuitElm.currentMult = -CircuitElm.currentMult;
-				}
-			}
-			if (sysTime - this.timer.secTime >= 1000)
-			{
-				this.timer.secTime = sysTime;
-			}
-			this.timer.lastTime = sysTime;
-		}
-		else
-		{
-			this.timer.lastTime = 0;
-		}
-
-		CircuitElm.powerMult = Math.exp(this.powerBar.getValue() / 4.762 - 7);
-
-		int i;
-		Font oldfont = g.getFont();
-		for (i = 0; i != this.circuit.getElementCount(); i++)
-		{
-			if (this.powerCheckItem.getState())
-			{
-				g.setColor(Color.gray);
-			}
-			/*
-			 * else if (conductanceCheckItem.getState())
-			 * g.setColor(Color.white);
-			 */
-			this.circuit.getElementAt(i).draw(g);
-		}
-
-		if (this.tempMouseMode == CirSim.MODE_DRAG_ROW || this.tempMouseMode == CirSim.MODE_DRAG_COLUMN
-				|| this.tempMouseMode == CirSim.MODE_DRAG_POST || this.tempMouseMode == CirSim.MODE_DRAG_SELECTED)
-		{
-			for (i = 0; i != this.circuit.getElementCount(); i++)
-			{
-				CircuitElm ce = this.circuit.getElementAt(i);
-				DrawUtil.drawPost(g, ce.x, ce.y);
-				DrawUtil.drawPost(g, ce.x2, ce.y2);
-			}
-		}
-
-		int badnodes = 0;
-
-		// find bad connections, nodes not connected to other elements which
-		// intersect other elements' bounding boxes
-		for (i = 0; i != this.circuit.getNodeCount(); i++)
-		{
-			CircuitNode cn = this.circuit.getNodeAt(i);
-			if (!cn.isInternal() && cn.getSize() == 1)
-			{
-				int bb = 0, j;
-				CircuitNodeLink cnl = cn.elementAt(0);
-				for (j = 0; j != this.circuit.getElementCount(); j++)
-				{
-					if (cnl.elm != this.circuit.getElementAt(j)
-							&& this.circuit.getElementAt(j).boundingBox.contains(cn.x, cn.y))
-					{
-						bb++;
-					}
-				}
-				if (bb > 0)
-				{
-					g.setColor(Color.red);
-					g.fillOval(cn.x - 3, cn.y - 3, 7, 7);
-					badnodes++;
-				}
-			}
-		}
-		/*
-		 * if (mouseElm != null) { g.setFont(oldfont); g.drawString("+",
-		 * mouseElm.x+10, mouseElm.y); }
-		 */
-		if (this.dragElm != null && (this.dragElm.x != this.dragElm.x2 || this.dragElm.y != this.dragElm.y2))
-		{
-			this.dragElm.draw(g);
-		}
-
-		g.setFont(oldfont);
-
-		// Dessinage des scopes
-		if (this.stopMessage == null)
-		{
-			this.scopeMan.drawScope(g);
-		}
-
-		g.setColor(CircuitElm.whiteColor);
-		if (this.stopMessage != null)
-		{
-			g.drawString(this.stopMessage, 10, this.circuit.circuitArea.height);
-		}
-		else
-		{
-			if (this.circuit.circuitBottom == 0)
-			{
-				this.circuit.calcCircuitBottom();
-			}
-			String info[] = new String[10];
-			if (this.mouseElm != null)
-			{
-				if (this.mousePost == -1)
-				{
-					this.mouseElm.getInfo(info);
-				}
-				else
-				{
-					info[0] = "V = " + CoreUtil.getUnitText(this.mouseElm.getPostVoltage(this.mousePost), "V");
-					/*
-					 * //shownodes for (i = 0; i != mouseElm.getPostCount();
-					 * i++) info[0] += " " + mouseElm.nodes[i]; if
-					 * (mouseElm.getVoltageSourceCount() > 0) info[0] += ";" +
-					 * (mouseElm.getVoltageSource()+nodeList.size());
-					 */
-				}
-
-			}
-			else
-			{
-				CircuitElm.showFormat.setMinimumFractionDigits(2);
-				info[0] = "t = " + CoreUtil.getUnitText(this.timer.time, "s");
-				CircuitElm.showFormat.setMinimumFractionDigits(0);
-			}
-			if (this.hintType != -1)
-			{
-				for (i = 0; info[i] != null; i++)
-				{
-					;
-				}
-				String s = this.getHint();
-				if (s == null)
-				{
-					this.hintType = -1;
-				}
-				else
-				{
-					info[i] = s;
-				}
-			}
-			int x = 0;
-
-			int ct = this.scopeMan.scopeCount;
-
-			if (this.stopMessage != null)
-			{
-				ct = 0;
-			}
-
-			if (ct != 0)
-			{
-				x = this.scopeMan.scopes[ct - 1].rightEdge() + 20;
-			}
-
-			x = Math.max(x, this.winSize.width * 2 / 3);
-
-			// count lines of data
-			for (i = 0; info[i] != null; i++)
-			{
-
-			}
-
-			if (badnodes > 0)
-			{
-				if (badnodes == 1)
-				{
-					info[i++] = badnodes + " bad connection";
-				}
-				else
-				{
-					info[i++] = badnodes + " bad connections";
-				}
-			}
-
-			// find where to show data; below circuit, not too high unless we
-			// need it
-			int ybase = this.winSize.height - 15 * i - 5;
-			ybase = Math.min(ybase, this.circuit.circuitArea.height);
-			ybase = Math.max(ybase, this.circuit.circuitBottom);
-
-			for (i = 0; info[i] != null; i++)
-			{
-				g.drawString(info[i], x, ybase + 15 * (i + 1));
-			}
-
-		}
-
-		if (this.selectedArea != null)
-		{
-			g.setColor(CircuitElm.selectColor);
-			g.drawRect(this.selectedArea.x, this.selectedArea.y, this.selectedArea.width, this.selectedArea.height);
-		}
-
-		this.mouseElm = realMouseElm;
-		/*
-		 * g.setColor(Color.white); g.drawString("Framerate: " + framerate, 10,
-		 * 10); g.drawString("Steprate: " + steprate, 10, 30);
-		 * g.drawString("Steprate/iter: " + (steprate/getIterCount()), 10, 50);
-		 * g.drawString("iterc: " + (getIterCount()), 10, 70);
-		 */
-
-		realg.drawImage(this.dbimage, 0, 0, this.cirFrame);
-
-		if (this.activityManager.isPlaying() && !this.circuit.matrix.matrixIsNull())
-		{
-
-			long delay = this.timer.calculateDelay();
-
-			if (delay > 0)
-			{
-				try
-				{
-					Thread.sleep(delay);
-				}
-				catch (InterruptedException e)
-				{
-				}
-			}
-
-			this.circuitPanel.repaint();
-		}
-
-		this.timer.nextCycle();
-	}
-
 	private String getHint()
 	{
 		CircuitElm c1 = this.circuit.getElementAt(this.hintItem1);
@@ -1282,169 +1451,6 @@ this.circuitPanel.add(scopePopUp);
 		}
 		// return (Math.exp((speedBar.getValue()-1)/24.) + .5);
 		return .1 * Math.exp((this.speedBar.getValue() - 61) / 24.);
-	}
-
-	private void runCircuit() throws CircuitAnalysisException
-	{
-		if (this.circuit.isEmpty())
-		{
-			this.circuit.matrix.clear();
-			return;
-		}
-
-		int iter;
-
-		long steprate = (long) (160 * this.getIterCount());
-		long presentTime = System.currentTimeMillis();
-		long lit = this.timer.lastIterTime;
-
-		if (1000 >= steprate * (presentTime - this.timer.lastIterTime))
-		{
-			return;
-		}
-
-		for (iter = 1;; iter++)
-		{
-			int i, j, k, subiter;
-			for (i = 0; i != this.circuit.getElementCount(); i++)
-			{
-				CircuitElm ce = this.circuit.getElementAt(i);
-
-				try
-				{
-					ce.startIteration();
-				}
-				catch (CircuitAnalysisException e)
-				{
-					this.handleAnalysisException(e);
-				}
-
-			}
-
-			for (subiter = 0; subiter != CirSim.subiterCount; subiter++)
-			{
-				this.circuit.converged = true;
-				this.subIterations = subiter;
-
-				this.circuit.matrix.origRightToRight();
-
-				if (this.circuit.isNonLinear())
-				{
-					this.circuit.matrix.recopyMatrix();
-				}
-
-				for (i = 0; i != this.circuit.getElementCount(); i++)
-				{
-					CircuitElm ce = this.circuit.getElementAt(i);
-
-					try
-					{
-						ce.doStep();
-					}
-					catch (CircuitAnalysisException e)
-					{
-						this.handleAnalysisException(e);
-					}
-				}
-
-				if (this.stopMessage != null)
-				{
-					return;
-				}
-
-				if (this.circuit.matrix.matrixIsInfiniteOrNAN())
-				{
-					throw new CircuitAnalysisException("nan/infinite matrix!");
-				}
-
-				if (this.circuit.isNonLinear())
-				{
-					if (this.circuit.converged && subiter > 0)
-					{
-						break;
-					}
-
-					if (!this.circuit.matrix.doLowUpFactor())
-					{
-						throw new CircuitAnalysisException("Singular matrix!");
-					}
-				}
-
-				this.circuit.matrix.doLowUpSolve();
-
-				for (j = 0; j != this.circuit.getMatrixFullSize(); j++)
-				{
-					MatrixRowInfo rowInfo = this.circuit.matrix.circuitRowInfo[j];
-					double res = 0;
-					if (rowInfo.type == MatrixRowInfo.ROW_CONST)
-					{
-						res = rowInfo.value;
-					}
-					else
-					{
-						res = this.circuit.matrix.getRightSide(rowInfo.mapCol);
-					}
-					/*
-					 * System.out.println(j + " " + res + " " + ri.type + " " +
-					 * ri.mapCol);
-					 */
-					if (Double.isNaN(res))
-					{
-						this.circuit.converged = false;
-						// debugprint = true;
-						break;
-					}
-					if (j < this.circuit.getNodeCount() - 1)
-					{
-						CircuitNode cn = this.circuit.getNodeAt(j + 1);
-						for (k = 0; k != cn.getSize(); k++)
-						{
-							CircuitNodeLink cnl = cn.elementAt(k);
-							cnl.elm.setNodeVoltage(cnl.num, res);
-						}
-					}
-					else
-					{
-						int ji = j - (this.circuit.getNodeCount() - 1);
-						// System.out.println("setting vsrc " + ji + " to " +
-						// res);
-						this.circuit.voltageSources[ji].setCurrent(ji, res);
-					}
-				}
-				if (!this.circuit.isNonLinear())
-				{
-					break;
-				}
-			}
-
-			if (subiter > 5)
-			{
-				System.out.print("converged after " + subiter + " iterations\n");
-			}
-
-			if (subiter == CirSim.subiterCount)
-			{
-				this.stop("Convergence failed!", null);
-				break;
-			}
-
-			this.timer.doTimeStep();
-
-			this.scopeMan.doTimeStep();
-
-			presentTime = System.currentTimeMillis();
-			lit = presentTime;
-
-			if (iter * 1000 >= steprate * (presentTime - this.timer.lastIterTime)
-					|| presentTime - this.timer.getLastFrameTime() > 500)
-			{
-				break;
-			}
-		}
-
-		this.timer.lastIterTime = lit;
-		// System.out.println((System.currentTimeMillis()-lastFrameTime)/(double)
-		// iter);
 	}
 
 	@Deprecated
@@ -2722,7 +2728,7 @@ this.circuitPanel.add(scopePopUp);
 			{
 				if (CirSim.this.mouseMode == CirSim.MODE_SELECT || CirSim.this.mouseMode == CirSim.MODE_DRAG_SELECTED)
 				{
-					CirSim.this.clearSelection();
+					CirSim.this.circuit.clearSelection();
 				}
 			}
 		}
@@ -2870,7 +2876,7 @@ this.circuitPanel.add(scopePopUp);
 
 			if (circuitChanged)
 			{
-				CirSim.this.needAnalyze();
+				CirSim.this.circuit.setNeedAnalysis(true);
 			}
 
 			if (CirSim.this.dragElm != null)
@@ -3074,6 +3080,22 @@ this.circuitPanel.add(scopePopUp);
 			}
 		}
 	}
+	
+	private class ActivityList implements ActivityListener
+	{
+		@Override
+		public void stateChanged(boolean isPlaying)
+		{
+			if (isPlaying)
+			{
+				CirSim.this.circuit.setNeedAnalysis(true);
+				CirSim.this.circuitPanel.repaint();
+			}
+
+		}
+		
+	}
+	
 
 	public static void main(String args[])
 	{
