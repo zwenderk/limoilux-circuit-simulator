@@ -317,7 +317,7 @@ public abstract class CircuitElm implements Editable
 		this.y += dy;
 		this.x2 += dx;
 		this.y2 += dy;
-		this.boundingBox.move(dx, dy);
+		this.boundingBox.setLocation(dx, dy);
 		this.setPoints();
 	}
 
