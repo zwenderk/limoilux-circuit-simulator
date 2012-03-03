@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class LampElm extends CircuitElm
@@ -125,25 +126,25 @@ public class LampElm extends CircuitElm
 		g.setColor(this.getTempColor());
 		g.fillOval(this.bulb.x - this.bulbR, this.bulb.y - this.bulbR, this.bulbR * 2, this.bulbR * 2);
 		g.setColor(Color.white);
-		CircuitElm.drawThickCircle(g, this.bulb.x, this.bulb.y, this.bulbR);
+		DrawUtil.drawThickCircle(g, this.bulb.x, this.bulb.y, this.bulbR);
 		this.setVoltageColor(g, v1);
-		CircuitElm.drawThickLine(g, this.lead1, this.filament[0]);
+		DrawUtil.drawThickLine(g, this.lead1, this.filament[0]);
 		this.setVoltageColor(g, v2);
-		CircuitElm.drawThickLine(g, this.lead2, this.filament[1]);
+		DrawUtil.drawThickLine(g, this.lead2, this.filament[1]);
 		this.setVoltageColor(g, (v1 + v2) * .5);
-		CircuitElm.drawThickLine(g, this.filament[0], this.filament[1]);
+		DrawUtil.drawThickLine(g, this.filament[0], this.filament[1]);
 		this.updateDotCount();
 		if (CircuitElm.cirSim.dragElm != this)
 		{
-			CircuitElm.drawDots(g, this.point1, this.lead1, this.curcount);
+			DrawUtil.drawDots(g, this.point1, this.lead1, this.curcount);
 			double cc = this.curcount + (this.dn - 16) / 2;
-			CircuitElm.drawDots(g, this.lead1, this.filament[0], cc);
+			DrawUtil.drawDots(g, this.lead1, this.filament[0], cc);
 			cc += this.filament_len;
-			CircuitElm.drawDots(g, this.filament[0], this.filament[1], cc);
+			DrawUtil.drawDots(g, this.filament[0], this.filament[1], cc);
 			cc += 16;
-			CircuitElm.drawDots(g, this.filament[1], this.lead2, cc);
+			DrawUtil.drawDots(g, this.filament[1], this.lead2, cc);
 			cc += this.filament_len;
-			CircuitElm.drawDots(g, this.lead2, this.point2, this.curcount);
+			DrawUtil.drawDots(g, this.lead2, this.point2, this.curcount);
 		}
 		this.drawPosts(g);
 	}

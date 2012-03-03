@@ -91,7 +91,7 @@ public class SwitchElm extends CircuitElm
 
 		if (!this.needsHighlight())
 		{
-			g.setColor(CircuitElm.whiteColor);
+			g.setColor(CircuitElm.WHITE_COLOR);
 		}
 		CircuitElm.interpPoint(this.lead1, this.lead2, this.ps, 0, hs1);
 		CircuitElm.interpPoint(this.lead1, this.lead2, this.ps2, 1, hs2);

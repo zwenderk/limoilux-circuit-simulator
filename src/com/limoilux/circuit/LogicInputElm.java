@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class LogicInputElm extends SwitchElm
@@ -81,7 +82,7 @@ public class LogicInputElm extends SwitchElm
 	{
 		Font f = new Font("SansSerif", Font.BOLD, 20);
 		g.setFont(f);
-		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.whiteColor);
+		g.setColor(this.needsHighlight() ? CircuitElm.SELECT_COLOR : CircuitElm.WHITE_COLOR);
 		String s = this.position == 0 ? "L" : "H";
 		if (this.isNumeric())
 		{
@@ -90,9 +91,9 @@ public class LogicInputElm extends SwitchElm
 		this.setBbox(this.point1, this.lead1, 0);
 		this.drawCenteredText(g, s, this.x2, this.y2, true);
 		this.setVoltageColor(g, this.volts[0]);
-		CircuitElm.drawThickLine(g, this.point1, this.lead1);
+		DrawUtil.drawThickLine(g, this.point1, this.lead1);
 		this.updateDotCount();
-		CircuitElm.drawDots(g, this.point1, this.lead1, this.curcount);
+		DrawUtil.drawDots(g, this.point1, this.lead1, this.curcount);
 		this.drawPosts(g);
 	}
 

@@ -57,13 +57,13 @@ public class ProbeElm extends CircuitElm
 		this.setVoltageColor(g, this.volts[0]);
 		if (selected)
 		{
-			g.setColor(CircuitElm.selectColor);
+			g.setColor(CircuitElm.SELECT_COLOR);
 		}
 		CircuitElm.drawThickLine(g, this.point1, this.lead1);
 		this.setVoltageColor(g, this.volts[1]);
 		if (selected)
 		{
-			g.setColor(CircuitElm.selectColor);
+			g.setColor(CircuitElm.SELECT_COLOR);
 		}
 		CircuitElm.drawThickLine(g, this.lead2, this.point2);
 		Font f = new Font("SansSerif", Font.BOLD, 14);

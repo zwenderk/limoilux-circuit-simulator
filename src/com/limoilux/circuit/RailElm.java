@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
 
 public class RailElm extends VoltageElm
 {
@@ -57,7 +58,7 @@ public class RailElm extends VoltageElm
 		{
 			Font f = new Font("SansSerif", 0, 12);
 			g.setFont(f);
-			g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.whiteColor);
+			g.setColor(this.needsHighlight() ? CircuitElm.SELECT_COLOR : CircuitElm.WHITE_COLOR);
 			this.setPowerColor(g, false);
 			double v = this.getVoltage();
 			String s = CircuitElm.getShortUnitText(v, "V");
@@ -87,7 +88,7 @@ public class RailElm extends VoltageElm
 		this.curcount = CircuitElm.updateDotCount(-this.current, this.curcount);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
-			CircuitElm.drawDots(g, this.point1, this.lead1, this.curcount);
+			DrawUtil.drawDots(g, this.point1, this.lead1, this.curcount);
 		}
 	}
 

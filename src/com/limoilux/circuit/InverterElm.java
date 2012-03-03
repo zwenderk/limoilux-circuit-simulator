@@ -6,8 +6,10 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.util.StringTokenizer;
 
+import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class InverterElm extends CircuitElm
@@ -52,11 +54,11 @@ public class InverterElm extends CircuitElm
 	{
 		this.drawPosts(g);
 		this.draw2Leads(g);
-		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
-		CircuitElm.drawThickPolygon(g, this.gatePoly);
-		CircuitElm.drawThickCircle(g, this.pcircle.x, this.pcircle.y, 3);
-		this.curcount = CircuitElm.updateDotCount(this.current, this.curcount);
-		CircuitElm.drawDots(g, this.lead2, this.point2, this.curcount);
+		g.setColor(this.needsHighlight() ? CircuitElm.SELECT_COLOR : CircuitElm.LIGHT_GRAY_COLOR);
+		DrawUtil.drawThickPolygon(g, this.gatePoly);
+		DrawUtil.drawThickCircle(g, this.pcircle.x, this.pcircle.y, 3);
+		this.curcount = CoreUtil.updateDotCount(this.current, this.curcount);
+		DrawUtil.drawDots(g, this.lead2, this.point2, this.curcount);
 	}
 
 	Polygon gatePoly;

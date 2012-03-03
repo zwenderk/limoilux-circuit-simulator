@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class MosfetElm extends CircuitElm
@@ -128,14 +129,14 @@ public class MosfetElm extends CircuitElm
 		if ((this.flags & this.FLAG_SHOWVT) != 0)
 		{
 			String s = "" + this.vt * this.pnp;
-			g.setColor(CircuitElm.whiteColor);
-			g.setFont(CircuitElm.unitsFont);
+			g.setColor(CircuitElm.WHITE_COLOR);
+			g.setFont(CircuitElm.UNIT_FONT);
 			this.drawCenteredText(g, s, this.x2 + 2, this.y2, false);
 		}
 		if ((this.needsHighlight() || CircuitElm.cirSim.dragElm == this) && this.dy == 0)
 		{
 			g.setColor(Color.white);
-			g.setFont(CircuitElm.unitsFont);
+			g.setFont(CircuitElm.UNIT_FONT);
 			int ds = CircuitElm.sign(this.dx);
 			g.drawString("G", this.gate[1].x - 10 * ds, this.gate[1].y - 5);
 			g.drawString(this.pnp == -1 ? "D" : "S", this.src[0].x - 3 + 9 * ds, this.src[0].y + 4); // x+6
@@ -147,9 +148,9 @@ public class MosfetElm extends CircuitElm
 			g.drawString(this.pnp == -1 ? "S" : "D", this.drn[0].x - 3 + 9 * ds, this.drn[0].y + 4);
 		}
 		this.curcount = CircuitElm.updateDotCount(-this.ids, this.curcount);
-		CircuitElm.drawDots(g, this.src[0], this.src[1], this.curcount);
-		CircuitElm.drawDots(g, this.src[1], this.drn[1], this.curcount);
-		CircuitElm.drawDots(g, this.drn[1], this.drn[0], this.curcount);
+		DrawUtil.drawDots(g, this.src[0], this.src[1], this.curcount);
+		DrawUtil.drawDots(g, this.src[1], this.drn[1], this.curcount);
+		DrawUtil.drawDots(g, this.drn[1], this.drn[0], this.curcount);
 		this.drawPosts(g);
 	}
 

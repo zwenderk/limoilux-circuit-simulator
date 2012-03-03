@@ -72,7 +72,7 @@ public class SweepElm extends CircuitElm
 		this.setBbox(this.point1, this.point2, this.circleSize);
 		this.setVoltageColor(g, this.volts[0]);
 		CircuitElm.drawThickLine(g, this.point1, this.lead1);
-		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : Color.gray);
+		g.setColor(this.needsHighlight() ? CircuitElm.SELECT_COLOR : Color.gray);
 		this.setPowerColor(g, false);
 		int xc = this.point2.x;
 		int yc = this.point2.y;

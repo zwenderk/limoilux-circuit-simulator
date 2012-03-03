@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class VoltageElm extends CircuitElm
@@ -161,12 +162,12 @@ public class VoltageElm extends CircuitElm
 			this.setPowerColor(g, false);
 			this.setVoltageColor(g, this.volts[0]);
 			CircuitElm.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 0, 10);
-			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
+			DrawUtil.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 			this.setVoltageColor(g, this.volts[1]);
 			int hs = 16;
 			this.setBbox(this.point1, this.point2, hs);
 			CircuitElm.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 1, hs);
-			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
+			DrawUtil.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 		}
 		else
 		{
@@ -179,7 +180,7 @@ public class VoltageElm extends CircuitElm
 		{
 			if (this.waveform == VoltageElm.WF_DC)
 			{
-				CircuitElm.drawDots(g, this.point1, this.point2, this.curcount);
+				DrawUtil.drawDots(g, this.point1, this.point2, this.curcount);
 			}
 			else
 			{
@@ -192,7 +193,7 @@ public class VoltageElm extends CircuitElm
 
 	void drawWaveform(Graphics g, Point center)
 	{
-		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : Color.gray);
+		g.setColor(this.needsHighlight() ? CircuitElm.SELECT_COLOR : Color.gray);
 		this.setPowerColor(g, false);
 		int xc = center.x;
 		int yc = center.y;

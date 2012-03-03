@@ -60,7 +60,7 @@ public class AnalogSwitch2Elm extends AnalogSwitchElm
 		DrawUtil.drawThickLine(g, this.swpoles[1], this.swposts[1]);
 
 		// draw switch
-		g.setColor(CircuitElm.lightGrayColor);
+		g.setColor(CircuitElm.LIGHT_GRAY_COLOR);
 		int position = this.open ? 1 : 0;
 		DrawUtil.drawThickLine(g, this.lead1, this.swpoles[position]);
 

@@ -11,6 +11,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 
 public class PotElm extends CircuitElm implements AdjustmentListener
@@ -210,19 +211,19 @@ public class PotElm extends CircuitElm implements AdjustmentListener
 			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 		}
 		this.setVoltageColor(g, v3);
-		CircuitElm.drawThickLine(g, this.post3, this.corner2);
-		CircuitElm.drawThickLine(g, this.corner2, this.arrowPoint);
-		CircuitElm.drawThickLine(g, this.arrow1, this.arrowPoint);
-		CircuitElm.drawThickLine(g, this.arrow2, this.arrowPoint);
+		DrawUtil.drawThickLine(g, this.post3, this.corner2);
+		DrawUtil.drawThickLine(g, this.corner2, this.arrowPoint);
+		DrawUtil.drawThickLine(g, this.arrow1, this.arrowPoint);
+		DrawUtil.drawThickLine(g, this.arrow2, this.arrowPoint);
 		this.curcount1 = CircuitElm.updateDotCount(this.current1, this.curcount1);
 		this.curcount2 = CircuitElm.updateDotCount(this.current2, this.curcount2);
 		this.curcount3 = CircuitElm.updateDotCount(this.current3, this.curcount3);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
-			CircuitElm.drawDots(g, this.point1, this.midpoint, this.curcount1);
-			CircuitElm.drawDots(g, this.point2, this.midpoint, this.curcount2);
-			CircuitElm.drawDots(g, this.post3, this.corner2, this.curcount3);
-			CircuitElm.drawDots(g, this.corner2, this.midpoint,
+			DrawUtil.drawDots(g, this.point1, this.midpoint, this.curcount1);
+			DrawUtil.drawDots(g, this.point2, this.midpoint, this.curcount2);
+			DrawUtil.drawDots(g, this.post3, this.corner2, this.curcount3);
+			DrawUtil.drawDots(g, this.corner2, this.midpoint,
 					this.curcount3 + CircuitElm.distance(this.post3, this.corner2));
 		}
 		this.drawPosts(g);

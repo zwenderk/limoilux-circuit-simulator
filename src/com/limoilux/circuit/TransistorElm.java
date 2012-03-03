@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 import com.limoilux.circuit.ui.scope.Scope;
 
@@ -92,12 +93,12 @@ public class TransistorElm extends CircuitElm
 		this.setPowerColor(g, true);
 		// draw collector
 		this.setVoltageColor(g, this.volts[1]);
-		CircuitElm.drawThickLine(g, this.coll[0], this.coll[1]);
+		DrawUtil.drawThickLine(g, this.coll[0], this.coll[1]);
 		// draw emitter
 		this.setVoltageColor(g, this.volts[2]);
-		CircuitElm.drawThickLine(g, this.emit[0], this.emit[1]);
+		DrawUtil.drawThickLine(g, this.emit[0], this.emit[1]);
 		// draw arrow
-		g.setColor(CircuitElm.lightGrayColor);
+		g.setColor(CircuitElm.LIGHT_GRAY_COLOR);
 		g.fillPolygon(this.arrowPoly);
 		// draw base
 		this.setVoltageColor(g, this.volts[0]);
@@ -105,14 +106,14 @@ public class TransistorElm extends CircuitElm
 		{
 			g.setColor(Color.gray);
 		}
-		CircuitElm.drawThickLine(g, this.point1, this.base);
+		DrawUtil.drawThickLine(g, this.point1, this.base);
 		// draw dots
 		this.curcount_b = CircuitElm.updateDotCount(-this.ib, this.curcount_b);
-		CircuitElm.drawDots(g, this.base, this.point1, this.curcount_b);
+		DrawUtil.drawDots(g, this.base, this.point1, this.curcount_b);
 		this.curcount_c = CircuitElm.updateDotCount(-this.ic, this.curcount_c);
-		CircuitElm.drawDots(g, this.coll[1], this.coll[0], this.curcount_c);
+		DrawUtil.drawDots(g, this.coll[1], this.coll[0], this.curcount_c);
 		this.curcount_e = CircuitElm.updateDotCount(-this.ie, this.curcount_e);
-		CircuitElm.drawDots(g, this.emit[1], this.emit[0], this.curcount_e);
+		DrawUtil.drawDots(g, this.emit[1], this.emit[0], this.curcount_e);
 		// draw base rectangle
 		this.setVoltageColor(g, this.volts[0]);
 		this.setPowerColor(g, true);
@@ -121,7 +122,7 @@ public class TransistorElm extends CircuitElm
 		if ((this.needsHighlight() || CircuitElm.cirSim.dragElm == this) && this.dy == 0)
 		{
 			g.setColor(Color.white);
-			g.setFont(CircuitElm.unitsFont);
+			g.setFont(CircuitElm.UNIT_FONT);
 			int ds = CircuitElm.sign(this.dx);
 			g.drawString("B", this.base.x - 10 * ds, this.base.y - 5);
 			g.drawString("C", this.coll[0].x - 3 + 9 * ds, this.coll[0].y + 4); // x+6

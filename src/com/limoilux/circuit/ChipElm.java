@@ -104,10 +104,10 @@ public abstract class ChipElm extends CircuitElm
 			{
 				g.setColor(CircuitElm.cirSim.printableCheckItem.getState() ? Color.white : Color.black);
 				DrawUtil.drawThickCircle(g, p.bubbleX, p.bubbleY, 1);
-				g.setColor(CircuitElm.lightGrayColor);
+				g.setColor(CircuitElm.LIGHT_GRAY_COLOR);
 				DrawUtil.drawThickCircle(g, p.bubbleX, p.bubbleY, 3);
 			}
-			g.setColor(CircuitElm.whiteColor);
+			g.setColor(CircuitElm.WHITE_COLOR);
 			int sw = fm.stringWidth(p.text);
 			g.drawString(p.text, p.textloc.x - sw / 2, p.textloc.y + fm.getAscent() / 2);
 			if (p.lineOver)
@@ -116,7 +116,7 @@ public abstract class ChipElm extends CircuitElm
 				g.drawLine(p.textloc.x - sw / 2, ya, p.textloc.x + sw / 2, ya);
 			}
 		}
-		g.setColor(this.needsHighlight() ? CircuitElm.selectColor : CircuitElm.lightGrayColor);
+		g.setColor(this.needsHighlight() ? CircuitElm.SELECT_COLOR : CircuitElm.LIGHT_GRAY_COLOR);
 		DrawUtil.drawThickPolygon(g, this.rectPointsX, this.rectPointsY, 4);
 		if (this.clockPointsX != null)
 		{
