@@ -407,19 +407,18 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private int findAndDrawBadNode(Graphics g)
 	{
-		int i;
 		int badnodes = 0;
 
 		// find bad connections, nodes not connected to other elements which
 		// intersect other elements' bounding boxes
-		for (i = 0; i != this.circuit.getNodeCount(); i++)
+		for (int i = 0; i != this.circuit.getNodeCount(); i++)
 		{
 			CircuitNode cn = this.circuit.getNodeAt(i);
 			if (!cn.isInternal() && cn.getSize() == 1)
 			{
-				int bb = 0, j;
+				int bb = 0;
 				CircuitNodeLink cnl = cn.elementAt(0);
-				for (j = 0; j != this.circuit.getElementCount(); j++)
+				for (int j = 0; j != this.circuit.getElementCount(); j++)
 				{
 					if (cnl.elm != this.circuit.getElementAt(j)
 							&& this.circuit.getElementAt(j).boundingBox.contains(cn.x, cn.y))
@@ -427,6 +426,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 						bb++;
 					}
 				}
+				
 				if (bb > 0)
 				{
 					g.setColor(Color.red);
