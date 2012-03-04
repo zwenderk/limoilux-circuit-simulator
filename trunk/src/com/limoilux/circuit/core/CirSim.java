@@ -306,6 +306,16 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		this.mainContainer.add(this.scopeMan.getScopePane(), BorderLayout.SOUTH);
 
 	}
+	
+	private long repaint()
+	{
+		this.prepareRepaint();
+		this.circuitPanel.repaint();
+		
+		
+		return this.timer.calculateDelay();
+		
+	}
 
 	private void prepareRepaint()
 	{
@@ -3059,11 +3069,10 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			while (true)
 			{
 
-				delay = CirSim.this.timer.calculateDelay();
-				
-				CirSim.this.prepareRepaint();
 
-				CirSim.this.circuitPanel.repaint();
+				delay = CirSim.this.repaint();
+
+
 
 				if (delay > 0)
 				{
