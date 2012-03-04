@@ -308,13 +308,14 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.mainContainer.add(this.scopeMan.scopePane, BorderLayout.SOUTH);
 
 	}
-	
+
 	private void buildDBImage(Dimension dim)
 	{
 		this.circuitPanel.circuitImage = this.circuitPanel.createImage(dim.width, dim.height);
 		this.scopeMan.scopePane.scopeImg = this.scopeMan.scopePane.createImage(dim.width, dim.height);
 
 	}
+
 	public void updateCircuit(Panel panel, Image img, Graphics realg)
 	{
 		Graphics g = null;
@@ -1231,8 +1232,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	{
 		return "Circuit by Paul Falstad";
 	}
-
-
 
 	private void handleResize()
 	{
@@ -2379,11 +2378,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 	}
 
-	@Deprecated
-	private void clearSelection()
-	{
-		this.circuit.clearSelection();
-	}
 
 	@Override
 	public void componentHidden(ComponentEvent e)
@@ -2398,14 +2392,27 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	@Override
 	public void componentShown(ComponentEvent e)
 	{
+		this.repaint();
+	}
+
+	public void repaint()
+	{
 		this.circuitPanel.repaint();
 		this.scopeMan.scopePane.repaint();
+	}
+	
+	public void repaint(int time)
+	{
+		this.circuitPanel.repaint(time);
+		this.scopeMan.scopePane.repaint(time);
 	}
 
 	@Override
 	public void componentResized(ComponentEvent e)
 	{
 		this.handleResize();
+		
+		this.repaint();
 		this.circuitPanel.repaint(100);
 		this.scopeMan.scopePane.repaint(100);
 	}
