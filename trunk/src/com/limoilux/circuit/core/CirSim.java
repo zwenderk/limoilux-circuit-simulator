@@ -2499,7 +2499,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			int i;
 			for (i = 0; i != this.scopeMan.scopeCount; i++)
 			{
-				if (this.scopeMan.scopes[i].elm == null)
+				if (this.scopeMan.scopes[i].element == null)
 				{
 					break;
 				}
@@ -2515,14 +2515,14 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				this.scopeMan.scopes[i].position = i;
 				this.handleResize();
 			}
-			this.scopeMan.scopes[i].setElm(this.menuElm);
+			this.scopeMan.scopes[i].setElement(this.menuElm);
 		}
 
 		if (this.menuScope != -1)
 		{
 			if (ac.compareTo("remove") == 0)
 			{
-				this.scopeMan.scopes[this.menuScope].setElm(null);
+				this.scopeMan.scopes[this.menuScope].setElement(null);
 			}
 			if (ac.compareTo("speed2") == 0)
 			{
