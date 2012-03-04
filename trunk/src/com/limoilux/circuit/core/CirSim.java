@@ -2435,29 +2435,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		}
 		
 		this.scopeMan.setupScopes(this.winSize);
-		
-		if (this.activityManager.isPlaying())
-		{
-			try
-			{
-				this.runCircuit();
-			}
-			catch (CircuitAnalysisException e)
-			{
-				this.handleAnalysisException(e);
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				this.circuit.setNeedAnalysis(true);
-				
-				this.circuitPanel.repaint();
-				
-				this.scopeMan.scopePane.repaint();
-
-				return;
-			}
-		}
 
 		
 		// Repaindre

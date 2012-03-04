@@ -71,31 +71,9 @@ public class ScopePane extends Panel
 				return;
 			}
 		}
+		
 		g.fillRect(0, 0, this.cirSim.winSize.width, this.cirSim.winSize.height);
-		if (this.cirSim.activityManager.isPlaying())
-		{
-			long sysTime = System.currentTimeMillis();
-			if (this.cirSim.timer.lastTime != 0)
-			{
-				int inc = (int) (sysTime - this.cirSim.timer.lastTime);
-				double c = this.cirSim.currentBar.getValue();
-				c = Math.exp(c / 3.5 - 14.2);
-				CircuitElm.currentMult = 1.7 * inc * c;
-				if (!this.cirSim.conventionCheckItem.getState())
-				{
-					CircuitElm.currentMult = -CircuitElm.currentMult;
-				}
-			}
-			if (sysTime - this.cirSim.timer.secTime >= 1000)
-			{
-				this.cirSim.timer.secTime = sysTime;
-			}
-			this.cirSim.timer.lastTime = sysTime;
-		}
-		else
-		{
-			this.cirSim.timer.lastTime = 0;
-		}
+
 
 		Font oldfont = g.getFont();
 
