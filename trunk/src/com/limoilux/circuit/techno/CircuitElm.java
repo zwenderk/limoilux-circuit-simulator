@@ -356,8 +356,8 @@ public abstract class CircuitElm implements Editable
 		{
 			return;
 		}
-		if (CircuitElm.cirSim.mouseMode == CircuitSimulator.MODE_DRAG_ROW
-				|| CircuitElm.cirSim.mouseMode == CircuitSimulator.MODE_DRAG_COLUMN)
+		if (CircuitElm.cirSim.mouseMan.mouseMode == CircuitSimulator.MODE_DRAG_ROW
+				|| CircuitElm.cirSim.mouseMan.mouseMode == CircuitSimulator.MODE_DRAG_COLUMN)
 		{
 			return;
 		}
@@ -619,7 +619,7 @@ public abstract class CircuitElm implements Editable
 
 	public boolean needsHighlight()
 	{
-		return CircuitElm.cirSim.mouseElm == this || this.selected;
+		return CircuitElm.cirSim.mouseMan.mouseElm == this || this.selected;
 	}
 
 	public boolean isSelected()
