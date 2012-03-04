@@ -322,7 +322,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 	private void prepareRepaint()
 	{
-
 		// Analyser le circuit si nessaire.
 		if (this.circuit.needAnalysis())
 		{
@@ -339,9 +338,21 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 			this.circuit.setNeedAnalysis(false);
 		}
+
+		if (CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElm)
+		{
+			this.mouseElm = (CircuitElm) CirSim.editDialog.elm;
+		}
+
+		if (this.mouseElm == null)
+		{
+			this.mouseElm = this.stopElm;
+		}
+
+		this.scopeMan.setupScopes(this.winSize);
 	}
 
-	private void runCurrent()
+	private void drawCurrent()
 	{
 		long sysTime = System.currentTimeMillis();
 
@@ -450,32 +461,19 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		CircuitElm.powerMult = Math.exp(this.powerBar.getValue() / 4.762 - 7);
 	}
 
-	public void createCircuitImage(Graphics g) throws Exception
+	public void createCircuitImage(Image image) throws Exception
 	{
-		CircuitElm realMouseElm;
-
-		if (CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElm)
-		{
-			this.mouseElm = (CircuitElm) CirSim.editDialog.elm;
-		}
-
-		realMouseElm = this.mouseElm;
-		if (this.mouseElm == null)
-		{
-			this.mouseElm = this.stopElm;
-		}
-
-		this.scopeMan.setupScopes(this.winSize);
+		Graphics g = image.getGraphics();
 
 		g.setColor(Color.black);
 
-		g.fillRect(0, 0, this.winSize.width, this.winSize.height);
+		g.fillRect(0, 0, image.getWidth(this.cirFrame), image.getHeight(this.cirFrame));
 
 		if (this.activityManager.isPlaying())
 		{
 			this.runCircuit();
 
-			this.runCurrent();
+			this.drawCurrent();
 		}
 		else
 		{
@@ -501,8 +499,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		this.drawStrings(g, badnodes);
 
 		this.drawSelectedArea(g);
-
-		this.mouseElm = realMouseElm;
 	}
 
 	private void drawStrings(Graphics g, int badnodes)
@@ -528,14 +524,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				else
 				{
 					info[0] = "V = " + CoreUtil.getUnitText(this.mouseElm.getPostVoltage(this.mousePost), "V");
-					/*
-					 * //shownodes for (i = 0; i != mouseElm.getPostCount();
-					 * i++) info[0] += " " + mouseElm.nodes[i]; if
-					 * (mouseElm.getVoltageSourceCount() > 0) info[0] += ";" +
-					 * (mouseElm.getVoltageSource()+nodeList.size());
-					 */
 				}
-
 			}
 			else
 			{
