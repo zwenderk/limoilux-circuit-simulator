@@ -156,6 +156,7 @@ public class ScopeManager
 	public void setupScopes(Dimension winSize)
 	{
 		Rectangle rect;
+		Scope scope;
 		
 		this.removeUnused();
 
@@ -193,9 +194,9 @@ public class ScopeManager
 		int row = 0;
 		int speed = 0;
 
-		for (int i = 0; i != this.scopeCount; i++)
+		for (int i = 0; i < this.scopeCount; i++)
 		{
-			Scope scope = this.scopes[i];
+			scope = this.scopes[i];
 			if (scope.position > pos)
 			{
 				pos = scope.position;
