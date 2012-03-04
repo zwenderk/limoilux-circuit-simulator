@@ -50,7 +50,7 @@ public class ScopePane extends Panel
 		g = this.scopeImg.getGraphics();
 		g.setColor(Color.black);
 
-		g.fillRect(0, 0, this.cirSim.winSize.width, this.cirSim.winSize.height);
+
 
 		if (this.cirSim.activityManager.isPlaying())
 		{
@@ -71,7 +71,7 @@ public class ScopePane extends Panel
 				return;
 			}
 		}
-
+		g.fillRect(0, 0, this.cirSim.winSize.width, this.cirSim.winSize.height);
 		if (this.cirSim.activityManager.isPlaying())
 		{
 			long sysTime = System.currentTimeMillis();
@@ -97,7 +97,6 @@ public class ScopePane extends Panel
 			this.cirSim.timer.lastTime = 0;
 		}
 
-		int i;
 		Font oldfont = g.getFont();
 
 
