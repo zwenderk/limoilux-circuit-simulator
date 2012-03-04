@@ -172,9 +172,9 @@ public class TriacElm extends CircuitElm
 		DrawUtil.drawThickLine(g, this.lead2, this.gate[0]);
 		DrawUtil.drawThickLine(g, this.gate[0], this.gate[1]);
 
-		this.curcount_a = CoreUtil.updateDotCount(this.ia, this.curcount_a, cirSim.currentMultiplier);
-		this.curcount_c = CoreUtil.updateDotCount(this.ic, this.curcount_c, cirSim.currentMultiplier);
-		this.curcount_g = CoreUtil.updateDotCount(this.ig, this.curcount_g, cirSim.currentMultiplier);
+		this.curcount_a = CoreUtil.updateDotCount(this.ia, this.curcount_a, CircuitElm.cirSim.currentMultiplier);
+		this.curcount_c = CoreUtil.updateDotCount(this.ic, this.curcount_c, CircuitElm.cirSim.currentMultiplier);
+		this.curcount_g = CoreUtil.updateDotCount(this.ig, this.curcount_g, CircuitElm.cirSim.currentMultiplier);
 		if (CircuitElm.cirSim.dragElm != this)
 		{
 			DrawUtil.drawDots(g, this.point1, this.lead2, this.curcount_a);

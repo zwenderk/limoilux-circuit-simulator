@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Panel;
 
 import javax.swing.JPanel;
 
@@ -27,13 +26,12 @@ public class CircuitPane extends JPanel
 		this.setForeground(Color.lightGray);
 
 	}
-	
+
 	public void buildDBImage()
 	{
 		Dimension dim = this.getSize();
 		this.dbimage = this.createImage(dim.width, dim.height);
 	}
-
 
 	@Override
 	public void paintComponent(Graphics g)
@@ -43,7 +41,7 @@ public class CircuitPane extends JPanel
 		try
 		{
 			this.cirSim.createCircuitImage(this.dbimage);
-			
+
 			g.drawImage(this.dbimage, 0, 0, this.cirSim.cirFrame);
 		}
 
@@ -55,7 +53,7 @@ public class CircuitPane extends JPanel
 		{
 			e.printStackTrace();
 			this.cirSim.circuit.setNeedAnalysis(true);
-			
+
 		}
 
 	}

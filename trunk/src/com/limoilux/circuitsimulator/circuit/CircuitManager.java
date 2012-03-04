@@ -16,7 +16,7 @@ public class CircuitManager
 		this.circuit = circuit;
 		this.circuitPanel = circuitPanel;
 	}
-	
+
 	public static CircuitElm constructElement(Class<?> classType, int x0, int y0)
 	{
 		// find element class
