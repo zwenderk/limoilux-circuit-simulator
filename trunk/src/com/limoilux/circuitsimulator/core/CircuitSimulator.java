@@ -128,8 +128,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	private int draggingPost;
 	private SwitchElm heldSwitchElm;
 
-	private Class<?> dumpTypes[];
-
 	private int dragX, dragY, initDragX, initDragY;
 
 	private Rectangle selectedArea;
@@ -821,18 +819,9 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		}
 	}
 
+	@Deprecated
 	private void initDumpTypes()
 	{
-
-		this.dumpTypes = new Class[300];
-
-		// these characters are reserved
-		this.dumpTypes['o'] = Scope.class;
-		this.dumpTypes['h'] = Scope.class;
-		this.dumpTypes['$'] = Scope.class;
-		this.dumpTypes['%'] = Scope.class;
-		this.dumpTypes['?'] = Scope.class;
-		this.dumpTypes['B'] = Scope.class;
 	}
 
 	private void initPopupMenu()
@@ -1182,7 +1171,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		if (element.needsShortcut() && element.getDumpClass() == classPath)
 		{
-			dt = element.getDumpType();
+			dt = element.getElementId();
 			label += " (" + (char) dt + ")";
 		}
 
@@ -1202,7 +1191,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	private void register(Class<?> c, CircuitElm elm)
 	{
 		Class<?> dumpClass = null;
-		int elementId = elm.getDumpType();
+		int elementId = elm.getElementId();
+		
 		if (elementId == 0)
 		{
 			System.out.println("no dump type: " + c);
@@ -1210,18 +1200,18 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		}
 
 		dumpClass = elm.getDumpClass();
-		if (this.dumpTypes[elementId] == dumpClass)
+		if (this.circuitMan.dumpTypes[elementId] == dumpClass)
 		{
 			return;
 		}
 
-		if (this.dumpTypes[elementId] != null)
+		if (this.circuitMan.dumpTypes[elementId] != null)
 		{
-			System.out.println("dump type conflict: " + c + " " + this.dumpTypes[elementId]);
+			System.out.println("dump type conflict: " + c + " " + this.circuitMan.dumpTypes[elementId]);
 			return;
 		}
 
-		this.dumpTypes[elementId] = dumpClass;
+		this.circuitMan.dumpTypes[elementId] = dumpClass;
 	}
 
 	public String getAppletInfo()
@@ -1765,7 +1755,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 					int f = new Integer(st.nextToken()).intValue();
 
 					CircuitElm ce = null;
-					Class<?> cls = this.dumpTypes[tint];
+					Class<?> cls = this.circuitMan.dumpTypes[tint];
 
 					if (cls == null)
 					{
@@ -2622,7 +2612,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		{
 			if (e.getKeyChar() > ' ' && e.getKeyChar() < 127)
 			{
-				Class<?> c = CircuitSimulator.this.dumpTypes[e.getKeyChar()];
+				Class<?> c = CircuitSimulator.this.circuitMan.dumpTypes[e.getKeyChar()];
 				if (c == null || c == Scope.class)
 				{
 					return;

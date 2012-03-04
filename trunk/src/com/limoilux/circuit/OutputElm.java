@@ -26,7 +26,7 @@ public class OutputElm extends CircuitElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 'O';
 	}

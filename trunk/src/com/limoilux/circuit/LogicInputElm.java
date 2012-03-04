@@ -53,7 +53,7 @@ public class LogicInputElm extends SwitchElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 'L';
 	}

@@ -268,7 +268,7 @@ public abstract class ChipElm extends CircuitElm
 	@Override
 	public String dump()
 	{
-		int t = this.getDumpType();
+		int t = this.getElementId();
 		String s = super.dump();
 		if (this.needsBits())
 		{

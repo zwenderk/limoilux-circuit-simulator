@@ -28,7 +28,7 @@ public class NorGateElm extends OrGateElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 153;
 	}

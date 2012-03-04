@@ -32,7 +32,7 @@ public class InductorElm extends CircuitElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 'l';
 	}

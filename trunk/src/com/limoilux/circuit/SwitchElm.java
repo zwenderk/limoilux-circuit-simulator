@@ -52,7 +52,7 @@ public class SwitchElm extends CircuitElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 's';
 	}

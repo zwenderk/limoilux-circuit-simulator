@@ -135,7 +135,7 @@ public class VCOElm extends ChipElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 158;
 	}

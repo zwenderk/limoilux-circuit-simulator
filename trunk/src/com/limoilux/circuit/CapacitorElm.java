@@ -55,7 +55,7 @@ public class CapacitorElm extends CircuitElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 'c';
 	}

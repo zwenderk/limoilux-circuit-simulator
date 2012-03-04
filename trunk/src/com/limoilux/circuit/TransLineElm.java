@@ -40,7 +40,7 @@ public class TransLineElm extends CircuitElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 171;
 	}

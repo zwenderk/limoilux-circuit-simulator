@@ -46,7 +46,7 @@ public class DiacElm extends CircuitElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 185;
 	}

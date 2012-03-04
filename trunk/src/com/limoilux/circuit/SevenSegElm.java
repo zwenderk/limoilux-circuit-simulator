@@ -86,7 +86,7 @@ public class SevenSegElm extends ChipElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 157;
 	}

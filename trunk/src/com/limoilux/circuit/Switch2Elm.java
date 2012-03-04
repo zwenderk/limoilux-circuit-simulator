@@ -34,7 +34,7 @@ public class Switch2Elm extends SwitchElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 'S';
 	}

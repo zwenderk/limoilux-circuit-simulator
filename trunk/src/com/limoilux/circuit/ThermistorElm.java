@@ -48,7 +48,7 @@ public class ThermistorElm extends CircuitElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 188;
 	}

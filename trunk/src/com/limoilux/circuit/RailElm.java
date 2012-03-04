@@ -29,7 +29,7 @@ public class RailElm extends VoltageElm
 	final int FLAG_CLOCK = 1;
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 'R';
 	}

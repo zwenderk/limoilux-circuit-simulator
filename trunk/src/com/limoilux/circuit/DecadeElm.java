@@ -94,7 +94,7 @@ public class DecadeElm extends ChipElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 163;
 	}

@@ -45,7 +45,7 @@ public class ZenerElm extends DiodeElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 'z';
 	}

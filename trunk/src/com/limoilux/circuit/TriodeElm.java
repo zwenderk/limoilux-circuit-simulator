@@ -59,7 +59,7 @@ public class TriodeElm extends CircuitElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 173;
 	}

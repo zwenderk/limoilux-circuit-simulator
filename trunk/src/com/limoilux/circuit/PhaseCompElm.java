@@ -99,7 +99,7 @@ public class PhaseCompElm extends ChipElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 161;
 	}
