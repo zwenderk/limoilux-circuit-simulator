@@ -41,7 +41,7 @@ public class CircuitPane extends JPanel
 
 		try
 		{
-			this.cirSim.createCircuitImage(this.dbimage.getGraphics());
+			this.cirSim.createCircuitImage(this.dbimage);
 			
 			g.drawImage(this.dbimage, 0, 0, this.cirSim.cirFrame);
 		}
