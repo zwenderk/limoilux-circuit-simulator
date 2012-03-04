@@ -78,275 +78,13 @@ public class Scope extends JPanel
 		this.sim = s;
 	}
 
-	public void showCurrent(boolean b)
-	{
-		this.showI = b;
-		this.value = this.ivalue = 0;
-	}
-
-	public void showVoltage(boolean b)
-	{
-		this.showV = b;
-		this.value = this.ivalue = 0;
-	}
-
-	public void showMax(boolean b)
-	{
-		this.showMax = b;
-	}
-
-	public void showMin(boolean b)
-	{
-		this.showMin = b;
-	}
-
-	public void setFrequencyVisible(boolean b)
-	{
-		this.showFreq = b;
-	}
-
-	public void setLockScale(boolean b)
-	{
-		this.lockScale = b;
-	}
-
-	public void resetGraph()
-	{
-		this.scopePointCount = 1;
-		while (this.scopePointCount <= this.rect.width)
-		{
-			this.scopePointCount *= 2;
-		}
-		this.minV = new double[this.scopePointCount];
-		this.maxV = new double[this.scopePointCount];
-		this.minI = new double[this.scopePointCount];
-		this.maxI = new double[this.scopePointCount];
-		this.ptr = this.ctr = 0;
-		this.allocImage();
-	}
-
-	boolean active()
-	{
-		return this.elm != null;
-	}
-
-	void reset()
-	{
-		this.resetGraph();
-		this.minMaxV = 5;
-		this.minMaxI = .1;
-		this.speed = 64;
-		this.showI = this.showV = this.showMax = true;
-		this.showFreq = this.lockScale = this.showMin = false;
-		this.plot2d = false;
-		// no showI for Output
-		if (this.elm != null
-				&& (this.elm instanceof OutputElm || this.elm instanceof LogicOutputElm || this.elm instanceof ProbeElm))
-		{
-			this.showI = false;
-		}
-		this.value = this.ivalue = 0;
-		if (this.elm instanceof TransistorElm)
-		{
-			this.value = Scope.VAL_VCE;
-		}
-	}
-
 	@Override
 	public void paintComponents(Graphics g)
 	{
 		super.paintComponents(g);
-	}
-
-	public void setRect(Rectangle r)
-	{
-		this.rect = r;
-		this.resetGraph();
-	}
-
-	@Override
-	public int getWidth()
-	{
-		return this.rect.width;
-	}
-
-	public int rightEdge()
-	{
-		return this.rect.x + this.rect.width;
-	}
-
-	public void setElm(CircuitElm ce)
-	{
-		this.elm = ce;
-		this.reset();
-	}
-
-	public void doTimeStep()
-	{
-		if (this.elm == null)
-		{
-			return;
-		}
-		double v = this.elm.getScopeValue(this.value);
-		if (v < this.minV[this.ptr])
-		{
-			this.minV[this.ptr] = v;
-		}
-		if (v > this.maxV[this.ptr])
-		{
-			this.maxV[this.ptr] = v;
-		}
-		double i = 0;
-		if (this.value == 0 || this.ivalue != 0)
-		{
-			i = this.ivalue == 0 ? this.elm.getCurrent() : this.elm.getScopeValue(this.ivalue);
-			if (i < this.minI[this.ptr])
-			{
-				this.minI[this.ptr] = i;
-			}
-			if (i > this.maxI[this.ptr])
-			{
-				this.maxI[this.ptr] = i;
-			}
-		}
-
-		if (this.plot2d && this.dpixels != null)
-		{
-			boolean newscale = false;
-			while (v > this.minMaxV || v < -this.minMaxV)
-			{
-				this.minMaxV *= 2;
-				newscale = true;
-			}
-			double yval = i;
-			if (this.plotXY)
-			{
-				yval = this.yElm == null ? 0 : this.yElm.getVoltageDiff();
-			}
-			while (yval > this.minMaxI || yval < -this.minMaxI)
-			{
-				this.minMaxI *= 2;
-				newscale = true;
-			}
-			if (newscale)
-			{
-				this.clear2dView();
-			}
-			double xa = v / this.minMaxV;
-			double ya = yval / this.minMaxI;
-			int x = (int) (this.rect.width * (1 + xa) * .499);
-			int y = (int) (this.rect.height * (1 - ya) * .499);
-			this.drawTo(x, y);
-		}
-		else
-		{
-			this.ctr++;
-			if (this.ctr >= this.speed)
-			{
-				this.ptr = this.ptr + 1 & this.scopePointCount - 1;
-				this.minV[this.ptr] = this.maxV[this.ptr] = v;
-				this.minI[this.ptr] = this.maxI[this.ptr] = i;
-				this.ctr = 0;
-			}
-		}
-	}
-
-	void drawTo(int x2, int y2)
-	{
-		if (this.draw_ox == -1)
-		{
-			this.draw_ox = x2;
-			this.draw_oy = y2;
-		}
-		// need to draw a line from x1,y1 to x2,y2
-		if (this.draw_ox == x2 && this.draw_oy == y2)
-		{
-			this.dpixels[x2 + this.rect.width * y2] = 1;
-		}
-		else if (CircuitElm.abs(y2 - this.draw_oy) > CircuitElm.abs(x2 - this.draw_ox))
-		{
-			// y difference is greater, so we step along y's
-			// from min to max y and calculate x for each step
-			double sgn = CircuitElm.sign(y2 - this.draw_oy);
-			int x, y;
-			for (y = this.draw_oy; y != y2 + sgn; y += sgn)
-			{
-				x = this.draw_ox + (x2 - this.draw_ox) * (y - this.draw_oy) / (y2 - this.draw_oy);
-				this.dpixels[x + this.rect.width * y] = 1;
-			}
-		}
-		else
-		{
-			// x difference is greater, so we step along x's
-			// from min to max x and calculate y for each step
-			double sgn = CircuitElm.sign(x2 - this.draw_ox);
-			int x, y;
-			for (x = this.draw_ox; x != x2 + sgn; x += sgn)
-			{
-				y = this.draw_oy + (y2 - this.draw_oy) * (x - this.draw_ox) / (x2 - this.draw_ox);
-				this.dpixels[x + this.rect.width * y] = 1;
-			}
-		}
-		this.draw_ox = x2;
-		this.draw_oy = y2;
-	}
-
-	void clear2dView()
-	{
-		int i;
-		for (i = 0; i != this.dpixels.length; i++)
-		{
-			this.dpixels[i] = 0;
-		}
-		this.draw_ox = this.draw_oy = -1;
-	}
-
-	public void adjustScale(double x)
-	{
-		this.minMaxV *= x;
-		this.minMaxI *= x;
-	}
-
-	void draw2d(Graphics g)
-	{
-		int i;
-		if (this.pixels == null || this.dpixels == null)
-		{
-			return;
-		}
-		int col = this.sim.printableCheckItem.getState() ? 0xFFFFFFFF : 0;
-		for (i = 0; i != this.pixels.length; i++)
-		{
-			this.pixels[i] = col;
-		}
-		for (i = 0; i != this.rect.width; i++)
-		{
-			this.pixels[i + this.rect.width * (this.rect.height / 2)] = 0xFF00FF00;
-		}
-		int ycol = this.plotXY ? 0xFF00FF00 : 0xFFFFFF00;
-		for (i = 0; i != this.rect.height; i++)
-		{
-			this.pixels[this.rect.width / 2 + this.rect.width * i] = ycol;
-		}
-		for (i = 0; i != this.pixels.length; i++)
-		{
-			int q = (int) (255 * this.dpixels[i]);
-			if (q > 0)
-			{
-				this.pixels[i] = 0xFF000000 | 0x10101 * q;
-			}
-			this.dpixels[i] *= .997;
-		}
-		g.drawImage(this.image, this.rect.x, this.rect.y, null);
-		g.setColor(CircuitElm.WHITE_COLOR);
-		g.fillOval(this.rect.x + this.draw_ox - 2, this.rect.y + this.draw_oy - 2, 5, 5);
-		int yt = this.rect.y + 10;
-		int x = this.rect.x;
-		if (this.text != null && this.rect.y + this.rect.height > yt + 5)
-		{
-			g.drawString(this.text, x, yt);
-			yt += 15;
-		}
+		
+		this.draw(g);
+		System.out.println(this + "painted");
 	}
 
 	public void draw(Graphics g)
@@ -373,7 +111,7 @@ public class Scope extends JPanel
 		int x = 0;
 		int maxy = (this.rect.height - 1) / 2;
 		int y = maxy;
-
+	
 		boolean gotI = false;
 		boolean gotV = false;
 		int minRange = 4;
@@ -408,7 +146,7 @@ public class Scope extends JPanel
 				this.minMaxI *= 2;
 			}
 		}
-
+	
 		double gridStep = 1e-8;
 		double gridMax = this.showI ? this.minMaxI : this.minMaxV;
 		while (gridStep * 100 < gridMax)
@@ -419,10 +157,10 @@ public class Scope extends JPanel
 		{
 			gridStep = 0;
 		}
-
+	
 		int ll;
 		boolean sublines = maxy * gridStep / gridMax > 3;
-
+	
 		for (ll = -100; ll <= 100; ll++)
 		{
 			// don't show gridlines if plotting multiple values,
@@ -450,7 +188,7 @@ public class Scope extends JPanel
 				this.pixels[i + yl * this.rect.width] = col;
 			}
 		}
-
+	
 		gridStep = 1e-15;
 		double ts = this.sim.timer.timeStep * this.speed;
 		while (gridStep < ts * 5)
@@ -459,7 +197,7 @@ public class Scope extends JPanel
 		}
 		double tstart = this.sim.timer.time - this.sim.timer.timeStep * this.speed * this.rect.width;
 		double tx = this.sim.timer.time - this.sim.timer.time % gridStep;
-
+	
 		for (ll = 0;; ll++)
 		{
 			double tl = tx - gridStep * ll;
@@ -477,7 +215,7 @@ public class Scope extends JPanel
 				continue;
 			}
 			col = 0xFF202020;
-
+	
 			if ((tl + gridStep / 4) % (gridStep * 10) < gridStep)
 			{
 				col = 0xFF909090;
@@ -486,13 +224,13 @@ public class Scope extends JPanel
 					col = 0xFF4040D0;
 				}
 			}
-
+	
 			for (i = 0; i < this.pixels.length; i += this.rect.width)
 			{
 				this.pixels[i + gx] = col;
 			}
 		}
-
+	
 		// these two loops are pretty much the same, and should be
 		// combined!
 		if (this.value == 0 && this.showI)
@@ -722,6 +460,273 @@ public class Scope extends JPanel
 			}
 		}
 	}
+
+	public void showCurrent(boolean b)
+	{
+		this.showI = b;
+		this.value = this.ivalue = 0;
+	}
+
+	public void showVoltage(boolean b)
+	{
+		this.showV = b;
+		this.value = this.ivalue = 0;
+	}
+
+	public void showMax(boolean b)
+	{
+		this.showMax = b;
+	}
+
+	public void showMin(boolean b)
+	{
+		this.showMin = b;
+	}
+
+	public void setFrequencyVisible(boolean b)
+	{
+		this.showFreq = b;
+	}
+
+	public void setLockScale(boolean b)
+	{
+		this.lockScale = b;
+	}
+
+	public void resetGraph()
+	{
+		this.scopePointCount = 1;
+		while (this.scopePointCount <= this.rect.width)
+		{
+			this.scopePointCount *= 2;
+		}
+		this.minV = new double[this.scopePointCount];
+		this.maxV = new double[this.scopePointCount];
+		this.minI = new double[this.scopePointCount];
+		this.maxI = new double[this.scopePointCount];
+		this.ptr = this.ctr = 0;
+		this.allocImage();
+	}
+
+	boolean active()
+	{
+		return this.elm != null;
+	}
+
+	void reset()
+	{
+		this.resetGraph();
+		this.minMaxV = 5;
+		this.minMaxI = .1;
+		this.speed = 64;
+		this.showI = this.showV = this.showMax = true;
+		this.showFreq = this.lockScale = this.showMin = false;
+		this.plot2d = false;
+		// no showI for Output
+		if (this.elm != null
+				&& (this.elm instanceof OutputElm || this.elm instanceof LogicOutputElm || this.elm instanceof ProbeElm))
+		{
+			this.showI = false;
+		}
+		this.value = this.ivalue = 0;
+		if (this.elm instanceof TransistorElm)
+		{
+			this.value = Scope.VAL_VCE;
+		}
+	}
+
+	public void setRect(Rectangle r)
+	{
+		this.rect = r;
+		this.resetGraph();
+	}
+
+	@Override
+	public int getWidth()
+	{
+		return this.rect.width;
+	}
+
+	public int rightEdge()
+	{
+		return this.rect.x + this.rect.width;
+	}
+
+	public void setElm(CircuitElm ce)
+	{
+		this.elm = ce;
+		this.reset();
+	}
+
+	public void doTimeStep()
+	{
+		if (this.elm == null)
+		{
+			return;
+		}
+		double v = this.elm.getScopeValue(this.value);
+		if (v < this.minV[this.ptr])
+		{
+			this.minV[this.ptr] = v;
+		}
+		if (v > this.maxV[this.ptr])
+		{
+			this.maxV[this.ptr] = v;
+		}
+		double i = 0;
+		if (this.value == 0 || this.ivalue != 0)
+		{
+			i = this.ivalue == 0 ? this.elm.getCurrent() : this.elm.getScopeValue(this.ivalue);
+			if (i < this.minI[this.ptr])
+			{
+				this.minI[this.ptr] = i;
+			}
+			if (i > this.maxI[this.ptr])
+			{
+				this.maxI[this.ptr] = i;
+			}
+		}
+
+		if (this.plot2d && this.dpixels != null)
+		{
+			boolean newscale = false;
+			while (v > this.minMaxV || v < -this.minMaxV)
+			{
+				this.minMaxV *= 2;
+				newscale = true;
+			}
+			double yval = i;
+			if (this.plotXY)
+			{
+				yval = this.yElm == null ? 0 : this.yElm.getVoltageDiff();
+			}
+			while (yval > this.minMaxI || yval < -this.minMaxI)
+			{
+				this.minMaxI *= 2;
+				newscale = true;
+			}
+			if (newscale)
+			{
+				this.clear2dView();
+			}
+			double xa = v / this.minMaxV;
+			double ya = yval / this.minMaxI;
+			int x = (int) (this.rect.width * (1 + xa) * .499);
+			int y = (int) (this.rect.height * (1 - ya) * .499);
+			this.drawTo(x, y);
+		}
+		else
+		{
+			this.ctr++;
+			if (this.ctr >= this.speed)
+			{
+				this.ptr = this.ptr + 1 & this.scopePointCount - 1;
+				this.minV[this.ptr] = this.maxV[this.ptr] = v;
+				this.minI[this.ptr] = this.maxI[this.ptr] = i;
+				this.ctr = 0;
+			}
+		}
+	}
+
+	void drawTo(int x2, int y2)
+	{
+		if (this.draw_ox == -1)
+		{
+			this.draw_ox = x2;
+			this.draw_oy = y2;
+		}
+		// need to draw a line from x1,y1 to x2,y2
+		if (this.draw_ox == x2 && this.draw_oy == y2)
+		{
+			this.dpixels[x2 + this.rect.width * y2] = 1;
+		}
+		else if (CircuitElm.abs(y2 - this.draw_oy) > CircuitElm.abs(x2 - this.draw_ox))
+		{
+			// y difference is greater, so we step along y's
+			// from min to max y and calculate x for each step
+			double sgn = CircuitElm.sign(y2 - this.draw_oy);
+			int x, y;
+			for (y = this.draw_oy; y != y2 + sgn; y += sgn)
+			{
+				x = this.draw_ox + (x2 - this.draw_ox) * (y - this.draw_oy) / (y2 - this.draw_oy);
+				this.dpixels[x + this.rect.width * y] = 1;
+			}
+		}
+		else
+		{
+			// x difference is greater, so we step along x's
+			// from min to max x and calculate y for each step
+			double sgn = CircuitElm.sign(x2 - this.draw_ox);
+			int x, y;
+			for (x = this.draw_ox; x != x2 + sgn; x += sgn)
+			{
+				y = this.draw_oy + (y2 - this.draw_oy) * (x - this.draw_ox) / (x2 - this.draw_ox);
+				this.dpixels[x + this.rect.width * y] = 1;
+			}
+		}
+		this.draw_ox = x2;
+		this.draw_oy = y2;
+	}
+
+	void clear2dView()
+	{
+		int i;
+		for (i = 0; i != this.dpixels.length; i++)
+		{
+			this.dpixels[i] = 0;
+		}
+		this.draw_ox = this.draw_oy = -1;
+	}
+
+	public void adjustScale(double x)
+	{
+		this.minMaxV *= x;
+		this.minMaxI *= x;
+	}
+
+	void draw2d(Graphics g)
+	{
+		int i;
+		if (this.pixels == null || this.dpixels == null)
+		{
+			return;
+		}
+		int col = this.sim.printableCheckItem.getState() ? 0xFFFFFFFF : 0;
+		for (i = 0; i != this.pixels.length; i++)
+		{
+			this.pixels[i] = col;
+		}
+		for (i = 0; i != this.rect.width; i++)
+		{
+			this.pixels[i + this.rect.width * (this.rect.height / 2)] = 0xFF00FF00;
+		}
+		int ycol = this.plotXY ? 0xFF00FF00 : 0xFFFFFF00;
+		for (i = 0; i != this.rect.height; i++)
+		{
+			this.pixels[this.rect.width / 2 + this.rect.width * i] = ycol;
+		}
+		for (i = 0; i != this.pixels.length; i++)
+		{
+			int q = (int) (255 * this.dpixels[i]);
+			if (q > 0)
+			{
+				this.pixels[i] = 0xFF000000 | 0x10101 * q;
+			}
+			this.dpixels[i] *= .997;
+		}
+		g.drawImage(this.image, this.rect.x, this.rect.y, null);
+		g.setColor(CircuitElm.WHITE_COLOR);
+		g.fillOval(this.rect.x + this.draw_ox - 2, this.rect.y + this.draw_oy - 2, 5, 5);
+		int yt = this.rect.y + 10;
+		int x = this.rect.x;
+		if (this.text != null && this.rect.y + this.rect.height > yt + 5)
+		{
+			g.drawString(this.text, x, yt);
+			yt += 15;
+		}
+	}
+	
+
 
 	public void speedUp()
 	{
