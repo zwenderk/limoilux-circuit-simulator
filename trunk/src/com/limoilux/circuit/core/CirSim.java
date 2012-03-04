@@ -233,16 +233,18 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		// this.mainContainer.setLayout(new BorderLayout());
 		this.circuitPanel = new CircuitPane(this);
 
-		this.timer = new Timer();
 		this.circuit = new Circuit();
-		this.circuitMan = new CircuitManager(this.circuit);
-
+		this.circuitMan = new CircuitManager(this.circuit, this.circuitPanel);
+		this.scopeMan = new ScopeManager(this.circuit);
+		
+		this.timer = new Timer();
+		
 		this.activityManager = new ActivityManager();
 		this.activityListener = new ActivityList();
 		this.activityManager.addActivityListener(this.activityListener);
 
-		this.scopeMan = new ScopeManager(this.circuit);
-		this.cirFrame = new CircuitFrame(this.circuitPanel);
+
+		this.cirFrame = new CircuitFrame();
 
 		this.mainContainer = new JPanel();
 		this.mainContainer.setBackground(Color.BLACK);
@@ -289,8 +291,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		this.undoStack = new Vector<String>();
 		this.redoStack = new Vector<String>();
 
-		this.circuitPanel.setBackground(Color.black);
-		this.circuitPanel.setForeground(Color.lightGray);
 
 		this.initPopupMenu();
 

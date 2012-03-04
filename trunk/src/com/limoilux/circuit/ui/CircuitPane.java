@@ -24,6 +24,7 @@ public class CircuitPane extends JPanel
 		this.cirSim = cirSim;
 
 		this.setBackground(Color.BLACK);
+		this.setForeground(Color.lightGray);
 
 	}
 	
