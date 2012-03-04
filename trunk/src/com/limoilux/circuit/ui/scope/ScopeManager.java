@@ -155,6 +155,8 @@ public class ScopeManager
 
 	public void setupScopes(Dimension winSize)
 	{
+		Rectangle rect;
+		
 		this.removeUnused();
 
 		int height = winSize.height - this.circuit.circuitArea.height;
@@ -207,11 +209,11 @@ public class ScopeManager
 				scope.resetGraph();
 			}
 
-			Rectangle r = new Rectangle(pos * w, winSize.height - height + colh * row, w - marg, colh);
+			rect = new Rectangle(pos * w, winSize.height - height + colh * row, w - marg, colh);
 			row++;
-			if (!r.equals(scope.rect))
+			if (!rect.equals(scope.rect))
 			{
-				scope.setRect(r);
+				scope.setRect(rect);
 			}
 		}
 	}
