@@ -44,12 +44,8 @@ public class ScopePane extends Panel
 		CircuitElm realMouseElm;
 
 	
-		if (this.cirSim.mouseElm == null)
-		{
-			this.cirSim.mouseElm = this.cirSim.stopElm;
-		}
 
-		this.cirSim.scopeMan.setupScopes(this.cirSim.winSize);
+
 
 		g = this.scopeImg.getGraphics();
 		g.setColor(Color.black);
@@ -105,29 +101,6 @@ public class ScopePane extends Panel
 
 		int i;
 		Font oldfont = g.getFont();
-		for (i = 0; i != this.cirSim.circuit.getElementCount(); i++)
-		{
-			if (this.cirSim.powerCheckItem.getState())
-			{
-				g.setColor(Color.gray);
-			}
-			/*
-			 * else if (conductanceCheckItem.getState())
-			 * g.setColor(Color.white);
-			 */
-			this.cirSim.circuit.getElementAt(i).draw(g);
-		}
-
-		if (this.cirSim.tempMouseMode == CirSim.MODE_DRAG_ROW || this.cirSim.tempMouseMode == CirSim.MODE_DRAG_COLUMN
-				|| this.cirSim.tempMouseMode == CirSim.MODE_DRAG_POST || this.cirSim.tempMouseMode == CirSim.MODE_DRAG_SELECTED)
-		{
-			for (i = 0; i != this.cirSim.circuit.getElementCount(); i++)
-			{
-				CircuitElm ce = this.cirSim.circuit.getElementAt(i);
-				DrawUtil.drawPost(g, ce.x, ce.y);
-				DrawUtil.drawPost(g, ce.x2, ce.y2);
-			}
-		}
 
 		int badnodes = 0;
 
