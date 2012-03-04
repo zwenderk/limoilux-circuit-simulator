@@ -776,6 +776,9 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.handleResize();
 
 		this.cirFrame.requestFocus();
+		
+		Thread t = new Thread(new RepaintRun());
+		t.start();
 
 	}
 
@@ -3087,6 +3090,29 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 		}
 
+	}
+	
+	private class RepaintRun implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			while(true)
+			{
+				CirSim.this.circuitPanel.repaint();
+				
+				try
+				{
+					Thread.sleep(100);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+				
+			}
+		}
+		
 	}
 
 	public static void main(String args[])
