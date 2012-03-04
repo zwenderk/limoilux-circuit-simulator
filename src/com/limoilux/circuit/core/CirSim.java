@@ -312,10 +312,9 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		if (!(this.winSize == null || this.winSize.width == 0))
 		{
 			this.prepareRepaint();
+			
 			this.circuitPanel.repaint();
 		}
-
-		
 		
 		return this.timer.calculateDelay();
 		
@@ -323,21 +322,14 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 	private void prepareRepaint()
 	{
-
-	}
-
-	public void updateCircuit(Graphics realg)
-	{
-		Graphics g = null;
-		CircuitElm realMouseElm;
-
+		
+		// Analyser le circuit si nessaire.
 		if (this.circuit.needAnalysis())
 		{
 			try
 			{
 				this.stopMessage = null;
 				this.stopElm = null;
-
 				this.circuit.analyzeCircuit();
 			}
 			catch (CircuitAnalysisException e)
@@ -347,6 +339,12 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 			this.circuit.setNeedAnalysis(false);
 		}
+	}
+
+	public void updateCircuit(Graphics realg) throws Exception
+	{
+		Graphics g = null;
+		CircuitElm realMouseElm;
 
 		if (CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElm)
 		{
@@ -368,21 +366,9 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 		if (this.activityManager.isPlaying())
 		{
-			try
-			{
-				this.runCircuit();
-			}
-			catch (CircuitAnalysisException e)
-			{
-				this.handleAnalysisException(e);
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				this.circuit.setNeedAnalysis(true);
 
-				return;
-			}
+				this.runCircuit();
+	
 		}
 
 		if (this.activityManager.isPlaying())
@@ -587,6 +573,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			g.drawRect(this.selectedArea.x, this.selectedArea.y, this.selectedArea.width, this.selectedArea.height);
 		}
 
+		
 		this.mouseElm = realMouseElm;
 		/*
 		 * g.setColor(Color.white); g.drawString("Framerate: " + framerate, 10,
@@ -1374,7 +1361,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		this.handleAnalysisException(new CircuitAnalysisException(msg, ce));
 	}
 
-	private void handleAnalysisException(CircuitAnalysisException e)
+	public void handleAnalysisException(CircuitAnalysisException e)
 	{
 		this.circuit.matrix.clear();
 

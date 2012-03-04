@@ -8,6 +8,7 @@ import java.awt.Panel;
 import javax.swing.JPanel;
 
 import com.limoilux.circuit.core.CirSim;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
 
 public class CircuitPane extends JPanel
 {
@@ -28,7 +29,21 @@ public class CircuitPane extends JPanel
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		this.cirSim.updateCircuit(g);
+
+		try
+		{
+			this.cirSim.updateCircuit(g);
+		}
+
+		catch (CircuitAnalysisException e)
+		{
+			this.cirSim.handleAnalysisException(e);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			this.cirSim.circuit.setNeedAnalysis(true);
+		}
 
 	}
 }
