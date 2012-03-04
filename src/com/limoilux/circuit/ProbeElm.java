@@ -25,7 +25,7 @@ public class ProbeElm extends CircuitElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 'p';
 	}

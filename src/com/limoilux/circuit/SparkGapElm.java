@@ -43,7 +43,7 @@ public class SparkGapElm extends CircuitElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 187;
 	}

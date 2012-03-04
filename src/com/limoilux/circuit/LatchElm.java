@@ -78,7 +78,7 @@ public class LatchElm extends ChipElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 168;
 	}

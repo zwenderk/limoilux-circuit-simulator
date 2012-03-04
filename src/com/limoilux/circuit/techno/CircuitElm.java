@@ -94,7 +94,7 @@ public abstract class CircuitElm implements Editable
 		this.initBoundingBox();
 	}
 
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 0;
 	}
@@ -124,7 +124,7 @@ public abstract class CircuitElm implements Editable
 
 	public String dump()
 	{
-		int t = this.getDumpType();
+		int t = this.getElementId();
 		return (t < 127 ? (char) t + " " : t + " ") + this.x + " " + this.y + " " + this.x2 + " " + this.y2 + " "
 				+ this.flags;
 	}

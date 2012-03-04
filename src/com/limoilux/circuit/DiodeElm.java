@@ -57,7 +57,7 @@ public class DiodeElm extends CircuitElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 'd';
 	}

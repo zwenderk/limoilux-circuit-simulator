@@ -46,7 +46,7 @@ public class LampElm extends CircuitElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 181;
 	}

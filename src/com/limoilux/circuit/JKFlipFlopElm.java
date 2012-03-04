@@ -80,7 +80,7 @@ public class JKFlipFlopElm extends ChipElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 156;
 	}

@@ -76,7 +76,7 @@ public class OrGateElm extends GateElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 152;
 	}

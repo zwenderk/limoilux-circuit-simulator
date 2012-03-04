@@ -81,7 +81,7 @@ public class DFlipFlopElm extends ChipElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 155;
 	}

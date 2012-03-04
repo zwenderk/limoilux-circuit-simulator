@@ -49,7 +49,7 @@ public class AntennaElm extends RailElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 'A';
 	}

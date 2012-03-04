@@ -45,7 +45,7 @@ public class AnalogSwitchElm extends CircuitElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 159;
 	}

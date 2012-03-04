@@ -63,7 +63,7 @@ public class AndGateElm extends GateElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 150;
 	}

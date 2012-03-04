@@ -87,7 +87,7 @@ public class JfetElm extends MosfetElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 'j';
 	}

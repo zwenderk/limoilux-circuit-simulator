@@ -72,7 +72,7 @@ public class TextElm extends CircuitElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 'x';
 	}

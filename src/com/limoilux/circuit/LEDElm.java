@@ -37,7 +37,7 @@ public class LEDElm extends DiodeElm
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 162;
 	}

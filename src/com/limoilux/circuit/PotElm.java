@@ -57,7 +57,7 @@ public class PotElm extends CircuitElm implements AdjustmentListener
 	}
 
 	@Override
-	public int getDumpType()
+	public int getElementId()
 	{
 		return 174;
 	}
