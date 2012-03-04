@@ -1250,7 +1250,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 			this.circuit.centerCircuit(this.gridMask, this.circuit.circuitArea);
 
-			this.circuitPanel.repaint();
+			this.repaint();
 
 			this.circuit.setCircuitBottom(0);
 		}
@@ -1351,7 +1351,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 					((SwitchElm) ce).toggle();
 					this.circuit.setNeedAnalysis(true);
 
-					this.circuitPanel.repaint();
+					this.repaint();
 					return;
 				}
 			}
@@ -1398,7 +1398,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 		this.circuit.setNeedAnalysis(false);
 
-		this.circuitPanel.repaint();
+		this.repaint();
 	}
 
 	@Deprecated
@@ -1715,8 +1715,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			this.scopeMan.scopeCount = 0;
 		}
 
-		this.circuitPanel.repaint();
-		this.scopeMan.scopePane.repaint();
+		this.repaint();
 
 		int p;
 		for (p = 0; p < len;)
@@ -2397,8 +2396,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 	public void repaint()
 	{
-		this.circuitPanel.repaint();
-		this.scopeMan.scopePane.repaint();
+		this.repaint(0);
 	}
 	
 	public void repaint(int time)
@@ -2413,7 +2411,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.handleResize();
 		
 		this.repaint();
-		this.circuitPanel.repaint(100);
+		this.repaint(100);
 		this.scopeMan.scopePane.repaint(100);
 	}
 
@@ -2438,8 +2436,8 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			this.circuit.setNeedAnalysis(true);
 			this.timer.time = 0;
 			this.activityManager.setPlaying(true);
-			this.circuitPanel.repaint();
-			this.scopeMan.scopePane.repaint();
+			
+			this.repaint();
 		}
 
 		if (e.getSource() == this.exportItem)
@@ -2587,7 +2585,8 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			{
 				this.scopeMan.scopes[this.menuScope].resetGraph();
 			}
-			this.circuitPanel.repaint();
+			
+			this.repaint();
 		}
 
 		if (ac.indexOf("setup ") == 0)
@@ -2600,7 +2599,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	@Override
 	public void itemStateChanged(ItemEvent e)
 	{
-		this.circuitPanel.repaint(CirSim.PAUSE);
+		this.repaint(CirSim.PAUSE);
 		Object mi = e.getItemSelectable();
 
 		if (mi == this.smallGridCheckItem)
@@ -2755,7 +2754,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		{
 			CirSim.this.scopeSelected = -1;
 			CirSim.this.mouseElm = CirSim.this.plotXElm = CirSim.this.plotYElm = null;
-			CirSim.this.circuitPanel.repaint();
+			CirSim.this.repaint();
 		}
 
 		@Override
@@ -2897,7 +2896,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			}
 
 			CirSim.this.dragElm = null;
-			CirSim.this.circuitPanel.repaint();
+			CirSim.this.repaint();
 		}
 
 	}
@@ -2976,7 +2975,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 					CirSim.this.dragY = CirSim.this.snapGrid(e.getY());
 				}
 			}
-			CirSim.this.circuitPanel.repaint(CirSim.PAUSE);
+			CirSim.this.repaint(CirSim.PAUSE);
 		}
 
 		@Override
@@ -3088,7 +3087,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 			if (CirSim.this.mouseElm != origMouse)
 			{
-				CirSim.this.circuitPanel.repaint();
+				CirSim.this.repaint();
 			}
 		}
 	}
@@ -3101,7 +3100,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			if (isPlaying)
 			{
 				CirSim.this.circuit.setNeedAnalysis(true);
-				CirSim.this.circuitPanel.repaint();
+				CirSim.this.repaint();
 			}
 		}
 
