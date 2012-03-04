@@ -5,11 +5,11 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
-public class CircuitFrame extends JFrame
+public class CoreWindow extends JFrame
 {
 	private static final long serialVersionUID = 2501086205361457967L;
 
-	public CircuitFrame()
+	public CoreWindow()
 	{
 		super();
 

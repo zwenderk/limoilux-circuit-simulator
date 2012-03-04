@@ -216,7 +216,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 	
 	public final CircuitPane circuitPanel;
 
-	public final CircuitFrame cirFrame;
+	public final CoreWindow cirFrame;
 	public final JPanel mainContainer;
 	public final JToolBar toolBar;
 
@@ -241,7 +241,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		this.activityListener = new ActivityList();
 		this.activityManager.addActivityListener(this.activityListener);
 
-		this.cirFrame = new CircuitFrame();
+		this.cirFrame = new CoreWindow();
 
 		this.mainContainer = new JPanel();
 		this.mainContainer.setBackground(Color.BLACK);
