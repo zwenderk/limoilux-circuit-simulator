@@ -309,8 +309,12 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 	
 	private long repaint()
 	{
-		this.prepareRepaint();
-		this.circuitPanel.repaint();
+		if (!(this.winSize == null || this.winSize.width == 0))
+		{
+			this.prepareRepaint();
+			this.circuitPanel.repaint();
+		}
+
 		
 		
 		return this.timer.calculateDelay();
@@ -326,11 +330,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 	{
 		Graphics g = null;
 		CircuitElm realMouseElm;
-
-		if (this.winSize == null || this.winSize.width == 0)
-		{
-			return;
-		}
 
 		if (this.circuit.needAnalysis())
 		{
