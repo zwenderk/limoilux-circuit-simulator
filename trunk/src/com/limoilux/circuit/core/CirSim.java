@@ -79,7 +79,7 @@ import com.limoilux.circuit.ui.scope.ScopeManager;
  * @author David Bernard
  * 
  */
-public class CirSim implements ComponentListener, ActionListener, AdjustmentListener, ItemListener
+public class CirSim implements ComponentListener, ActionListener, ItemListener
 {
 	@Deprecated
 	private static final double PI = Math.PI;
@@ -363,7 +363,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			{
 				e.printStackTrace();
 				this.circuit.setNeedAnalysis(true);
-				this.circuitPanel.repaint();
 
 				return;
 			}
@@ -859,7 +858,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 		this.toolBar.add(new JLabel("Speed", SwingConstants.CENTER));
 		this.speedBar = new JScrollBar(Adjustable.HORIZONTAL, 3, 1, 0, 260);
-		this.speedBar.addAdjustmentListener(this);
+
 		this.toolBar.add(this.speedBar);
 
 		// this.toolBar.add(new JLabel("Current Speed", JLabel.CENTER));
@@ -1246,7 +1245,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 			this.circuit.centerCircuit(this.gridMask, this.circuit.circuitArea);
 
-			this.circuitPanel.repaint();
 
 			this.circuit.setCircuitBottom(0);
 		}
@@ -1346,8 +1344,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 				{
 					((SwitchElm) ce).toggle();
 					this.circuit.setNeedAnalysis(true);
-
-					this.circuitPanel.repaint();
 					return;
 				}
 			}
@@ -1362,7 +1358,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	public void needAnalyze()
 	{
 		this.circuit.setNeedAnalysis(true);
-		this.circuitPanel.repaint();
 	}
 
 	@Deprecated
@@ -1393,8 +1388,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.activityManager.setPlaying(false);
 
 		this.circuit.setNeedAnalysis(false);
-
-		this.circuitPanel.repaint();
 	}
 
 	@Deprecated
@@ -1711,7 +1704,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			this.scopeMan.scopeCount = 0;
 		}
 
-		this.circuitPanel.repaint();
+
 
 		int p;
 		for (p = 0; p < len;)
@@ -2392,14 +2385,12 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	@Override
 	public void componentShown(ComponentEvent e)
 	{
-		this.circuitPanel.repaint();
 	}
 
 	@Override
 	public void componentResized(ComponentEvent e)
 	{
 		this.handleResize();
-		this.circuitPanel.repaint(100);
 	}
 
 	@Override
@@ -2423,7 +2414,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			this.circuit.setNeedAnalysis(true);
 			this.timer.time = 0;
 			this.activityManager.setPlaying(true);
-			this.circuitPanel.repaint();
 		}
 
 		if (e.getSource() == this.exportItem)
@@ -2571,7 +2561,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			{
 				this.scopeMan.scopes[this.menuScope].resetGraph();
 			}
-			this.circuitPanel.repaint();
 		}
 
 		if (ac.indexOf("setup ") == 0)
@@ -2583,8 +2572,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 	@Override
 	public void itemStateChanged(ItemEvent e)
-	{
-		this.circuitPanel.repaint(CirSim.PAUSE);
+	{ 
 		Object mi = e.getItemSelectable();
 
 		if (mi == this.smallGridCheckItem)
@@ -2662,12 +2650,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		}
 	}
 
-	@Override
-	public void adjustmentValueChanged(AdjustmentEvent e)
-	{
-		System.out.print(((JScrollBar) e.getSource()).getValue() + "\n");
-	}
-
 	private class MyKeyListener implements KeyListener
 	{
 
@@ -2739,7 +2721,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		{
 			CirSim.this.scopeSelected = -1;
 			CirSim.this.mouseElm = CirSim.this.plotXElm = CirSim.this.plotYElm = null;
-			CirSim.this.circuitPanel.repaint();
 		}
 
 		@Override
@@ -2960,7 +2941,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 					CirSim.this.dragY = CirSim.this.snapGrid(e.getY());
 				}
 			}
-			CirSim.this.circuitPanel.repaint(CirSim.PAUSE);
 		}
 
 		@Override
@@ -3070,10 +3050,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 				}
 			}
 
-			if (CirSim.this.mouseElm != origMouse)
-			{
-				CirSim.this.circuitPanel.repaint();
-			}
+
 		}
 	}
 
@@ -3085,7 +3062,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			if (isPlaying)
 			{
 				CirSim.this.circuit.setNeedAnalysis(true);
-				CirSim.this.circuitPanel.repaint();
 			}
 
 		}
