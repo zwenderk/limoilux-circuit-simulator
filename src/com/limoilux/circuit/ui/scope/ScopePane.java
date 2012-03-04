@@ -3,122 +3,19 @@ package com.limoilux.circuit.ui.scope;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Panel;
 
 import javax.swing.JPanel;
 
-import com.limoilux.circuit.core.CirSim;
-import com.limoilux.circuit.core.CoreUtil;
-import com.limoilux.circuit.techno.CircuitAnalysisException;
-import com.limoilux.circuit.techno.CircuitElm;
-import com.limoilux.circuit.techno.CircuitNode;
-import com.limoilux.circuit.techno.CircuitNodeLink;
-import com.limoilux.circuit.ui.DrawUtil;
-
 public class ScopePane extends JPanel
 {
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 6532697895940366402L;
-	private final CirSim cirSim;
-	public Image scopeImg;
-	
-	public ScopePane(CirSim cirSim)
+
+	public ScopePane()
 	{
-		this.cirSim = cirSim;
-		
 		this.setPreferredSize(new Dimension(0, 150));
 		this.setBackground(Color.GREEN);
-	}
-	
-	@Override
-	public void update(Graphics g)
-	{
-		super.update(g);
-		
-		this.updateCircuit( g);
-	}
-	
-	public void updateCircuit(Graphics realg)
-	{
-		Graphics g = null;
-		CircuitElm realMouseElm;
-
-	
-
-
-
-		g = this.scopeImg.getGraphics();
-		g.setColor(Color.black);
-
-
-
-		if (this.cirSim.activityManager.isPlaying())
-		{
-			try
-			{
-				this.cirSim.runCircuit();
-			}
-			catch (CircuitAnalysisException e)
-			{
-				this.cirSim.handleAnalysisException(e);
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				this.cirSim.circuit.setNeedAnalysis(true);
-				this.repaint();
-
-				return;
-			}
-		}
-		
-		g.fillRect(0, 0, this.cirSim.winSize.width, this.cirSim.winSize.height);
-
-
-		Font oldfont = g.getFont();
-
-
-
-		g.setFont(oldfont);
-
-		// Dessinage des scopes
-		if (this.cirSim.stopMessage == null)
-		{
-			this.cirSim.scopeMan.drawScope(g);
-		}
-
-
-		realMouseElm = this.cirSim.mouseElm;
-		this.cirSim.mouseElm = realMouseElm;
-		/*
-		 * g.setColor(Color.white); g.drawString("Framerate: " + framerate, 10,
-		 * 10); g.drawString("Steprate: " + steprate, 10, 30);
-		 * g.drawString("Steprate/iter: " + (steprate/getIterCount()), 10, 50);
-		 * g.drawString("iterc: " + (getIterCount()), 10, 70);
-		 */
-
-		realg.drawImage(this.scopeImg, 0, 0, this.cirSim.cirFrame);
-
-		if (this.cirSim.activityManager.isPlaying() && !this.cirSim.circuit.matrix.matrixIsNull())
-		{
-
-			long delay = this.cirSim.timer.calculateDelay();
-
-			if (delay > 0)
-			{
-				try
-				{
-					Thread.sleep(delay);
-				}
-				catch (InterruptedException e)
-				{
-				}
-			}
-
-			this.repaint();
-		}
-
 	}
 }
