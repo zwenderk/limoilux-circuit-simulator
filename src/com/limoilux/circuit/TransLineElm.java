@@ -169,7 +169,7 @@ public class TransLineElm extends CircuitElm
 
 		this.curCount1 = CircuitElm.updateDotCount(-this.current1, this.curCount1);
 		this.curCount2 = CircuitElm.updateDotCount(this.current2, this.curCount2);
-		if (CircuitElm.cirSim.dragElm != this)
+		if (CircuitElm.cirSim.mouseMan.dragElm != this)
 		{
 			DrawUtil.drawDots(g, this.posts[0], this.inner[0], this.curCount1);
 			DrawUtil.drawDots(g, this.posts[2], this.inner[2], -this.curCount1);

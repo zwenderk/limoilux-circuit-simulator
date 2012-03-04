@@ -119,7 +119,7 @@ public class TransistorElm extends CircuitElm
 		this.setPowerColor(g, true);
 		g.fillPolygon(this.rectPoly);
 
-		if ((this.needsHighlight() || CircuitElm.cirSim.dragElm == this) && this.dy == 0)
+		if ((this.needsHighlight() || CircuitElm.cirSim.mouseMan.dragElm == this) && this.dy == 0)
 		{
 			g.setColor(Color.white);
 			g.setFont(CircuitElm.UNIT_FONT);

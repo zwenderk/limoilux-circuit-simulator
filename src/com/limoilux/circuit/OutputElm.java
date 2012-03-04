@@ -53,7 +53,7 @@ public class OutputElm extends CircuitElm
 		g.setColor(selected ? CircuitElm.SELECT_COLOR : CircuitElm.WHITE_COLOR);
 		String s = (this.flags & this.FLAG_VALUE) != 0 ? CircuitElm.getVoltageText(this.volts[0]) : "out";
 		FontMetrics fm = g.getFontMetrics();
-		if (this == CircuitElm.cirSim.plotXElm)
+		if (this == CircuitElm.cirSim.mouseMan.plotXElm)
 		{
 			s = "X";
 		}

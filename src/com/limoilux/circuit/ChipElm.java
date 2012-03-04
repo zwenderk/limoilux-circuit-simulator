@@ -148,7 +148,7 @@ public abstract class ChipElm extends CircuitElm
 	@Override
 	public void setPoints()
 	{
-		if (this.x2 - this.x > this.sizeX * this.cspc2 && this == CircuitElm.cirSim.dragElm)
+		if (this.x2 - this.x > this.sizeX * this.cspc2 && this == CircuitElm.cirSim.mouseMan.dragElm)
 		{
 			this.setSize(2);
 		}

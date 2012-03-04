@@ -218,7 +218,7 @@ public class PotElm extends CircuitElm implements AdjustmentListener
 		this.curcount1 = CircuitElm.updateDotCount(this.current1, this.curcount1);
 		this.curcount2 = CircuitElm.updateDotCount(this.current2, this.curcount2);
 		this.curcount3 = CircuitElm.updateDotCount(this.current3, this.curcount3);
-		if (CircuitElm.cirSim.dragElm != this)
+		if (CircuitElm.cirSim.mouseMan.dragElm != this)
 		{
 			DrawUtil.drawDots(g, this.point1, this.midpoint, this.curcount1);
 			DrawUtil.drawDots(g, this.point2, this.midpoint, this.curcount2);

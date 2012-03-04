@@ -134,7 +134,7 @@ public class LampElm extends CircuitElm
 		this.setVoltageColor(g, (v1 + v2) * .5);
 		DrawUtil.drawThickLine(g, this.filament[0], this.filament[1]);
 		this.updateDotCount();
-		if (CircuitElm.cirSim.dragElm != this)
+		if (CircuitElm.cirSim.mouseMan.dragElm != this)
 		{
 			DrawUtil.drawDots(g, this.point1, this.lead1, this.curcount);
 			double cc = this.curcount + (this.dn - 16) / 2;

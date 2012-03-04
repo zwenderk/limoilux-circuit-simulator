@@ -351,7 +351,7 @@ public abstract class CircuitElm implements Editable
 
 	public void drawPost(Graphics g, int x0, int y0, int n)
 	{
-		if (CircuitElm.cirSim.dragElm == null && !this.needsHighlight()
+		if (CircuitElm.cirSim.mouseMan.dragElm == null && !this.needsHighlight()
 				&& CircuitElm.cirSim.circuit.getNodeAt(n).getSize() == 2)
 		{
 			return;
@@ -505,7 +505,7 @@ public abstract class CircuitElm implements Editable
 	public void doDots(Graphics g)
 	{
 		this.updateDotCount();
-		if (CircuitElm.cirSim.dragElm != this)
+		if (CircuitElm.cirSim.mouseMan.dragElm != this)
 		{
 			DrawUtil.drawDots(g, this.point1, this.point2, this.curcount);
 		}

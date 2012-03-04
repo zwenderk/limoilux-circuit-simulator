@@ -169,7 +169,7 @@ public class SCRElm extends CircuitElm
 		this.curcount_a = CircuitElm.updateDotCount(this.ia, this.curcount_a);
 		this.curcount_c = CircuitElm.updateDotCount(this.ic, this.curcount_c);
 		this.curcount_g = CircuitElm.updateDotCount(this.ig, this.curcount_g);
-		if (CircuitElm.cirSim.dragElm != this)
+		if (CircuitElm.cirSim.mouseMan.dragElm != this)
 		{
 			CircuitElm.drawDots(g, this.point1, this.lead2, this.curcount_a);
 			CircuitElm.drawDots(g, this.point2, this.lead2, this.curcount_c);
