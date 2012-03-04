@@ -155,8 +155,10 @@ public class ScopeManager
 
 	public void setupScopes(Dimension winSize)
 	{
+		final int MARGIN = 10;
 		Rectangle rect;
 		Scope scope;
+		int position;
 		
 		this.removeUnused();
 
@@ -167,14 +169,14 @@ public class ScopeManager
 			this.scopeColCount[i] = 0;
 		}
 
-		int pos = 0;
-		for (int i = 0; i != this.scopeCount; i++)
+		position = 0;
+		for (int i = 0; i < this.scopeCount; i++)
 		{
-			pos = Math.max(this.scopes[i].position, pos);
+			position = Math.max(this.scopes[i].position, position);
 			this.scopeColCount[this.scopes[i].position]++;
 		}
 
-		int colct = pos + 1;
+		int colct = position + 1;
 		int iw = CirSim.INFO_WIDTH;
 
 		if (colct <= 2)
@@ -182,14 +184,14 @@ public class ScopeManager
 			iw *= 3 / 2;
 		}
 
-		int w = (winSize.width - iw) / colct;
-		int marg = 10;
-		if (w < marg * 2)
+		int width = (winSize.width - iw) / colct;
+
+		if (width < MARGIN * 2)
 		{
-			w = marg * 2;
+			width = MARGIN * 2;
 		}
 
-		pos = -1;
+		position = -1;
 		int colh = 0;
 		int row = 0;
 		int speed = 0;
@@ -197,20 +199,22 @@ public class ScopeManager
 		for (int i = 0; i < this.scopeCount; i++)
 		{
 			scope = this.scopes[i];
-			if (scope.position > pos)
+			
+			if (scope.position > position)
 			{
-				pos = scope.position;
-				colh = height / this.scopeColCount[pos];
+				position = scope.position;
+				colh = height / this.scopeColCount[position];
 				row = 0;
 				speed = scope.speed;
 			}
+			
 			if (scope.speed != speed)
 			{
 				scope.speed = speed;
 				scope.resetGraph();
 			}
 
-			rect = new Rectangle(pos * w, winSize.height - height + colh * row, w - marg, colh);
+			rect = new Rectangle(position * width, winSize.height - height + colh * row, width - MARGIN, colh);
 			row++;
 			if (!rect.equals(scope.rect))
 			{
