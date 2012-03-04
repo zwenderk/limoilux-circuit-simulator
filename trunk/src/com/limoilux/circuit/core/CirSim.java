@@ -432,6 +432,18 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		
 		return badnodes;
 	}
+	
+	private void drawDrag(Graphics g)
+	{
+		/*
+		 * if (mouseElm != null) { g.setFont(oldfont); g.drawString("+",
+		 * mouseElm.x+10, mouseElm.y); }
+		 */
+		if (this.dragElm != null && (this.dragElm.x != this.dragElm.x2 || this.dragElm.y != this.dragElm.y2))
+		{
+			this.dragElm.draw(g);
+		}
+	}
 
 	public void updateCircuit(Graphics realg) throws Exception
 	{
@@ -476,14 +488,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		
 		int badnodes = this.findAndDrawBadNode(g);
 		
-		/*
-		 * if (mouseElm != null) { g.setFont(oldfont); g.drawString("+",
-		 * mouseElm.x+10, mouseElm.y); }
-		 */
-		if (this.dragElm != null && (this.dragElm.x != this.dragElm.x2 || this.dragElm.y != this.dragElm.y2))
-		{
-			this.dragElm.draw(g);
-		}
+		this.drawDrag(g);
 
 		Font oldfont = g.getFont();
 		g.setFont(oldfont);
@@ -532,13 +537,12 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			}
 			
 
-			int i;
+			int nbInfo;
 			if (this.hintType != -1)
 			{
-				for (i = 0; info[i] != null; i++)
-				{
-					;
-				}
+				
+				for (nbInfo = 0; info[nbInfo] != null; nbInfo++);
+				
 				String s = this.getHint();
 				if (s == null)
 				{
@@ -546,7 +550,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				}
 				else
 				{
-					info[i] = s;
+					info[nbInfo] = s;
 				}
 			}
 			int x = 0;
@@ -566,32 +570,29 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			x = Math.max(x, this.winSize.width * 2 / 3);
 
 			// count lines of data
-			for (i = 0; info[i] != null; i++)
-			{
-
-			}
+			for (nbInfo = 0; info[nbInfo] != null; nbInfo++);
 
 			if (badnodes > 0)
 			{
 				if (badnodes == 1)
 				{
-					info[i++] = badnodes + " bad connection";
+					info[nbInfo++] = badnodes + " bad connection";
 				}
 				else
 				{
-					info[i++] = badnodes + " bad connections";
+					info[nbInfo++] = badnodes + " bad connections";
 				}
 			}
 
 			// find where to show data; below circuit, not too high unless we
 			// need it
-			int ybase = this.winSize.height - 15 * i - 5;
+			int ybase = this.winSize.height - 15 * nbInfo - 5;
 			ybase = Math.min(ybase, this.circuit.circuitArea.height);
 			ybase = Math.max(ybase, this.circuit.circuitBottom);
 
-			for (i = 0; info[i] != null; i++)
+			for (nbInfo = 0; info[nbInfo] != null; nbInfo++)
 			{
-				g.drawString(info[i], x, ybase + 15 * (i + 1));
+				g.drawString(info[nbInfo], x, ybase + 15 * (nbInfo + 1));
 			}
 
 		}
