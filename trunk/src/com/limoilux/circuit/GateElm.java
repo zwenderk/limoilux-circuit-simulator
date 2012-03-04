@@ -71,7 +71,7 @@ public abstract class GateElm extends CircuitElm
 	public void setPoints()
 	{
 		super.setPoints();
-		if (this.dn > 150 && this == CircuitElm.cirSim.dragElm)
+		if (this.dn > 150 && this == CircuitElm.cirSim.mouseMan.dragElm)
 		{
 			this.setSize(2);
 		}

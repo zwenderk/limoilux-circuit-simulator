@@ -387,7 +387,7 @@ public class Scope extends JPanel
 		int curColor = 0xFFFFFF00;
 		int voltColor = this.value > 0 ? 0xFFFFFFFF : 0xFF00FF00;
 
-		if (this.sim.scopeSelected == -1 && this.element == this.sim.mouseMan.mouseElm)
+		if (this.sim.mouseMan.scopeSelected == -1 && this.element == this.sim.mouseMan.mouseElm)
 		{
 			curColor = 0xFF00FFFF;
 			voltColor = 0xFF00FFFF;
@@ -994,8 +994,8 @@ public class Scope extends JPanel
 		this.sim.mouseMan.mouseElm = this.element;
 		if (this.plotXY)
 		{
-			this.sim.plotXElm = this.element;
-			this.sim.plotYElm = this.yElm;
+			this.sim.mouseMan.plotXElm = this.element;
+			this.sim.mouseMan.plotYElm = this.yElm;
 		}
 	}
 
@@ -1007,7 +1007,7 @@ public class Scope extends JPanel
 		{
 			for (e++; e < this.sim.circuit.getElementCount(); e++)
 			{
-				CircuitElm ce = this.sim.circuit.getElement(e);
+				CircuitElm ce = this.sim.circuit.getElementAt(e);
 				if ((ce instanceof OutputElm || ce instanceof ProbeElm) && ce != this.element)
 				{
 					this.yElm = ce;

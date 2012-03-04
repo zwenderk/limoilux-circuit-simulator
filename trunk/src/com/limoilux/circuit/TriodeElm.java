@@ -128,7 +128,7 @@ public class TriodeElm extends CircuitElm
 		this.curcountp = CoreUtil.updateDotCount(this.currentp, this.curcountp, CircuitElm.cirSim.currentMultiplier);
 		this.curcountc = CoreUtil.updateDotCount(this.currentc, this.curcountc, CircuitElm.cirSim.currentMultiplier);
 		this.curcountg = CoreUtil.updateDotCount(this.currentg, this.curcountg, CircuitElm.cirSim.currentMultiplier);
-		if (CircuitElm.cirSim.dragElm != this)
+		if (CircuitElm.cirSim.mouseMan.dragElm != this)
 		{
 			DrawUtil.drawDots(g, this.plate[0], this.midgrid, this.curcountp);
 			DrawUtil.drawDots(g, this.midgrid, this.midcath, this.curcountc);

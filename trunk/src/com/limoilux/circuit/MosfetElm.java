@@ -133,7 +133,7 @@ public class MosfetElm extends CircuitElm
 			g.setFont(CircuitElm.UNIT_FONT);
 			this.drawCenteredText(g, s, this.x2 + 2, this.y2, false);
 		}
-		if ((this.needsHighlight() || CircuitElm.cirSim.dragElm == this) && this.dy == 0)
+		if ((this.needsHighlight() || CircuitElm.cirSim.mouseMan.dragElm == this) && this.dy == 0)
 		{
 			g.setColor(Color.white);
 			g.setFont(CircuitElm.UNIT_FONT);

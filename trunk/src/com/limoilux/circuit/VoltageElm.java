@@ -176,7 +176,7 @@ public class VoltageElm extends CircuitElm
 			this.drawWaveform(g, CircuitElm.ps1);
 		}
 		this.updateDotCount();
-		if (CircuitElm.cirSim.dragElm != this)
+		if (CircuitElm.cirSim.mouseMan.dragElm != this)
 		{
 			if (this.waveform == VoltageElm.WF_DC)
 			{

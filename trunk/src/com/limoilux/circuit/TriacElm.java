@@ -175,7 +175,7 @@ public class TriacElm extends CircuitElm
 		this.curcount_a = CoreUtil.updateDotCount(this.ia, this.curcount_a, CircuitElm.cirSim.currentMultiplier);
 		this.curcount_c = CoreUtil.updateDotCount(this.ic, this.curcount_c, CircuitElm.cirSim.currentMultiplier);
 		this.curcount_g = CoreUtil.updateDotCount(this.ig, this.curcount_g, CircuitElm.cirSim.currentMultiplier);
-		if (CircuitElm.cirSim.dragElm != this)
+		if (CircuitElm.cirSim.mouseMan.dragElm != this)
 		{
 			DrawUtil.drawDots(g, this.point1, this.lead2, this.curcount_a);
 			DrawUtil.drawDots(g, this.point2, this.lead2, this.curcount_c);

@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuitsimulator.circuit.Circuit;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
 public class MouseManager implements MouseMotionListener, MouseListener
@@ -21,13 +22,21 @@ public class MouseManager implements MouseMotionListener, MouseListener
 	public int dragY;
 	public int tempMouseMode;
 	public int mouseMode;
+	public String mouseModeStr = "Select";
 	public int initDragX;
 	public int initDragY;
 	public int draggingPost;
+	public int scopeSelected = -1;
 	
 	public CircuitElm mouseElm;
+	public CircuitElm dragElm;
+	
+	public CircuitElm plotXElm;
+	public CircuitElm plotYElm;
+	
+	public Circuit circuit;
 
-	public MouseManager()
+	public MouseManager(Circuit circuit)
 	{
 		this.tempMouseMode = MouseManager.MODE_SELECT;
 		this.mouseMode = MouseManager.MODE_SELECT;

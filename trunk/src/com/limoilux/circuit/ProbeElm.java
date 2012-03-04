@@ -52,7 +52,7 @@ public class ProbeElm extends CircuitElm
 		int hs = 8;
 		this.setBbox(this.point1, this.point2, hs);
 		boolean selected = this.needsHighlight() || CircuitElm.cirSim.plotYElm == this;
-		double len = selected || CircuitElm.cirSim.dragElm == this ? 16 : this.dn - 32;
+		double len = selected || CircuitElm.cirSim.mouseMan.dragElm == this ? 16 : this.dn - 32;
 		this.calcLeads((int) len);
 		this.setVoltageColor(g, this.volts[0]);
 		if (selected)
@@ -68,7 +68,7 @@ public class ProbeElm extends CircuitElm
 		CircuitElm.drawThickLine(g, this.lead2, this.point2);
 		Font f = new Font("SansSerif", Font.BOLD, 14);
 		g.setFont(f);
-		if (this == CircuitElm.cirSim.plotXElm)
+		if (this == CircuitElm.cirSim.mouseMan.plotXElm)
 		{
 			this.drawCenteredText(g, "X", this.center.x, this.center.y, true);
 		}
