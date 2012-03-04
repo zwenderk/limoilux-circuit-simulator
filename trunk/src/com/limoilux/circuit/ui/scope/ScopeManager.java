@@ -15,15 +15,13 @@ public class ScopeManager
 
 	public Scope scopes[];
 
-	public final ScopePane scopePane;
+	private final ScopePane scopePane;
 	private final Circuit circuit;
-	private final CirSim cirSim;
 
-	public ScopeManager( CirSim cirSim, Circuit circuit)
+	public ScopeManager(Circuit circuit)
 	{
-		this.cirSim = cirSim;
 		this.circuit = circuit;
-		this.scopePane = new ScopePane(cirSim);
+		this.scopePane = new ScopePane();
 
 		this.scopes = new Scope[20];
 		this.scopeColCount = new int[20];
@@ -44,11 +42,6 @@ public class ScopeManager
 			this.scopes[i].draw(g);
 			this.scopes[i].repaint();
 		}
-	}
-	
-	public void repaint()
-	{
-		this.scopePane.repaint();
 	}
 
 	public void doTimeStep()
@@ -146,7 +139,6 @@ public class ScopeManager
 				i--;
 				continue;
 			}
-			
 			if (this.scopes[i].position > pos + 1)
 			{
 				this.scopes[i].position = pos + 1;
@@ -163,28 +155,23 @@ public class ScopeManager
 
 	public void setupScopes(Dimension winSize)
 	{
-		final int MARGIN = 10;
-		Rectangle rect;
-		Scope scope;
-		int position;
-		
 		this.removeUnused();
 
-		int height =  winSize.height - this.circuit.circuitArea.height;
+		int height = winSize.height - this.circuit.circuitArea.height;
 
 		for (int i = 0; i < this.scopeCount; i++)
 		{
 			this.scopeColCount[i] = 0;
 		}
 
-		position = 0;
-		for (int i = 0; i < this.scopeCount; i++)
+		int pos = 0;
+		for (int i = 0; i != this.scopeCount; i++)
 		{
-			position = Math.max(this.scopes[i].position, position);
+			pos = Math.max(this.scopes[i].position, pos);
 			this.scopeColCount[this.scopes[i].position]++;
 		}
 
-		int colct = position + 1;
+		int colct = pos + 1;
 		int iw = CirSim.INFO_WIDTH;
 
 		if (colct <= 2)
@@ -192,42 +179,39 @@ public class ScopeManager
 			iw *= 3 / 2;
 		}
 
-		int width = (winSize.width - iw) / colct;
-
-		if (width < MARGIN * 2)
+		int w = (winSize.width - iw) / colct;
+		int marg = 10;
+		if (w < marg * 2)
 		{
-			width = MARGIN * 2;
+			w = marg * 2;
 		}
 
-		position = -1;
+		pos = -1;
 		int colh = 0;
 		int row = 0;
 		int speed = 0;
 
-		for (int i = 0; i < this.scopeCount; i++)
+		for (int i = 0; i != this.scopeCount; i++)
 		{
-			scope = this.scopes[i];
-			
-			if (scope.position > position)
+			Scope scope = this.scopes[i];
+			if (scope.position > pos)
 			{
-				position = scope.position;
-				colh = height / this.scopeColCount[position];
+				pos = scope.position;
+				colh = height / this.scopeColCount[pos];
 				row = 0;
 				speed = scope.speed;
 			}
-			
 			if (scope.speed != speed)
 			{
 				scope.speed = speed;
 				scope.resetGraph();
 			}
 
-			rect = new Rectangle(position * width, 0, width - MARGIN, colh);
-			//winSize.height - height + colh * row
+			Rectangle r = new Rectangle(pos * w, winSize.height - height + colh * row, w - marg, colh);
 			row++;
-			if (!rect.equals(scope.rect))
+			if (!r.equals(scope.rect))
 			{
-				scope.setRect(rect);
+				scope.setRect(r);
 			}
 		}
 	}
