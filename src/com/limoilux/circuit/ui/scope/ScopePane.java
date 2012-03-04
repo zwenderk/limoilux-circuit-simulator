@@ -43,33 +43,6 @@ public class ScopePane extends Panel
 		Graphics g = null;
 		CircuitElm realMouseElm;
 
-		if (this.cirSim.winSize == null || this.cirSim.winSize.width == 0)
-		{
-			return;
-		}
-
-		if (this.cirSim.circuit.needAnalysis())
-		{
-			try
-			{
-				this.cirSim.stopMessage = null;
-				this.cirSim.stopElm = null;
-
-				this.cirSim.circuit.analyzeCircuit();
-			}
-			catch (CircuitAnalysisException e)
-			{
-				this.cirSim.handleAnalysisException(e);
-			}
-
-			this.cirSim.circuit.setNeedAnalysis(false);
-		}
-
-		if (CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElm)
-		{
-			this.cirSim.mouseElm = (CircuitElm) CirSim.editDialog.elm;
-		}
-
 		realMouseElm = this.cirSim.mouseElm;
 		if (this.cirSim.mouseElm == null)
 		{
@@ -334,6 +307,5 @@ public class ScopePane extends Panel
 			this.repaint();
 		}
 
-		this.cirSim.timer.nextCycle();
 	}
 }
