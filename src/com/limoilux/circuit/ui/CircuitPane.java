@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Panel;
 
+import javax.swing.JPanel;
+
 import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
@@ -14,7 +16,7 @@ import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.techno.CircuitNode;
 import com.limoilux.circuit.techno.CircuitNodeLink;
 
-public class CircuitPane extends Panel
+public class CircuitPane extends JPanel
 {
 	private static final long serialVersionUID = -3418969740606491502L;
 
@@ -28,12 +30,18 @@ public class CircuitPane extends Panel
 		this.setBackground(Color.BLACK);
 
 	}
+	
+	@Override
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		this.updateCircuit(g);
+	}
 
 	@Override
 	public void update(Graphics g)
 	{
-		super.update(g);
-		this.updateCircuit(g);
+
 	}
 	
 	public void preUpdate()
@@ -278,7 +286,7 @@ public class CircuitPane extends Panel
 				}
 			}
 
-			this.repaint();
+			//this.repaint();
 		}
 
 	}

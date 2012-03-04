@@ -788,7 +788,10 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.handleResize();
 
 		this.cirFrame.requestFocus();
-
+		
+		Thread t = new Thread(new Repainter());
+		
+		t.start();
 	}
 
 	private void manageJavaVersion()
@@ -2391,15 +2394,11 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	@Override
 	public void componentShown(ComponentEvent e)
 	{
-		this.repaint();
+		//this.repaint();
 	}
 
+
 	public void repaint()
-	{
-		this.repaint(0);
-	}
-	
-	public void repaint(int time)
 	{
 
 		if (this.winSize == null || this.winSize.width == 0)
@@ -2438,9 +2437,9 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 		
 		// Repaindre
-		this.scopeMan.scopePane.repaint();
-		this.circuitPanel.repaint();
 
+		this.circuitPanel.repaint();
+		this.scopeMan.scopePane.repaint();
 		
 
 		this.timer.nextCycle();
@@ -2451,7 +2450,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	{
 		this.handleResize();
 		
-		this.repaint(100);
+		this.repaint();
 	}
 
 	@Override
@@ -2638,7 +2637,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	@Override
 	public void itemStateChanged(ItemEvent e)
 	{
-		this.repaint(CirSim.PAUSE);
+		this.repaint();
 		Object mi = e.getItemSelectable();
 
 		if (mi == this.smallGridCheckItem)
@@ -3014,7 +3013,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 					CirSim.this.dragY = CirSim.this.snapGrid(e.getY());
 				}
 			}
-			CirSim.this.repaint(CirSim.PAUSE);
+			CirSim.this.repaint();
 		}
 
 		@Override
@@ -3143,6 +3142,30 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			}
 		}
 
+	}
+	
+	private class Repainter implements Runnable
+	{
+
+		@Override
+		public void run()
+		{
+			while (true)
+			{
+				CirSim.this.repaint();
+				try
+				{
+					Thread.sleep(22);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+			}
+			
+
+		}
+		
 	}
 
 	public static void main(String args[])

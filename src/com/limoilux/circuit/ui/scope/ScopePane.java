@@ -8,6 +8,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Panel;
 
+import javax.swing.JPanel;
+
 import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
@@ -16,7 +18,7 @@ import com.limoilux.circuit.techno.CircuitNode;
 import com.limoilux.circuit.techno.CircuitNodeLink;
 import com.limoilux.circuit.ui.DrawUtil;
 
-public class ScopePane extends Panel
+public class ScopePane extends JPanel
 {
 	private static final long serialVersionUID = 6532697895940366402L;
 	private final CirSim cirSim;
