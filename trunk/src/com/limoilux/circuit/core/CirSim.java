@@ -445,7 +445,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		}
 	}
 
-	public void updateCircuit(Graphics realg) throws Exception
+	public Image createCircuitImage() throws Exception
 	{
 		Graphics g = null;
 		CircuitElm realMouseElm;
@@ -604,15 +604,10 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		}
 
 		this.mouseElm = realMouseElm;
-		/*
-		 * g.setColor(Color.white); g.drawString("Framerate: " + framerate, 10,
-		 * 10); g.drawString("Steprate: " + steprate, 10, 30);
-		 * g.drawString("Steprate/iter: " + (steprate/getIterCount()), 10, 50);
-		 * g.drawString("iterc: " + (getIterCount()), 10, 70);
-		 */
 
-		realg.drawImage(this.dbimage, 0, 0, this.cirFrame);
 
+		
+		return this.dbimage;
 	}
 
 	private void runCircuit() throws CircuitAnalysisException

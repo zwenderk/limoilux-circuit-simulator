@@ -3,6 +3,7 @@ package com.limoilux.circuit.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Panel;
 
 import javax.swing.JPanel;
@@ -32,7 +33,9 @@ public class CircuitPane extends JPanel
 
 		try
 		{
-			this.cirSim.updateCircuit(g);
+			Image i = this.cirSim.createCircuitImage();
+			
+			g.drawImage(i, 0, 0, this.cirSim.cirFrame);
 		}
 
 		catch (CircuitAnalysisException e)
@@ -43,6 +46,7 @@ public class CircuitPane extends JPanel
 		{
 			e.printStackTrace();
 			this.cirSim.circuit.setNeedAnalysis(true);
+			
 		}
 
 	}
