@@ -18,6 +18,7 @@ public class ScopeManager
 	private final ScopePane scopePane;
 	private final Circuit circuit;
 
+
 	public ScopeManager(Circuit circuit)
 	{
 		this.circuit = circuit;
@@ -39,6 +40,7 @@ public class ScopeManager
 		// Dessinage des scopes
 		for (int i = 0; i < this.scopeCount; i++)
 		{
+			System.out.println("Painting " + i);
 			this.scopes[i].draw(g);
 			this.scopes[i].repaint();
 		}
@@ -139,6 +141,7 @@ public class ScopeManager
 				i--;
 				continue;
 			}
+			
 			if (this.scopes[i].position > pos + 1)
 			{
 				this.scopes[i].position = pos + 1;
