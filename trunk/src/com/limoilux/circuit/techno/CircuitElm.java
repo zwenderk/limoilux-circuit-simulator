@@ -13,11 +13,11 @@ import java.text.NumberFormat;
 import com.limoilux.circuit.RailElm;
 import com.limoilux.circuit.SweepElm;
 import com.limoilux.circuit.VoltageElm;
-import com.limoilux.circuit.core.CirSim;
-import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.core.Editable;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.core.CirSim;
+import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public abstract class CircuitElm implements Editable
 {

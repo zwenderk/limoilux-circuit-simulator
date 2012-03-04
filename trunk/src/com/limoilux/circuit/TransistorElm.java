@@ -12,7 +12,7 @@ import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
-import com.limoilux.circuit.ui.scope.Scope;
+import com.limoilux.circuitsimulator.scope.Scope;
 
 public class TransistorElm extends CircuitElm
 {

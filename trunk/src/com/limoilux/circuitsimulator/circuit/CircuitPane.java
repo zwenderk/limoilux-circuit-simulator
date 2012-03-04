@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.ui;
+package com.limoilux.circuitsimulator.circuit;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,8 +9,8 @@ import java.awt.Panel;
 
 import javax.swing.JPanel;
 
-import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
+import com.limoilux.circuitsimulator.core.CirSim;
 
 public class CircuitPane extends JPanel
 {

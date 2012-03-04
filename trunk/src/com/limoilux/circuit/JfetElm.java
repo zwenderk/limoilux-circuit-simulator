@@ -6,9 +6,9 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.util.StringTokenizer;
 
-import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
+import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public class JfetElm extends MosfetElm
 {

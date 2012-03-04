@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.ui;
+package com.limoilux.circuitsimulator.core;
 
 import java.awt.BorderLayout;
 import java.awt.Graphics;

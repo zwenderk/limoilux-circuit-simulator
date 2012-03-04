@@ -6,10 +6,10 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.util.StringTokenizer;
 
-import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.core.CoreUtil;
 
 // Zener code contributed by J. Mike Rollins
 // http://www.camotruck.net/rollins/simulator.html

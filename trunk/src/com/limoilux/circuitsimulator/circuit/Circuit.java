@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.techno;
+package com.limoilux.circuitsimulator.circuit;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -12,6 +12,11 @@ import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.RailElm;
 import com.limoilux.circuit.VoltageElm;
 import com.limoilux.circuit.WireElm;
+import com.limoilux.circuit.techno.CircuitAnalysisException;
+import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.techno.CircuitNode;
+import com.limoilux.circuit.techno.CircuitNodeLink;
+import com.limoilux.circuit.techno.PathInfoFinder;
 import com.limoilux.circuit.techno.matrix.MatrixManager;
 import com.limoilux.circuit.techno.matrix.MatrixRowInfo;
 

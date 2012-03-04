@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.ui.scope;
+package com.limoilux.circuitsimulator.scope;
 
 import java.awt.Color;
 import java.awt.Dimension;

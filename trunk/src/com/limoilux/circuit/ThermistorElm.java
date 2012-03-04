@@ -11,11 +11,11 @@ import java.awt.Point;
 import java.awt.Scrollbar;
 import java.util.StringTokenizer;
 
-import com.limoilux.circuit.core.CirSim;
-import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.core.CirSim;
+import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public class ThermistorElm extends CircuitElm
 {
