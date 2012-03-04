@@ -232,13 +232,13 @@ public class CoreUtil
 		return CoreUtil.getUnitText(Math.abs(i), "A");
 	}
 
-	public static double updateDotCount(double cur, double cc)
+	public static double updateDotCount(double cur, double cc, double currentMultiplier)
 	{
 		if (!CircuitElm.cirSim.activityManager.isPlaying())
 		{
 			return cc;
 		}
-		double cadd = cur * CircuitElm.currentMult;
+		double cadd = cur * currentMultiplier;
 		/*
 		 * if (cur != 0 && cadd <= .05 && cadd >= -.05) cadd = (cadd < 0) ? -.05
 		 * : .05;

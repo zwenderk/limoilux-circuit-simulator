@@ -81,6 +81,7 @@ import com.limoilux.circuit.ui.scope.ScopeManager;
  */
 public class CirSim implements ComponentListener, ActionListener, ItemListener
 {
+	private static final CirSim SINGLETON = new CirSim();
 	@Deprecated
 	private static final double PI = Math.PI;
 
@@ -93,6 +94,8 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 	private static final int MODE_SELECT = 6;
 
 	private static final int PAUSE = 10;
+	
+	public double currentMultiplier;
 
 	private static final int HINT_LC = 1;
 	private static final int HINT_RC = 2;
@@ -220,7 +223,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 	public final ActivityManager activityManager;
 	private final ActivityListener activityListener;
 
-	public CirSim()
+	private CirSim()
 	{
 		super();
 
@@ -381,10 +384,10 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				int inc = (int) (sysTime - this.timer.lastTime);
 				double c = this.currentBar.getValue();
 				c = Math.exp(c / 3.5 - 14.2);
-				CircuitElm.currentMult = 1.7 * inc * c;
+				this.currentMultiplier = 1.7 * inc * c;
 				if (!this.conventionCheckItem.getState())
 				{
-					CircuitElm.currentMult = -CircuitElm.currentMult;
+					this.currentMultiplier = -this.currentMultiplier;
 				}
 			}
 			if (sysTime - this.timer.secTime >= 1000)
@@ -3076,6 +3079,11 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				CirSim.this.timer.nextCycle();
 			}
 		}
+	}
+	
+	public static CirSim getInstance()
+	{
+		return CirSim.SINGLETON;
 	}
 
 	public static void main(String args[])

@@ -28,15 +28,15 @@ public abstract class CircuitElm implements Editable
 	public static final Color LIGHT_GRAY_COLOR = Color.lightGray;
 
 	public static double voltageRange = 5;
-
-
-	public static double currentMult;
+	
 	public static double powerMult;
 
 	public static final Point ps1 = new Point();
 	public static final Point ps2 = new Point();
 
-	public static CirSim cirSim;
+	// va devenir un singleton
+	@Deprecated
+	public static CirSim cirSim = CirSim.getInstance();
 
 	public static NumberFormat showFormat;
 	public static NumberFormat shortFormat;
@@ -500,7 +500,7 @@ public abstract class CircuitElm implements Editable
 
 	public void updateDotCount()
 	{
-		this.curcount = CoreUtil.updateDotCount(this.current, this.curcount);
+		this.curcount = CoreUtil.updateDotCount(this.current, this.curcount, cirSim.currentMultiplier);
 	}
 
 	public void doDots(Graphics g)
@@ -724,7 +724,7 @@ public abstract class CircuitElm implements Editable
 	@Deprecated
 	public static double updateDotCount(double cur, double cc)
 	{
-		return CoreUtil.updateDotCount(cur, cc);
+		return CoreUtil.updateDotCount(cur, cc, cirSim.currentMultiplier);
 	}
 
 	@Deprecated
