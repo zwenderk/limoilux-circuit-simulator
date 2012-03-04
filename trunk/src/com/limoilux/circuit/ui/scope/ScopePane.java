@@ -129,14 +129,6 @@ public class ScopePane extends Panel
 				}
 			}
 		}
-		/*
-		 * if (mouseElm != null) { g.setFont(oldfont); g.drawString("+",
-		 * mouseElm.x+10, mouseElm.y); }
-		 */
-		if (this.cirSim.dragElm != null && (this.cirSim.dragElm.x != this.cirSim.dragElm.x2 || this.cirSim.dragElm.y != this.cirSim.dragElm.y2))
-		{
-			this.cirSim.dragElm.draw(g);
-		}
 
 		g.setFont(oldfont);
 
@@ -245,11 +237,6 @@ public class ScopePane extends Panel
 
 		}
 
-		if (this.cirSim.selectedArea != null)
-		{
-			g.setColor(CircuitElm.SELECT_COLOR);
-			g.drawRect(this.cirSim.selectedArea.x, this.cirSim.selectedArea.y, this.cirSim.selectedArea.width, this.cirSim.selectedArea.height);
-		}
 
 		realMouseElm = this.cirSim.mouseElm;
 		this.cirSim.mouseElm = realMouseElm;
