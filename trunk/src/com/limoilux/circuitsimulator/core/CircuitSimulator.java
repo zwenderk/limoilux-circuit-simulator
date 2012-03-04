@@ -1165,7 +1165,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			e.printStackTrace();
 		}
 
-		element = CircuitSimulator.constructElement(classPath, 0, 0);
+		element = CircuitUtil.constructElement(classPath, 0, 0);
 
 		this.register(classPath, element);
 
@@ -1359,7 +1359,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	@Deprecated
 	public CircuitElm getElement(int n)
 	{
-		return this.circuit.getElement(n);
+		return this.circuit.getElementAt(n);
 	}
 
 	@Deprecated
@@ -1429,7 +1429,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			return 0;
 		}
 		// return (Math.exp((speedBar.getValue()-1)/24.) + .5);
-		return .1 * Math.exp((this.speedBar.getValue() - 61) / 24.);
+		return 0.1 * Math.exp((this.speedBar.getValue() - 61) / 24.);
 	}
 
 	@Deprecated
@@ -2900,7 +2900,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			CircuitSimulator.this.dragY = CircuitSimulator.this.snapGrid(y);
 			CircuitSimulator.this.draggingPost = -1;
 			int i;
-			CircuitElm origMouse = CircuitSimulator.this.mouseElm;
+
 			CircuitSimulator.this.mouseElm = null;
 			CircuitSimulator.this.mousePost = -1;
 			CircuitSimulator.this.plotXElm = CircuitSimulator.this.plotYElm = null;
