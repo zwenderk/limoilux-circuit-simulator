@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.EditInfo;
-import com.limoilux.circuitsimulator.core.CirSim;
+import com.limoilux.circuitsimulator.core.CircuitSimulator;
 import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public class SparkGapElm extends CircuitElm
@@ -138,8 +138,8 @@ public class SparkGapElm extends CircuitElm
 		arr[0] = "spark gap";
 		this.getBasicInfo(arr);
 		arr[3] = this.state ? "on" : "off";
-		arr[4] = "Ron = " + CircuitElm.getUnitText(this.onresistance, CirSim.ohmString);
-		arr[5] = "Roff = " + CircuitElm.getUnitText(this.offresistance, CirSim.ohmString);
+		arr[4] = "Ron = " + CircuitElm.getUnitText(this.onresistance, CircuitSimulator.ohmString);
+		arr[5] = "Roff = " + CircuitElm.getUnitText(this.offresistance, CircuitSimulator.ohmString);
 		arr[6] = "Vbreakdown = " + CircuitElm.getUnitText(this.breakdown, "V");
 	}
 

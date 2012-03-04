@@ -1,20 +1,20 @@
 
 package com.limoilux.circuit;
 
-import com.limoilux.circuitsimulator.core.CirSim;
+import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
 public class Diode
 {
 	public int nodes[];
 	@Deprecated
-	public CirSim sim;
+	public CircuitSimulator sim;
 
 	public double leakage = 1e-14; // was 1e-9;
 	double vt, vdcoef, fwdrop, zvoltage, zoffset;
 	double lastvoltdiff;
 	double vcrit;
 
-	public Diode(CirSim s)
+	public Diode(CircuitSimulator s)
 	{
 		this.sim = s;
 		this.nodes = new int[2];

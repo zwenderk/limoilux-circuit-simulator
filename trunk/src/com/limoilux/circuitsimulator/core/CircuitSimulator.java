@@ -78,9 +78,9 @@ import com.limoilux.circuitsimulator.scope.ScopeManager;
  * @author David Bernard
  * 
  */
-public class CirSim implements ComponentListener, ActionListener, ItemListener
+public class CircuitSimulator implements ComponentListener, ActionListener, ItemListener
 {
-	private static final CirSim SINGLETON = new CirSim();
+	private static final CircuitSimulator SINGLETON = new CircuitSimulator();
 	@Deprecated
 	private static final double PI = Math.PI;
 
@@ -196,8 +196,8 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 	public CheckboxMenuItem scopeVceIcMenuItem;
 	public MenuItem scopeSelectYMenuItem;
 	private Class<?> addingClass;
-	public int mouseMode = CirSim.MODE_SELECT;
-	private int tempMouseMode = CirSim.MODE_SELECT;
+	public int mouseMode = CircuitSimulator.MODE_SELECT;
+	private int tempMouseMode = CircuitSimulator.MODE_SELECT;
 	private String mouseModeStr = "Select";
 
 	public JButton playButton;
@@ -223,7 +223,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 	public final ActivityManager activityManager;
 	private final ActivityListener activityListener;
 
-	private CirSim()
+	private CircuitSimulator()
 	{
 		super();
 
@@ -338,9 +338,9 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			this.circuit.setNeedAnalysis(false);
 		}
 
-		if (CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElm)
+		if (CircuitSimulator.editDialog != null && CircuitSimulator.editDialog.elm instanceof CircuitElm)
 		{
-			this.mouseElm = (CircuitElm) CirSim.editDialog.elm;
+			this.mouseElm = (CircuitElm) CircuitSimulator.editDialog.elm;
 		}
 
 		if (this.mouseElm == null)
@@ -397,8 +397,8 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 	{
 		int i;
 
-		if (this.tempMouseMode == CirSim.MODE_DRAG_ROW || this.tempMouseMode == CirSim.MODE_DRAG_COLUMN
-				|| this.tempMouseMode == CirSim.MODE_DRAG_POST || this.tempMouseMode == CirSim.MODE_DRAG_SELECTED)
+		if (this.tempMouseMode == CircuitSimulator.MODE_DRAG_ROW || this.tempMouseMode == CircuitSimulator.MODE_DRAG_COLUMN
+				|| this.tempMouseMode == CircuitSimulator.MODE_DRAG_POST || this.tempMouseMode == CircuitSimulator.MODE_DRAG_SELECTED)
 		{
 			for (i = 0; i != this.circuit.getElementCount(); i++)
 			{
@@ -645,7 +645,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 			}
 
-			for (subiter = 0; subiter != CirSim.subiterCount; subiter++)
+			for (subiter = 0; subiter != CircuitSimulator.subiterCount; subiter++)
 			{
 				this.circuit.converged = true;
 				this.subIterations = subiter;
@@ -746,7 +746,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				System.out.print("converged after " + subiter + " iterations\n");
 			}
 
-			if (subiter == CirSim.subiterCount)
+			if (subiter == CircuitSimulator.subiterCount)
 			{
 				this.stop("Convergence failed!", null);
 				break;
@@ -795,8 +795,8 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		if (jvf >= 48)
 		{
 			System.out.println(jv);
-			CirSim.muString = "\u03bc";
-			CirSim.ohmString = "\u03a9";
+			CircuitSimulator.muString = "\u03bc";
+			CircuitSimulator.ohmString = "\u03a9";
 			this.useBufferedImage = true;
 		}
 	}
@@ -1176,7 +1176,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			e.printStackTrace();
 		}
 
-		element = CirSim.constructElement(classPath, 0, 0);
+		element = CircuitSimulator.constructElement(classPath, 0, 0);
 
 		this.register(classPath, element);
 
@@ -1258,7 +1258,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		{
 			return null;
 		}
-		if (this.hintType == CirSim.HINT_LC)
+		if (this.hintType == CircuitSimulator.HINT_LC)
 		{
 			if (!(c1 instanceof InductorElm))
 			{
@@ -1271,9 +1271,9 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			InductorElm ie = (InductorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
 			return "res.f = "
-					+ CoreUtil.getUnitText(1 / (2 * CirSim.PI * Math.sqrt(ie.inductance * ce.capacitance)), "Hz");
+					+ CoreUtil.getUnitText(1 / (2 * CircuitSimulator.PI * Math.sqrt(ie.inductance * ce.capacitance)), "Hz");
 		}
-		if (this.hintType == CirSim.HINT_RC)
+		if (this.hintType == CircuitSimulator.HINT_RC)
 		{
 			if (!(c1 instanceof ResistorElm))
 			{
@@ -1287,7 +1287,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			CapacitorElm ce = (CapacitorElm) c2;
 			return "RC = " + CoreUtil.getUnitText(re.resistance * ce.capacitance, "s");
 		}
-		if (this.hintType == CirSim.HINT_3DB_C)
+		if (this.hintType == CircuitSimulator.HINT_3DB_C)
 		{
 			if (!(c1 instanceof ResistorElm))
 			{
@@ -1299,9 +1299,9 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			}
 			ResistorElm re = (ResistorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
-			return "f.3db = " + CoreUtil.getUnitText(1 / (2 * CirSim.PI * re.resistance * ce.capacitance), "Hz");
+			return "f.3db = " + CoreUtil.getUnitText(1 / (2 * CircuitSimulator.PI * re.resistance * ce.capacitance), "Hz");
 		}
-		if (this.hintType == CirSim.HINT_3DB_L)
+		if (this.hintType == CircuitSimulator.HINT_3DB_L)
 		{
 			if (!(c1 instanceof ResistorElm))
 			{
@@ -1313,9 +1313,9 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			}
 			ResistorElm re = (ResistorElm) c1;
 			InductorElm ie = (InductorElm) c2;
-			return "f.3db = " + CoreUtil.getUnitText(re.resistance / (2 * CirSim.PI * ie.inductance), "Hz");
+			return "f.3db = " + CoreUtil.getUnitText(re.resistance / (2 * CircuitSimulator.PI * ie.inductance), "Hz");
 		}
-		if (this.hintType == CirSim.HINT_TWINT)
+		if (this.hintType == CircuitSimulator.HINT_TWINT)
 		{
 			if (!(c1 instanceof ResistorElm))
 			{
@@ -1327,7 +1327,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			}
 			ResistorElm re = (ResistorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
-			return "fc = " + CoreUtil.getUnitText(1 / (2 * CirSim.PI * re.resistance * ce.capacitance), "Hz");
+			return "fc = " + CoreUtil.getUnitText(1 / (2 * CircuitSimulator.PI * re.resistance * ce.capacitance), "Hz");
 		}
 		return null;
 	}
@@ -1458,14 +1458,14 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 	{
 		this.circuit.clearSelection();
 		this.pushUndo();
-		if (CirSim.editDialog != null)
+		if (CircuitSimulator.editDialog != null)
 		{
 			this.cirFrame.requestFocus();
-			CirSim.editDialog.setVisible(false);
-			CirSim.editDialog = null;
+			CircuitSimulator.editDialog.setVisible(false);
+			CircuitSimulator.editDialog = null;
 		}
-		CirSim.editDialog = new EditDialog(eable, this);
-		CirSim.editDialog.setVisible(true);
+		CircuitSimulator.editDialog = new EditDialog(eable, this);
+		CircuitSimulator.editDialog.setVisible(true);
 	}
 
 	/**
@@ -2557,7 +2557,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		if (mi instanceof CheckboxMenuItem)
 		{
 			MenuItem mmi = (MenuItem) mi;
-			this.mouseMode = CirSim.MODE_ADD_ELM;
+			this.mouseMode = CircuitSimulator.MODE_ADD_ELM;
 			String s = mmi.getActionCommand();
 
 			if (s.length() > 0)
@@ -2567,27 +2567,27 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 			if (s.compareTo("DragAll") == 0)
 			{
-				this.mouseMode = CirSim.MODE_DRAG_ALL;
+				this.mouseMode = CircuitSimulator.MODE_DRAG_ALL;
 			}
 			else if (s.compareTo("DragRow") == 0)
 			{
-				this.mouseMode = CirSim.MODE_DRAG_ROW;
+				this.mouseMode = CircuitSimulator.MODE_DRAG_ROW;
 			}
 			else if (s.compareTo("DragColumn") == 0)
 			{
-				this.mouseMode = CirSim.MODE_DRAG_COLUMN;
+				this.mouseMode = CircuitSimulator.MODE_DRAG_COLUMN;
 			}
 			else if (s.compareTo("DragSelected") == 0)
 			{
-				this.mouseMode = CirSim.MODE_DRAG_SELECTED;
+				this.mouseMode = CircuitSimulator.MODE_DRAG_SELECTED;
 			}
 			else if (s.compareTo("DragPost") == 0)
 			{
-				this.mouseMode = CirSim.MODE_DRAG_POST;
+				this.mouseMode = CircuitSimulator.MODE_DRAG_POST;
 			}
 			else if (s.compareTo("Select") == 0)
 			{
-				this.mouseMode = CirSim.MODE_SELECT;
+				this.mouseMode = CircuitSimulator.MODE_SELECT;
 			}
 			else if (s.length() > 0)
 			{
@@ -2622,31 +2622,31 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		{
 			if (e.getKeyChar() > ' ' && e.getKeyChar() < 127)
 			{
-				Class<?> c = CirSim.this.dumpTypes[e.getKeyChar()];
+				Class<?> c = CircuitSimulator.this.dumpTypes[e.getKeyChar()];
 				if (c == null || c == Scope.class)
 				{
 					return;
 				}
 
 				CircuitElm elm = null;
-				elm = CirSim.constructElement(c, 0, 0);
+				elm = CircuitSimulator.constructElement(c, 0, 0);
 				if (elm == null || !(elm.needsShortcut() && elm.getDumpClass() == c))
 				{
 					return;
 				}
 
-				CirSim.this.mouseMode = CirSim.MODE_ADD_ELM;
-				CirSim.this.mouseModeStr = c.getName();
-				CirSim.this.addingClass = c;
+				CircuitSimulator.this.mouseMode = CircuitSimulator.MODE_ADD_ELM;
+				CircuitSimulator.this.mouseModeStr = c.getName();
+				CircuitSimulator.this.addingClass = c;
 			}
 
 			if (e.getKeyChar() == ' ')
 			{
-				CirSim.this.mouseMode = CirSim.MODE_SELECT;
-				CirSim.this.mouseModeStr = "Select";
+				CircuitSimulator.this.mouseMode = CircuitSimulator.MODE_SELECT;
+				CircuitSimulator.this.mouseModeStr = "Select";
 			}
 
-			CirSim.this.tempMouseMode = CirSim.this.mouseMode;
+			CircuitSimulator.this.tempMouseMode = CircuitSimulator.this.mouseMode;
 		}
 	}
 
@@ -2658,9 +2658,9 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		{
 			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0)
 			{
-				if (CirSim.this.mouseMode == CirSim.MODE_SELECT || CirSim.this.mouseMode == CirSim.MODE_DRAG_SELECTED)
+				if (CircuitSimulator.this.mouseMode == CircuitSimulator.MODE_SELECT || CircuitSimulator.this.mouseMode == CircuitSimulator.MODE_DRAG_SELECTED)
 				{
-					CirSim.this.circuit.clearSelection();
+					CircuitSimulator.this.circuit.clearSelection();
 				}
 			}
 		}
@@ -2673,8 +2673,8 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		@Override
 		public void mouseExited(MouseEvent e)
 		{
-			CirSim.this.scopeSelected = -1;
-			CirSim.this.mouseElm = CirSim.this.plotXElm = CirSim.this.plotYElm = null;
+			CircuitSimulator.this.scopeSelected = -1;
+			CircuitSimulator.this.mouseElm = CircuitSimulator.this.plotXElm = CircuitSimulator.this.plotYElm = null;
 		}
 
 		@Override
@@ -2687,33 +2687,33 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 			if ((ex & (InputEvent.META_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)) == 0 && e.isPopupTrigger())
 			{
-				CirSim.this.doPopupMenu(e);
+				CircuitSimulator.this.doPopupMenu(e);
 				return;
 			}
 
 			if ((modif & InputEvent.BUTTON1_MASK) != 0)
 			{
 				// left mouse
-				CirSim.this.tempMouseMode = CirSim.this.mouseMode;
+				CircuitSimulator.this.tempMouseMode = CircuitSimulator.this.mouseMode;
 				if ((ex & InputEvent.ALT_DOWN_MASK) != 0 && (ex & InputEvent.META_DOWN_MASK) != 0)
 				{
-					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_COLUMN;
+					CircuitSimulator.this.tempMouseMode = CircuitSimulator.MODE_DRAG_COLUMN;
 				}
 				else if ((ex & InputEvent.ALT_DOWN_MASK) != 0 && (ex & InputEvent.SHIFT_DOWN_MASK) != 0)
 				{
-					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_ROW;
+					CircuitSimulator.this.tempMouseMode = CircuitSimulator.MODE_DRAG_ROW;
 				}
 				else if ((ex & InputEvent.SHIFT_DOWN_MASK) != 0)
 				{
-					CirSim.this.tempMouseMode = CirSim.MODE_SELECT;
+					CircuitSimulator.this.tempMouseMode = CircuitSimulator.MODE_SELECT;
 				}
 				else if ((ex & InputEvent.ALT_DOWN_MASK) != 0)
 				{
-					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_ALL;
+					CircuitSimulator.this.tempMouseMode = CircuitSimulator.MODE_DRAG_ALL;
 				}
 				else if ((ex & (InputEvent.CTRL_DOWN_MASK | InputEvent.META_DOWN_MASK)) != 0)
 				{
-					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_POST;
+					CircuitSimulator.this.tempMouseMode = CircuitSimulator.MODE_DRAG_POST;
 				}
 			}
 			else if ((e.getModifiers() & InputEvent.BUTTON3_MASK) != 0)
@@ -2721,11 +2721,11 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				// right mouse
 				if ((ex & InputEvent.SHIFT_DOWN_MASK) != 0)
 				{
-					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_ROW;
+					CircuitSimulator.this.tempMouseMode = CircuitSimulator.MODE_DRAG_ROW;
 				}
 				else if ((ex & (InputEvent.CTRL_DOWN_MASK | InputEvent.META_DOWN_MASK)) != 0)
 				{
-					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_COLUMN;
+					CircuitSimulator.this.tempMouseMode = CircuitSimulator.MODE_DRAG_COLUMN;
 				}
 				else
 				{
@@ -2733,37 +2733,37 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				}
 			}
 
-			if (CirSim.this.tempMouseMode != CirSim.MODE_SELECT
-					&& CirSim.this.tempMouseMode != CirSim.MODE_DRAG_SELECTED)
+			if (CircuitSimulator.this.tempMouseMode != CircuitSimulator.MODE_SELECT
+					&& CircuitSimulator.this.tempMouseMode != CircuitSimulator.MODE_DRAG_SELECTED)
 			{
 				System.out.println("clear selection");
-				CirSim.this.circuit.clearSelection();
+				CircuitSimulator.this.circuit.clearSelection();
 			}
 
-			if (CirSim.this.doSwitch(x, y))
+			if (CircuitSimulator.this.doSwitch(x, y))
 			{
 				return;
 			}
 
-			CirSim.this.pushUndo();
+			CircuitSimulator.this.pushUndo();
 
-			CirSim.this.initDragX = x;
-			CirSim.this.initDragY = y;
+			CircuitSimulator.this.initDragX = x;
+			CircuitSimulator.this.initDragY = y;
 
-			if (CirSim.this.tempMouseMode != CirSim.MODE_ADD_ELM || CirSim.this.addingClass == null)
+			if (CircuitSimulator.this.tempMouseMode != CircuitSimulator.MODE_ADD_ELM || CircuitSimulator.this.addingClass == null)
 			{
 				return;
 			}
 
-			int x0 = CirSim.this.snapGrid(x);
-			int y0 = CirSim.this.snapGrid(y);
+			int x0 = CircuitSimulator.this.snapGrid(x);
+			int y0 = CircuitSimulator.this.snapGrid(y);
 
-			if (!CirSim.this.circuit.circuitArea.contains(x0, y0))
+			if (!CircuitSimulator.this.circuit.circuitArea.contains(x0, y0))
 			{
 				return;
 			}
 
-			CirSim.this.dragElm = CirSim.constructElement(CirSim.this.addingClass, x0, y0);
+			CircuitSimulator.this.dragElm = CircuitSimulator.constructElement(CircuitSimulator.this.addingClass, x0, y0);
 		}
 
 		@Override
@@ -2775,47 +2775,47 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			if ((ex & (InputEvent.SHIFT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK | InputEvent.META_DOWN_MASK)) == 0
 					&& e.isPopupTrigger())
 			{
-				CirSim.this.doPopupMenu(e);
+				CircuitSimulator.this.doPopupMenu(e);
 				return;
 			}
 
-			CirSim.this.tempMouseMode = CirSim.this.mouseMode;
-			CirSim.this.selectedArea = null;
+			CircuitSimulator.this.tempMouseMode = CircuitSimulator.this.mouseMode;
+			CircuitSimulator.this.selectedArea = null;
 
-			if (CirSim.this.heldSwitchElm != null)
+			if (CircuitSimulator.this.heldSwitchElm != null)
 			{
-				CirSim.this.heldSwitchElm.mouseUp();
-				CirSim.this.heldSwitchElm = null;
+				CircuitSimulator.this.heldSwitchElm.mouseUp();
+				CircuitSimulator.this.heldSwitchElm = null;
 				circuitChanged = true;
 			}
 
-			if (CirSim.this.dragElm != null)
+			if (CircuitSimulator.this.dragElm != null)
 			{
 				// if the element is zero size then don't create it
-				if (CirSim.this.dragElm.x == CirSim.this.dragElm.x2 && CirSim.this.dragElm.y == CirSim.this.dragElm.y2)
+				if (CircuitSimulator.this.dragElm.x == CircuitSimulator.this.dragElm.x2 && CircuitSimulator.this.dragElm.y == CircuitSimulator.this.dragElm.y2)
 				{
-					CirSim.this.dragElm.delete();
+					CircuitSimulator.this.dragElm.delete();
 				}
 				else
 				{
-					CirSim.this.circuit.addElement(CirSim.this.dragElm);
+					CircuitSimulator.this.circuit.addElement(CircuitSimulator.this.dragElm);
 					circuitChanged = true;
 				}
 
-				CirSim.this.dragElm = null;
+				CircuitSimulator.this.dragElm = null;
 			}
 
 			if (circuitChanged)
 			{
-				CirSim.this.circuit.setNeedAnalysis(true);
+				CircuitSimulator.this.circuit.setNeedAnalysis(true);
 			}
 
-			if (CirSim.this.dragElm != null)
+			if (CircuitSimulator.this.dragElm != null)
 			{
-				CirSim.this.dragElm.delete();
+				CircuitSimulator.this.dragElm.delete();
 			}
 
-			CirSim.this.dragElm = null;
+			CircuitSimulator.this.dragElm = null;
 		}
 
 	}
@@ -2841,57 +2841,57 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			// return;
 			// }
 
-			if (CirSim.this.dragElm != null)
+			if (CircuitSimulator.this.dragElm != null)
 			{
-				CirSim.this.dragElm.drag(e.getX(), e.getY());
+				CircuitSimulator.this.dragElm.drag(e.getX(), e.getY());
 			}
 
 			boolean success = true;
 
-			switch (CirSim.this.tempMouseMode)
+			switch (CircuitSimulator.this.tempMouseMode)
 			{
 			case MODE_DRAG_ALL:
-				CirSim.this.dragAll(CirSim.this.snapGrid(e.getX()), CirSim.this.snapGrid(e.getY()));
+				CircuitSimulator.this.dragAll(CircuitSimulator.this.snapGrid(e.getX()), CircuitSimulator.this.snapGrid(e.getY()));
 				break;
 			case MODE_DRAG_ROW:
-				CirSim.this.dragRow(CirSim.this.snapGrid(e.getX()), CirSim.this.snapGrid(e.getY()));
+				CircuitSimulator.this.dragRow(CircuitSimulator.this.snapGrid(e.getX()), CircuitSimulator.this.snapGrid(e.getY()));
 				break;
 			case MODE_DRAG_COLUMN:
-				CirSim.this.dragColumn(CirSim.this.snapGrid(e.getX()), CirSim.this.snapGrid(e.getY()));
+				CircuitSimulator.this.dragColumn(CircuitSimulator.this.snapGrid(e.getX()), CircuitSimulator.this.snapGrid(e.getY()));
 				break;
 			case MODE_DRAG_POST:
-				if (CirSim.this.mouseElm != null)
+				if (CircuitSimulator.this.mouseElm != null)
 				{
-					CirSim.this.dragPost(CirSim.this.snapGrid(e.getX()), CirSim.this.snapGrid(e.getY()));
+					CircuitSimulator.this.dragPost(CircuitSimulator.this.snapGrid(e.getX()), CircuitSimulator.this.snapGrid(e.getY()));
 				}
 				break;
 			case MODE_SELECT:
-				if (CirSim.this.mouseElm == null)
+				if (CircuitSimulator.this.mouseElm == null)
 				{
-					CirSim.this.selectArea(e.getX(), e.getY());
+					CircuitSimulator.this.selectArea(e.getX(), e.getY());
 				}
 				else
 				{
-					CirSim.this.tempMouseMode = CirSim.MODE_DRAG_SELECTED;
-					success = CirSim.this.dragSelected(e.getX(), e.getY());
+					CircuitSimulator.this.tempMouseMode = CircuitSimulator.MODE_DRAG_SELECTED;
+					success = CircuitSimulator.this.dragSelected(e.getX(), e.getY());
 				}
 				break;
 			case MODE_DRAG_SELECTED:
-				success = CirSim.this.dragSelected(e.getX(), e.getY());
+				success = CircuitSimulator.this.dragSelected(e.getX(), e.getY());
 				break;
 			}
 
 			if (success)
 			{
-				if (CirSim.this.tempMouseMode == CirSim.MODE_DRAG_SELECTED && CirSim.this.mouseElm instanceof TextElm)
+				if (CircuitSimulator.this.tempMouseMode == CircuitSimulator.MODE_DRAG_SELECTED && CircuitSimulator.this.mouseElm instanceof TextElm)
 				{
-					CirSim.this.dragX = e.getX();
-					CirSim.this.dragY = e.getY();
+					CircuitSimulator.this.dragX = e.getX();
+					CircuitSimulator.this.dragY = e.getY();
 				}
 				else
 				{
-					CirSim.this.dragX = CirSim.this.snapGrid(e.getX());
-					CirSim.this.dragY = CirSim.this.snapGrid(e.getY());
+					CircuitSimulator.this.dragX = CircuitSimulator.this.snapGrid(e.getX());
+					CircuitSimulator.this.dragY = CircuitSimulator.this.snapGrid(e.getY());
 				}
 			}
 		}
@@ -2906,20 +2906,20 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 			int x = e.getX();
 			int y = e.getY();
-			CirSim.this.dragX = CirSim.this.snapGrid(x);
-			CirSim.this.dragY = CirSim.this.snapGrid(y);
-			CirSim.this.draggingPost = -1;
+			CircuitSimulator.this.dragX = CircuitSimulator.this.snapGrid(x);
+			CircuitSimulator.this.dragY = CircuitSimulator.this.snapGrid(y);
+			CircuitSimulator.this.draggingPost = -1;
 			int i;
-			CircuitElm origMouse = CirSim.this.mouseElm;
-			CirSim.this.mouseElm = null;
-			CirSim.this.mousePost = -1;
-			CirSim.this.plotXElm = CirSim.this.plotYElm = null;
+			CircuitElm origMouse = CircuitSimulator.this.mouseElm;
+			CircuitSimulator.this.mouseElm = null;
+			CircuitSimulator.this.mousePost = -1;
+			CircuitSimulator.this.plotXElm = CircuitSimulator.this.plotYElm = null;
 			int bestDist = 100000;
 			int bestArea = 100000;
 
-			for (i = 0; i < CirSim.this.circuit.getElementCount(); i++)
+			for (i = 0; i < CircuitSimulator.this.circuit.getElementCount(); i++)
 			{
-				CircuitElm currentElement = CirSim.this.circuit.getElementAt(i);
+				CircuitElm currentElement = CircuitSimulator.this.circuit.getElementAt(i);
 				if (currentElement.boundingBox.contains(x, y))
 				{
 
@@ -2944,35 +2944,35 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 						{
 							bestDist = dist;
 							bestArea = area;
-							CirSim.this.mouseElm = currentElement;
+							CircuitSimulator.this.mouseElm = currentElement;
 						}
 					}
 
 					if (currentElement.getPostCount() == 0)
 					{
-						CirSim.this.mouseElm = currentElement;
+						CircuitSimulator.this.mouseElm = currentElement;
 					}
 				}
 			}
 
-			CirSim.this.scopeSelected = -1;
-			if (CirSim.this.mouseElm == null)
+			CircuitSimulator.this.scopeSelected = -1;
+			if (CircuitSimulator.this.mouseElm == null)
 			{
-				for (i = 0; i != CirSim.this.scopeMan.scopeCount; i++)
+				for (i = 0; i != CircuitSimulator.this.scopeMan.scopeCount; i++)
 				{
-					Scope s = CirSim.this.scopeMan.scopes[i];
+					Scope s = CircuitSimulator.this.scopeMan.scopes[i];
 					if (s.rect.contains(x, y))
 					{
 						s.select();
-						CirSim.this.scopeSelected = i;
+						CircuitSimulator.this.scopeSelected = i;
 					}
 				}
 				// the mouse pointer was not in any of the bounding boxes, but
 				// we
 				// might still be close to a post
-				for (i = 0; i != CirSim.this.circuit.getElementCount(); i++)
+				for (i = 0; i != CircuitSimulator.this.circuit.getElementCount(); i++)
 				{
-					CircuitElm ce = CirSim.this.circuit.getElementAt(i);
+					CircuitElm ce = CircuitSimulator.this.circuit.getElementAt(i);
 					int j;
 					int jn = ce.getPostCount();
 					for (j = 0; j != jn; j++)
@@ -2981,8 +2981,8 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 						// int dist = CoreUtil.distanceSq(x, y, pt.x, pt.y);
 						if (CoreUtil.distanceSq(pt.x, pt.y, x, y) < 26)
 						{
-							CirSim.this.mouseElm = ce;
-							CirSim.this.mousePost = j;
+							CircuitSimulator.this.mouseElm = ce;
+							CircuitSimulator.this.mousePost = j;
 							break;
 						}
 					}
@@ -2990,14 +2990,14 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			}
 			else
 			{
-				CirSim.this.mousePost = -1;
+				CircuitSimulator.this.mousePost = -1;
 				// look for post close to the mouse pointer
-				for (i = 0; i != CirSim.this.mouseElm.getPostCount(); i++)
+				for (i = 0; i != CircuitSimulator.this.mouseElm.getPostCount(); i++)
 				{
-					Point pt = CirSim.this.mouseElm.getPost(i);
+					Point pt = CircuitSimulator.this.mouseElm.getPost(i);
 					if (CoreUtil.distanceSq(pt.x, pt.y, x, y) < 26)
 					{
-						CirSim.this.mousePost = i;
+						CircuitSimulator.this.mousePost = i;
 					}
 
 				}
@@ -3013,7 +3013,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		{
 			if (isPlaying)
 			{
-				CirSim.this.circuit.setNeedAnalysis(true);
+				CircuitSimulator.this.circuit.setNeedAnalysis(true);
 			}
 		}
 	}
@@ -3028,7 +3028,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			while (true)
 			{
 
-				delay = CirSim.this.repaint();
+				delay = CircuitSimulator.this.repaint();
 
 				if (delay > 0)
 				{
@@ -3041,19 +3041,19 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 					}
 				}
 
-				CirSim.this.timer.nextCycle();
+				CircuitSimulator.this.timer.nextCycle();
 			}
 		}
 	}
 
-	public static CirSim getInstance()
+	public static CircuitSimulator getInstance()
 	{
-		return CirSim.SINGLETON;
+		return CircuitSimulator.SINGLETON;
 	}
 
 	public static void main(String args[])
 	{
-		CirSim c = new CirSim();
+		CircuitSimulator c = new CircuitSimulator();
 
 		c.start();
 	}

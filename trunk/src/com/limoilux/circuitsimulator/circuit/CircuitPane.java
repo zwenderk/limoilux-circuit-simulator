@@ -9,16 +9,16 @@ import java.awt.Image;
 import javax.swing.JPanel;
 
 import com.limoilux.circuit.techno.CircuitAnalysisException;
-import com.limoilux.circuitsimulator.core.CirSim;
+import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
 public class CircuitPane extends JPanel
 {
 	private static final long serialVersionUID = -3418969740606491502L;
 
-	private final CirSim cirSim;
+	private final CircuitSimulator cirSim;
 	public Image dbimage;
 
-	public CircuitPane(CirSim cirSim)
+	public CircuitPane(CircuitSimulator cirSim)
 	{
 		this.cirSim = cirSim;
 

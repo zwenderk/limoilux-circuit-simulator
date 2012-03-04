@@ -163,7 +163,7 @@ public class CoreUtil
 		}
 		if (va < 1e-3)
 		{
-			return CircuitElm.showFormat.format(v * 1e6) + " " + CirSim.muString + u;
+			return CircuitElm.showFormat.format(v * 1e6) + " " + CircuitSimulator.muString + u;
 		}
 		if (va < 1)
 		{
@@ -201,7 +201,7 @@ public class CoreUtil
 		}
 		if (va < 1e-3)
 		{
-			return CircuitElm.shortFormat.format(v * 1e6) + CirSim.muString + u;
+			return CircuitElm.shortFormat.format(v * 1e6) + CircuitSimulator.muString + u;
 		}
 		if (va < 1)
 		{

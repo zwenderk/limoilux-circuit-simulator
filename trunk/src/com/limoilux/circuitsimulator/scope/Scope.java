@@ -20,7 +20,7 @@ import com.limoilux.circuit.OutputElm;
 import com.limoilux.circuit.ProbeElm;
 import com.limoilux.circuit.TransistorElm;
 import com.limoilux.circuit.techno.CircuitElm;
-import com.limoilux.circuitsimulator.core.CirSim;
+import com.limoilux.circuitsimulator.core.CircuitSimulator;
 import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public class Scope extends JPanel
@@ -67,9 +67,9 @@ public class Scope extends JPanel
 	public int draw_ox;
 	public int draw_oy;
 	public float dpixels[];
-	public CirSim sim;
+	public CircuitSimulator sim;
 
-	public Scope(CirSim s)
+	public Scope(CircuitSimulator s)
 	{
 		super();
 

@@ -1,20 +1,20 @@
 
 package com.limoilux.circuit;
 
-import com.limoilux.circuitsimulator.core.CirSim;
+import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
 class Inductor
 {
 	public static final int FLAG_BACK_EULER = 2;
 	int nodes[];
 	int flags;
-	CirSim sim;
+	CircuitSimulator sim;
 
 	double inductance;
 	double compResistance, current;
 	double curSourceValue;
 
-	Inductor(CirSim s)
+	Inductor(CircuitSimulator s)
 	{
 		this.sim = s;
 		this.nodes = new int[2];

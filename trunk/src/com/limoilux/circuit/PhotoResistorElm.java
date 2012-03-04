@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.EditInfo;
-import com.limoilux.circuitsimulator.core.CirSim;
+import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
 class PhotoResistorElm extends CircuitElm
 {
@@ -132,9 +132,9 @@ class PhotoResistorElm extends CircuitElm
 		// FIXME
 		arr[0] = "spark gap";
 		this.getBasicInfo(arr);
-		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CirSim.ohmString);
-		arr[4] = "Ron = " + CircuitElm.getUnitText(this.minresistance, CirSim.ohmString);
-		arr[5] = "Roff = " + CircuitElm.getUnitText(this.maxresistance, CirSim.ohmString);
+		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CircuitSimulator.ohmString);
+		arr[4] = "Ron = " + CircuitElm.getUnitText(this.minresistance, CircuitSimulator.ohmString);
+		arr[5] = "Roff = " + CircuitElm.getUnitText(this.maxresistance, CircuitSimulator.ohmString);
 	}
 
 	@Override
