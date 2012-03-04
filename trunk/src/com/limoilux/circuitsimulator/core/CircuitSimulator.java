@@ -3053,7 +3053,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	public static void main(String args[])
 	{
-		CircuitSimulator c = new CircuitSimulator();
+		CircuitSimulator c = CircuitSimulator.getInstance();
 
 		c.start();
 	}
