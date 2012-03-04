@@ -3,6 +3,7 @@ package com.limoilux.circuit.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Panel;
 
 import com.limoilux.circuit.core.CirSim;
@@ -11,7 +12,7 @@ public class CircuitPane extends Panel
 {
 	private static final long serialVersionUID = -3418969740606491502L;
 
-	@Deprecated
+	public Image circuitImage;
 	private final CirSim cirSim;
 
 	public CircuitPane(CirSim cirSim)
@@ -26,7 +27,7 @@ public class CircuitPane extends Panel
 	public void update(Graphics g)
 	{
 		super.update(g);
-		this.cirSim.updateCircuit(g);
+		this.cirSim.updateCircuit(this, this.circuitImage ,g);
 
 	}
 }

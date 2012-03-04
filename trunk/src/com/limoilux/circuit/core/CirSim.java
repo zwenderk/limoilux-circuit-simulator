@@ -15,6 +15,7 @@ import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
 import java.awt.MenuShortcut;
+import java.awt.Panel;
 import java.awt.Point;
 import java.awt.PopupMenu;
 import java.awt.Rectangle;
@@ -112,7 +113,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	private String startCircuit = null;
 	private String startLabel = null;
 	private String startCircuitText = null;
-	private Image dbimage;
 
 	public int subIterations;
 
@@ -231,10 +231,10 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.circuit = new Circuit();
 
 		this.activityManager = new ActivityManager();
-		this.activityListener = new ActivityList();
+		this.activityListener = new MyActivityListener();
 		this.activityManager.addActivityListener(this.activityListener);
 
-		this.scopeMan = new ScopeManager(this.circuit);
+		this.scopeMan = new ScopeManager(this, this.circuit);
 		this.cirFrame = new CircuitFrame(this.circuitPanel);
 
 		this.mainContainer = new JPanel();
@@ -300,11 +300,17 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.cirFrame.add(this.toolBar, BorderLayout.NORTH);
 
 		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
-		this.mainContainer.add(this.scopeMan.getScopePane(), BorderLayout.SOUTH);
+		this.mainContainer.add(this.scopeMan.scopePane, BorderLayout.SOUTH);
 
 	}
+	
+	private void buildDBImage(Dimension dim)
+	{
+		this.circuitPanel.circuitImage = this.circuitPanel.createImage(dim.width, dim.height);
+		this.scopeMan.scopePane.scopeImg = this.scopeMan.scopePane.createImage(dim.width, dim.height);
 
-	public void updateCircuit(Graphics realg)
+	}
+	public void updateCircuit(Panel panel, Image img, Graphics realg)
 	{
 		Graphics g = null;
 		CircuitElm realMouseElm;
@@ -344,7 +350,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 		this.scopeMan.setupScopes(this.winSize);
 
-		g = this.dbimage.getGraphics();
+		g = img.getGraphics();
 		g.setColor(Color.black);
 
 		g.fillRect(0, 0, this.winSize.width, this.winSize.height);
@@ -579,7 +585,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		 * g.drawString("iterc: " + (getIterCount()), 10, 70);
 		 */
 
-		realg.drawImage(this.dbimage, 0, 0, this.cirFrame);
+		realg.drawImage(img, 0, 0, this.cirFrame);
 
 		if (this.activityManager.isPlaying() && !this.circuit.matrix.matrixIsNull())
 		{
@@ -597,7 +603,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 				}
 			}
 
-			this.circuitPanel.repaint();
+			panel.repaint();
 		}
 
 		this.timer.nextCycle();
@@ -1221,10 +1227,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		return "Circuit by Paul Falstad";
 	}
 
-	private void buildDBImage(Dimension dim)
-	{
-		this.dbimage = this.circuitPanel.createImage(dim.width, dim.height);
-	}
+
 
 	private void handleResize()
 	{
@@ -2390,6 +2393,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	public void componentShown(ComponentEvent e)
 	{
 		this.circuitPanel.repaint();
+		this.scopeMan.scopePane.repaint();
 	}
 
 	@Override
@@ -3074,7 +3078,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		}
 	}
 
-	private class ActivityList implements ActivityListener
+	private class MyActivityListener implements ActivityListener
 	{
 		@Override
 		public void stateChanged(boolean isPlaying)
