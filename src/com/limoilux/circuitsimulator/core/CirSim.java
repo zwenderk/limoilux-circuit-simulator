@@ -66,6 +66,7 @@ import com.limoilux.circuit.ui.io.MigrationWizard;
 import com.limoilux.circuitsimulator.circuit.Circuit;
 import com.limoilux.circuitsimulator.circuit.CircuitManager;
 import com.limoilux.circuitsimulator.circuit.CircuitPane;
+import com.limoilux.circuitsimulator.circuit.CircuitUtil;
 import com.limoilux.circuitsimulator.scope.Scope;
 import com.limoilux.circuitsimulator.scope.ScopeManager;
 
@@ -91,8 +92,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 	private static final int MODE_DRAG_POST = 5;
 	private static final int MODE_SELECT = 6;
 
-	private static final int PAUSE = 10;
-
 	public double currentMultiplier;
 
 	private static final int HINT_LC = 1;
@@ -113,7 +112,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 	private String startCircuit = null;
 	private String startLabel = null;
 	private String startCircuitText = null;
-	private Image dbimage;
 
 	public int subIterations;
 
@@ -215,7 +213,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 	public final ScopeManager scopeMan;
 	public final CircuitManager circuitMan;
-
+	
 	public final CircuitPane circuitPanel;
 
 	public final CircuitFrame cirFrame;
@@ -232,9 +230,10 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		// this.mainContainer.setLayout(new BorderLayout());
 		this.circuitPanel = new CircuitPane(this);
 
-		this.circuit = new Circuit();
-		this.circuitMan = new CircuitManager(this.circuit, this.circuitPanel);
-		this.scopeMan = new ScopeManager(this.circuit);
+
+		this.circuitMan = new CircuitManager(this.circuitPanel);
+		this.circuit = this.circuitMan.getCircuit();
+		this.scopeMan = new ScopeManager(this.circuitMan.getCircuit());
 
 		this.timer = new Timer();
 
@@ -2049,7 +2048,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 	@Deprecated
 	private static CircuitElm constructElement(Class<?> classType, int x0, int y0)
 	{
-		return CircuitManager.constructElement(classType, x0, y0);
+		return CircuitUtil.constructElement(classType, x0, y0);
 	}
 
 	private void doPopupMenu(MouseEvent e)
