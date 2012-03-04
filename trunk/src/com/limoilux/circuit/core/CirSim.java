@@ -382,7 +382,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			this.circuit.getElementAt(i).draw(g);
 		}
 	}
-	
+
 	private void drawElementForMouse(Graphics g)
 	{
 		int i;
@@ -398,7 +398,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			}
 		}
 	}
-	
+
 	private int findAndDrawBadNode(Graphics g)
 	{
 		int i;
@@ -429,10 +429,10 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				}
 			}
 		}
-		
+
 		return badnodes;
 	}
-	
+
 	private void drawDrag(Graphics g)
 	{
 		/*
@@ -445,9 +445,13 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		}
 	}
 
+	private void calcPowerMult()
+	{
+		CircuitElm.powerMult = Math.exp(this.powerBar.getValue() / 4.762 - 7);
+	}
+
 	public void createCircuitImage(Graphics g) throws Exception
 	{
-	
 		CircuitElm realMouseElm;
 
 		if (CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElm)
@@ -463,7 +467,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 		this.scopeMan.setupScopes(this.winSize);
 
-
 		g.setColor(Color.black);
 
 		g.fillRect(0, 0, this.winSize.width, this.winSize.height);
@@ -476,22 +479,18 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		}
 		else
 		{
-			this.timer.lastTime = 0;
+			this.timer.reset();
 		}
 
-		CircuitElm.powerMult = Math.exp(this.powerBar.getValue() / 4.762 - 7);
+		this.calcPowerMult();
 
 		this.drawElements(g);
 
-		
 		this.drawElementForMouse(g);
-		
-		int badnodes = this.findAndDrawBadNode(g);
-		
-		this.drawDrag(g);
 
-		Font oldfont = g.getFont();
-		g.setFont(oldfont);
+		int badnodes = this.findAndDrawBadNode(g);
+
+		this.drawDrag(g);
 
 		// Dessinage des scopes
 		if (this.stopMessage == null)
@@ -499,6 +498,15 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			this.scopeMan.drawScope(g);
 		}
 
+		this.drawStrings(g, badnodes);
+
+		this.drawSelectedArea(g);
+
+		this.mouseElm = realMouseElm;
+	}
+
+	private void drawStrings(Graphics g, int badnodes)
+	{
 		g.setColor(CircuitElm.WHITE_COLOR);
 		if (this.stopMessage != null)
 		{
@@ -535,14 +543,14 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				info[0] = "t = " + CoreUtil.getUnitText(this.timer.time, "s");
 				CircuitElm.showFormat.setMinimumFractionDigits(0);
 			}
-			
 
 			int nbInfo;
 			if (this.hintType != -1)
 			{
-				
-				for (nbInfo = 0; info[nbInfo] != null; nbInfo++);
-				
+
+				for (nbInfo = 0; info[nbInfo] != null; nbInfo++)
+					;
+
 				String s = this.getHint();
 				if (s == null)
 				{
@@ -570,7 +578,8 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			x = Math.max(x, this.winSize.width * 2 / 3);
 
 			// count lines of data
-			for (nbInfo = 0; info[nbInfo] != null; nbInfo++);
+			for (nbInfo = 0; info[nbInfo] != null; nbInfo++)
+				;
 
 			if (badnodes > 0)
 			{
@@ -596,14 +605,15 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			}
 
 		}
+	}
 
+	private void drawSelectedArea(Graphics g)
+	{
 		if (this.selectedArea != null)
 		{
 			g.setColor(CircuitElm.SELECT_COLOR);
 			g.drawRect(this.selectedArea.x, this.selectedArea.y, this.selectedArea.width, this.selectedArea.height);
 		}
-
-		this.mouseElm = realMouseElm;
 	}
 
 	private void runCircuit() throws CircuitAnalysisException
