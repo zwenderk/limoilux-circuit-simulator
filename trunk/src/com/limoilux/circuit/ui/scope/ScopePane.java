@@ -43,7 +43,7 @@ public class ScopePane extends Panel
 		Graphics g = null;
 		CircuitElm realMouseElm;
 
-		realMouseElm = this.cirSim.mouseElm;
+	
 		if (this.cirSim.mouseElm == null)
 		{
 			this.cirSim.mouseElm = this.cirSim.stopElm;
@@ -278,6 +278,7 @@ public class ScopePane extends Panel
 			g.drawRect(this.cirSim.selectedArea.x, this.cirSim.selectedArea.y, this.cirSim.selectedArea.width, this.cirSim.selectedArea.height);
 		}
 
+		realMouseElm = this.cirSim.mouseElm;
 		this.cirSim.mouseElm = realMouseElm;
 		/*
 		 * g.setColor(Color.white); g.drawString("Framerate: " + framerate, 10,

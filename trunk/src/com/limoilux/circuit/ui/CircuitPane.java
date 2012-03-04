@@ -36,13 +36,12 @@ public class CircuitPane extends Panel
 		this.updateCircuit(g);
 
 	}
-	
+
 	public void updateCircuit(Graphics realg)
 	{
 		Graphics g = null;
 		CircuitElm realMouseElm;
 
-		realMouseElm = this.cirSim.mouseElm;
 		if (this.cirSim.mouseElm == null)
 		{
 			this.cirSim.mouseElm = this.cirSim.stopElm;
@@ -116,7 +115,8 @@ public class CircuitPane extends Panel
 		}
 
 		if (this.cirSim.tempMouseMode == CirSim.MODE_DRAG_ROW || this.cirSim.tempMouseMode == CirSim.MODE_DRAG_COLUMN
-				|| this.cirSim.tempMouseMode == CirSim.MODE_DRAG_POST || this.cirSim.tempMouseMode == CirSim.MODE_DRAG_SELECTED)
+				|| this.cirSim.tempMouseMode == CirSim.MODE_DRAG_POST
+				|| this.cirSim.tempMouseMode == CirSim.MODE_DRAG_SELECTED)
 		{
 			for (i = 0; i != this.cirSim.circuit.getElementCount(); i++)
 			{
@@ -157,7 +157,8 @@ public class CircuitPane extends Panel
 		 * if (mouseElm != null) { g.setFont(oldfont); g.drawString("+",
 		 * mouseElm.x+10, mouseElm.y); }
 		 */
-		if (this.cirSim.dragElm != null && (this.cirSim.dragElm.x != this.cirSim.dragElm.x2 || this.cirSim.dragElm.y != this.cirSim.dragElm.y2))
+		if (this.cirSim.dragElm != null
+				&& (this.cirSim.dragElm.x != this.cirSim.dragElm.x2 || this.cirSim.dragElm.y != this.cirSim.dragElm.y2))
 		{
 			this.cirSim.dragElm.draw(g);
 		}
@@ -184,7 +185,8 @@ public class CircuitPane extends Panel
 				}
 				else
 				{
-					info[0] = "V = " + CoreUtil.getUnitText(this.cirSim.mouseElm.getPostVoltage(this.cirSim.mousePost), "V");
+					info[0] = "V = "
+							+ CoreUtil.getUnitText(this.cirSim.mouseElm.getPostVoltage(this.cirSim.mousePost), "V");
 					/*
 					 * //shownodes for (i = 0; i != mouseElm.getPostCount();
 					 * i++) info[0] += " " + mouseElm.nodes[i]; if
@@ -266,9 +268,11 @@ public class CircuitPane extends Panel
 		if (this.cirSim.selectedArea != null)
 		{
 			g.setColor(CircuitElm.SELECT_COLOR);
-			g.drawRect(this.cirSim.selectedArea.x, this.cirSim.selectedArea.y, this.cirSim.selectedArea.width, this.cirSim.selectedArea.height);
+			g.drawRect(this.cirSim.selectedArea.x, this.cirSim.selectedArea.y, this.cirSim.selectedArea.width,
+					this.cirSim.selectedArea.height);
 		}
 
+		realMouseElm = this.cirSim.mouseElm;
 		this.cirSim.mouseElm = realMouseElm;
 		/*
 		 * g.setColor(Color.white); g.drawString("Framerate: " + framerate, 10,
