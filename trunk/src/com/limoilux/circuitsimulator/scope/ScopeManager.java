@@ -215,4 +215,22 @@ public class ScopeManager
 			}
 		}
 	}
+	
+	public String createDump()
+	{
+		String dump = "";
+		String tempDump = "";
+		
+		for (int i = 0; i < this.scopeCount; i++)
+		{
+			tempDump = this.scopes[i].dump();
+			if (tempDump != null)
+			{
+				dump += tempDump + "\n";
+			}
+		}
+		
+		return dump;
+	}
+
 }

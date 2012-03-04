@@ -6,12 +6,13 @@ import java.util.Vector;
 
 public class Clipboard
 {
-	public String clipboard;
+	public String cache;
 	public final Vector<String> undoStack;
 	public final Vector<String> redoStack;
 	
 	public MenuItem undoItem;
 	public MenuItem redoItem;
+	public MenuItem pasteItem;
 
 	public Clipboard()
 	{
@@ -23,5 +24,10 @@ public class Clipboard
 	{
 		this.redoItem.setEnabled(this.redoStack.size() > 0);
 		this.undoItem.setEnabled(this.undoStack.size() > 0);
+	}
+	
+	public void enablePaste()
+	{
+		this.pasteItem.setEnabled(this.cache.length() > 0);
 	}
 }
