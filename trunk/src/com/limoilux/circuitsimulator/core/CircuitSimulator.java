@@ -405,38 +405,10 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		}
 	}
 
+	@Deprecated
 	private int findAndDrawBadNode(Graphics g)
 	{
-		int badnodes = 0;
-
-		// find bad connections, nodes not connected to other elements which
-		// intersect other elements' bounding boxes
-		for (int i = 0; i != this.circuit.getNodeCount(); i++)
-		{
-			CircuitNode cn = this.circuit.getNodeAt(i);
-			if (!cn.isInternal() && cn.getSize() == 1)
-			{
-				int bb = 0;
-				CircuitNodeLink cnl = cn.elementAt(0);
-				for (int j = 0; j != this.circuit.getElementCount(); j++)
-				{
-					if (cnl.elm != this.circuit.getElementAt(j)
-							&& this.circuit.getElementAt(j).boundingBox.contains(cn.x, cn.y))
-					{
-						bb++;
-					}
-				}
-				
-				if (bb > 0)
-				{
-					g.setColor(Color.red);
-					g.fillOval(cn.x - 3, cn.y - 3, 7, 7);
-					badnodes++;
-				}
-			}
-		}
-
-		return badnodes;
+		return this.circuitMan.findAndDrawBadNode(g);
 	}
 
 	private void drawDrag(Graphics g)
@@ -481,7 +453,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		this.drawElementForMouse(g);
 
-		int badnodes = this.findAndDrawBadNode(g);
+		int badnodes = this.circuitMan.findAndDrawBadNode(g);
 
 		this.drawDrag(g);
 
