@@ -15,14 +15,15 @@ public class ScopeManager
 
 	public Scope scopes[];
 
-	private final ScopePane scopePane;
+	public final ScopePane scopePane;
 	private final Circuit circuit;
+	private final CirSim cirSim;
 
-
-	public ScopeManager(Circuit circuit)
+	public ScopeManager( CirSim cirSim, Circuit circuit)
 	{
+		this.cirSim = cirSim;
 		this.circuit = circuit;
-		this.scopePane = new ScopePane();
+		this.scopePane = new ScopePane(cirSim);
 
 		this.scopes = new Scope[20];
 		this.scopeColCount = new int[20];
@@ -40,10 +41,14 @@ public class ScopeManager
 		// Dessinage des scopes
 		for (int i = 0; i < this.scopeCount; i++)
 		{
-			System.out.println("Painting " + i);
 			this.scopes[i].draw(g);
 			this.scopes[i].repaint();
 		}
+	}
+	
+	public void repaint()
+	{
+		this.scopePane.repaint();
 	}
 
 	public void doTimeStep()
