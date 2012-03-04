@@ -50,6 +50,7 @@ import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.ResistorElm;
 import com.limoilux.circuit.SwitchElm;
 import com.limoilux.circuit.TextElm;
+import com.limoilux.circuit.core.Clipboard;
 import com.limoilux.circuit.core.Editable;
 import com.limoilux.circuit.core.Timer;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
@@ -116,7 +117,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	public int subIterations;
 
 	public Dimension winSize;
-	public Vector<CircuitElm> elmList;
 	public CircuitElm dragElm;
 	public CircuitElm menuElm;
 	public CircuitElm mouseElm;
@@ -144,13 +144,12 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	private int hintType = -1, hintItem1, hintItem2;
 	private String stopMessage;
 
-	private String clipboard;
-	private Vector<String> undoStack, redoStack;
 
 	private Label titleLabel;
 	private JButton resetButton;
-	private MenuItem exportItem, importItem, exitItem, undoItem, redoItem, cutItem, copyItem, pasteItem, selectAllItem,
+	private MenuItem exportItem, importItem, exitItem,  cutItem, copyItem, pasteItem, selectAllItem,
 			optionsItem;
+	
 
 	private Menu optionsMenu;
 
@@ -213,6 +212,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	public final CircuitManager circuitMan;
 	
 	public final CircuitPane circuitPanel;
+	
+	public final Clipboard clipboard;
 
 	public final CoreWindow cirFrame;
 	public final JPanel mainContainer;
@@ -224,6 +225,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	private CircuitSimulator()
 	{
 		super();
+		
+		this.clipboard = new Clipboard();
 
 		// this.mainContainer.setLayout(new BorderLayout());
 		this.circuitPanel = new CircuitPane(this);
@@ -281,9 +284,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		this.setGrid();
 
-		this.undoStack = new Vector<String>();
-		this.redoStack = new Vector<String>();
-
 		this.initPopupMenu();
 
 		this.scopeMenu = this.buildScopeMenu(false);
@@ -308,8 +308,11 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		if (!(this.winSize == null || this.winSize.width == 0))
 		{
 			this.prepareRepaint();
+			
 
-			this.circuitPanel.repaint();
+			this.scopeMan.setupScopes(this.winSize);
+
+			this.circuitMan.repaint();
 		}
 
 		return this.timer.calculateDelay();
@@ -344,7 +347,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.mouseElm = this.stopElm;
 		}
 
-		this.scopeMan.setupScopes(this.winSize);
 	}
 
 	private void drawCurrent()
@@ -890,10 +892,10 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		m.add(this.exitItem = this.getMenuItem("Exit"));
 
 		m = new Menu("Edit");
-		m.add(this.undoItem = this.getMenuItem("Undo"));
-		this.undoItem.setShortcut(new MenuShortcut(KeyEvent.VK_Z));
-		m.add(this.redoItem = this.getMenuItem("Redo"));
-		this.redoItem.setShortcut(new MenuShortcut(KeyEvent.VK_Z, true));
+		m.add(this.clipboard.undoItem = this.getMenuItem("Undo"));
+		this.clipboard.undoItem.setShortcut(new MenuShortcut(KeyEvent.VK_Z));
+		m.add(this.clipboard.redoItem = this.getMenuItem("Redo"));
+		this.clipboard.redoItem.setShortcut(new MenuShortcut(KeyEvent.VK_Z, true));
 		m.addSeparator();
 		m.add(this.cutItem = this.getMenuItem("Cut"));
 		this.cutItem.setShortcut(new MenuShortcut(KeyEvent.VK_X));
@@ -2121,48 +2123,46 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void pushUndo()
 	{
-		this.redoStack.removeAllElements();
+		this.clipboard.redoStack.removeAllElements();
 		String s = this.dumpCircuit();
-		if (this.undoStack.size() > 0 && s.compareTo(this.undoStack.lastElement()) == 0)
+		if (this.clipboard.undoStack.size() > 0 && s.compareTo(this.clipboard.undoStack.lastElement()) == 0)
 		{
 			return;
 		}
-		this.undoStack.add(s);
+		this.clipboard.undoStack.add(s);
 		this.enableUndoRedo();
 	}
 
 	private void doUndo()
 	{
-		if (this.undoStack.size() == 0)
+		if (this.clipboard.undoStack.size() > 0)
 		{
-			return;
+			this.clipboard.redoStack.add(this.dumpCircuit());
+			String s = this.clipboard.undoStack.remove(this.clipboard.undoStack.size() - 1);
+			this.readSetup(s);
+			this.enableUndoRedo();
 		}
-
-		this.redoStack.add(this.dumpCircuit());
-		String s = this.undoStack.remove(this.undoStack.size() - 1);
-		this.readSetup(s);
-		this.enableUndoRedo();
 	}
 
 	private void doRedo()
 	{
-		if (this.redoStack.size() == 0)
+		if (this.clipboard.redoStack.size() > 0)
 		{
-			return;
+
+			this.clipboard.undoStack.add(this.dumpCircuit());
+
+			String s = this.clipboard.redoStack.remove(this.clipboard.redoStack.size() - 1);
+
+			this.readSetup(s);
+			this.enableUndoRedo();
 		}
 
-		this.undoStack.add(this.dumpCircuit());
-
-		String s = this.redoStack.remove(this.redoStack.size() - 1);
-
-		this.readSetup(s);
-		this.enableUndoRedo();
 	}
 
+	@Deprecated
 	private void enableUndoRedo()
 	{
-		this.redoItem.setEnabled(this.redoStack.size() > 0);
-		this.undoItem.setEnabled(this.undoStack.size() > 0);
+		this.clipboard.enableUndoRedo();
 	}
 
 	private void setMenuSelection()
@@ -2183,19 +2183,20 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	{
 		this.pushUndo();
 		this.setMenuSelection();
-		this.clipboard = "";
+		this.clipboard.clipboard = "";
 
 		for (int i = this.circuit.getElementCount() - 1; i >= 0; i--)
 		{
 			CircuitElm ce = this.circuit.getElementAt(i);
 			if (ce.isSelected())
 			{
-				this.clipboard += ce.dump() + "\n";
+				this.clipboard.clipboard += ce.dump() + "\n";
 				ce.delete();
 				this.circuit.removeElementAt(i);
 			}
 		}
 		this.enablePaste();
+		
 		this.needAnalyze();
 	}
 
@@ -2219,14 +2220,14 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void doCopy()
 	{
-		this.clipboard = "";
+		this.clipboard.clipboard = "";
 		this.setMenuSelection();
 		for (int i = this.circuit.getElementCount() - 1; i >= 0; i--)
 		{
 			CircuitElm ce = this.circuit.getElementAt(i);
 			if (ce.isSelected())
 			{
-				this.clipboard += ce.dump() + "\n";
+				this.clipboard.clipboard += ce.dump() + "\n";
 			}
 
 		}
@@ -2236,7 +2237,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void enablePaste()
 	{
-		this.pasteItem.setEnabled(this.clipboard.length() > 0);
+		this.pasteItem.setEnabled(this.clipboard.clipboard.length() > 0);
 	}
 
 	private void doPaste()
@@ -2259,7 +2260,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			}
 		}
 		int oldsz = this.circuit.getElementCount();
-		this.readSetup(this.clipboard, true);
+		this.readSetup(this.clipboard.clipboard, true);
 
 		// select new items
 		Rectangle newbb = null;
@@ -2373,12 +2374,12 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.showMigrationDialog();
 		}
 
-		if (e.getSource() == this.undoItem)
+		if (e.getSource() == this.clipboard.undoItem)
 		{
 			this.doUndo();
 		}
 
-		if (e.getSource() == this.redoItem)
+		if (e.getSource() == this.clipboard.redoItem)
 		{
 			this.doRedo();
 		}
