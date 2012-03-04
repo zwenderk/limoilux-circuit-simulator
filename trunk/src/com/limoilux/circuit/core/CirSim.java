@@ -445,9 +445,9 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		}
 	}
 
-	public Image createCircuitImage() throws Exception
+	public void createCircuitImage(Graphics g) throws Exception
 	{
-		Graphics g = null;
+	
 		CircuitElm realMouseElm;
 
 		if (CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElm)
@@ -463,7 +463,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 		this.scopeMan.setupScopes(this.winSize);
 
-		g = this.dbimage.getGraphics();
+
 		g.setColor(Color.black);
 
 		g.fillRect(0, 0, this.winSize.width, this.winSize.height);
@@ -604,10 +604,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		}
 
 		this.mouseElm = realMouseElm;
-
-
-		
-		return this.dbimage;
 	}
 
 	private void runCircuit() throws CircuitAnalysisException
@@ -1231,11 +1227,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		return "Circuit by Paul Falstad";
 	}
 
-	private void buildDBImage(Dimension dim)
-	{
-		this.dbimage = this.circuitPanel.createImage(dim.width, dim.height);
-	}
-
 	private void handleResize()
 	{
 		Dimension dim = this.circuitPanel.getSize();
@@ -1243,7 +1234,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 		if (dim.width != 0)
 		{
-			this.buildDBImage(dim);
+			this.circuitPanel.buildDBImage();
 
 			int height = dim.height / 5;
 
