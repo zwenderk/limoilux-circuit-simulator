@@ -19,7 +19,7 @@ import java.text.NumberFormat;
 
 import com.limoilux.circuit.core.Editable;
 import com.limoilux.circuit.ui.layout.EditDialogLayout;
-import com.limoilux.circuitsimulator.core.CirSim;
+import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
 public class EditDialog extends Dialog implements AdjustmentListener, ActionListener, ItemListener
 {
@@ -28,14 +28,14 @@ public class EditDialog extends Dialog implements AdjustmentListener, ActionList
 	 */
 	private static final long serialVersionUID = -2448517167834043767L;
 	public Editable elm;
-	public CirSim cframe;
+	public CircuitSimulator cframe;
 	public Button applyButton, okButton;
 	public EditInfo einfos[];
 	public int einfocount;
 	public static final int barmax = 1000;
 	public NumberFormat noCommaFormat;
 
-	public EditDialog(Editable ce, CirSim f)
+	public EditDialog(Editable ce, CircuitSimulator f)
 	{
 		super(f.cirFrame, "Edit Component", false);
 		this.cframe = f;
@@ -245,7 +245,7 @@ public class EditDialog extends Dialog implements AdjustmentListener, ActionList
 			this.apply();
 			this.cframe.mainContainer.requestFocus();
 			this.setVisible(false);
-			CirSim.editDialog = null;
+			CircuitSimulator.editDialog = null;
 		}
 		if (e.getSource() == this.applyButton)
 		{
@@ -308,8 +308,8 @@ public class EditDialog extends Dialog implements AdjustmentListener, ActionList
 		if (changed)
 		{
 			this.setVisible(false);
-			CirSim.editDialog = new EditDialog(this.elm, this.cframe);
-			CirSim.editDialog.show();
+			CircuitSimulator.editDialog = new EditDialog(this.elm, this.cframe);
+			CircuitSimulator.editDialog.show();
 		}
 	}
 
@@ -320,7 +320,7 @@ public class EditDialog extends Dialog implements AdjustmentListener, ActionList
 		{
 			this.cframe.mainContainer.requestFocus();
 			this.setVisible(false);
-			CirSim.editDialog = null;
+			CircuitSimulator.editDialog = null;
 			return true;
 		}
 		return super.handleEvent(ev);

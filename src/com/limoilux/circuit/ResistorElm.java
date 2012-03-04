@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.EditInfo;
-import com.limoilux.circuitsimulator.core.CirSim;
+import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
 public class ResistorElm extends CircuitElm
 {
@@ -132,7 +132,7 @@ public class ResistorElm extends CircuitElm
 	{
 		arr[0] = "resistor";
 		this.getBasicInfo(arr);
-		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CirSim.ohmString);
+		arr[3] = "R = " + CircuitElm.getUnitText(this.resistance, CircuitSimulator.ohmString);
 		arr[4] = "P = " + CircuitElm.getUnitText(this.getPower(), "W");
 	}
 

@@ -3,13 +3,13 @@ package com.limoilux.circuit.ui;
 
 import com.limoilux.circuit.core.Editable;
 import com.limoilux.circuit.techno.CircuitElm;
-import com.limoilux.circuitsimulator.core.CirSim;
+import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
 public class EditOptions implements Editable
 {
-	CirSim sim;
+	CircuitSimulator sim;
 
-	public EditOptions(CirSim s)
+	public EditOptions(CircuitSimulator s)
 	{
 		this.sim = s;
 	}

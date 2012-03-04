@@ -16,7 +16,7 @@ import com.limoilux.circuit.VoltageElm;
 import com.limoilux.circuit.core.Editable;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
-import com.limoilux.circuitsimulator.core.CirSim;
+import com.limoilux.circuitsimulator.core.CircuitSimulator;
 import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public abstract class CircuitElm implements Editable
@@ -36,7 +36,7 @@ public abstract class CircuitElm implements Editable
 
 	// va devenir un singleton
 	@Deprecated
-	public static CirSim cirSim = CirSim.getInstance();
+	public static CircuitSimulator cirSim = CircuitSimulator.getInstance();
 
 	public static NumberFormat showFormat;
 	public static NumberFormat shortFormat;
@@ -356,8 +356,8 @@ public abstract class CircuitElm implements Editable
 		{
 			return;
 		}
-		if (CircuitElm.cirSim.mouseMode == CirSim.MODE_DRAG_ROW
-				|| CircuitElm.cirSim.mouseMode == CirSim.MODE_DRAG_COLUMN)
+		if (CircuitElm.cirSim.mouseMode == CircuitSimulator.MODE_DRAG_ROW
+				|| CircuitElm.cirSim.mouseMode == CircuitSimulator.MODE_DRAG_COLUMN)
 		{
 			return;
 		}
@@ -848,7 +848,7 @@ public abstract class CircuitElm implements Editable
 		return CoreUtil.distance(p1, p2);
 	}
 
-	public static void initClass(CirSim cirSim)
+	public static void initClass(CircuitSimulator cirSim)
 	{
 		CircuitElm.cirSim = cirSim;
 

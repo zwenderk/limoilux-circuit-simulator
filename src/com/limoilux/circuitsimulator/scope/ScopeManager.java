@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 import com.limoilux.circuitsimulator.circuit.Circuit;
-import com.limoilux.circuitsimulator.core.CirSim;
+import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
 public class ScopeManager
 {
@@ -172,7 +172,7 @@ public class ScopeManager
 		}
 
 		int colct = pos + 1;
-		int iw = CirSim.INFO_WIDTH;
+		int iw = CircuitSimulator.INFO_WIDTH;
 
 		if (colct <= 2)
 		{

@@ -10,7 +10,7 @@ import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
-import com.limoilux.circuitsimulator.core.CirSim;
+import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
 public class TransLineElm extends CircuitElm
 {
@@ -290,7 +290,7 @@ public class TransLineElm extends CircuitElm
 	public void getInfo(String arr[])
 	{
 		arr[0] = "transmission line";
-		arr[1] = CircuitElm.getUnitText(this.imped, CirSim.ohmString);
+		arr[1] = CircuitElm.getUnitText(this.imped, CircuitSimulator.ohmString);
 		arr[2] = "length = " + CircuitElm.getUnitText(2.9979e8 * this.delay, "m");
 		arr[3] = "delay = " + CircuitElm.getUnitText(this.delay, "s");
 	}
