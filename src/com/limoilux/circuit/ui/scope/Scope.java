@@ -58,7 +58,7 @@ public class Scope extends JPanel
 	public boolean plot2d;
 	public boolean plotXY;
 
-	public CircuitElm elm;
+	public CircuitElm element;
 	public CircuitElm xElm;
 	public CircuitElm yElm;
 	public MemoryImageSource imageSource;
@@ -127,7 +127,7 @@ public class Scope extends JPanel
 
 	boolean active()
 	{
-		return this.elm != null;
+		return this.element != null;
 	}
 
 	void reset()
@@ -140,13 +140,13 @@ public class Scope extends JPanel
 		this.showFreq = this.lockScale = this.showMin = false;
 		this.plot2d = false;
 		// no showI for Output
-		if (this.elm != null
-				&& (this.elm instanceof OutputElm || this.elm instanceof LogicOutputElm || this.elm instanceof ProbeElm))
+		if (this.element != null
+				&& (this.element instanceof OutputElm || this.element instanceof LogicOutputElm || this.element instanceof ProbeElm))
 		{
 			this.showI = false;
 		}
 		this.value = this.ivalue = 0;
-		if (this.elm instanceof TransistorElm)
+		if (this.element instanceof TransistorElm)
 		{
 			this.value = Scope.VAL_VCE;
 		}
@@ -175,19 +175,20 @@ public class Scope extends JPanel
 		return this.rect.x + this.rect.width;
 	}
 
-	public void setElm(CircuitElm ce)
+	public void setElement(CircuitElm ce)
 	{
-		this.elm = ce;
+		this.element = ce;
 		this.reset();
 	}
 
 	public void doTimeStep()
 	{
-		if (this.elm == null)
+		if (this.element == null)
 		{
 			return;
 		}
-		double v = this.elm.getScopeValue(this.value);
+		
+		double v = this.element.getScopeValue(this.value);
 		if (v < this.minV[this.ptr])
 		{
 			this.minV[this.ptr] = v;
@@ -199,7 +200,7 @@ public class Scope extends JPanel
 		double i = 0;
 		if (this.value == 0 || this.ivalue != 0)
 		{
-			i = this.ivalue == 0 ? this.elm.getCurrent() : this.elm.getScopeValue(this.ivalue);
+			i = this.ivalue == 0 ? this.element.getCurrent() : this.element.getScopeValue(this.ivalue);
 			if (i < this.minI[this.ptr])
 			{
 				this.minI[this.ptr] = i;
@@ -263,11 +264,11 @@ public class Scope extends JPanel
 		{
 			this.dpixels[x2 + this.rect.width * y2] = 1;
 		}
-		else if (CircuitElm.abs(y2 - this.draw_oy) > CircuitElm.abs(x2 - this.draw_ox))
+		else if (Math.abs(y2 - this.draw_oy) > Math.abs(x2 - this.draw_ox))
 		{
 			// y difference is greater, so we step along y's
 			// from min to max y and calculate x for each step
-			double sgn = CircuitElm.sign(y2 - this.draw_oy);
+			double sgn = CoreUtil.sign(y2 - this.draw_oy);
 			int x, y;
 			for (y = this.draw_oy; y != y2 + sgn; y += sgn)
 			{
@@ -279,7 +280,7 @@ public class Scope extends JPanel
 		{
 			// x difference is greater, so we step along x's
 			// from min to max x and calculate y for each step
-			double sgn = CircuitElm.sign(x2 - this.draw_ox);
+			double sgn = CoreUtil.sign(x2 - this.draw_ox);
 			int x, y;
 			for (x = this.draw_ox; x != x2 + sgn; x += sgn)
 			{
@@ -351,7 +352,7 @@ public class Scope extends JPanel
 
 	public void draw(Graphics g)
 	{
-		if (this.elm == null)
+		if (this.element == null)
 		{
 			return;
 		}
@@ -365,11 +366,13 @@ public class Scope extends JPanel
 			return;
 		}
 		int i;
-		int col = this.sim.printableCheckItem.getState() ? 0xFFFFFFFF : 0;
+		int color = this.sim.printableCheckItem.getState() ? 0xFFFFFFFF : 0;
+		
 		for (i = 0; i != this.pixels.length; i++)
 		{
-			this.pixels[i] = col;
+			this.pixels[i] = color;
 		}
+		
 		int x = 0;
 		int maxy = (this.rect.height - 1) / 2;
 		int y = maxy;
@@ -383,10 +386,13 @@ public class Scope extends JPanel
 		double realMinI = 1e8;
 		int curColor = 0xFFFFFF00;
 		int voltColor = this.value > 0 ? 0xFFFFFFFF : 0xFF00FF00;
-		if (this.sim.scopeSelected == -1 && this.elm == this.sim.mouseElm)
+		
+		if (this.sim.scopeSelected == -1 && this.element == this.sim.mouseElm)
 		{
-			curColor = voltColor = 0xFF00FFFF;
+			curColor = 0xFF00FFFF;
+			voltColor = 0xFF00FFFF;
 		}
+		
 		int ipa = this.ptr + this.scopePointCount - this.rect.width;
 		for (i = 0; i != this.rect.width; i++)
 		{
@@ -436,10 +442,10 @@ public class Scope extends JPanel
 			{
 				continue;
 			}
-			col = ll == 0 ? 0xFF909090 : 0xFF404040;
+			color = ll == 0 ? 0xFF909090 : 0xFF404040;
 			if (ll % 10 != 0)
 			{
-				col = 0xFF101010;
+				color = 0xFF101010;
 				if (!sublines)
 				{
 					continue;
@@ -447,7 +453,7 @@ public class Scope extends JPanel
 			}
 			for (i = 0; i != this.rect.width; i++)
 			{
-				this.pixels[i + yl * this.rect.width] = col;
+				this.pixels[i + yl * this.rect.width] = color;
 			}
 		}
 
@@ -476,20 +482,20 @@ public class Scope extends JPanel
 			{
 				continue;
 			}
-			col = 0xFF202020;
+			color = 0xFF202020;
 
 			if ((tl + gridStep / 4) % (gridStep * 10) < gridStep)
 			{
-				col = 0xFF909090;
+				color = 0xFF909090;
 				if ((tl + gridStep / 4) % (gridStep * 100) < gridStep)
 				{
-					col = 0xFF4040D0;
+					color = 0xFF4040D0;
 				}
 			}
 
 			for (i = 0; i < this.pixels.length; i += this.rect.width)
 			{
-				this.pixels[i + gx] = col;
+				this.pixels[i + gx] = color;
 			}
 		}
 
@@ -673,7 +679,7 @@ public class Scope extends JPanel
 		{
 			if (this.value != 0)
 			{
-				g.drawString(CoreUtil.getUnitText(realMaxV, this.elm.getScopeUnits(this.value)), x, yt);
+				g.drawString(CoreUtil.getUnitText(realMaxV, this.element.getScopeUnits(this.value)), x, yt);
 			}
 			else if (this.showV)
 			{
@@ -690,7 +696,7 @@ public class Scope extends JPanel
 			int ym = this.rect.y + this.rect.height - 5;
 			if (this.value != 0)
 			{
-				g.drawString(CoreUtil.getUnitText(realMinV, this.elm.getScopeUnits(this.value)), x, ym);
+				g.drawString(CoreUtil.getUnitText(realMinV, this.element.getScopeUnits(this.value)), x, ym);
 			}
 			else if (this.showV)
 			{
@@ -740,11 +746,11 @@ public class Scope extends JPanel
 
 	public PopupMenu getMenu()
 	{
-		if (this.elm == null)
+		if (this.element == null)
 		{
 			return null;
 		}
-		if (this.elm instanceof TransistorElm)
+		if (this.element instanceof TransistorElm)
 		{
 			this.sim.scopeIbMenuItem.setState(this.value == Scope.VAL_IB);
 			this.sim.scopeIcMenuItem.setState(this.value == Scope.VAL_IC);
@@ -767,7 +773,7 @@ public class Scope extends JPanel
 			this.sim.scopeXYMenuItem.setState(this.plotXY);
 			this.sim.scopeSelectYMenuItem.setEnabled(this.plotXY);
 			this.sim.scopeResistMenuItem.setState(this.value == Scope.VAL_R);
-			this.sim.scopeResistMenuItem.setEnabled(this.elm instanceof MemristorElm);
+			this.sim.scopeResistMenuItem.setEnabled(this.element instanceof MemristorElm);
 			return this.sim.scopeMenu;
 		}
 	}
@@ -780,7 +786,7 @@ public class Scope extends JPanel
 
 	public String dump()
 	{
-		if (this.elm == null)
+		if (this.element == null)
 		{
 			return null;
 		}
@@ -789,7 +795,7 @@ public class Scope extends JPanel
 				(this.showFreq ? 8 : 0) | (this.lockScale ? 16 : 0) | (this.plot2d ? 64 : 0) | (this.plotXY ? 128 : 0)
 				| (this.showMin ? 256 : 0);
 		flags |= Scope.FLAG_YELM; // yelm present
-		int eno = this.sim.circuit.locateElement(this.elm);
+		int eno = this.sim.circuit.locateElement(this.element);
 		if (eno < 0)
 		{
 			return null;
@@ -812,7 +818,7 @@ public class Scope extends JPanel
 		{
 			return;
 		}
-		this.elm = this.sim.circuit.getElement(e);
+		this.element = this.sim.circuit.getElement(e);
 		this.speed = new Integer(st.nextToken()).intValue();
 		this.value = new Integer(st.nextToken()).intValue();
 		int flags = new Integer(st.nextToken()).intValue();
@@ -985,10 +991,10 @@ public class Scope extends JPanel
 
 	public void select()
 	{
-		this.sim.mouseElm = this.elm;
+		this.sim.mouseElm = this.element;
 		if (this.plotXY)
 		{
-			this.sim.plotXElm = this.elm;
+			this.sim.plotXElm = this.element;
 			this.sim.plotYElm = this.yElm;
 		}
 	}
@@ -1002,7 +1008,7 @@ public class Scope extends JPanel
 			for (e++; e < this.sim.circuit.getElementCount(); e++)
 			{
 				CircuitElm ce = this.sim.circuit.getElement(e);
-				if ((ce instanceof OutputElm || ce instanceof ProbeElm) && ce != this.elm)
+				if ((ce instanceof OutputElm || ce instanceof ProbeElm) && ce != this.element)
 				{
 					this.yElm = ce;
 					return;

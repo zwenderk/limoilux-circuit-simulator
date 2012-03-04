@@ -122,12 +122,12 @@ public class ScopeManager
 		int pos = -1;
 		for (int i = 0; i < this.scopeCount; i++)
 		{
-			if (this.circuit.locateElement(this.scopes[i].elm) < 0)
+			if (this.circuit.locateElement(this.scopes[i].element) < 0)
 			{
-				this.scopes[i].setElm(null);
+				this.scopes[i].setElement(null);
 			}
 
-			if (this.scopes[i].elm == null)
+			if (this.scopes[i].element == null)
 			{
 
 				for (int j = i; j != this.scopeCount; j++)
@@ -147,7 +147,7 @@ public class ScopeManager
 			pos = this.scopes[i].position;
 		}
 
-		while (this.scopeCount > 0 && this.scopes[this.scopeCount - 1].elm == null)
+		while (this.scopeCount > 0 && this.scopes[this.scopeCount - 1].element == null)
 		{
 			this.scopeCount--;
 		}
