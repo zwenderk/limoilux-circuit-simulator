@@ -170,7 +170,7 @@ public class ScopeManager
 		
 		this.removeUnused();
 
-		int height = winSize.height - this.circuit.circuitArea.height;
+		int height =  winSize.height - this.circuit.circuitArea.height;
 
 		for (int i = 0; i < this.scopeCount; i++)
 		{
@@ -222,7 +222,8 @@ public class ScopeManager
 				scope.resetGraph();
 			}
 
-			rect = new Rectangle(position * width, winSize.height - height + colh * row, width - MARGIN, colh);
+			rect = new Rectangle(position * width, 0, width - MARGIN, colh);
+			//winSize.height - height + colh * row
 			row++;
 			if (!rect.equals(scope.rect))
 			{

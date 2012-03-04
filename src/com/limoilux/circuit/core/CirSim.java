@@ -89,8 +89,8 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	private static final int MODE_ADD_ELM = 0;
 	private static final int MODE_DRAG_ALL = 1;
 
-	private static final int MODE_DRAG_SELECTED = 4;
-	private static final int MODE_DRAG_POST = 5;
+	public static final int MODE_DRAG_SELECTED = 4;
+	public static final int MODE_DRAG_POST = 5;
 	private static final int MODE_SELECT = 6;
 
 	private static final int PAUSE = 10;
@@ -125,7 +125,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	public CircuitElm plotXElm;
 	public CircuitElm plotYElm;
 
-	private int mousePost = -1;
+	public int mousePost = -1;
 	private int draggingPost;
 	private SwitchElm heldSwitchElm;
 
@@ -133,7 +133,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 	private int dragX, dragY, initDragX, initDragY;
 
-	private Rectangle selectedArea;
+	public Rectangle selectedArea;
 
 	public int gridSize, gridMask, gridRound;
 
@@ -144,8 +144,12 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 	public int scopeSelected = -1;
 	private int menuScope = -1;
-	private int hintType = -1, hintItem1, hintItem2;
-	private String stopMessage;
+	public int hintType = -1;
+
+	private int hintItem1;
+
+	private int hintItem2;
+	public String stopMessage;
 
 	private String clipboard;
 	private Vector<String> undoStack, redoStack;
@@ -167,9 +171,9 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	public CheckboxMenuItem printableCheckItem;
 	public CheckboxMenuItem conventionCheckItem;
 	private JScrollBar speedBar;
-	private JScrollBar currentBar;
+	public JScrollBar currentBar;
 	private Label powerLabel;
-	private Scrollbar powerBar;
+	public Scrollbar powerBar;
 	private PopupMenu elementsPopUp;
 	private MenuItem elmEditMenuItem;
 	private MenuItem elmCutMenuItem;
@@ -198,7 +202,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	public MenuItem scopeSelectYMenuItem;
 	private Class<?> addingClass;
 	public int mouseMode = CirSim.MODE_SELECT;
-	private int tempMouseMode = CirSim.MODE_SELECT;
+	public int tempMouseMode = CirSim.MODE_SELECT;
 	private String mouseModeStr = "Select";
 
 	public JButton playButton;
@@ -267,6 +271,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 
 		// Add Listener
 		this.circuitPanel.addComponentListener(this);
+		this.scopeMan.scopePane.addComponentListener(this);
 		this.circuitPanel.addMouseMotionListener(this.mouseMotionList);
 		this.circuitPanel.addMouseListener(this.mouseList);
 		this.circuitPanel.addKeyListener(this.keyList);
@@ -369,7 +374,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			{
 				e.printStackTrace();
 				this.circuit.setNeedAnalysis(true);
-				this.circuitPanel.repaint();
+				panel.repaint();
 
 				return;
 			}
@@ -609,7 +614,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.timer.nextCycle();
 	}
 
-	private void runCircuit() throws CircuitAnalysisException
+	public void runCircuit() throws CircuitAnalysisException
 	{
 		if (this.circuit.isEmpty())
 		{
@@ -1252,7 +1257,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		}
 	}
 
-	private String getHint()
+	public String getHint()
 	{
 		CircuitElm c1 = this.circuit.getElementAt(this.hintItem1);
 		CircuitElm c2 = this.circuit.getElementAt(this.hintItem2);
@@ -1383,7 +1388,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		this.handleAnalysisException(new CircuitAnalysisException(msg, ce));
 	}
 
-	private void handleAnalysisException(CircuitAnalysisException e)
+	public void handleAnalysisException(CircuitAnalysisException e)
 	{
 		this.circuit.matrix.clear();
 
@@ -1712,6 +1717,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		}
 
 		this.circuitPanel.repaint();
+		this.scopeMan.scopePane.repaint();
 
 		int p;
 		for (p = 0; p < len;)
@@ -2401,6 +2407,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	{
 		this.handleResize();
 		this.circuitPanel.repaint(100);
+		this.scopeMan.scopePane.repaint(100);
 	}
 
 	@Override
@@ -2425,6 +2432,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 			this.timer.time = 0;
 			this.activityManager.setPlaying(true);
 			this.circuitPanel.repaint();
+			this.scopeMan.scopePane.repaint();
 		}
 
 		if (e.getSource() == this.exportItem)
@@ -3088,7 +3096,6 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 				CirSim.this.circuit.setNeedAnalysis(true);
 				CirSim.this.circuitPanel.repaint();
 			}
-
 		}
 
 	}
