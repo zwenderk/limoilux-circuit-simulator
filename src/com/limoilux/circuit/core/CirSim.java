@@ -69,7 +69,6 @@ import com.limoilux.circuit.ui.EditDialog;
 import com.limoilux.circuit.ui.EditOptions;
 import com.limoilux.circuit.ui.io.MigrationWizard;
 import com.limoilux.circuit.ui.scope.Scope;
-import com.limoilux.circuit.ui.scope.ScopeManager;
 
 /**
  * For information about the theory behind this, see Electronic Circuit & System
@@ -212,8 +211,12 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 	private final KeyListener keyList;
 
 	public final Timer timer;
+
 	public final Circuit circuit;
+
 	public final ScopeManager scopeMan;
+	public final CircuitManager circuitMan;
+	
 	public final CircuitPane circuitPanel;
 
 	public final CircuitFrame cirFrame;
@@ -232,6 +235,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 		this.timer = new Timer();
 		this.circuit = new Circuit();
+		this.circuitMan = new CircuitManager(this.circuit);
 
 		this.activityManager = new ActivityManager();
 		this.activityListener = new ActivityList();

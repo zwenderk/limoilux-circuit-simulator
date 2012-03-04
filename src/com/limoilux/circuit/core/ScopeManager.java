@@ -1,12 +1,13 @@
 
-package com.limoilux.circuit.ui.scope;
+package com.limoilux.circuit.core;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-import com.limoilux.circuit.core.CirSim;
 import com.limoilux.circuit.techno.Circuit;
+import com.limoilux.circuit.ui.scope.Scope;
+import com.limoilux.circuit.ui.scope.ScopePane;
 
 public class ScopeManager
 {
