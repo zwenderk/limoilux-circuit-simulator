@@ -12,6 +12,11 @@ public class Timer
 	private long lastFrameTime;
 	public long lastIterTime;
 	public long secTime = 0;
+	
+	public Timer()
+	{
+		
+	}
 
 	public long calculateDelay()
 	{
