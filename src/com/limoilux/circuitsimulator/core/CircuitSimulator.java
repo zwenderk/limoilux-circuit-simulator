@@ -144,12 +144,9 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	private int hintType = -1, hintItem1, hintItem2;
 	private String stopMessage;
 
-
 	private Label titleLabel;
 	private JButton resetButton;
-	private MenuItem exportItem, importItem, exitItem,  cutItem, copyItem, pasteItem, selectAllItem,
-			optionsItem;
-	
+	private MenuItem exportItem, importItem, exitItem, cutItem, copyItem, pasteItem, selectAllItem, optionsItem;
 
 	private Menu optionsMenu;
 
@@ -210,9 +207,9 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	public final ScopeManager scopeMan;
 	public final CircuitManager circuitMan;
-	
+
 	public final CircuitPane circuitPanel;
-	
+
 	public final Clipboard clipboard;
 
 	public final CoreWindow cirFrame;
@@ -225,12 +222,11 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	private CircuitSimulator()
 	{
 		super();
-		
+
 		this.clipboard = new Clipboard();
 
 		// this.mainContainer.setLayout(new BorderLayout());
 		this.circuitPanel = new CircuitPane(this);
-
 
 		this.circuitMan = new CircuitManager(this.circuitPanel);
 		this.circuit = this.circuitMan.getCircuit();
@@ -299,7 +295,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.cirFrame.add(this.toolBar, BorderLayout.NORTH);
 
 		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
-		//this.mainContainer.add(this.scopeMan.getScopePane(), BorderLayout.SOUTH);
+		// this.mainContainer.add(this.scopeMan.getScopePane(),
+		// BorderLayout.SOUTH);
 
 	}
 
@@ -308,7 +305,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		if (!(this.winSize == null || this.winSize.width == 0))
 		{
 			this.prepareRepaint();
-			
 
 			this.scopeMan.setupScopes(this.winSize);
 
@@ -395,8 +391,10 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	{
 		int i;
 
-		if (this.tempMouseMode == CircuitSimulator.MODE_DRAG_ROW || this.tempMouseMode == CircuitSimulator.MODE_DRAG_COLUMN
-				|| this.tempMouseMode == CircuitSimulator.MODE_DRAG_POST || this.tempMouseMode == CircuitSimulator.MODE_DRAG_SELECTED)
+		if (this.tempMouseMode == CircuitSimulator.MODE_DRAG_ROW
+				|| this.tempMouseMode == CircuitSimulator.MODE_DRAG_COLUMN
+				|| this.tempMouseMode == CircuitSimulator.MODE_DRAG_POST
+				|| this.tempMouseMode == CircuitSimulator.MODE_DRAG_SELECTED)
 		{
 			for (i = 0; i != this.circuit.getElementCount(); i++)
 			{
@@ -894,16 +892,20 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		m = new Menu("Edit");
 		m.add(this.clipboard.undoItem = this.getMenuItem("Undo"));
 		this.clipboard.undoItem.setShortcut(new MenuShortcut(KeyEvent.VK_Z));
+
 		m.add(this.clipboard.redoItem = this.getMenuItem("Redo"));
 		this.clipboard.redoItem.setShortcut(new MenuShortcut(KeyEvent.VK_Z, true));
+
 		m.addSeparator();
 		m.add(this.cutItem = this.getMenuItem("Cut"));
 		this.cutItem.setShortcut(new MenuShortcut(KeyEvent.VK_X));
 		m.add(this.copyItem = this.getMenuItem("Copy"));
 		this.copyItem.setShortcut(new MenuShortcut(KeyEvent.VK_C));
-		m.add(this.pasteItem = this.getMenuItem("Paste"));
-		this.pasteItem.setShortcut(new MenuShortcut(KeyEvent.VK_V));
-		this.pasteItem.setEnabled(false);
+
+		m.add(this.clipboard.pasteItem = this.getMenuItem("Paste"));
+		this.clipboard.pasteItem.setShortcut(new MenuShortcut(KeyEvent.VK_V));
+		this.clipboard.pasteItem.setEnabled(false);
+
 		m.add(this.selectAllItem = this.getMenuItem("Select All"));
 		this.selectAllItem.setShortcut(new MenuShortcut(KeyEvent.VK_A));
 
@@ -1192,7 +1194,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	{
 		Class<?> dumpClass = null;
 		int elementId = elm.getElementId();
-		
+
 		if (elementId == 0)
 		{
 			System.out.println("no dump type: " + c);
@@ -1261,7 +1263,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			InductorElm ie = (InductorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
 			return "res.f = "
-					+ CoreUtil.getUnitText(1 / (2 * CircuitSimulator.PI * Math.sqrt(ie.inductance * ce.capacitance)), "Hz");
+					+ CoreUtil.getUnitText(1 / (2 * CircuitSimulator.PI * Math.sqrt(ie.inductance * ce.capacitance)),
+							"Hz");
 		}
 		if (this.hintType == CircuitSimulator.HINT_RC)
 		{
@@ -1289,7 +1292,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			}
 			ResistorElm re = (ResistorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
-			return "f.3db = " + CoreUtil.getUnitText(1 / (2 * CircuitSimulator.PI * re.resistance * ce.capacitance), "Hz");
+			return "f.3db = "
+					+ CoreUtil.getUnitText(1 / (2 * CircuitSimulator.PI * re.resistance * ce.capacitance), "Hz");
 		}
 		if (this.hintType == CircuitSimulator.HINT_3DB_L)
 		{
@@ -1484,7 +1488,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	private String dumpCircuit()
 	{
 		String dump = "";
-		String tempDump = "";
 
 		int f = 0;
 
@@ -1533,14 +1536,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		dump += this.circuit.createDump();
 
-		for (int i = 0; i < this.scopeMan.scopeCount; i++)
-		{
-			tempDump = this.scopeMan.scopes[i].dump();
-			if (tempDump != null)
-			{
-				dump += tempDump + "\n";
-			}
-		}
+		dump += this.scopeMan.createDump();
 
 		if (this.hintType != -1)
 		{
@@ -2130,7 +2126,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			return;
 		}
 		this.clipboard.undoStack.add(s);
-		this.enableUndoRedo();
+		this.clipboard.enableUndoRedo();
 	}
 
 	private void doUndo()
@@ -2140,7 +2136,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.clipboard.redoStack.add(this.dumpCircuit());
 			String s = this.clipboard.undoStack.remove(this.clipboard.undoStack.size() - 1);
 			this.readSetup(s);
-			this.enableUndoRedo();
+			this.clipboard.enableUndoRedo();
 		}
 	}
 
@@ -2154,7 +2150,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			String s = this.clipboard.redoStack.remove(this.clipboard.redoStack.size() - 1);
 
 			this.readSetup(s);
-			this.enableUndoRedo();
+			this.clipboard.enableUndoRedo();
 		}
 
 	}
@@ -2167,15 +2163,11 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void setMenuSelection()
 	{
-		if (this.menuElm != null)
+		if (this.menuElm != null && !this.menuElm.selected)
 		{
-			if (this.menuElm.selected)
-			{
-				return;
-			}
-
 			this.circuit.clearSelection();
 			this.menuElm.setSelected(true);
+
 		}
 	}
 
@@ -2183,21 +2175,21 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	{
 		this.pushUndo();
 		this.setMenuSelection();
-		this.clipboard.clipboard = "";
+		this.clipboard.cache = "";
 
 		for (int i = this.circuit.getElementCount() - 1; i >= 0; i--)
 		{
 			CircuitElm ce = this.circuit.getElementAt(i);
 			if (ce.isSelected())
 			{
-				this.clipboard.clipboard += ce.dump() + "\n";
+				this.clipboard.cache += ce.dump() + "\n";
 				ce.delete();
 				this.circuit.removeElementAt(i);
 			}
 		}
 		this.enablePaste();
-		
-		this.needAnalyze();
+
+		this.circuit.setNeedAnalysis(true);
 	}
 
 	private void doDelete()
@@ -2215,29 +2207,30 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			}
 		}
 
-		this.needAnalyze();
+		this.circuit.setNeedAnalysis(true);
 	}
 
 	private void doCopy()
 	{
-		this.clipboard.clipboard = "";
+		this.clipboard.cache = "";
 		this.setMenuSelection();
 		for (int i = this.circuit.getElementCount() - 1; i >= 0; i--)
 		{
 			CircuitElm ce = this.circuit.getElementAt(i);
 			if (ce.isSelected())
 			{
-				this.clipboard.clipboard += ce.dump() + "\n";
+				this.clipboard.cache += ce.dump() + "\n";
 			}
 
 		}
 
-		this.enablePaste();
+		this.clipboard.enablePaste();
 	}
 
+	@Deprecated
 	private void enablePaste()
 	{
-		this.pasteItem.setEnabled(this.clipboard.clipboard.length() > 0);
+		this.clipboard.enablePaste();
 	}
 
 	private void doPaste()
@@ -2260,7 +2253,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			}
 		}
 		int oldsz = this.circuit.getElementCount();
-		this.readSetup(this.clipboard.clipboard, true);
+		this.readSetup(this.clipboard.cache, true);
 
 		// select new items
 		Rectangle newbb = null;
@@ -2307,12 +2300,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		}
 		this.needAnalyze();
 
-	}
-
-	@Deprecated
-	private void clearSelection()
-	{
-		this.circuit.clearSelection();
 	}
 
 	@Override
@@ -2647,7 +2634,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		{
 			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0)
 			{
-				if (CircuitSimulator.this.mouseMode == CircuitSimulator.MODE_SELECT || CircuitSimulator.this.mouseMode == CircuitSimulator.MODE_DRAG_SELECTED)
+				if (CircuitSimulator.this.mouseMode == CircuitSimulator.MODE_SELECT
+						|| CircuitSimulator.this.mouseMode == CircuitSimulator.MODE_DRAG_SELECTED)
 				{
 					CircuitSimulator.this.circuit.clearSelection();
 				}
@@ -2739,7 +2727,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			CircuitSimulator.this.initDragX = x;
 			CircuitSimulator.this.initDragY = y;
 
-			if (CircuitSimulator.this.tempMouseMode != CircuitSimulator.MODE_ADD_ELM || CircuitSimulator.this.addingClass == null)
+			if (CircuitSimulator.this.tempMouseMode != CircuitSimulator.MODE_ADD_ELM
+					|| CircuitSimulator.this.addingClass == null)
 			{
 				return;
 			}
@@ -2752,7 +2741,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 				return;
 			}
 
-			CircuitSimulator.this.dragElm = CircuitSimulator.constructElement(CircuitSimulator.this.addingClass, x0, y0);
+			CircuitSimulator.this.dragElm = CircuitSimulator
+					.constructElement(CircuitSimulator.this.addingClass, x0, y0);
 		}
 
 		@Override
@@ -2781,7 +2771,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			if (CircuitSimulator.this.dragElm != null)
 			{
 				// if the element is zero size then don't create it
-				if (CircuitSimulator.this.dragElm.x == CircuitSimulator.this.dragElm.x2 && CircuitSimulator.this.dragElm.y == CircuitSimulator.this.dragElm.y2)
+				if (CircuitSimulator.this.dragElm.x == CircuitSimulator.this.dragElm.x2
+						&& CircuitSimulator.this.dragElm.y == CircuitSimulator.this.dragElm.y2)
 				{
 					CircuitSimulator.this.dragElm.delete();
 				}
@@ -2840,18 +2831,22 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			switch (CircuitSimulator.this.tempMouseMode)
 			{
 			case MODE_DRAG_ALL:
-				CircuitSimulator.this.dragAll(CircuitSimulator.this.snapGrid(e.getX()), CircuitSimulator.this.snapGrid(e.getY()));
+				CircuitSimulator.this.dragAll(CircuitSimulator.this.snapGrid(e.getX()),
+						CircuitSimulator.this.snapGrid(e.getY()));
 				break;
 			case MODE_DRAG_ROW:
-				CircuitSimulator.this.dragRow(CircuitSimulator.this.snapGrid(e.getX()), CircuitSimulator.this.snapGrid(e.getY()));
+				CircuitSimulator.this.dragRow(CircuitSimulator.this.snapGrid(e.getX()),
+						CircuitSimulator.this.snapGrid(e.getY()));
 				break;
 			case MODE_DRAG_COLUMN:
-				CircuitSimulator.this.dragColumn(CircuitSimulator.this.snapGrid(e.getX()), CircuitSimulator.this.snapGrid(e.getY()));
+				CircuitSimulator.this.dragColumn(CircuitSimulator.this.snapGrid(e.getX()),
+						CircuitSimulator.this.snapGrid(e.getY()));
 				break;
 			case MODE_DRAG_POST:
 				if (CircuitSimulator.this.mouseElm != null)
 				{
-					CircuitSimulator.this.dragPost(CircuitSimulator.this.snapGrid(e.getX()), CircuitSimulator.this.snapGrid(e.getY()));
+					CircuitSimulator.this.dragPost(CircuitSimulator.this.snapGrid(e.getX()),
+							CircuitSimulator.this.snapGrid(e.getY()));
 				}
 				break;
 			case MODE_SELECT:
@@ -2872,7 +2867,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 			if (success)
 			{
-				if (CircuitSimulator.this.tempMouseMode == CircuitSimulator.MODE_DRAG_SELECTED && CircuitSimulator.this.mouseElm instanceof TextElm)
+				if (CircuitSimulator.this.tempMouseMode == CircuitSimulator.MODE_DRAG_SELECTED
+						&& CircuitSimulator.this.mouseElm instanceof TextElm)
 				{
 					CircuitSimulator.this.dragX = e.getX();
 					CircuitSimulator.this.dragY = e.getY();
