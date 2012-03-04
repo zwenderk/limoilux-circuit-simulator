@@ -2410,9 +2410,7 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 	{
 		this.handleResize();
 		
-		this.repaint();
 		this.repaint(100);
-		this.scopeMan.scopePane.repaint(100);
 	}
 
 	@Override
