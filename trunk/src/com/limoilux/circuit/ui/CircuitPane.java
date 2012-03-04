@@ -34,7 +34,11 @@ public class CircuitPane extends Panel
 	{
 		super.update(g);
 		this.updateCircuit(g);
-
+	}
+	
+	public void preUpdate()
+	{
+		
 	}
 
 	public void updateCircuit(Graphics realg)
@@ -42,35 +46,10 @@ public class CircuitPane extends Panel
 		Graphics g = null;
 		CircuitElm realMouseElm;
 
-		if (this.cirSim.mouseElm == null)
-		{
-			this.cirSim.mouseElm = this.cirSim.stopElm;
-		}
-
 		g = this.circuitImage.getGraphics();
 		g.setColor(Color.black);
 
 		g.fillRect(0, 0, this.cirSim.winSize.width, this.cirSim.winSize.height);
-
-		if (this.cirSim.activityManager.isPlaying())
-		{
-			try
-			{
-				this.cirSim.runCircuit();
-			}
-			catch (CircuitAnalysisException e)
-			{
-				this.cirSim.handleAnalysisException(e);
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				this.cirSim.circuit.setNeedAnalysis(true);
-				this.repaint();
-
-				return;
-			}
-		}
 
 		if (this.cirSim.activityManager.isPlaying())
 		{

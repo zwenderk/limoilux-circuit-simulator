@@ -2428,9 +2428,42 @@ public class CirSim implements ComponentListener, ActionListener, AdjustmentList
 		{
 			this.mouseElm = (CircuitElm) CirSim.editDialog.elm;
 		}
+
+		if (this.mouseElm == null)
+		{
+			this.mouseElm = this.stopElm;
+		}
 		
-		this.circuitPanel.repaint(time);
-		this.scopeMan.scopePane.repaint(time);
+		this.scopeMan.setupScopes(this.winSize);
+		
+		if (this.activityManager.isPlaying())
+		{
+			try
+			{
+				this.runCircuit();
+			}
+			catch (CircuitAnalysisException e)
+			{
+				this.handleAnalysisException(e);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				this.circuit.setNeedAnalysis(true);
+				
+				this.circuitPanel.repaint();
+				
+				this.scopeMan.scopePane.repaint();
+
+				return;
+			}
+		}
+
+		
+		// Repaindre
+		this.scopeMan.scopePane.repaint();
+		this.circuitPanel.repaint();
+
 		
 
 		this.timer.nextCycle();
