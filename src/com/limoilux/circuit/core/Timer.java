@@ -29,7 +29,7 @@ public class Timer
 	{
 		this.lastFrameTime = this.lastTime;
 	}
-	
+
 	public void reset()
 	{
 		this.lastTime = 0;

@@ -187,7 +187,7 @@ public class Scope extends JPanel
 		{
 			return;
 		}
-		
+
 		double v = this.element.getScopeValue(this.value);
 		if (v < this.minV[this.ptr])
 		{
@@ -367,12 +367,12 @@ public class Scope extends JPanel
 		}
 		int i;
 		int color = this.sim.printableCheckItem.getState() ? 0xFFFFFFFF : 0;
-		
+
 		for (i = 0; i != this.pixels.length; i++)
 		{
 			this.pixels[i] = color;
 		}
-		
+
 		int x = 0;
 		int maxy = (this.rect.height - 1) / 2;
 		int y = maxy;
@@ -386,13 +386,13 @@ public class Scope extends JPanel
 		double realMinI = 1e8;
 		int curColor = 0xFFFFFF00;
 		int voltColor = this.value > 0 ? 0xFFFFFFFF : 0xFF00FF00;
-		
+
 		if (this.sim.scopeSelected == -1 && this.element == this.sim.mouseElm)
 		{
 			curColor = 0xFF00FFFF;
 			voltColor = 0xFF00FFFF;
 		}
-		
+
 		int ipa = this.ptr + this.scopePointCount - this.rect.width;
 		for (i = 0; i != this.rect.width; i++)
 		{

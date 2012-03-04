@@ -28,7 +28,7 @@ public abstract class CircuitElm implements Editable
 	public static final Color LIGHT_GRAY_COLOR = Color.lightGray;
 
 	public static double voltageRange = 5;
-	
+
 	public static double powerMult;
 
 	public static final Point ps1 = new Point();
@@ -43,7 +43,7 @@ public abstract class CircuitElm implements Editable
 	public static NumberFormat noCommaFormat;
 
 	public Rectangle boundingBox;
-	
+
 	static Color[] colorScale;
 
 	public Point point1;
@@ -479,7 +479,6 @@ public abstract class CircuitElm implements Editable
 		double segf = 1. / segments;
 		double cx;
 		double hsx;
-		
 
 		CircuitElm.ps1.setLocation(p1);
 		for (int i = 0; i != segments; i++)
@@ -500,7 +499,7 @@ public abstract class CircuitElm implements Editable
 
 	public void updateDotCount()
 	{
-		this.curcount = CoreUtil.updateDotCount(this.current, this.curcount, cirSim.currentMultiplier);
+		this.curcount = CoreUtil.updateDotCount(this.current, this.curcount, CircuitElm.cirSim.currentMultiplier);
 	}
 
 	public void doDots(Graphics g)
@@ -664,7 +663,7 @@ public abstract class CircuitElm implements Editable
 	public static void drawThickLine(Graphics g, Point pa, Point pb)
 	{
 		DrawUtil.drawThickLine(g, pa, pb);
-	
+
 	}
 
 	@Deprecated
@@ -724,7 +723,7 @@ public abstract class CircuitElm implements Editable
 	@Deprecated
 	public static double updateDotCount(double cur, double cc)
 	{
-		return CoreUtil.updateDotCount(cur, cc, cirSim.currentMultiplier);
+		return CoreUtil.updateDotCount(cur, cc, CircuitElm.cirSim.currentMultiplier);
 	}
 
 	@Deprecated

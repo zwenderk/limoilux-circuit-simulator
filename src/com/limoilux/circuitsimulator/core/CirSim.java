@@ -7,7 +7,6 @@ import java.awt.BorderLayout;
 import java.awt.CheckboxMenuItem;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Label;
@@ -21,8 +20,6 @@ import java.awt.Rectangle;
 import java.awt.Scrollbar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
@@ -36,7 +33,6 @@ import java.awt.event.MouseMotionListener;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.StringTokenizer;
@@ -219,7 +215,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 	public final ScopeManager scopeMan;
 	public final CircuitManager circuitMan;
-	
+
 	public final CircuitPane circuitPanel;
 
 	public final CircuitFrame cirFrame;
@@ -239,13 +235,12 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		this.circuit = new Circuit();
 		this.circuitMan = new CircuitManager(this.circuit, this.circuitPanel);
 		this.scopeMan = new ScopeManager(this.circuit);
-		
+
 		this.timer = new Timer();
-		
+
 		this.activityManager = new ActivityManager();
 		this.activityListener = new ActivityList();
 		this.activityManager.addActivityListener(this.activityListener);
-
 
 		this.cirFrame = new CircuitFrame();
 
@@ -293,7 +288,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 		this.undoStack = new Vector<String>();
 		this.redoStack = new Vector<String>();
-
 
 		this.initPopupMenu();
 
@@ -544,7 +538,9 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			{
 
 				for (nbInfo = 0; info[nbInfo] != null; nbInfo++)
+				{
 					;
+				}
 
 				String s = this.getHint();
 				if (s == null)
@@ -574,7 +570,9 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 			// count lines of data
 			for (nbInfo = 0; info[nbInfo] != null; nbInfo++)
+			{
 				;
+			}
 
 			if (badnodes > 0)
 			{
@@ -1179,7 +1177,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			e.printStackTrace();
 		}
 
-		element = this.constructElement(classPath, 0, 0);
+		element = CirSim.constructElement(classPath, 0, 0);
 
 		this.register(classPath, element);
 
@@ -2632,7 +2630,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				}
 
 				CircuitElm elm = null;
-				elm = CirSim.this.constructElement(c, 0, 0);
+				elm = CirSim.constructElement(c, 0, 0);
 				if (elm == null || !(elm.needsShortcut() && elm.getDumpClass() == c))
 				{
 					return;
@@ -2766,7 +2764,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				return;
 			}
 
-			CirSim.this.dragElm = CirSim.this.constructElement(CirSim.this.addingClass, x0, y0);
+			CirSim.this.dragElm = CirSim.constructElement(CirSim.this.addingClass, x0, y0);
 		}
 
 		@Override

@@ -2,14 +2,12 @@
 package com.limoilux.circuitsimulator.core;
 
 import java.awt.BorderLayout;
-import java.awt.Graphics;
 
 import javax.swing.JFrame;
 
 public class CircuitFrame extends JFrame
 {
 	private static final long serialVersionUID = 2501086205361457967L;
-
 
 	public CircuitFrame()
 	{
