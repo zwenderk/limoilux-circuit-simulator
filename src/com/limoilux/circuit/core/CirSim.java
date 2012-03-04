@@ -304,6 +304,11 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 	}
 
+	private void prepareRepaint()
+	{
+
+	}
+
 	public void updateCircuit(Graphics realg)
 	{
 		Graphics g = null;
@@ -580,26 +585,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 		realg.drawImage(this.dbimage, 0, 0, this.cirFrame);
 
-		if (this.activityManager.isPlaying() && !this.circuit.matrix.matrixIsNull())
-		{
-
-			long delay = this.timer.calculateDelay();
-
-			if (delay > 0)
-			{
-				try
-				{
-					Thread.sleep(delay);
-				}
-				catch (InterruptedException e)
-				{
-				}
-			}
-
-			this.circuitPanel.repaint();
-		}
-
-		this.timer.nextCycle();
 	}
 
 	private void runCircuit() throws CircuitAnalysisException
@@ -775,7 +760,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		this.handleResize();
 
 		this.cirFrame.requestFocus();
-		
+
 		Thread t = new Thread(new RepaintRun());
 		t.start();
 
@@ -1245,7 +1230,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 			this.circuit.centerCircuit(this.gridMask, this.circuit.circuitArea);
 
-
 			this.circuit.setCircuitBottom(0);
 		}
 	}
@@ -1703,8 +1687,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			CircuitElm.voltageRange = 5;
 			this.scopeMan.scopeCount = 0;
 		}
-
-
 
 		int p;
 		for (p = 0; p < len;)
@@ -2572,7 +2554,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 
 	@Override
 	public void itemStateChanged(ItemEvent e)
-	{ 
+	{
 		Object mi = e.getItemSelectable();
 
 		if (mi == this.smallGridCheckItem)
@@ -2862,7 +2844,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			}
 
 			CirSim.this.dragElm = null;
-			CirSim.this.circuitPanel.repaint();
 		}
 
 	}
@@ -3050,7 +3031,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				}
 			}
 
-
 		}
 	}
 
@@ -3063,32 +3043,41 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			{
 				CirSim.this.circuit.setNeedAnalysis(true);
 			}
-
 		}
-
 	}
-	
+
 	private class RepaintRun implements Runnable
 	{
 		@Override
 		public void run()
 		{
-			while(true)
+			long delay = 0;
+
+			while (true)
 			{
+
+				delay = CirSim.this.timer.calculateDelay();
+				
+				CirSim.this.prepareRepaint();
+
 				CirSim.this.circuitPanel.repaint();
-				
-				try
+
+				if (delay > 0)
 				{
-					Thread.sleep(100);
+					try
+					{
+						Thread.sleep(delay);
+					}
+					catch (InterruptedException e)
+					{
+					}
 				}
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-				
+
+				CirSim.this.timer.nextCycle();
+
 			}
 		}
-		
+
 	}
 
 	public static void main(String args[])
