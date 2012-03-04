@@ -3074,10 +3074,8 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				}
 
 				CirSim.this.timer.nextCycle();
-
 			}
 		}
-
 	}
 
 	public static void main(String args[])
