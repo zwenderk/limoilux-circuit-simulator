@@ -94,7 +94,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 	private static final int MODE_SELECT = 6;
 
 	private static final int PAUSE = 10;
-	
+
 	public double currentMultiplier;
 
 	private static final int HINT_LC = 1;
@@ -306,23 +306,23 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		this.mainContainer.add(this.scopeMan.getScopePane(), BorderLayout.SOUTH);
 
 	}
-	
+
 	private long repaint()
 	{
 		if (!(this.winSize == null || this.winSize.width == 0))
 		{
 			this.prepareRepaint();
-			
+
 			this.circuitPanel.repaint();
 		}
-		
+
 		return this.timer.calculateDelay();
-		
+
 	}
 
 	private void prepareRepaint()
 	{
-		
+
 		// Analyser le circuit si nessaire.
 		if (this.circuit.needAnalysis())
 		{
@@ -341,66 +341,35 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		}
 	}
 
-	public void updateCircuit(Graphics realg) throws Exception
+	private void runCurrent()
 	{
-		Graphics g = null;
-		CircuitElm realMouseElm;
+		long sysTime = System.currentTimeMillis();
 
-		if (CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElm)
-		{
-			this.mouseElm = (CircuitElm) CirSim.editDialog.elm;
-		}
-
-		realMouseElm = this.mouseElm;
-		if (this.mouseElm == null)
-		{
-			this.mouseElm = this.stopElm;
-		}
-
-		this.scopeMan.setupScopes(this.winSize);
-
-		g = this.dbimage.getGraphics();
-		g.setColor(Color.black);
-
-		g.fillRect(0, 0, this.winSize.width, this.winSize.height);
-
-		if (this.activityManager.isPlaying())
+		if (this.timer.lastTime != 0)
 		{
 
-				this.runCircuit();
-	
-		}
-
-		if (this.activityManager.isPlaying())
-		{
-			long sysTime = System.currentTimeMillis();
-			if (this.timer.lastTime != 0)
+			int inc = (int) (sysTime - this.timer.lastTime);
+			double c = this.currentBar.getValue();
+			c = Math.exp(c / 3.5 - 14.2);
+			this.currentMultiplier = 1.7 * inc * c;
+			if (!this.conventionCheckItem.getState())
 			{
-				int inc = (int) (sysTime - this.timer.lastTime);
-				double c = this.currentBar.getValue();
-				c = Math.exp(c / 3.5 - 14.2);
-				this.currentMultiplier = 1.7 * inc * c;
-				if (!this.conventionCheckItem.getState())
-				{
-					this.currentMultiplier = -this.currentMultiplier;
-				}
+				this.currentMultiplier = -this.currentMultiplier;
 			}
-			if (sysTime - this.timer.secTime >= 1000)
-			{
-				this.timer.secTime = sysTime;
-			}
-			this.timer.lastTime = sysTime;
 		}
-		else
+
+		if (sysTime - this.timer.secTime >= 1000)
 		{
-			this.timer.lastTime = 0;
+			this.timer.secTime = sysTime;
 		}
 
-		CircuitElm.powerMult = Math.exp(this.powerBar.getValue() / 4.762 - 7);
+		this.timer.lastTime = sysTime;
+	}
 
-		int i;
-		Font oldfont = g.getFont();
-		for (i = 0; i != this.circuit.getElementCount(); i++)
+	private void drawElements(Graphics g)
+	{
+
+		for (int i = 0; i != this.circuit.getElementCount(); i++)
 		{
 			if (this.powerCheckItem.getState())
 			{
@@ -412,6 +381,11 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			 */
 			this.circuit.getElementAt(i).draw(g);
 		}
+	}
+	
+	private void drawElementForMouse(Graphics g)
+	{
+		int i;
 
 		if (this.tempMouseMode == CirSim.MODE_DRAG_ROW || this.tempMouseMode == CirSim.MODE_DRAG_COLUMN
 				|| this.tempMouseMode == CirSim.MODE_DRAG_POST || this.tempMouseMode == CirSim.MODE_DRAG_SELECTED)
@@ -423,7 +397,11 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				DrawUtil.drawPost(g, ce.x2, ce.y2);
 			}
 		}
-
+	}
+	
+	private int findAndDrawBadNode(Graphics g)
+	{
+		int i;
 		int badnodes = 0;
 
 		// find bad connections, nodes not connected to other elements which
@@ -451,6 +429,53 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				}
 			}
 		}
+		
+		return badnodes;
+	}
+
+	public void updateCircuit(Graphics realg) throws Exception
+	{
+		Graphics g = null;
+		CircuitElm realMouseElm;
+
+		if (CirSim.editDialog != null && CirSim.editDialog.elm instanceof CircuitElm)
+		{
+			this.mouseElm = (CircuitElm) CirSim.editDialog.elm;
+		}
+
+		realMouseElm = this.mouseElm;
+		if (this.mouseElm == null)
+		{
+			this.mouseElm = this.stopElm;
+		}
+
+		this.scopeMan.setupScopes(this.winSize);
+
+		g = this.dbimage.getGraphics();
+		g.setColor(Color.black);
+
+		g.fillRect(0, 0, this.winSize.width, this.winSize.height);
+
+		if (this.activityManager.isPlaying())
+		{
+			this.runCircuit();
+
+			this.runCurrent();
+		}
+		else
+		{
+			this.timer.lastTime = 0;
+		}
+
+		CircuitElm.powerMult = Math.exp(this.powerBar.getValue() / 4.762 - 7);
+
+		this.drawElements(g);
+
+		
+		this.drawElementForMouse(g);
+		
+		int badnodes = this.findAndDrawBadNode(g);
+		
 		/*
 		 * if (mouseElm != null) { g.setFont(oldfont); g.drawString("+",
 		 * mouseElm.x+10, mouseElm.y); }
@@ -460,6 +485,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			this.dragElm.draw(g);
 		}
 
+		Font oldfont = g.getFont();
 		g.setFont(oldfont);
 
 		// Dessinage des scopes
@@ -504,6 +530,9 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 				info[0] = "t = " + CoreUtil.getUnitText(this.timer.time, "s");
 				CircuitElm.showFormat.setMinimumFractionDigits(0);
 			}
+			
+
+			int i;
 			if (this.hintType != -1)
 			{
 				for (i = 0; info[i] != null; i++)
@@ -573,7 +602,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			g.drawRect(this.selectedArea.x, this.selectedArea.y, this.selectedArea.width, this.selectedArea.height);
 		}
 
-		
 		this.mouseElm = realMouseElm;
 		/*
 		 * g.setColor(Color.white); g.drawString("Framerate: " + framerate, 10,
@@ -3055,10 +3083,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			while (true)
 			{
 
-
 				delay = CirSim.this.repaint();
-
-
 
 				if (delay > 0)
 				{
@@ -3075,7 +3100,7 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 			}
 		}
 	}
-	
+
 	public static CirSim getInstance()
 	{
 		return CirSim.SINGLETON;
