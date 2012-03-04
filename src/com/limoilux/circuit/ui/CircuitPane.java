@@ -69,7 +69,7 @@ public class CircuitPane extends Panel
 			{
 				this.cirSim.timer.secTime = sysTime;
 			}
-			this.cirSim.timer.lastTime = sysTime;
+		     this.cirSim.timer.lastTime = sysTime;
 		}
 		else
 		{
