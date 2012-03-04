@@ -317,7 +317,6 @@ public class CirSim implements ComponentListener, ActionListener, ItemListener
 		}
 
 		return this.timer.calculateDelay();
-
 	}
 
 	private void prepareRepaint()
