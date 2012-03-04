@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.ui.scope;
+package com.limoilux.circuitsimulator.scope;
 
 import java.awt.Graphics;
 import java.awt.PopupMenu;
@@ -19,9 +19,9 @@ import com.limoilux.circuit.MemristorElm;
 import com.limoilux.circuit.OutputElm;
 import com.limoilux.circuit.ProbeElm;
 import com.limoilux.circuit.TransistorElm;
-import com.limoilux.circuit.core.CirSim;
-import com.limoilux.circuit.core.CoreUtil;
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuitsimulator.core.CirSim;
+import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public class Scope extends JPanel
 {

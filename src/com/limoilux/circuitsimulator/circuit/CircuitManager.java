@@ -1,12 +1,10 @@
 
-package com.limoilux.circuit.core;
+package com.limoilux.circuitsimulator.circuit;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import com.limoilux.circuit.techno.Circuit;
 import com.limoilux.circuit.techno.CircuitElm;
-import com.limoilux.circuit.ui.CircuitPane;
 
 public class CircuitManager
 {

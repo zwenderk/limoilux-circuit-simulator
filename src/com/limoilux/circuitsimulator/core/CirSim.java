@@ -1,6 +1,6 @@
 //CirSim.java (c) 2010 by Paul Falstad
 
-package com.limoilux.circuit.core;
+package com.limoilux.circuitsimulator.core;
 
 import java.awt.Adjustable;
 import java.awt.BorderLayout;
@@ -54,7 +54,8 @@ import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.ResistorElm;
 import com.limoilux.circuit.SwitchElm;
 import com.limoilux.circuit.TextElm;
-import com.limoilux.circuit.techno.Circuit;
+import com.limoilux.circuit.core.Editable;
+import com.limoilux.circuit.core.Timer;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.techno.CircuitNode;
@@ -62,13 +63,15 @@ import com.limoilux.circuit.techno.CircuitNodeLink;
 import com.limoilux.circuit.techno.matrix.MatrixRowInfo;
 import com.limoilux.circuit.ui.ActivityListener;
 import com.limoilux.circuit.ui.ActivityManager;
-import com.limoilux.circuit.ui.CircuitFrame;
-import com.limoilux.circuit.ui.CircuitPane;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditDialog;
 import com.limoilux.circuit.ui.EditOptions;
 import com.limoilux.circuit.ui.io.MigrationWizard;
-import com.limoilux.circuit.ui.scope.Scope;
+import com.limoilux.circuitsimulator.circuit.Circuit;
+import com.limoilux.circuitsimulator.circuit.CircuitManager;
+import com.limoilux.circuitsimulator.circuit.CircuitPane;
+import com.limoilux.circuitsimulator.scope.Scope;
+import com.limoilux.circuitsimulator.scope.ScopeManager;
 
 /**
  * For information about the theory behind this, see Electronic Circuit & System

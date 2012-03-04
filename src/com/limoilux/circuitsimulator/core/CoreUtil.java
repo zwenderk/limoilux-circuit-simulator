@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.core;
+package com.limoilux.circuitsimulator.core;
 
 import java.awt.Point;
 import java.awt.Polygon;
