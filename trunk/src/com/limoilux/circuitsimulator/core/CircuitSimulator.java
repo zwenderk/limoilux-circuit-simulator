@@ -267,8 +267,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		this.manageJavaVersion();
 
-		this.initDumpTypes();
-
 		// Add Listener
 		this.circuitPanel.addComponentListener(this);
 		this.circuitPanel.addMouseMotionListener(this.mouseMotionList);
@@ -301,7 +299,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.cirFrame.add(this.toolBar, BorderLayout.NORTH);
 
 		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
-		this.mainContainer.add(this.scopeMan.getScopePane(), BorderLayout.SOUTH);
+		//this.mainContainer.add(this.scopeMan.getScopePane(), BorderLayout.SOUTH);
 
 	}
 
