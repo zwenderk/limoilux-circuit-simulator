@@ -143,7 +143,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private Label titleLabel;
 	private JButton resetButton;
-	private MenuItem exportItem, importItem, exitItem, cutItem, copyItem, selectAllItem, optionsItem;
+	private MenuItem exportItem, importItem, exitItem, cutItem, copyItem, selectAllItem;
 
 	private Menu optionsMenu;
 
@@ -835,67 +835,87 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		MenuBar menubar = null;
 
 		menubar = new MenuBar();
-		Menu m = new Menu("File");
+		Menu menu = new Menu("File");
 
-		menubar.add(m);
+		menubar.add(menu);
 
-		m.add(this.importItem = this.getMenuItem("Import"));
-		m.add(this.exportItem = this.getMenuItem("Export"));
-		m.addSeparator();
-		m.add(this.exitItem = this.getMenuItem("Exit"));
+		menu.add(this.importItem = this.getMenuItem("Import"));
+		menu.add(this.exportItem = this.getMenuItem("Export"));
+		menu.addSeparator();
+		menu.add(this.exitItem = this.getMenuItem("Exit"));
 
-		m = new Menu("Edit");
-		m.add(this.clipboard.undoItem = this.getMenuItem("Undo"));
+		menu = new Menu("Edit");
+		menu.add(this.clipboard.undoItem = this.getMenuItem("Undo"));
 		this.clipboard.undoItem.setShortcut(new MenuShortcut(KeyEvent.VK_Z));
 
-		m.add(this.clipboard.redoItem = this.getMenuItem("Redo"));
+		menu.add(this.clipboard.redoItem = this.getMenuItem("Redo"));
 		this.clipboard.redoItem.setShortcut(new MenuShortcut(KeyEvent.VK_Z, true));
 
-		m.addSeparator();
-		m.add(this.cutItem = this.getMenuItem("Cut"));
+		menu.addSeparator();
+		menu.add(this.cutItem = this.getMenuItem("Cut"));
 		this.cutItem.setShortcut(new MenuShortcut(KeyEvent.VK_X));
-		m.add(this.copyItem = this.getMenuItem("Copy"));
+		menu.add(this.copyItem = this.getMenuItem("Copy"));
 		this.copyItem.setShortcut(new MenuShortcut(KeyEvent.VK_C));
 
-		m.add(this.clipboard.pasteItem = this.getMenuItem("Paste"));
+		menu.add(this.clipboard.pasteItem = this.getMenuItem("Paste"));
 		this.clipboard.pasteItem.setShortcut(new MenuShortcut(KeyEvent.VK_V));
 		this.clipboard.pasteItem.setEnabled(false);
 
-		m.add(this.selectAllItem = this.getMenuItem("Select All"));
+		menu.add(this.selectAllItem = this.getMenuItem("Select All"));
 		this.selectAllItem.setShortcut(new MenuShortcut(KeyEvent.VK_A));
 
-		menubar.add(m);
+		menubar.add(menu);
 
-		m = new Menu("Scope");
+		menu = new Menu("Scope");
 
-		menubar.add(m);
+		menubar.add(menu);
 
-		m.add(this.getMenuItem("Stack All", "stackAll"));
-		m.add(this.getMenuItem("Unstack All", "unstackAll"));
+		menu.add(this.getMenuItem("Stack All", "stackAll"));
+		menu.add(this.getMenuItem("Unstack All", "unstackAll"));
 
-		this.optionsMenu = m = new Menu("Options");
+		this.optionsMenu = menu = new Menu("Options");
 
-		menubar.add(m);
 
-		m.add(this.menuMan.dotsCheckItem = this.getCheckItem("Show Current"));
+
+		this.menuMan.dotsCheckItem = this.getCheckItem("Show Current");
 		this.menuMan.dotsCheckItem.setState(true);
-		m.add(this.menuMan.voltsCheckItem = this.getCheckItem("Show Voltage"));
+		menu.add(this.menuMan.dotsCheckItem);
+
+		this.menuMan.voltsCheckItem = this.getCheckItem("Show Voltage");
 		this.menuMan.voltsCheckItem.setState(true);
-		m.add(this.menuMan.powerCheckItem = this.getCheckItem("Show Power"));
-		m.add(this.menuMan.showValuesCheckItem = this.getCheckItem("Show Values"));
+		menu.add(this.menuMan.voltsCheckItem);
+
+		this.menuMan.powerCheckItem = this.getCheckItem("Show Power");
+		menu.add(this.menuMan.powerCheckItem);
+		
+		this.menuMan.showValuesCheckItem = this.getCheckItem("Show Values");
 		this.menuMan.showValuesCheckItem.setState(true);
+		menu.add(this.menuMan.showValuesCheckItem);
+
+		//conductanceCheckItem = getCheckItem("Show Conductance");
 		// m.add(conductanceCheckItem = getCheckItem("Show Conductance"));
-		m.add(this.menuMan.smallGridCheckItem = this.getCheckItem("Small Grid"));
-		m.add(this.menuMan.euroResistorCheckItem = this.getCheckItem("European Resistors"));
+		
+		this.menuMan.smallGridCheckItem = this.getCheckItem("Small Grid");
+		menu.add(this.menuMan.smallGridCheckItem);
+		
+		this.menuMan.euroResistorCheckItem = this.getCheckItem("European Resistors");
 		this.menuMan.euroResistorCheckItem.setState(false);
-		m.add(this.menuMan.printableCheckItem = this.getCheckItem("White Background"));
+		menu.add(this.menuMan.euroResistorCheckItem);
+
+		this.menuMan.printableCheckItem = this.getCheckItem("White Background");
 		this.menuMan.printableCheckItem.setState(printable);
-		m.add(this.menuMan.conventionCheckItem = this.getCheckItem("Conventional Current Motion"));
+		menu.add(this.menuMan.printableCheckItem);
+
+		this.menuMan.conventionCheckItem = this.getCheckItem("Conventional Current Motion");
 		this.menuMan.conventionCheckItem.setState(convention);
-		m.add(this.optionsItem = this.getMenuItem("Other Options..."));
+		menu.add(this.menuMan.conventionCheckItem);
+	
+		this.menuMan.optionsItem = this.getMenuItem("Other Options...");
+		menu.add(this.menuMan.optionsItem);
+		
+		menubar.add(menu);
 
 		Menu circuitsMenu = new Menu("Circuits");
-
 		menubar.add(circuitsMenu);
 
 		this.cirFrame.setMenuBar(menubar);
@@ -1447,7 +1467,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		int f = 0;
 
 		// f = this.dotsCheckItem.getState() ? 1 : 0;
-		if (this.menuMan.dotsCheckItem.getState())
+		if (this.menuMan.showDots())
 		{
 			f = 1;
 		}
@@ -2296,7 +2316,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.showMigrationDialog();
 		}
 
-		if (e.getSource() == this.optionsItem)
+		if (e.getSource() == this.menuMan.optionsItem)
 		{
 			this.doEdit(new EditOptions(this));
 		}
