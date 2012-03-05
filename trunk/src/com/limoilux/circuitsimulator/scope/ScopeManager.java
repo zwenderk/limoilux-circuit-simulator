@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuitsimulator.circuit.Circuit;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
@@ -13,7 +14,7 @@ public class ScopeManager
 	public int scopeCount;
 	public int scopeColCount[];
 
-	public Scope scopes[];
+	public final Scope scopes[];
 
 	private final ScopePane scopePane;
 	private final Circuit circuit;
@@ -119,10 +120,12 @@ public class ScopeManager
 	{
 		// check scopes to make sure the elements still exist, and remove
 		// unused scopes/columns
+		CircuitElm element;
 		int pos = -1;
 		for (int i = 0; i < this.scopeCount; i++)
 		{
-			if (this.circuit.locateElement(this.scopes[i].element) < 0)
+			element = this.scopes[i].element;
+			if (this.circuit.locateElement(element) < 0)
 			{
 				this.scopes[i].setElement(null);
 			}

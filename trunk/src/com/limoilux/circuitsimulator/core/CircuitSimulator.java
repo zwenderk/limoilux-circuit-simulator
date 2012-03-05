@@ -306,17 +306,21 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		Thread t = new Thread(new RepaintRun());
 		t.start();
 	
+		//CircuitSimulator.this.activityManager.setPlaying(true);
 	}
 
 	private long repaint()
 	{
 		if (!(this.winSize == null || this.winSize.width == 0))
 		{
-			this.prepareRepaint();
 
+			
+			this.prepareRepaint();
+			
 			this.scopeMan.setupScopes(this.winSize);
 
 			this.circuitMan.repaint();
+	
 		}
 
 		return this.timer.calculateDelay();
@@ -2934,6 +2938,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		public void run()
 		{
 			long delay = 0;
+
 
 			while (true)
 			{
