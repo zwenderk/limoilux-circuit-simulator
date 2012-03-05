@@ -865,8 +865,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	private Menu buildMenuBar()
 	{
 		// Artéfacte de la version Falstad.
-		final boolean printable = false;
-		final boolean convention = true;
 
 		MenuBar menubar = null;
 
@@ -875,30 +873,47 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		menubar.add(menu);
 
-		menu.add(this.importItem = this.getMenuItem("Import"));
-		menu.add(this.exportItem = this.getMenuItem("Export"));
+		this.importItem = this.getMenuItem("Import");
+		menu.add(this.importItem);
+		
+		this.exportItem = this.getMenuItem("Export");
+		menu.add(this.exportItem);
+		
 		menu.addSeparator();
-		menu.add(this.exitItem = this.getMenuItem("Exit"));
+		
+		this.exitItem = this.getMenuItem("Exit");
+		menu.add(this.exitItem);
 
 		menu = new Menu("Edit");
-		menu.add(this.clipboard.undoItem = this.getMenuItem("Undo"));
+		
+		this.clipboard.undoItem = this.getMenuItem("Undo");
 		this.clipboard.undoItem.setShortcut(new MenuShortcut(KeyEvent.VK_Z));
+		menu.add(this.clipboard.undoItem);
 
-		menu.add(this.clipboard.redoItem = this.getMenuItem("Redo"));
+		this.clipboard.redoItem = this.getMenuItem("Redo");
 		this.clipboard.redoItem.setShortcut(new MenuShortcut(KeyEvent.VK_Z, true));
+		menu.add(this.clipboard.redoItem);
 
 		menu.addSeparator();
-		menu.add(this.cutItem = this.getMenuItem("Cut"));
+		
+		this.cutItem = this.getMenuItem("Cut");
 		this.cutItem.setShortcut(new MenuShortcut(KeyEvent.VK_X));
-		menu.add(this.copyItem = this.getMenuItem("Copy"));
+		menu.add(this.cutItem);
+		
+		this.copyItem = this.getMenuItem("Copy");
 		this.copyItem.setShortcut(new MenuShortcut(KeyEvent.VK_C));
+		menu.add(this.copyItem);
 
-		menu.add(this.clipboard.pasteItem = this.getMenuItem("Paste"));
+
+		this.clipboard.pasteItem = this.getMenuItem("Paste");
 		this.clipboard.pasteItem.setShortcut(new MenuShortcut(KeyEvent.VK_V));
 		this.clipboard.pasteItem.setEnabled(false);
+		menu.add(this.clipboard.pasteItem);
 
-		menu.add(this.selectAllItem = this.getMenuItem("Select All"));
+		this.selectAllItem = this.getMenuItem("Select All");
 		this.selectAllItem.setShortcut(new MenuShortcut(KeyEvent.VK_A));
+		menu.add(this.selectAllItem);
+
 
 		menubar.add(menu);
 
@@ -908,47 +923,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		menu.add(this.getMenuItem("Stack All", "stackAll"));
 		menu.add(this.getMenuItem("Unstack All", "unstackAll"));
-
-		this.menuMan.optionMenu = new Menu("Options");
-
-
-		menu = this.menuMan.optionMenu;
-		this.menuMan.dotsCheckItem = this.getCheckItem("Show Current");
-		this.menuMan.dotsCheckItem.setState(true);
-		menu.add(this.menuMan.dotsCheckItem);
-
-		this.menuMan.voltsCheckItem = this.getCheckItem("Show Voltage");
-		this.menuMan.voltsCheckItem.setState(true);
-		menu.add(this.menuMan.voltsCheckItem);
-
-		this.menuMan.powerCheckItem = this.getCheckItem("Show Power");
-		menu.add(this.menuMan.powerCheckItem);
 		
-		this.menuMan.showValuesCheckItem = this.getCheckItem("Show Values");
-		this.menuMan.showValuesCheckItem.setState(true);
-		menu.add(this.menuMan.showValuesCheckItem);
-
-		//conductanceCheckItem = getCheckItem("Show Conductance");
-		// m.add(conductanceCheckItem = getCheckItem("Show Conductance"));
-		
-		this.menuMan.smallGridCheckItem = this.getCheckItem("Small Grid");
-		menu.add(this.menuMan.smallGridCheckItem);
-		
-		this.menuMan.euroResistorCheckItem = this.getCheckItem("European Resistors");
-		this.menuMan.euroResistorCheckItem.setState(false);
-		menu.add(this.menuMan.euroResistorCheckItem);
-
-		this.menuMan.printableCheckItem = this.getCheckItem("White Background");
-		this.menuMan.printableCheckItem.setState(printable);
-		menu.add(this.menuMan.printableCheckItem);
-
-		this.menuMan.conventionCheckItem = this.getCheckItem("Conventional Current Motion");
-		this.menuMan.conventionCheckItem.setState(convention);
-		menu.add(this.menuMan.conventionCheckItem);
-	
-		this.menuMan.optionsItem = this.getMenuItem("Other Options...");
-		menu.add(this.menuMan.optionsItem);
-		
+		menu = this.menuMan.getOptionMenu();
 		menubar.add(menu);
 
 		Menu circuitsMenu = new Menu("Circuits");

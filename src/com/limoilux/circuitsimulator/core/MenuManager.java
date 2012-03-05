@@ -34,9 +34,7 @@ public class MenuManager
 		Menu menu;
 		
 		// Menu Option
-		this.optionMenu = new Menu("Options");
-		
-		menu = this.optionMenu;
+		menu =  new Menu("Options");
 		this.dotsCheckItem = this.getCheckItem("Show Current");
 		this.dotsCheckItem.setState(true);
 		menu.add(this.dotsCheckItem);
@@ -72,6 +70,7 @@ public class MenuManager
 	
 		this.optionsItem = this.getMenuItem("Other Options...");
 		menu.add(this.optionsItem);
+		this.optionMenu = menu;
 	}
 
 	public boolean showDots()
