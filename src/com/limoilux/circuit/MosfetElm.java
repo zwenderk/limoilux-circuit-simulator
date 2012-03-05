@@ -115,7 +115,7 @@ public class MosfetElm extends CircuitElm
 			this.setVoltageColor(g, this.pnp == 1 ? this.volts[1] : this.volts[2]);
 			g.fillPolygon(this.arrowPoly);
 		}
-		if (CircuitElm.cirSim.powerCheckItem.getState())
+		if (CircuitElm.cirSim.menuMan.powerCheckItem.getState())
 		{
 			g.setColor(Color.gray);
 		}

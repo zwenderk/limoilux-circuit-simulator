@@ -28,7 +28,7 @@ public class OpAmpElm extends CircuitElm
 		this.maxOut = 15;
 		this.minOut = -15;
 		this.gbw = 1e6;
-		this.setSize(CircuitElm.cirSim.smallGridCheckItem.getState() ? 1 : 2);
+		this.setSize(CircuitElm.cirSim.menuMan.smallGridCheckItem.getState() ? 1 : 2);
 		this.setGain();
 	}
 

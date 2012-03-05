@@ -54,14 +54,14 @@ public class ResistorElm extends CircuitElm
 		int segments = 16;
 		int i;
 		int ox = 0;
-		int hs = CircuitElm.cirSim.euroResistorCheckItem.getState() ? 6 : 8;
+		int hs = CircuitElm.cirSim.menuMan.euroResistorCheckItem.getState() ? 6 : 8;
 		double v1 = this.volts[0];
 		double v2 = this.volts[1];
 		this.setBbox(this.point1, this.point2, hs);
 		this.draw2Leads(g);
 		this.setPowerColor(g, true);
 		double segf = 1. / segments;
-		if (!CircuitElm.cirSim.euroResistorCheckItem.getState())
+		if (!CircuitElm.cirSim.menuMan.euroResistorCheckItem.getState())
 		{
 			// draw zigzag
 			for (i = 0; i != segments; i++)
@@ -105,7 +105,7 @@ public class ResistorElm extends CircuitElm
 			CircuitElm.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 1, hs);
 			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 		}
-		if (CircuitElm.cirSim.showValuesCheckItem.getState())
+		if (CircuitElm.cirSim.menuMan.showValuesCheckItem.getState())
 		{
 			String s = CircuitElm.getShortUnitText(this.resistance, "");
 			this.drawValues(g, s, hs);

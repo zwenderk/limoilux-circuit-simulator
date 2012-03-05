@@ -62,7 +62,7 @@ public class DrawUtil
 
 	public static void drawDots(Graphics g, Point pa, Point pb, double pos)
 	{
-		if (!CircuitElm.cirSim.activityManager.isPlaying() || pos == 0 || !CircuitElm.cirSim.dotsCheckItem.getState())
+		if (!CircuitElm.cirSim.activityManager.isPlaying() || pos == 0 || !CircuitElm.cirSim.menuMan.dotsCheckItem.getState())
 		{
 			return;
 		}

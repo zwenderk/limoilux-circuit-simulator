@@ -92,7 +92,7 @@ public class CapacitorElm extends CircuitElm
 		DrawUtil.drawThickLine(g, this.point1, this.lead1);
 		this.setPowerColor(g, false);
 		DrawUtil.drawThickLine(g, this.plate1[0], this.plate1[1]);
-		if (CircuitElm.cirSim.powerCheckItem.getState())
+		if (CircuitElm.cirSim.menuMan.powerCheckItem.getState())
 		{
 			g.setColor(Color.gray);
 		}
@@ -111,7 +111,7 @@ public class CapacitorElm extends CircuitElm
 			DrawUtil.drawDots(g, this.point2, this.lead2, -this.curcount);
 		}
 		this.drawPosts(g);
-		if (CircuitElm.cirSim.showValuesCheckItem.getState())
+		if (CircuitElm.cirSim.menuMan.showValuesCheckItem.getState())
 		{
 			String s = CircuitElm.getShortUnitText(this.capacitance, "F");
 			this.drawValues(g, s, hs);

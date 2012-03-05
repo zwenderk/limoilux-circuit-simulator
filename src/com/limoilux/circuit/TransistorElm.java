@@ -22,7 +22,7 @@ public class TransistorElm extends CircuitElm
 	double gmin;
 	final int FLAG_FLIP = 1;
 
-	TransistorElm(int xx, int yy, boolean pnpflag)
+	public TransistorElm(int xx, int yy, boolean pnpflag)
 	{
 		super(xx, yy);
 		this.pnp = pnpflag ? -1 : 1;
@@ -102,7 +102,7 @@ public class TransistorElm extends CircuitElm
 		g.fillPolygon(this.arrowPoly);
 		// draw base
 		this.setVoltageColor(g, this.volts[0]);
-		if (CircuitElm.cirSim.powerCheckItem.getState())
+		if (CircuitElm.cirSim.menuMan.powerCheckItem.getState())
 		{
 			g.setColor(Color.gray);
 		}

@@ -35,7 +35,6 @@ public abstract class CircuitElm implements Editable
 	public static final Point ps2 = new Point();
 
 	// va devenir un singleton
-	@Deprecated
 	public static CircuitSimulator cirSim = CircuitSimulator.getInstance();
 
 	public static NumberFormat showFormat;
@@ -537,9 +536,9 @@ public abstract class CircuitElm implements Editable
 			g.setColor(CircuitElm.SELECT_COLOR);
 			return;
 		}
-		if (!CircuitElm.cirSim.voltsCheckItem.getState())
+		if (!CircuitElm.cirSim.menuMan.voltsCheckItem.getState())
 		{
-			if (!CircuitElm.cirSim.powerCheckItem.getState())
+			if (!CircuitElm.cirSim.menuMan.powerCheckItem.getState())
 			{
 				// !conductanceCheckItem.getState())
 				g.setColor(CircuitElm.WHITE_COLOR);
@@ -564,7 +563,7 @@ public abstract class CircuitElm implements Editable
 		 * if (conductanceCheckItem.getState()) { setConductanceColor(g,
 		 * current/getVoltageDiff()); return; }
 		 */
-		if (!CircuitElm.cirSim.powerCheckItem.getState())
+		if (!CircuitElm.cirSim.menuMan.powerCheckItem.getState())
 		{
 			return;
 		}
