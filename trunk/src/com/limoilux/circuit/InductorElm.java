@@ -61,7 +61,7 @@ public class InductorElm extends CircuitElm
 		this.draw2Leads(g);
 		this.setPowerColor(g, false);
 		this.drawCoil(g, 8, this.lead1, this.lead2, v1, v2);
-		if (CircuitElm.cirSim.showValuesCheckItem.getState())
+		if (CircuitElm.cirSim.menuMan.showValuesCheckItem.getState())
 		{
 			String s = CircuitElm.getShortUnitText(this.inductance, "H");
 			this.drawValues(g, s, hs);

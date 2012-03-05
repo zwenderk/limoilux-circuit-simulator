@@ -73,7 +73,7 @@ public class CurrentElm extends CircuitElm
 		g.fillPolygon(this.arrow);
 		this.setBbox(this.point1, this.point2, cr);
 		this.doDots(g);
-		if (CircuitElm.cirSim.showValuesCheckItem.getState())
+		if (CircuitElm.cirSim.menuMan.showValuesCheckItem.getState())
 		{
 			String s = CircuitElm.getShortUnitText(this.currentValue, "A");
 			if (this.dx == 0 || this.dy == 0)

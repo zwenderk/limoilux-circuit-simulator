@@ -147,15 +147,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private Menu optionsMenu;
 
-	public CheckboxMenuItem dotsCheckItem;
-	public CheckboxMenuItem voltsCheckItem;
-	public CheckboxMenuItem powerCheckItem;
-	public CheckboxMenuItem smallGridCheckItem;
-	public CheckboxMenuItem showValuesCheckItem;
-	public CheckboxMenuItem conductanceCheckItem;
-	public CheckboxMenuItem euroResistorCheckItem;
-	public CheckboxMenuItem printableCheckItem;
-	public CheckboxMenuItem conventionCheckItem;
 	private JScrollBar speedBar;
 	private JScrollBar currentBar;
 	private Label powerLabel;
@@ -188,9 +179,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	public MenuItem scopeSelectYMenuItem;
 	private Class<?> addingClass;
 
-	private int tempMouseMode = CircuitSimulator.MODE_SELECT;
-	private String mouseModeStr = "Select";
-
 	public JButton playButton;
 	public JButton stopButton;
 
@@ -205,6 +193,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	public final CircuitMouseManager mouseMan;
 	public final ScopeManager scopeMan;
 	public final CircuitManager circuitMan;
+	public final MenuManager menuMan;
 
 	public final CircuitPane circuitPanel;
 
@@ -222,6 +211,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		super();
 
 		this.clipboard = new Clipboard();
+		this.menuMan = new MenuManager();
 
 		// this.mainContainer.setLayout(new BorderLayout());
 		this.circuitPanel = new CircuitPane(this);
@@ -374,7 +364,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			double c = this.currentBar.getValue();
 			c = Math.exp(c / 3.5 - 14.2);
 			this.currentMultiplier = 1.7 * inc * c;
-			if (!this.conventionCheckItem.getState())
+			if (!this.menuMan.conventionCheckItem.getState())
 			{
 				this.currentMultiplier = -this.currentMultiplier;
 			}
@@ -393,7 +383,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		for (int i = 0; i != this.circuit.getElementCount(); i++)
 		{
-			if (this.powerCheckItem.getState())
+			if (this.menuMan.powerCheckItem.getState())
 			{
 				g.setColor(Color.gray);
 			}
@@ -787,11 +777,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		}
 	}
 
-	@Deprecated
-	private void initDumpTypes()
-	{
-	}
-
 	private void initPopupMenu()
 	{
 		this.elementsPopUp = new PopupMenu();
@@ -892,21 +877,21 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		menubar.add(m);
 
-		m.add(this.dotsCheckItem = this.getCheckItem("Show Current"));
-		this.dotsCheckItem.setState(true);
-		m.add(this.voltsCheckItem = this.getCheckItem("Show Voltage"));
-		this.voltsCheckItem.setState(true);
-		m.add(this.powerCheckItem = this.getCheckItem("Show Power"));
-		m.add(this.showValuesCheckItem = this.getCheckItem("Show Values"));
-		this.showValuesCheckItem.setState(true);
+		m.add(this.menuMan.dotsCheckItem = this.getCheckItem("Show Current"));
+		this.menuMan.dotsCheckItem.setState(true);
+		m.add(this.menuMan.voltsCheckItem = this.getCheckItem("Show Voltage"));
+		this.menuMan.voltsCheckItem.setState(true);
+		m.add(this.menuMan.powerCheckItem = this.getCheckItem("Show Power"));
+		m.add(this.menuMan.showValuesCheckItem = this.getCheckItem("Show Values"));
+		this.menuMan.showValuesCheckItem.setState(true);
 		// m.add(conductanceCheckItem = getCheckItem("Show Conductance"));
-		m.add(this.smallGridCheckItem = this.getCheckItem("Small Grid"));
-		m.add(this.euroResistorCheckItem = this.getCheckItem("European Resistors"));
-		this.euroResistorCheckItem.setState(false);
-		m.add(this.printableCheckItem = this.getCheckItem("White Background"));
-		this.printableCheckItem.setState(printable);
-		m.add(this.conventionCheckItem = this.getCheckItem("Conventional Current Motion"));
-		this.conventionCheckItem.setState(convention);
+		m.add(this.menuMan.smallGridCheckItem = this.getCheckItem("Small Grid"));
+		m.add(this.menuMan.euroResistorCheckItem = this.getCheckItem("European Resistors"));
+		this.menuMan.euroResistorCheckItem.setState(false);
+		m.add(this.menuMan.printableCheckItem = this.getCheckItem("White Background"));
+		this.menuMan.printableCheckItem.setState(printable);
+		m.add(this.menuMan.conventionCheckItem = this.getCheckItem("Conventional Current Motion"));
+		this.menuMan.conventionCheckItem.setState(convention);
 		m.add(this.optionsItem = this.getMenuItem("Other Options..."));
 
 		Menu circuitsMenu = new Menu("Circuits");
@@ -1462,31 +1447,31 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		int f = 0;
 
 		// f = this.dotsCheckItem.getState() ? 1 : 0;
-		if (this.dotsCheckItem.getState())
+		if (this.menuMan.dotsCheckItem.getState())
 		{
 			f = 1;
 		}
 
 		// f |= this.smallGridCheckItem.getState() ? 2 : 0;
-		if (this.smallGridCheckItem.getState())
+		if (this.menuMan.smallGridCheckItem.getState())
 		{
 			f |= 2;
 		}
 
 		// f |= this.voltsCheckItem.getState() ? 0 : 4;
-		if (!this.voltsCheckItem.getState())
+		if (!this.menuMan.voltsCheckItem.getState())
 		{
 			f |= 4;
 		}
 
 		// f |= this.powerCheckItem.getState() ? 8 : 0;
-		if (this.powerCheckItem.getState())
+		if (this.menuMan.powerCheckItem.getState())
 		{
 			f |= 8;
 		}
 
 		// f |= this.showValuesCheckItem.getState() ? 0 : 16;
-		if (!this.showValuesCheckItem.getState())
+		if (!this.menuMan.showValuesCheckItem.getState())
 		{
 			f |= 16;
 		}
@@ -1647,11 +1632,11 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.circuit.removeAllElements();
 			this.hintType = -1;
 			this.timer.timeStep = 5e-6;
-			this.dotsCheckItem.setState(true);
-			this.smallGridCheckItem.setState(false);
-			this.powerCheckItem.setState(false);
-			this.voltsCheckItem.setState(true);
-			this.showValuesCheckItem.setState(true);
+			this.menuMan.dotsCheckItem.setState(true);
+			this.menuMan.smallGridCheckItem.setState(false);
+			this.menuMan.powerCheckItem.setState(false);
+			this.menuMan.voltsCheckItem.setState(true);
+			this.menuMan.showValuesCheckItem.setState(true);
 			this.setGrid();
 			this.speedBar.setValue(117); // 57
 			this.currentBar.setValue(50);
@@ -1783,11 +1768,11 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	private void readOptions(StringTokenizer st)
 	{
 		int flags = new Integer(st.nextToken()).intValue();
-		this.dotsCheckItem.setState((flags & 1) != 0);
-		this.smallGridCheckItem.setState((flags & 2) != 0);
-		this.voltsCheckItem.setState((flags & 4) == 0);
-		this.powerCheckItem.setState((flags & 8) == 8);
-		this.showValuesCheckItem.setState((flags & 16) == 0);
+		this.menuMan.dotsCheckItem.setState((flags & 1) != 0);
+		this.menuMan.smallGridCheckItem.setState((flags & 2) != 0);
+		this.menuMan.voltsCheckItem.setState((flags & 4) == 0);
+		this.menuMan.powerCheckItem.setState((flags & 8) == 8);
+		this.menuMan.showValuesCheckItem.setState((flags & 16) == 0);
 		this.timer.timeStep = new Double(st.nextToken()).doubleValue();
 		double sp = new Double(st.nextToken()).doubleValue();
 		int sp2 = (int) (Math.log(10 * sp) * 24 + 61.5);
@@ -2058,7 +2043,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void enableItems()
 	{
-		if (this.powerCheckItem.getState())
+		if (this.menuMan.powerCheckItem.getState())
 		{
 			this.powerBar.setEnabled(false);
 			this.powerLabel.setEnabled(false);
@@ -2073,7 +2058,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void setGrid()
 	{
-		if (this.smallGridCheckItem.getState())
+		if (this.menuMan.smallGridCheckItem.getState())
 		{
 			this.gridSize = 8;
 		}
@@ -2465,24 +2450,24 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	{
 		Object mi = e.getItemSelectable();
 
-		if (mi == this.smallGridCheckItem)
+		if (mi == this.menuMan.smallGridCheckItem)
 		{
 			this.setGrid();
 		}
-		if (mi == this.powerCheckItem)
+		if (mi == this.menuMan.powerCheckItem)
 		{
-			if (this.powerCheckItem.getState())
+			if (this.menuMan.powerCheckItem.getState())
 			{
-				this.voltsCheckItem.setState(false);
+				this.menuMan.voltsCheckItem.setState(false);
 			}
 			else
 			{
-				this.voltsCheckItem.setState(true);
+				this.menuMan.voltsCheckItem.setState(true);
 			}
 		}
-		if (mi == this.voltsCheckItem && this.voltsCheckItem.getState())
+		if (mi == this.menuMan.voltsCheckItem && this.menuMan.voltsCheckItem.getState())
 		{
-			this.powerCheckItem.setState(false);
+			this.menuMan.powerCheckItem.setState(false);
 		}
 		this.enableItems();
 		if (this.menuScope != -1)

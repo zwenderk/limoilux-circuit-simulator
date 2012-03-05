@@ -13,6 +13,7 @@ import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public abstract class ChipElm extends CircuitElm
 {
@@ -39,7 +40,7 @@ public abstract class ChipElm extends CircuitElm
 		}
 		this.noDiagonal = true;
 		this.setupPins();
-		this.setSize(CircuitElm.cirSim.smallGridCheckItem.getState() ? 1 : 2);
+		this.setSize(CircuitElm.cirSim.menuMan.smallGridCheckItem.getState() ? 1 : 2);
 	}
 
 	public ChipElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
@@ -98,11 +99,11 @@ public abstract class ChipElm extends CircuitElm
 			Point a = p.post;
 			Point b = p.stub;
 			DrawUtil.drawThickLine(g, a, b);
-			p.curcount = CircuitElm.updateDotCount(p.current, p.curcount);
+			p.curcount = CoreUtil.updateDotCount(p.current, p.curcount, CircuitElm.cirSim.currentMultiplier);
 			DrawUtil.drawDots(g, b, a, p.curcount);
 			if (p.bubble)
 			{
-				g.setColor(CircuitElm.cirSim.printableCheckItem.getState() ? Color.white : Color.black);
+				g.setColor(CircuitElm.cirSim.menuMan.printableCheckItem.getState() ? Color.white : Color.black);
 				DrawUtil.drawThickCircle(g, p.bubbleX, p.bubbleY, 1);
 				g.setColor(CircuitElm.LIGHT_GRAY_COLOR);
 				DrawUtil.drawThickCircle(g, p.bubbleX, p.bubbleY, 3);

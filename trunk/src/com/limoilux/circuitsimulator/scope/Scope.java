@@ -315,7 +315,7 @@ public class Scope extends JPanel
 		{
 			return;
 		}
-		int col = this.sim.printableCheckItem.getState() ? 0xFFFFFFFF : 0;
+		int col = this.sim.menuMan.printableCheckItem.getState() ? 0xFFFFFFFF : 0;
 		for (i = 0; i != this.pixels.length; i++)
 		{
 			this.pixels[i] = col;
@@ -366,7 +366,7 @@ public class Scope extends JPanel
 			return;
 		}
 		int i;
-		int color = this.sim.printableCheckItem.getState() ? 0xFFFFFFFF : 0;
+		int color = this.sim.menuMan.printableCheckItem.getState() ? 0xFFFFFFFF : 0;
 
 		for (i = 0; i != this.pixels.length; i++)
 		{

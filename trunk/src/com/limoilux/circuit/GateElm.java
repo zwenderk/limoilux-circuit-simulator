@@ -24,7 +24,7 @@ public abstract class GateElm extends CircuitElm
 		super(xx, yy);
 		this.noDiagonal = true;
 		this.inputCount = 2;
-		this.setSize(CircuitElm.cirSim.smallGridCheckItem.getState() ? 1 : 2);
+		this.setSize(CircuitElm.cirSim.menuMan.smallGridCheckItem.getState() ? 1 : 2);
 	}
 
 	public GateElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)

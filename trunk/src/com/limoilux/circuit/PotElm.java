@@ -149,7 +149,7 @@ public class PotElm extends CircuitElm implements AdjustmentListener
 		int segments = 16;
 		int i;
 		int ox = 0;
-		int hs = CircuitElm.cirSim.euroResistorCheckItem.getState() ? 6 : 8;
+		int hs = CircuitElm.cirSim.menuMan.euroResistorCheckItem.getState() ? 6 : 8;
 		double v1 = this.volts[0];
 		double v2 = this.volts[1];
 		double v3 = this.volts[2];
@@ -158,7 +158,7 @@ public class PotElm extends CircuitElm implements AdjustmentListener
 		this.setPowerColor(g, true);
 		double segf = 1. / segments;
 		int divide = (int) (segments * this.position);
-		if (!CircuitElm.cirSim.euroResistorCheckItem.getState())
+		if (!CircuitElm.cirSim.menuMan.euroResistorCheckItem.getState())
 		{
 			// draw zigzag
 			for (i = 0; i != segments; i++)
