@@ -288,8 +288,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		this.fetchSetupList(circuitsMenu, false);
 
-		this.initStartCircuitText();
-
 		this.initScreen();
 
 		this.cirFrame.add(this.mainContainer, BorderLayout.CENTER);
@@ -299,6 +297,25 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		// this.mainContainer.add(this.scopeMan.getScopePane(),
 		// BorderLayout.SOUTH);
 
+	}
+
+	private void start()
+	{
+	
+		this.cirFrame.setVisible(true);
+	
+		this.scopeMan.setupScopes(this.winSize);
+	
+		this.handleResize();
+	
+		this.cirFrame.requestFocus();
+	
+
+		this.initStartCircuitText();
+
+		Thread t = new Thread(new RepaintRun());
+		t.start();
+	
 	}
 
 	private long repaint()
@@ -734,22 +751,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.timer.lastIterTime = lit;
 		// System.out.println((System.currentTimeMillis()-lastFrameTime)/(double)
 		// iter);
-	}
-
-	private void start()
-	{
-
-		this.cirFrame.setVisible(true);
-
-		this.scopeMan.setupScopes(this.winSize);
-
-		this.handleResize();
-
-		this.cirFrame.requestFocus();
-
-		Thread t = new Thread(new RepaintRun());
-		t.start();
-
 	}
 
 	private void manageJavaVersion()
