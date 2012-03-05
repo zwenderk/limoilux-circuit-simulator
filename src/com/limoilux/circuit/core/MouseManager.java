@@ -8,7 +8,7 @@ import java.awt.event.MouseMotionListener;
 
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuitsimulator.circuit.Circuit;
-import com.limoilux.circuitsimulator.core.CircuitSimulator;
+
 
 public class MouseManager implements MouseMotionListener, MouseListener
 {
@@ -96,10 +96,12 @@ public class MouseManager implements MouseMotionListener, MouseListener
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent arg0)
+	public void mouseMoved(MouseEvent e)
 	{
 		// TODO Auto-generated method stub
-
+		
 	}
+
+
 
 }
