@@ -13,7 +13,7 @@ public class CircuitManager
 	public final Circuit circuit;
 	public final CircuitPane circuitPanel;
 	public final DumpManager dumpMan;
-	public final MouseManager mouseMan;
+	public final CircuitMouseManager mouseMan;
 
 
 	public CircuitManager( CircuitPane circuitPanel)
@@ -21,7 +21,7 @@ public class CircuitManager
 	
 		this.circuit = new Circuit();
 		
-		this.mouseMan = new MouseManager(this.circuit);
+		this.mouseMan = new CircuitMouseManager(this.circuit);
 		this.circuitPanel = circuitPanel;
 		this.dumpMan = new DumpManager();
 		
