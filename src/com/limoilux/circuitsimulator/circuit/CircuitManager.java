@@ -3,30 +3,30 @@ package com.limoilux.circuitsimulator.circuit;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
-import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.techno.CircuitNode;
 import com.limoilux.circuit.techno.CircuitNodeLink;
-import com.limoilux.circuitsimulator.scope.Scope;
+
 
 public class CircuitManager
 {
 	public final Circuit circuit;
 	public final CircuitPane circuitPanel;
 	public final DumpManager dumpMan;
-	
+	public final MouseManager mouseMan;
 
 
 	public CircuitManager( CircuitPane circuitPanel)
 	{
+	
 		this.circuit = new Circuit();
+		
+		this.mouseMan = new MouseManager(this.circuit);
 		this.circuitPanel = circuitPanel;
 		this.dumpMan = new DumpManager();
 		
-		
-
+		this.circuitPanel.addMouseMotionListener(this.mouseMan);
+		this.circuitPanel.addMouseListener(this.mouseMan);
 	}
 
 	public void repaint()
@@ -72,4 +72,5 @@ public class CircuitManager
 
 		return badnodes;
 	}
+
 }

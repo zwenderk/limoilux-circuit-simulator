@@ -51,7 +51,7 @@ import com.limoilux.circuit.SwitchElm;
 import com.limoilux.circuit.TextElm;
 import com.limoilux.circuit.core.Clipboard;
 import com.limoilux.circuit.core.Editable;
-import com.limoilux.circuit.core.MouseManager;
+
 import com.limoilux.circuit.core.Timer;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
@@ -68,6 +68,7 @@ import com.limoilux.circuitsimulator.circuit.Circuit;
 import com.limoilux.circuitsimulator.circuit.CircuitManager;
 import com.limoilux.circuitsimulator.circuit.CircuitPane;
 import com.limoilux.circuitsimulator.circuit.CircuitUtil;
+import com.limoilux.circuitsimulator.circuit.MouseManager;
 import com.limoilux.circuitsimulator.scope.Scope;
 import com.limoilux.circuitsimulator.scope.ScopeManager;
 
@@ -120,7 +121,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	public CircuitElm dragElm;
 	public CircuitElm menuElm;
 	public CircuitElm stopElm;
-	
+
 	public CircuitElm plotXElm;
 	public CircuitElm plotYElm;
 
@@ -227,7 +228,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		this.circuitMan = new CircuitManager(this.circuitPanel);
 		this.circuit = this.circuitMan.getCircuit();
-		this.mouseMan = new MouseManager(this.circuit);
+		this.mouseMan = this.circuitMan.mouseMan;
 
 		this.scopeMan = new ScopeManager(this.circuitMan.getCircuit());
 
@@ -268,9 +269,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		// Add Listener
 		this.circuitPanel.addComponentListener(this);
 
-		this.circuitPanel.addMouseMotionListener(this.mouseMan);
 		this.circuitPanel.addMouseMotionListener(this.mouseMotionList);
-		this.circuitPanel.addMouseListener(this.mouseMan);
 		this.circuitPanel.addMouseListener(this.mouseList);
 		this.circuitPanel.addKeyListener(this.keyList);
 
@@ -413,7 +412,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		 * if (mouseElm != null) { g.setFont(oldfont); g.drawString("+",
 		 * mouseElm.x+10, mouseElm.y); }
 		 */
-		if (this.mouseMan.dragElm != null && (this.mouseMan.dragElm.x != this.mouseMan.dragElm.x2 || this.mouseMan.dragElm.y != this.mouseMan.dragElm.y2))
+		if (this.mouseMan.dragElm != null
+				&& (this.mouseMan.dragElm.x != this.mouseMan.dragElm.x2 || this.mouseMan.dragElm.y != this.mouseMan.dragElm.y2))
 		{
 			this.mouseMan.dragElm.draw(g);
 		}
@@ -2699,8 +2699,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 				return;
 			}
 
-			CircuitSimulator.this.mouseMan.dragElm = CircuitSimulator
-					.constructElement(CircuitSimulator.this.addingClass, x0, y0);
+			CircuitSimulator.this.mouseMan.dragElm = CircuitUtil.constructElement(CircuitSimulator.this.addingClass,
+					x0, y0);
 		}
 
 		@Override
