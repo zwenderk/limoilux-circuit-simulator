@@ -211,7 +211,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		super();
 
 		this.clipboard = new Clipboard();
-		this.menuMan = new MenuManager();
+		this.menuMan = new MenuManager(this, this);
 
 		// this.mainContainer.setLayout(new BorderLayout());
 		this.circuitPanel = new CircuitPane(this);
@@ -873,10 +873,10 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		menu.add(this.getMenuItem("Stack All", "stackAll"));
 		menu.add(this.getMenuItem("Unstack All", "unstackAll"));
 
-		this.optionsMenu = menu = new Menu("Options");
+		this.menuMan.optionMenu = new Menu("Options");
 
 
-
+		menu = this.menuMan.optionMenu;
 		this.menuMan.dotsCheckItem = this.getCheckItem("Show Current");
 		this.menuMan.dotsCheckItem.setState(true);
 		menu.add(this.menuMan.dotsCheckItem);
@@ -2041,7 +2041,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void doMainMenuChecks(Menu m)
 	{
-		if (m == this.optionsMenu)
+		if (m == this.menuMan.optionMenu)
 		{
 			return;
 		}
