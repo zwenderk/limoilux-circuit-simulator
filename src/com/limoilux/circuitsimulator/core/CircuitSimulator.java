@@ -2067,7 +2067,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.powerBar.setEnabled(false);
 			this.powerLabel.setEnabled(false);
 		}
-		this.enableUndoRedo();
+		this.clipboard.enableUndoRedo();
 	}
 
 	private void setGrid()
@@ -2124,11 +2124,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	}
 
-	@Deprecated
-	private void enableUndoRedo()
-	{
-		this.clipboard.enableUndoRedo();
-	}
+
 
 	private void setMenuSelection()
 	{
@@ -2156,7 +2152,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 				this.circuit.removeElementAt(i);
 			}
 		}
-		this.enablePaste();
+		this.clipboard.enablePaste();
 
 		this.circuit.setNeedAnalysis(true);
 	}
@@ -2193,12 +2189,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		}
 
-		this.clipboard.enablePaste();
-	}
-
-	@Deprecated
-	private void enablePaste()
-	{
 		this.clipboard.enablePaste();
 	}
 
@@ -2629,48 +2619,18 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 			if ((modif & InputEvent.BUTTON1_MASK) != 0)
 			{
-				// left mouse
-				CircuitSimulator.this.mouseMan.tempMouseMode = CircuitSimulator.this.mouseMan.mouseMode;
-				if ((ex & InputEvent.ALT_DOWN_MASK) != 0 && (ex & InputEvent.META_DOWN_MASK) != 0)
-				{
-					CircuitSimulator.this.mouseMan.tempMouseMode = CircuitSimulator.MODE_DRAG_COLUMN;
-				}
-				else if ((ex & InputEvent.ALT_DOWN_MASK) != 0 && (ex & InputEvent.SHIFT_DOWN_MASK) != 0)
-				{
-					CircuitSimulator.this.mouseMan.tempMouseMode = CircuitSimulator.MODE_DRAG_ROW;
-				}
-				else if ((ex & InputEvent.SHIFT_DOWN_MASK) != 0)
-				{
-					CircuitSimulator.this.mouseMan.tempMouseMode = CircuitSimulator.MODE_SELECT;
-				}
-				else if ((ex & InputEvent.ALT_DOWN_MASK) != 0)
-				{
-					CircuitSimulator.this.mouseMan.tempMouseMode = CircuitSimulator.MODE_DRAG_ALL;
-				}
-				else if ((ex & (InputEvent.CTRL_DOWN_MASK | InputEvent.META_DOWN_MASK)) != 0)
-				{
-					CircuitSimulator.this.mouseMan.tempMouseMode = CircuitSimulator.MODE_DRAG_POST;
-				}
+				CircuitSimulator.this.mouseMan.leftClick(ex);
 			}
-			else if ((e.getModifiers() & InputEvent.BUTTON3_MASK) != 0)
+			else if ((modif & InputEvent.BUTTON3_MASK) != 0)
 			{
-				// right mouse
-				if ((ex & InputEvent.SHIFT_DOWN_MASK) != 0)
+				if (CircuitSimulator.this.mouseMan.rightClick(ex))
 				{
-					CircuitSimulator.this.mouseMan.tempMouseMode = CircuitSimulator.MODE_DRAG_ROW;
-				}
-				else if ((ex & (InputEvent.CTRL_DOWN_MASK | InputEvent.META_DOWN_MASK)) != 0)
-				{
-					CircuitSimulator.this.mouseMan.tempMouseMode = CircuitSimulator.MODE_DRAG_COLUMN;
-				}
-				else
-				{
+					// Trouver un moyen d'éliminer
 					return;
 				}
 			}
 
-			if (CircuitSimulator.this.mouseMan.tempMouseMode != CircuitSimulator.MODE_SELECT
-					&& CircuitSimulator.this.mouseMan.tempMouseMode != CircuitSimulator.MODE_DRAG_SELECTED)
+			if (!CircuitSimulator.this.mouseMan.isModeSelected())
 			{
 				CircuitSimulator.this.circuit.clearSelection();
 			}
