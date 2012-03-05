@@ -68,7 +68,7 @@ import com.limoilux.circuitsimulator.circuit.Circuit;
 import com.limoilux.circuitsimulator.circuit.CircuitManager;
 import com.limoilux.circuitsimulator.circuit.CircuitPane;
 import com.limoilux.circuitsimulator.circuit.CircuitUtil;
-import com.limoilux.circuitsimulator.circuit.MouseManager;
+import com.limoilux.circuitsimulator.circuit.CircuitMouseManager;
 import com.limoilux.circuitsimulator.scope.Scope;
 import com.limoilux.circuitsimulator.scope.ScopeManager;
 
@@ -202,7 +202,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	public final Circuit circuit;
 
-	public final MouseManager mouseMan;
+	public final CircuitMouseManager mouseMan;
 	public final ScopeManager scopeMan;
 	public final CircuitManager circuitMan;
 

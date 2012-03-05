@@ -8,7 +8,7 @@ import java.awt.event.MouseMotionListener;
 
 import com.limoilux.circuit.techno.CircuitElm;
 
-public class MouseManager implements MouseMotionListener, MouseListener
+public class CircuitMouseManager implements MouseMotionListener, MouseListener
 {
 
 	private static final int MODE_ADD_ELM = 0;
@@ -37,12 +37,12 @@ public class MouseManager implements MouseMotionListener, MouseListener
 
 	private final Circuit circuit;
 
-	public MouseManager(Circuit circuit)
+	public CircuitMouseManager(Circuit circuit)
 	{
 		this.circuit = circuit;
 		
-		this.tempMouseMode = MouseManager.MODE_SELECT;
-		this.mouseMode = MouseManager.MODE_SELECT;
+		this.tempMouseMode = CircuitMouseManager.MODE_SELECT;
+		this.mouseMode = CircuitMouseManager.MODE_SELECT;
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class MouseManager implements MouseMotionListener, MouseListener
 	{
 		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0)
 		{
-			if (this.mouseMode == MouseManager.MODE_SELECT || this.mouseMode == MouseManager.MODE_DRAG_SELECTED)
+			if (this.mouseMode == CircuitMouseManager.MODE_SELECT || this.mouseMode == CircuitMouseManager.MODE_DRAG_SELECTED)
 			{
 				this.circuit.clearSelection();
 			}
