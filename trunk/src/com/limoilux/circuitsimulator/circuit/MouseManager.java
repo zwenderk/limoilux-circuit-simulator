@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.core;
+package com.limoilux.circuitsimulator.circuit;
 
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
@@ -7,11 +7,10 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import com.limoilux.circuit.techno.CircuitElm;
-import com.limoilux.circuitsimulator.circuit.Circuit;
-
 
 public class MouseManager implements MouseMotionListener, MouseListener
 {
+
 	private static final int MODE_ADD_ELM = 0;
 	private static final int MODE_DRAG_ALL = 1;
 
@@ -36,11 +35,12 @@ public class MouseManager implements MouseMotionListener, MouseListener
 	public CircuitElm plotXElm;
 	public CircuitElm plotYElm;
 
-	public final Circuit circuit;
+	private final Circuit circuit;
 
 	public MouseManager(Circuit circuit)
 	{
 		this.circuit = circuit;
+		
 		this.tempMouseMode = MouseManager.MODE_SELECT;
 		this.mouseMode = MouseManager.MODE_SELECT;
 	}
@@ -99,9 +99,7 @@ public class MouseManager implements MouseMotionListener, MouseListener
 	public void mouseMoved(MouseEvent e)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
 
 }
