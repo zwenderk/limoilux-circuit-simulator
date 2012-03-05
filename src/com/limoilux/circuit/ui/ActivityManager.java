@@ -27,7 +27,7 @@ public class ActivityManager
 
 	public ActivityManager()
 	{
-		this(true);
+		this(false);
 	}
 
 	public void setPlaying(boolean playing)
