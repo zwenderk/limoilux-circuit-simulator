@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuit.ui.DrawUtil;
+import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public class GroundElm extends CircuitElm
 {
@@ -34,17 +36,17 @@ public class GroundElm extends CircuitElm
 	public void draw(Graphics g)
 	{
 		this.setVoltageColor(g, 0);
-		CircuitElm.drawThickLine(g, this.point1, this.point2);
+		DrawUtil.drawThickLine(g, this.point1, this.point2);
 		int i;
 		for (i = 0; i != 3; i++)
 		{
 			int a = 10 - i * 4;
 			int b = i * 5; // -10;
-			CircuitElm.interpPoint2(this.point1, this.point2, CircuitElm.ps1, CircuitElm.ps2, 1 + b / this.dn, a);
-			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
+			CoreUtil.interpPoint2(this.point1, this.point2, CircuitElm.ps1, CircuitElm.ps2, 1 + b / this.dn, a);
+			DrawUtil.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 		}
 		this.doDots(g);
-		CircuitElm.interpPoint(this.point1, this.point2, CircuitElm.ps2, 1 + 11. / this.dn);
+		CoreUtil.interpPoint(this.point1, this.point2, CircuitElm.ps2, 1 + 11. / this.dn);
 		this.setBbox(this.point1, CircuitElm.ps2, 11);
 		this.drawPost(g, this.x, this.y, this.nodes[0]);
 	}
