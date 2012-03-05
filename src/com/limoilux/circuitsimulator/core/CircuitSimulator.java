@@ -2601,14 +2601,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		@Override
 		public void mouseClicked(MouseEvent e)
 		{
-			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0)
-			{
-				if (CircuitSimulator.this.mouseMan.mouseMode == CircuitSimulator.MODE_SELECT
-						|| CircuitSimulator.this.mouseMan.mouseMode == CircuitSimulator.MODE_DRAG_SELECTED)
-				{
-					CircuitSimulator.this.circuit.clearSelection();
-				}
-			}
 		}
 
 		@Override
@@ -2619,11 +2611,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		@Override
 		public void mouseExited(MouseEvent e)
 		{
-			CircuitSimulator.this.mouseMan.scopeSelected = -1;
-			CircuitSimulator.this.mouseMan.mouseElm = null;
-
-			CircuitSimulator.this.mouseMan.plotXElm = null;
-			CircuitSimulator.this.mouseMan.plotYElm = null;
 		}
 
 		@Override
@@ -2685,7 +2672,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			if (CircuitSimulator.this.mouseMan.tempMouseMode != CircuitSimulator.MODE_SELECT
 					&& CircuitSimulator.this.mouseMan.tempMouseMode != CircuitSimulator.MODE_DRAG_SELECTED)
 			{
-				System.out.println("clear selection");
 				CircuitSimulator.this.circuit.clearSelection();
 			}
 
