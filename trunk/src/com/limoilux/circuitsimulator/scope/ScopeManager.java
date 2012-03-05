@@ -27,6 +27,8 @@ public class ScopeManager
 		this.scopes = new Scope[20];
 		this.scopeColCount = new int[20];
 		this.scopeCount = 0;
+		
+		
 
 	}
 

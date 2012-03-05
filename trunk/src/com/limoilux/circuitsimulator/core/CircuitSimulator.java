@@ -33,6 +33,7 @@ import java.awt.event.MouseMotionListener;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.StringTokenizer;
@@ -43,6 +44,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import com.limoilux.circuit.CapacitorElm;
 import com.limoilux.circuit.InductorElm;
@@ -286,6 +288,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
 		// this.mainContainer.add(this.scopeMan.getScopePane(),
 		// BorderLayout.SOUTH);
+		
+		
 
 	}
 
@@ -295,16 +299,44 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.cirFrame.setVisible(true);
 	
 		this.scopeMan.setupScopes(this.winSize);
+		
+		Scope[] scopes = this.scopeMan.scopes;
+		for (int i = 0; i < scopes.length; i++)
+		{
+			scopes[i] = new Scope(this);
+		}
+		
 	
 		this.handleResize();
 	
-		this.cirFrame.requestFocus();
-	
+		Runnable starter = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				CircuitSimulator.this.cirFrame.requestFocus();
+			}
+		};
+
+		try
+		{
+			SwingUtilities.invokeAndWait(starter);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		catch (InvocationTargetException e)
+		{
+			e.printStackTrace();
+		}
 
 		this.initStartCircuitText();
 
 		Thread t = new Thread(new RepaintRun());
 		t.start();
+		
+
 	
 		//CircuitSimulator.this.activityManager.setPlaying(true);
 	}
