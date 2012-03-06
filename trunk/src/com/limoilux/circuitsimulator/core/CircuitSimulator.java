@@ -308,11 +308,11 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	
 		this.scopeMan.setupScopes(this.winSize);
 		
-		Scope[] scopes = this.scopeMan.scopes;
-		for (int i = 0; i < scopes.length; i++)
-		{
-			scopes[i] = new Scope(this);
-		}
+		//Scope[] scopes = this.scopeMan.scopes;
+	//	for (int i = 0; i < scopes.length; i++)
+		//{
+	//		scopes[i] = new Scope(this);
+		//}
 		
 	
 		this.handleResize();
