@@ -20,7 +20,6 @@ public class MenuManager
 	public JCheckBoxMenuItem voltsCheckItem;
 	public JCheckBoxMenuItem powerCheckItem;
 	public JCheckBoxMenuItem smallGridCheckItem;
-	public JCheckBoxMenuItem showValuesCheckItem;
 	public JCheckBoxMenuItem conductanceCheckItem;
 	public JCheckBoxMenuItem euroResistorCheckItem;
 	public JCheckBoxMenuItem printableCheckItem;
@@ -48,15 +47,8 @@ public class MenuManager
 
 		this.powerCheckItem = this.getCheckItem("Show Power");
 		menu.add(this.powerCheckItem);
-		
-		this.showValuesCheckItem = this.getCheckItem("Show Values");
-		//this.showValuesCheckItem.setState(true);
-		menu.add(this.showValuesCheckItem);
-
 
 		
-		this.smallGridCheckItem = this.getCheckItem("Small Grid");
-		menu.add(this.smallGridCheckItem);
 
 		
 		this.optionMenu = menu;
@@ -74,15 +66,9 @@ public class MenuManager
 		return this.powerCheckItem.getState();
 	}
 
-	public boolean isSmallGrid()
-	{
-		return this.smallGridCheckItem.getState();
-	}
 
-	public boolean showValues()
-	{
-		return this.showValuesCheckItem.getState();
-	}
+
+
 
 
 

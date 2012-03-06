@@ -13,6 +13,7 @@ import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.core.Configs;
 import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public abstract class ChipElm extends CircuitElm
@@ -40,7 +41,7 @@ public abstract class ChipElm extends CircuitElm
 		}
 		this.noDiagonal = true;
 		this.setupPins();
-		this.setSize(CircuitElm.cirSim.menuMan.smallGridCheckItem.getState() ? 1 : 2);
+		this.setSize(Configs.smallGrid ? 1 : 2);
 	}
 
 	public ChipElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)

@@ -106,7 +106,7 @@ public class ResistorElm extends CircuitElm
 			CircuitElm.interpPoint2(this.lead1, this.lead2, CircuitElm.ps1, CircuitElm.ps2, 1, hs);
 			CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 		}
-		if (CircuitElm.cirSim.menuMan.showValuesCheckItem.getState())
+		if (Configs.showValues)
 		{
 			String s = CircuitElm.getShortUnitText(this.resistance, "");
 			this.drawValues(g, s, hs);

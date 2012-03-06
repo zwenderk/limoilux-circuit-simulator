@@ -256,7 +256,7 @@ public class VoltageElm extends CircuitElm
 			break;
 		}
 		}
-		if (CircuitElm.cirSim.menuMan.showValuesCheckItem.getState())
+		if (Configs.showValues)
 		{
 			String s = CircuitElm.getShortUnitText(this.frequency, "Hz");
 			if (this.dx == 0 || this.dy == 0)

@@ -1490,7 +1490,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		}
 
 		// f |= this.smallGridCheckItem.getState() ? 2 : 0;
-		if (this.menuMan.smallGridCheckItem.getState())
+		if (Configs.smallGrid)
 		{
 			f |= 2;
 		}
@@ -1508,7 +1508,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		}
 
 		// f |= this.showValuesCheckItem.getState() ? 0 : 16;
-		if (!this.menuMan.showValuesCheckItem.getState())
+		if (Configs.showValues)
 		{
 			f |= 16;
 		}
@@ -1670,10 +1670,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.hintType = -1;
 
 			//this.menuMan.dotsCheckItem.setState(true);
-			this.menuMan.smallGridCheckItem.setState(false);
 			this.menuMan.powerCheckItem.setState(false);
 			this.menuMan.voltsCheckItem.setState(true);
-			this.menuMan.showValuesCheckItem.setState(true);
 			this.setGrid();
 			this.speedBar.setValue(117); // 57
 			this.currentBar.setValue(50);
@@ -1808,10 +1806,9 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		int flags = new Integer(st.nextToken()).intValue();
 		
 		//this.menuMan.dotsCheckItem.setState((flags & 1) != 0);
-		this.menuMan.smallGridCheckItem.setState((flags & 2) != 0);
 		this.menuMan.voltsCheckItem.setState((flags & 4) == 0);
 		this.menuMan.powerCheckItem.setState((flags & 8) == 8);
-		this.menuMan.showValuesCheckItem.setState((flags & 16) == 0);
+
 		
 		// Dump pour garder la compatibilité, ancient timeStep.
 		st.nextToken();
@@ -2123,7 +2120,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void setGrid()
 	{
-		if (this.menuMan.smallGridCheckItem.getState())
+		if (Configs.smallGrid)
 		{
 			this.gridSize = 8;
 		}
@@ -2515,10 +2512,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	{
 		Object mi = e.getItemSelectable();
 
-		if (mi == this.menuMan.smallGridCheckItem)
-		{
-			this.setGrid();
-		}
+		
 		if (mi == this.menuMan.powerCheckItem)
 		{
 			if (this.menuMan.powerCheckItem.getState())
