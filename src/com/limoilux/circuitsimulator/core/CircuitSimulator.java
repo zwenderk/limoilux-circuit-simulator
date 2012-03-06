@@ -1490,7 +1490,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		}
 
 		// f |= this.smallGridCheckItem.getState() ? 2 : 0;
-		if (Configs.smallGrid)
+		if (Configs.SMALL_GRID)
 		{
 			f |= 2;
 		}
@@ -1508,7 +1508,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		}
 
 		// f |= this.showValuesCheckItem.getState() ? 0 : 16;
-		if (Configs.showValues)
+		if (Configs.SHOW_VALUES)
 		{
 			f |= 16;
 		}
@@ -1518,7 +1518,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		dump = "$ ";
 
 		dump += f + " ";
-		dump += Configs.timeStep + " ";
+		dump += Configs.TIME_STEP + " ";
 		dump += this.getIterCount() + " ";
 		dump += this.currentBar.getValue() + " ";
 		dump += CircuitElm.voltageRange + " ";
@@ -2120,7 +2120,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void setGrid()
 	{
-		if (Configs.smallGrid)
+		if (Configs.SMALL_GRID)
 		{
 			this.gridSize = 8;
 		}

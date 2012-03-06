@@ -20,7 +20,7 @@ public class EditOptions implements Editable
 	{
 		if (n == 0)
 		{
-			return new EditInfo("Time step size (s)", Configs.timeStep, 0, 0);
+			return new EditInfo("Time step size (s)", Configs.TIME_STEP, 0, 0);
 		}
 		if (n == 1)
 		{

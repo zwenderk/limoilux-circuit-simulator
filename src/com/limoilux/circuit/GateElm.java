@@ -25,7 +25,7 @@ public abstract class GateElm extends CircuitElm
 		super(xx, yy);
 		this.noDiagonal = true;
 		this.inputCount = 2;
-		this.setSize(Configs.smallGrid ? 1 : 2);
+		this.setSize(Configs.SMALL_GRID ? 1 : 2);
 	}
 
 	public GateElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
