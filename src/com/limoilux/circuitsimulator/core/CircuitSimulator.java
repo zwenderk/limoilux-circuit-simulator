@@ -301,8 +301,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	private void start()
 	{
 		Runnable starter = new Starter();
-
-
+		
 		try
 		{
 			SwingUtilities.invokeAndWait(starter);
@@ -318,8 +317,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		this.initStartCircuitText();
 
-		Thread t = new Thread(new RepaintRun());
-		t.start();
+		Thread thread = new Thread(new RepaintRun());
+		thread.start();
 	}
 
 	private long repaint()
