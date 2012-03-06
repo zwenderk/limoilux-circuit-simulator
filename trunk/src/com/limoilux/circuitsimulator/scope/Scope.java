@@ -367,7 +367,7 @@ public class Scope extends JPanel
 			return;
 		}
 		int i;
-		int color = this.sim.menuMan.printableCheckItem.getState() ? 0xFFFFFFFF : 0;
+		int color = 0;
 
 		for (i = 0; i != this.pixels.length; i++)
 		{

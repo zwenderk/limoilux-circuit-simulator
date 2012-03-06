@@ -91,6 +91,8 @@ import com.limoilux.circuitsimulator.scope.ScopeManager;
  */
 public class CircuitSimulator implements ComponentListener, ActionListener, ItemListener
 {
+
+	
 	private static final CircuitSimulator SINGLETON = new CircuitSimulator();
 	@Deprecated
 	private static final double PI = Math.PI;
@@ -403,7 +405,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			double c = this.currentBar.getValue();
 			c = Math.exp(c / 3.5 - 14.2);
 			this.currentMultiplier = 1.7 * inc * c;
-			if (!this.menuMan.conventionCheckItem.getState())
+			if (!Configs.CONVENTIONAL_CURRENT)
 			{
 				this.currentMultiplier = -this.currentMultiplier;
 			}
@@ -1482,7 +1484,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		int f = 0;
 
 		// f = this.dotsCheckItem.getState() ? 1 : 0;
-		if (this.menuMan.showDots())
+		if (Configs.SHOW_DOTS)
 		{
 			f = 1;
 		}
@@ -1667,7 +1669,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.circuit.removeAllElements();
 			this.hintType = -1;
 			this.timer.timeStep = 5e-6;
-			this.menuMan.dotsCheckItem.setState(true);
+			//this.menuMan.dotsCheckItem.setState(true);
 			this.menuMan.smallGridCheckItem.setState(false);
 			this.menuMan.powerCheckItem.setState(false);
 			this.menuMan.voltsCheckItem.setState(true);
@@ -1802,8 +1804,10 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void readOptions(StringTokenizer st)
 	{
+		// Atefact
 		int flags = new Integer(st.nextToken()).intValue();
-		this.menuMan.dotsCheckItem.setState((flags & 1) != 0);
+		
+		//this.menuMan.dotsCheckItem.setState((flags & 1) != 0);
 		this.menuMan.smallGridCheckItem.setState((flags & 2) != 0);
 		this.menuMan.voltsCheckItem.setState((flags & 4) == 0);
 		this.menuMan.powerCheckItem.setState((flags & 8) == 8);
