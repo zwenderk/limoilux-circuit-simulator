@@ -11,6 +11,7 @@ import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
 public class ScopeManager
 {
+	private static final int SIZE = 20;
 	public int scopeCount;
 	public int scopeColCount[];
 
@@ -21,11 +22,12 @@ public class ScopeManager
 
 	public ScopeManager(Circuit circuit)
 	{
+		
 		this.circuit = circuit;
 		this.scopePane = new ScopePane();
 
 		this.scopes = new Scope[20];
-		this.scopeColCount = new int[20];
+		this.scopeColCount = new int[SIZE];
 		this.scopeCount = 0;
 		
 		
@@ -170,7 +172,7 @@ public class ScopeManager
 		}
 
 		int pos = 0;
-		for (int i = 0; i != this.scopeCount; i++)
+		for (int i = 0; i < this.scopeCount; i++)
 		{
 			pos = Math.max(this.scopes[i].position, pos);
 			this.scopeColCount[this.scopes[i].position]++;

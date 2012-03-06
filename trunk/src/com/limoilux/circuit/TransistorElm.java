@@ -12,6 +12,7 @@ import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.core.Configs;
 import com.limoilux.circuitsimulator.scope.Scope;
 
 public class TransistorElm extends CircuitElm
@@ -102,7 +103,7 @@ public class TransistorElm extends CircuitElm
 		g.fillPolygon(this.arrowPoly);
 		// draw base
 		this.setVoltageColor(g, this.volts[0]);
-		if (CircuitElm.cirSim.menuMan.powerCheckItem.getState())
+		if (Configs.SHOW_POWER)
 		{
 			g.setColor(Color.gray);
 		}
