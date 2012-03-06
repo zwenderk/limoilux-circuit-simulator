@@ -38,6 +38,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.StringTokenizer;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
@@ -215,6 +216,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	public final ActivityManager activityManager;
 	private final ActivityListener activityListener;
 
+	private RepaintRun repaintRun = null;
+
 	private CircuitSimulator()
 	{
 		super();
@@ -301,7 +304,9 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	private void start()
 	{
 		Runnable starter = new Starter();
-		
+
+		this.initStartCircuitText();
+
 		try
 		{
 			SwingUtilities.invokeAndWait(starter);
@@ -315,9 +320,18 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			e.printStackTrace();
 		}
 
-		this.initStartCircuitText();
+		this.startDisplay();
+	}
 
-		Thread thread = new Thread(new RepaintRun());
+	private void startDisplay()
+	{
+		if (this.repaintRun != null)
+		{
+			this.repaintRun.goOn = false;
+		}
+
+		this.repaintRun = new RepaintRun();
+		Thread thread = new Thread(repaintRun);
 		thread.start();
 	}
 
@@ -807,9 +821,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void initToolBar()
 	{
-		this.resetButton = new JButton("Reset");
-		this.resetButton.addActionListener(this);
-		this.toolBar.add(this.resetButton);
+		this.toolBar.add(new ResetAction());
 		this.toolBar.addSeparator();
 
 		this.playButton = new JButton(this.activityManager.getPlayAction());
@@ -2280,24 +2292,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	public void actionPerformed(ActionEvent e)
 	{
 		String ac = e.getActionCommand();
-		if (e.getSource() == this.resetButton)
-		{
-			int i;
-
-			for (i = 0; i != this.circuit.getElementCount(); i++)
-			{
-				this.circuit.getElementAt(i).reset();
-			}
-
-			for (i = 0; i != this.scopeMan.scopeCount; i++)
-			{
-				this.scopeMan.scopes[i].resetGraph();
-			}
-
-			this.circuit.setNeedAnalysis(true);
-			this.timer.time = 0;
-			this.activityManager.setPlaying(true);
-		}
 
 		if (e.getSource() == this.exportItem)
 		{
@@ -2508,7 +2502,33 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.mouseMan.tempMouseMode = this.mouseMan.mouseMode;
 		}
 	}
-	
+
+	private class ResetAction extends AbstractAction
+	{
+		public ResetAction()
+		{
+			super("reset");
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0)
+		{
+			for (int i = 0; i != CircuitSimulator.this.circuit.getElementCount(); i++)
+			{
+				CircuitSimulator.this.circuit.getElementAt(i).reset();
+			}
+
+			for (int i = 0; i != CircuitSimulator.this.scopeMan.scopeCount; i++)
+			{
+				CircuitSimulator.this.scopeMan.scopes[i].resetGraph();
+			}
+
+			CircuitSimulator.this.circuit.setNeedAnalysis(true);
+			CircuitSimulator.this.timer.time = 0;
+			CircuitSimulator.this.activityManager.setPlaying(true);
+		}
+	}
+
 	private class Starter implements Runnable
 	{
 		@Override
@@ -2907,12 +2927,14 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private class RepaintRun implements Runnable
 	{
+		boolean goOn = true;
+
 		@Override
 		public void run()
 		{
 			long delay = 0;
 
-			while (true)
+			while (this.goOn)
 			{
 
 				delay = CircuitSimulator.this.repaint();
