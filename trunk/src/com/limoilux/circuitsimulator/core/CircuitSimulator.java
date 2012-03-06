@@ -854,20 +854,15 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		JMenuBar menubar = null;
 
 		menubar = new JMenuBar();
-		JMenu menu = new JMenu("File");
-
-		menubar.add(menu);
-
-		this.importItem = this.getMenuItem("Import");
-		menu.add(this.importItem);
-
-		this.exportItem = this.getMenuItem("Export");
-		menu.add(this.exportItem);
-
+		
+		JMenu menu = null;
+		
+		menu = new JMenu("File");
+		menu.add(new MigrationAction());
 		menu.addSeparator();
-
 		this.exitItem = this.getMenuItem("Exit");
 		menu.add(this.exitItem);
+		menubar.add(menu);
 
 		menu = new JMenu("Edit");
 
@@ -2287,21 +2282,27 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	{
 		this.handleResize();
 	}
+	
+	private class MigrationAction extends AbstractAction
+	{
+		public MigrationAction()
+		{
+			super("Import/Export");
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			CircuitSimulator.this.showMigrationDialog();
+		}
+		
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		String ac = e.getActionCommand();
 
-		if (e.getSource() == this.exportItem)
-		{
-			this.showMigrationDialog();
-		}
-
-		if (e.getSource() == this.importItem)
-		{
-			this.showMigrationDialog();
-		}
 
 		if (e.getSource() == this.clipboard.undoItem)
 		{
