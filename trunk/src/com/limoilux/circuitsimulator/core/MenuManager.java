@@ -58,8 +58,7 @@ public class MenuManager
 		this.smallGridCheckItem = this.getCheckItem("Small Grid");
 		menu.add(this.smallGridCheckItem);
 
-		this.optionsItem = this.getMenuItem("Other Options...");
-		menu.add(this.optionsItem);
+		
 		this.optionMenu = menu;
 	}
 

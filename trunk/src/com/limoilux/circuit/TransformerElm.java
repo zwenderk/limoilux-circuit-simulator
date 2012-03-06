@@ -10,6 +10,7 @@ import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.core.Configs;
 import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public class TransformerElm extends CircuitElm
@@ -197,7 +198,7 @@ public class TransformerElm extends CircuitElm
 		double m = this.couplingCoef * Math.sqrt(l1 * l2);
 		// build inverted matrix
 		double deti = 1 / (l1 * l2 - m * m);
-		double ts = this.isTrapezoidal() ? CircuitElm.cirSim.timer.timeStep / 2 : CircuitElm.cirSim.timer.timeStep;
+		double ts = this.isTrapezoidal() ? Configs.timeStep / 2 : Configs.timeStep;
 		this.a1 = l2 * deti * ts; // we multiply dt/2 into a1..a4 here
 		this.a2 = -m * deti * ts;
 		this.a3 = -m * deti * ts;

@@ -11,6 +11,7 @@ import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.core.Configs;
 
 public class VoltageElm extends CircuitElm
 {
@@ -388,7 +389,7 @@ public class VoltageElm extends CircuitElm
 			// even though the frequency has changed.
 			double oldfreq = this.frequency;
 			this.frequency = ei.value;
-			double maxfreq = 1 / (8 * CircuitElm.cirSim.timer.timeStep);
+			double maxfreq = 1 / (8 * Configs.timeStep);
 			if (this.frequency > maxfreq)
 			{
 				this.frequency = maxfreq;

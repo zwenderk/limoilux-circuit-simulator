@@ -27,7 +27,7 @@ public abstract class CircuitElm implements Editable
 	public static final Color WHITE_COLOR = Color.white;
 	public static final Color LIGHT_GRAY_COLOR = Color.lightGray;
 
-	public static double voltageRange = 5;
+	public static final double voltageRange = 5;
 
 	public static double powerMult;
 

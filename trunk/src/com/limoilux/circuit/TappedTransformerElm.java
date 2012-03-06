@@ -9,6 +9,7 @@ import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.core.Configs;
 
 public class TappedTransformerElm extends CircuitElm
 {
@@ -197,7 +198,7 @@ public class TappedTransformerElm extends CircuitElm
 		int i;
 		for (i = 0; i != 9; i++)
 		{
-			this.a[i] *= CircuitElm.cirSim.timer.timeStep / 2;
+			this.a[i] *= Configs.timeStep / 2;
 		}
 		CircuitElm.cirSim.circuit.stampConductance(this.nodes[0], this.nodes[1], this.a[0]);
 		CircuitElm.cirSim.circuit.stampVCCurrentSource(this.nodes[0], this.nodes[1], this.nodes[2], this.nodes[3],

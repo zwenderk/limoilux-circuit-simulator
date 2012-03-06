@@ -10,6 +10,7 @@ import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.core.Configs;
 import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public class InverterElm extends CircuitElm
@@ -101,7 +102,7 @@ public class InverterElm extends CircuitElm
 	{
 		double v0 = this.volts[1];
 		double out = this.volts[0] > 2.5 ? 0 : 5;
-		double maxStep = this.slewRate * CircuitElm.cirSim.timer.timeStep * 1e9;
+		double maxStep = this.slewRate * Configs.timeStep * 1e9;
 		out = Math.max(Math.min(v0 + maxStep, out), v0 - maxStep);
 		CircuitElm.cirSim.circuit.updateVoltageSource(0, this.nodes[1], this.voltSource, out);
 	}

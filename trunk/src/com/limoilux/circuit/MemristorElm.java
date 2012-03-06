@@ -9,6 +9,7 @@ import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.EditInfo;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
+import com.limoilux.circuitsimulator.core.Configs;
 
 public class MemristorElm extends CircuitElm
 {
@@ -122,7 +123,7 @@ public class MemristorElm extends CircuitElm
 	public void startIteration() throws CircuitAnalysisException
 	{
 		double wd = this.dopeWidth / this.totalWidth;
-		this.dopeWidth += CircuitElm.cirSim.timer.timeStep * this.mobility * this.r_on * this.current / this.totalWidth;
+		this.dopeWidth += Configs.timeStep * this.mobility * this.r_on * this.current / this.totalWidth;
 		if (this.dopeWidth < 0)
 		{
 			this.dopeWidth = 0;

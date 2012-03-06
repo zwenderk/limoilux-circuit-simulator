@@ -1518,7 +1518,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		dump = "$ ";
 
 		dump += f + " ";
-		dump += this.timer.timeStep + " ";
+		dump += Configs.timeStep + " ";
 		dump += this.getIterCount() + " ";
 		dump += this.currentBar.getValue() + " ";
 		dump += CircuitElm.voltageRange + " ";
@@ -1668,7 +1668,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 			this.circuit.removeAllElements();
 			this.hintType = -1;
-			this.timer.timeStep = 5e-6;
+
 			//this.menuMan.dotsCheckItem.setState(true);
 			this.menuMan.smallGridCheckItem.setState(false);
 			this.menuMan.powerCheckItem.setState(false);
@@ -1678,7 +1678,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.speedBar.setValue(117); // 57
 			this.currentBar.setValue(50);
 			this.powerBar.setValue(50);
-			CircuitElm.voltageRange = 5;
+
 			this.scopeMan.scopeCount = 0;
 		}
 
@@ -1812,20 +1812,23 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.menuMan.voltsCheckItem.setState((flags & 4) == 0);
 		this.menuMan.powerCheckItem.setState((flags & 8) == 8);
 		this.menuMan.showValuesCheckItem.setState((flags & 16) == 0);
-		this.timer.timeStep = new Double(st.nextToken()).doubleValue();
+		
+		// Dump pour garder la compatibilité, ancient timeStep.
+		st.nextToken();
+		
+		
 		double sp = new Double(st.nextToken()).doubleValue();
 		int sp2 = (int) (Math.log(10 * sp) * 24 + 61.5);
 		// int sp2 = (int) (Math.log(sp)*24+1.5);
 		this.speedBar.setValue(sp2);
 		this.currentBar.setValue(new Integer(st.nextToken()).intValue());
-		CircuitElm.voltageRange = new Double(st.nextToken()).doubleValue();
-		try
-		{
-			this.powerBar.setValue(new Integer(st.nextToken()).intValue());
-		}
-		catch (Exception e)
-		{
-		}
+		
+		// Dump pour garder la compatibilité, ancient voltage.
+		st.nextToken();
+		
+		// Dump pour garder la compatibilité, ancient powerBar.
+		st.nextToken();
+		
 		this.setGrid();
 	}
 
