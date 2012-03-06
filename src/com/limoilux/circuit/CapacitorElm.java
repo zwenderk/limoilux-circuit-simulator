@@ -93,7 +93,7 @@ public class CapacitorElm extends CircuitElm
 		DrawUtil.drawThickLine(g, this.point1, this.lead1);
 		this.setPowerColor(g, false);
 		DrawUtil.drawThickLine(g, this.plate1[0], this.plate1[1]);
-		if (CircuitElm.cirSim.menuMan.powerCheckItem.getState())
+		if (Configs.SHOW_POWER)
 		{
 			g.setColor(Color.gray);
 		}

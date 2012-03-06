@@ -17,6 +17,7 @@ import com.limoilux.circuit.core.Editable;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
+import com.limoilux.circuitsimulator.core.Configs;
 import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public abstract class CircuitElm implements Editable
@@ -536,9 +537,9 @@ public abstract class CircuitElm implements Editable
 			g.setColor(CircuitElm.SELECT_COLOR);
 			return;
 		}
-		if (!CircuitElm.cirSim.menuMan.voltsCheckItem.getState())
+		if (!Configs.SHOW_VOLTAGE)
 		{
-			if (!CircuitElm.cirSim.menuMan.powerCheckItem.getState())
+			if (!Configs.SHOW_POWER)
 			{
 				// !conductanceCheckItem.getState())
 				g.setColor(CircuitElm.WHITE_COLOR);
@@ -563,7 +564,7 @@ public abstract class CircuitElm implements Editable
 		 * if (conductanceCheckItem.getState()) { setConductanceColor(g,
 		 * current/getVoltageDiff()); return; }
 		 */
-		if (!CircuitElm.cirSim.menuMan.powerCheckItem.getState())
+		if (!Configs.SHOW_POWER)
 		{
 			return;
 		}

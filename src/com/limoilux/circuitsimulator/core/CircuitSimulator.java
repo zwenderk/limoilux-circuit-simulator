@@ -204,7 +204,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	public final CircuitMouseManager mouseMan;
 	public final ScopeManager scopeMan;
 	public final CircuitManager circuitMan;
-	public final MenuManager menuMan;
 
 	public final CircuitPane circuitPanel;
 
@@ -222,7 +221,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		super();
 
 		this.clipboard = new Clipboard();
-		this.menuMan = new MenuManager(this, this);
+
 
 		// this.mainContainer.setLayout(new BorderLayout());
 		this.circuitPanel = new CircuitPane(this);
@@ -402,7 +401,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		{
 
 			int inc = (int) (sysTime - this.timer.lastTime);
-			double c = this.currentBar.getValue();
+			double c = Configs.CURRENT_SPEED;
 			c = Math.exp(c / 3.5 - 14.2);
 			this.currentMultiplier = 1.7 * inc * c;
 			if (!Configs.CONVENTIONAL_CURRENT)
@@ -424,7 +423,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		for (int i = 0; i != this.circuit.getElementCount(); i++)
 		{
-			if (this.menuMan.powerCheckItem.getState())
+			if (Configs.SHOW_POWER)
 			{
 				g.setColor(Color.gray);
 			}
@@ -469,7 +468,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void calcPowerMult()
 	{
-		CircuitElm.powerMult = Math.exp(this.powerBar.getValue() / 4.762 - 7);
+		CircuitElm.powerMult = Math.exp(Configs.POWER_SPEED / 4.762 - 7);
 	}
 
 	public void createCircuitImage(Image image) throws Exception
@@ -851,7 +850,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.toolBar.add(this.speedBar);
 
 		// this.toolBar.add(new JLabel("Current Speed", JLabel.CENTER));
-		this.currentBar = new JScrollBar(Adjustable.HORIZONTAL, 50, 1, 1, 100);
 		// this.currentBar.addAdjustmentListener(this);
 		// this.toolBar.add(this.currentBar);
 
@@ -859,10 +857,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.powerLabel.setEnabled(false);
 		// this.toolBar.add(this.powerLabel);
 
-		this.powerBar = new Scrollbar(Scrollbar.HORIZONTAL, 50, 1, 1, 100);
-		this.powerBar.setEnabled(false);
-		// this.powerBar.addAdjustmentListener(this);
-		// this.toolBar.add(this.powerBar);
+
 
 		// this.toolBar.add(new Label("www.falstad.com"));
 	}
@@ -929,8 +924,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		menu.add(this.getMenuItem("Stack All", "stackAll"));
 		menu.add(this.getMenuItem("Unstack All", "unstackAll"));
 		
-		menu = this.menuMan.getOptionMenu();
-		menubar.add(menu);
+
 
 		JMenu circuitsMenu = new JMenu("Circuits");
 		menubar.add(circuitsMenu);
@@ -1496,13 +1490,13 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		}
 
 		// f |= this.voltsCheckItem.getState() ? 0 : 4;
-		if (!this.menuMan.voltsCheckItem.getState())
+		if (!Configs.SHOW_VOLTAGE)
 		{
 			f |= 4;
 		}
 
 		// f |= this.powerCheckItem.getState() ? 8 : 0;
-		if (this.menuMan.powerCheckItem.getState())
+		if (Configs.SHOW_POWER)
 		{
 			f |= 8;
 		}
@@ -1520,9 +1514,9 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		dump += f + " ";
 		dump += Configs.TIME_STEP + " ";
 		dump += this.getIterCount() + " ";
-		dump += this.currentBar.getValue() + " ";
+		dump += Configs.CURRENT_SPEED + " ";
 		dump += CircuitElm.voltageRange + " ";
-		dump += this.powerBar.getValue();
+		dump += Configs.POWER_SPEED;
 
 		dump += "\n";
 
@@ -1669,13 +1663,12 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.circuit.removeAllElements();
 			this.hintType = -1;
 
-			//this.menuMan.dotsCheckItem.setState(true);
-			this.menuMan.powerCheckItem.setState(false);
-			this.menuMan.voltsCheckItem.setState(true);
+
+
 			this.setGrid();
-			this.speedBar.setValue(117); // 57
-			this.currentBar.setValue(50);
-			this.powerBar.setValue(50);
+			
+			this.speedBar.setValue(Configs.DEF_SPEED);
+
 
 			this.scopeMan.scopeCount = 0;
 		}
@@ -1805,9 +1798,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		// Atefact
 		int flags = new Integer(st.nextToken()).intValue();
 		
-		//this.menuMan.dotsCheckItem.setState((flags & 1) != 0);
-		this.menuMan.voltsCheckItem.setState((flags & 4) == 0);
-		this.menuMan.powerCheckItem.setState((flags & 8) == 8);
+
 
 		
 		// Dump pour garder la compatibilité, ancient timeStep.
@@ -1818,13 +1809,15 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		int sp2 = (int) (Math.log(10 * sp) * 24 + 61.5);
 		// int sp2 = (int) (Math.log(sp)*24+1.5);
 		this.speedBar.setValue(sp2);
-		this.currentBar.setValue(new Integer(st.nextToken()).intValue());
+		
+		// Dump pour garder la compatibilité, ancient currentBar.
+		st.nextToken();
 		
 		// Dump pour garder la compatibilité, ancient voltage.
 		st.nextToken();
 		
 		// Dump pour garder la compatibilité, ancient powerBar.
-		st.nextToken();
+		//st.nextToken();
 		
 		this.setGrid();
 	}
@@ -2081,11 +2074,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void doMainMenuChecks(JMenu m)
 	{
-		if (m == this.menuMan.optionMenu)
-		{
-			return;
-		}
-
 		for (int i = 0; i != m.getItemCount(); i++)
 		{
 			JMenuItem mc = m.getItem(i);
@@ -2105,15 +2093,14 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void enableItems()
 	{
-		if (this.menuMan.powerCheckItem.getState())
+		if (Configs.SHOW_POWER)
 		{
-			this.powerBar.setEnabled(false);
-			this.powerLabel.setEnabled(false);
+
 		}
 		else
 		{
-			this.powerBar.setEnabled(false);
-			this.powerLabel.setEnabled(false);
+
+	
 		}
 		this.clipboard.enableUndoRedo();
 	}
@@ -2358,10 +2345,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.showMigrationDialog();
 		}
 
-		if (e.getSource() == this.menuMan.optionsItem)
-		{
-			this.doEdit(new EditOptions(this));
-		}
+
 
 		if (e.getSource() == this.importItem)
 		{
@@ -2503,7 +2487,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		if (ac.indexOf("setup ") == 0)
 		{
 			this.pushUndo();
-			this.readSetupFile(ac.substring(6), ((MenuItem) e.getSource()).getLabel());
+			this.readSetupFile(ac.substring(6), ((JMenuItem) e.getSource()).getLabel());
 		}
 	}
 
@@ -2512,22 +2496,9 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	{
 		Object mi = e.getItemSelectable();
 
+
 		
-		if (mi == this.menuMan.powerCheckItem)
-		{
-			if (this.menuMan.powerCheckItem.getState())
-			{
-				this.menuMan.voltsCheckItem.setState(false);
-			}
-			else
-			{
-				this.menuMan.voltsCheckItem.setState(true);
-			}
-		}
-		if (mi == this.menuMan.voltsCheckItem && this.menuMan.voltsCheckItem.getState())
-		{
-			this.menuMan.powerCheckItem.setState(false);
-		}
+
 		this.enableItems();
 		if (this.menuScope != -1)
 		{

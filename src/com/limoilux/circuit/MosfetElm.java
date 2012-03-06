@@ -12,6 +12,7 @@ import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.core.Configs;
 
 public class MosfetElm extends CircuitElm
 {
@@ -115,7 +116,7 @@ public class MosfetElm extends CircuitElm
 			this.setVoltageColor(g, this.pnp == 1 ? this.volts[1] : this.volts[2]);
 			g.fillPolygon(this.arrowPoly);
 		}
-		if (CircuitElm.cirSim.menuMan.powerCheckItem.getState())
+		if (Configs.SHOW_POWER)
 		{
 			g.setColor(Color.gray);
 		}

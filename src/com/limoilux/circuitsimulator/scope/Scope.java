@@ -317,7 +317,7 @@ public class Scope extends JPanel
 		{
 			return;
 		}
-		int col = this.sim.menuMan.printableCheckItem.getState() ? 0xFFFFFFFF : 0;
+		int col = 0;
 		for (i = 0; i != this.pixels.length; i++)
 		{
 			this.pixels[i] = col;
