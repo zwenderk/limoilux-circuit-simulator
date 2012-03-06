@@ -119,6 +119,46 @@ public class ScopeManager
 			this.scopes[s].position--;
 		}
 	}
+	
+	public void manageActionCommand(String ac, int menuScope)
+	{
+		if (ac.compareTo("remove") == 0)
+		{
+			this.scopes[menuScope].setElement(null);
+		}
+		if (ac.compareTo("speed2") == 0)
+		{
+			this.scopes[menuScope].speedUp();
+		}
+		if (ac.compareTo("speed1/2") == 0)
+		{
+			this.scopes[menuScope].slowDown();
+		}
+		if (ac.compareTo("scale") == 0)
+		{
+			this.scopes[menuScope].adjustScale(.5);
+		}
+		if (ac.compareTo("maxscale") == 0)
+		{
+			this.scopes[menuScope].adjustScale(1e-50);
+		}
+		if (ac.compareTo("stack") == 0)
+		{
+			this.stackScope(menuScope);
+		}
+		if (ac.compareTo("unstack") == 0)
+		{
+			this.unstackScope(menuScope);
+		}
+		if (ac.compareTo("selecty") == 0)
+		{
+			this.scopes[menuScope].selectY();
+		}
+		if (ac.compareTo("reset") == 0)
+		{
+			this.scopes[menuScope].resetGraph();
+		}
+	}
 
 	private void removeUnused()
 	{
