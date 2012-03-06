@@ -1597,28 +1597,30 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.titleLabel.setText("untitled");
 	}
 
-	private void readSetupFile(String str, String title)
+	private void readSetupFile(String fileName, String title)
 	{
+		ByteArrayOutputStream bytes = null;
+		System.out.println(fileName + " " + title);
 		this.timer.time = 0;
 
 		URL url;
 		try
 		{
-			url = new URL(CoreUtil.getCodeBase() + "circuits/" + str);
-			ByteArrayOutputStream ba = CoreUtil.readUrlData(url);
+			url = new URL(CoreUtil.getCodeBase() + Configs.CIRCUIT_FOLDER + "/" + fileName);
+			bytes = CoreUtil.readUrlData(url);
 
-			this.readSetup(ba.toByteArray(), ba.size(), false);
-			System.out.println("CirSim, file loaded: " + str);
+			this.readSetup(bytes.toByteArray(), bytes.size(), false);
+			System.out.println("CirSim, file loaded: " + fileName);
 		}
 		catch (MalformedURLException e)
 		{
 			e.printStackTrace();
-			this.stop("Unable to read " + str + "!", null);
+			this.stop("Unable to read " + fileName + "!", null);
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
-			this.stop("Unable to read " + str + "!", null);
+			this.stop("Unable to read " + fileName + "!", null);
 		}
 
 		this.cirFrame.setTitle(title);
