@@ -10,14 +10,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Label;
-import java.awt.Menu;
-import java.awt.MenuBar;
-import java.awt.MenuItem;
-import java.awt.MenuShortcut;
 import java.awt.Point;
-import java.awt.PopupMenu;
 import java.awt.Rectangle;
-import java.awt.Scrollbar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -72,7 +66,6 @@ import com.limoilux.circuit.ui.ActivityListener;
 import com.limoilux.circuit.ui.ActivityManager;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditDialog;
-import com.limoilux.circuit.ui.EditOptions;
 import com.limoilux.circuit.ui.io.MigrationWizard;
 import com.limoilux.circuitsimulator.circuit.Circuit;
 import com.limoilux.circuitsimulator.circuit.CircuitManager;
@@ -153,15 +146,10 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	private String stopMessage;
 
 	private Label titleLabel;
-	private JButton resetButton;
-	private JMenuItem exportItem, importItem, exitItem, cutItem, copyItem, selectAllItem;
-
-	private Menu optionsMenu;
+	private JMenuItem cutItem, copyItem, selectAllItem;
 
 	private JScrollBar speedBar;
-	private JScrollBar currentBar;
 	private Label powerLabel;
-	private Scrollbar powerBar;
 	private JPopupMenu elementsPopUp;
 	private JMenuItem elmEditMenuItem;
 	private JMenuItem elmCutMenuItem;
@@ -2406,54 +2394,59 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	@Override
 	public void itemStateChanged(ItemEvent e)
 	{
+		JMenuItem mmi = null;
+		Scope scope = null;
+		String command = null;
 		Object mi = e.getItemSelectable();
 
 		this.enableItems();
+		
 		if (this.menuScope != -1)
 		{
-			Scope sc = this.scopeMan.scopes[this.menuScope];
-			sc.handleMenu(e, mi);
+			scope = this.scopeMan.scopes[this.menuScope];
+			scope.handleMenu(e, mi);
 		}
-		if (mi instanceof CheckboxMenuItem)
+		
+		if (mi instanceof JCheckBoxMenuItem)
 		{
-			MenuItem mmi = (MenuItem) mi;
+			mmi = (JMenuItem) mi;
 			this.mouseMan.mouseMode = CircuitSimulator.MODE_ADD_ELM;
-			String s = mmi.getActionCommand();
+			command = mmi.getActionCommand();
 
-			if (s.length() > 0)
+			if (command.length() > 0)
 			{
-				this.mouseMan.mouseModeStr = s;
+				this.mouseMan.mouseModeStr = command;
 			}
 
-			if (s.compareTo("DragAll") == 0)
+			if (command.compareTo("DragAll") == 0)
 			{
 				this.mouseMan.mouseMode = CircuitSimulator.MODE_DRAG_ALL;
 			}
-			else if (s.compareTo("DragRow") == 0)
+			else if (command.compareTo("DragRow") == 0)
 			{
 				this.mouseMan.mouseMode = CircuitSimulator.MODE_DRAG_ROW;
 			}
-			else if (s.compareTo("DragColumn") == 0)
+			else if (command.compareTo("DragColumn") == 0)
 			{
 				this.mouseMan.mouseMode = CircuitSimulator.MODE_DRAG_COLUMN;
 			}
-			else if (s.compareTo("DragSelected") == 0)
+			else if (command.compareTo("DragSelected") == 0)
 			{
 				this.mouseMan.mouseMode = CircuitSimulator.MODE_DRAG_SELECTED;
 			}
-			else if (s.compareTo("DragPost") == 0)
+			else if (command.compareTo("DragPost") == 0)
 			{
 				this.mouseMan.mouseMode = CircuitSimulator.MODE_DRAG_POST;
 			}
-			else if (s.compareTo("Select") == 0)
+			else if (command.compareTo("Select") == 0)
 			{
 				this.mouseMan.mouseMode = CircuitSimulator.MODE_SELECT;
 			}
-			else if (s.length() > 0)
+			else if (command.length() > 0)
 			{
 				try
 				{
-					this.addingClass = Class.forName("com.limoilux.circuit." + s);
+					this.addingClass = Class.forName(Configs.CIRCUITS_PACKAGE + command);
 				}
 				catch (Exception ee)
 				{
