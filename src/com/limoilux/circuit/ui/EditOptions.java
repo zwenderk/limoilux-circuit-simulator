@@ -4,6 +4,7 @@ package com.limoilux.circuit.ui;
 import com.limoilux.circuit.core.Editable;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
+import com.limoilux.circuitsimulator.core.Configs;
 
 public class EditOptions implements Editable
 {
@@ -19,7 +20,7 @@ public class EditOptions implements Editable
 	{
 		if (n == 0)
 		{
-			return new EditInfo("Time step size (s)", this.sim.timer.timeStep, 0, 0);
+			return new EditInfo("Time step size (s)", Configs.timeStep, 0, 0);
 		}
 		if (n == 1)
 		{
@@ -32,13 +33,6 @@ public class EditOptions implements Editable
 	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
-		if (n == 0 && ei.value > 0)
-		{
-			this.sim.timer.timeStep = ei.value;
-		}
-		if (n == 1 && ei.value > 0)
-		{
-			CircuitElm.voltageRange = ei.value;
-		}
+
 	}
 };

@@ -1,3 +1,4 @@
+
 package com.limoilux.circuitsimulator.core;
 
 public class Configs
@@ -7,4 +8,6 @@ public class Configs
 	public static final boolean CONVENTIONAL_CURRENT = true;
 	public static final boolean SHOW_POWER = false;
 	public static final boolean SHOW_VOLTAGE = true;
+
+	public static final double timeStep = 5e-6;
 }

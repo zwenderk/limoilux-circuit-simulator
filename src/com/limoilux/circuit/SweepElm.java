@@ -10,6 +10,7 @@ import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.core.Configs;
 import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public class SweepElm extends CircuitElm
@@ -141,15 +142,15 @@ public class SweepElm extends CircuitElm
 		}
 		if ((this.flags & this.FLAG_LOG) == 0)
 		{
-			this.fadd = this.dir * CircuitElm.cirSim.timer.timeStep * (this.maxF - this.minF) / this.sweepTime;
+			this.fadd = this.dir * Configs.timeStep * (this.maxF - this.minF) / this.sweepTime;
 			this.fmul = 1;
 		}
 		else
 		{
 			this.fadd = 0;
-			this.fmul = Math.pow(this.maxF / this.minF, this.dir * CircuitElm.cirSim.timer.timeStep / this.sweepTime);
+			this.fmul = Math.pow(this.maxF / this.minF, this.dir * Configs.timeStep / this.sweepTime);
 		}
-		this.savedTimeStep = CircuitElm.cirSim.timer.timeStep;
+		this.savedTimeStep = Configs.timeStep;
 	}
 
 	@Override
@@ -167,12 +168,12 @@ public class SweepElm extends CircuitElm
 	public void startIteration() throws CircuitAnalysisException
 	{
 		// has timestep been changed?
-		if (CircuitElm.cirSim.timer.timeStep != this.savedTimeStep)
+		if (Configs.timeStep != this.savedTimeStep)
 		{
 			this.setParams();
 		}
 		this.v = Math.sin(this.freqTime) * this.maxV;
-		this.freqTime += this.frequency * 2 * Math.PI * CircuitElm.cirSim.timer.timeStep;
+		this.freqTime += this.frequency * 2 * Math.PI * Configs.timeStep;
 		this.frequency = this.frequency * this.fmul + this.fadd;
 		if (this.frequency >= this.maxF && this.dir == 1)
 		{
@@ -268,7 +269,7 @@ public class SweepElm extends CircuitElm
 	@Override
 	public void setEditValue(int n, EditInfo ei)
 	{
-		double maxfreq = 1 / (8 * CircuitElm.cirSim.timer.timeStep);
+		double maxfreq = 1 / (8 * Configs.timeStep);
 		if (n == 0)
 		{
 			this.minF = ei.value;

@@ -22,6 +22,7 @@ import com.limoilux.circuit.ProbeElm;
 import com.limoilux.circuit.TransistorElm;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
+import com.limoilux.circuitsimulator.core.Configs;
 import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public class Scope extends JPanel
@@ -459,12 +460,12 @@ public class Scope extends JPanel
 		}
 
 		gridStep = 1e-15;
-		double ts = this.sim.timer.timeStep * this.speed;
+		double ts = Configs.timeStep * this.speed;
 		while (gridStep < ts * 5)
 		{
 			gridStep *= 10;
 		}
-		double tstart = this.sim.timer.time - this.sim.timer.timeStep * this.speed * this.rect.width;
+		double tstart = this.sim.timer.time - Configs.timeStep * this.speed * this.rect.width;
 		double tx = this.sim.timer.time - this.sim.timer.time % gridStep;
 
 		for (ll = 0;; ll++)
@@ -664,7 +665,7 @@ public class Scope extends JPanel
 			avperiod /= periodct;
 			avperiod2 /= periodct;
 			double periodstd = Math.sqrt(avperiod2 - avperiod * avperiod);
-			freq = 1 / (avperiod * this.sim.timer.timeStep * this.speed);
+			freq = 1 / (avperiod * Configs.timeStep * this.speed);
 			// don't show freq if standard deviation is too great
 			if (periodct < 1 || periodstd > 2)
 			{

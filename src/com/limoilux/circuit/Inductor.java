@@ -2,6 +2,7 @@
 package com.limoilux.circuit;
 
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
+import com.limoilux.circuitsimulator.core.Configs;
 
 class Inductor
 {
@@ -48,12 +49,12 @@ class Inductor
 		this.nodes[1] = n1;
 		if (this.isTrapezoidal())
 		{
-			this.compResistance = 2 * this.inductance / this.sim.timer.timeStep;
+			this.compResistance = 2 * this.inductance / Configs.timeStep;
 		}
 		else
 		{
 			// backward euler
-			this.compResistance = this.inductance / this.sim.timer.timeStep;
+			this.compResistance = this.inductance / Configs.timeStep;
 		}
 		this.sim.circuit.stampResistor(this.nodes[0], this.nodes[1], this.compResistance);
 		this.sim.circuit.stampRightSide(this.nodes[0]);

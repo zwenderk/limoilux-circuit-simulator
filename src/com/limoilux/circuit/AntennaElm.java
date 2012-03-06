@@ -5,6 +5,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuitsimulator.core.Configs;
 
 public class AntennaElm extends RailElm
 {
@@ -37,7 +38,7 @@ public class AntennaElm extends RailElm
 	double getVoltage()
 	{
 		this.fmphase += 2 * Math.PI * (2200 + Math.sin(2 * Math.PI * CircuitElm.cirSim.timer.time * 13) * 100)
-				* CircuitElm.cirSim.timer.timeStep;
+				* Configs.timeStep;
 		double fm = 3 * Math.sin(this.fmphase);
 
 		return Math.sin(2 * Math.PI * CircuitElm.cirSim.timer.time * 3000)

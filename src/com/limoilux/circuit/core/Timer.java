@@ -1,6 +1,8 @@
 
 package com.limoilux.circuit.core;
 
+import com.limoilux.circuitsimulator.core.Configs;
+
 public class Timer
 {
 	private static final int MAX_FPS = 50;
@@ -8,7 +10,7 @@ public class Timer
 
 	public long lastTime = 0;
 
-	public double timeStep;
+
 
 	private long lastFrameTime;
 	public long lastIterTime;
@@ -37,7 +39,7 @@ public class Timer
 
 	public void doTimeStep()
 	{
-		this.time += this.timeStep;
+		this.time += Configs.timeStep;
 	}
 
 	public long getLastFrameTime()

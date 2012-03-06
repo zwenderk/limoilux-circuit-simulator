@@ -11,6 +11,7 @@ import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
+import com.limoilux.circuitsimulator.core.Configs;
 
 public class TransLineElm extends CircuitElm
 {
@@ -21,7 +22,7 @@ public class TransLineElm extends CircuitElm
 	public TransLineElm(int xx, int yy)
 	{
 		super(xx, yy);
-		this.delay = 1000 * CircuitElm.cirSim.timer.timeStep;
+		this.delay = 1000 * Configs.timeStep;
 		this.imped = 75;
 		this.noDiagonal = true;
 		this.reset();
@@ -90,11 +91,8 @@ public class TransLineElm extends CircuitElm
 	@Override
 	public void reset()
 	{
-		if (CircuitElm.cirSim.timer.timeStep == 0)
-		{
-			return;
-		}
-		this.lenSteps = (int) (this.delay / CircuitElm.cirSim.timer.timeStep);
+
+		this.lenSteps = (int) (this.delay / Configs.timeStep);
 		System.out.println(this.lenSteps + " steps");
 		if (this.lenSteps > 100000)
 		{
