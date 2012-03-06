@@ -4,15 +4,17 @@ package com.limoilux.circuit.core;
 import java.awt.MenuItem;
 import java.util.Vector;
 
+import javax.swing.JMenuItem;
+
 public class Clipboard
 {
 	public String cache;
 	public final Vector<String> undoStack;
 	public final Vector<String> redoStack;
 	
-	public MenuItem undoItem;
-	public MenuItem redoItem;
-	public MenuItem pasteItem;
+	public JMenuItem undoItem;
+	public JMenuItem redoItem;
+	public JMenuItem pasteItem;
 
 	public Clipboard()
 	{

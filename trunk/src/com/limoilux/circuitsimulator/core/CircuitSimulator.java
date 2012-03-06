@@ -39,10 +39,17 @@ import java.net.URL;
 import java.util.StringTokenizer;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
+import javax.swing.MenuElement;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
@@ -145,7 +152,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private Label titleLabel;
 	private JButton resetButton;
-	private MenuItem exportItem, importItem, exitItem, cutItem, copyItem, selectAllItem;
+	private JMenuItem exportItem, importItem, exitItem, cutItem, copyItem, selectAllItem;
 
 	private Menu optionsMenu;
 
@@ -153,32 +160,32 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	private JScrollBar currentBar;
 	private Label powerLabel;
 	private Scrollbar powerBar;
-	private PopupMenu elementsPopUp;
-	private MenuItem elmEditMenuItem;
-	private MenuItem elmCutMenuItem;
-	private MenuItem elmCopyMenuItem;
-	private MenuItem elmDeleteMenuItem;
-	private MenuItem elmScopeMenuItem;
-	public PopupMenu scopeMenu;
-	public PopupMenu transScopeMenu;
-	private PopupMenu mainMenu;
-	public CheckboxMenuItem scopeVMenuItem;
-	public CheckboxMenuItem scopeIMenuItem;
-	public CheckboxMenuItem scopeMaxMenuItem;
-	public CheckboxMenuItem scopeMinMenuItem;
-	public CheckboxMenuItem scopeFreqMenuItem;
-	public CheckboxMenuItem scopePowerMenuItem;
-	public CheckboxMenuItem scopeIbMenuItem;
-	public CheckboxMenuItem scopeIcMenuItem;
-	public CheckboxMenuItem scopeIeMenuItem;
-	public CheckboxMenuItem scopeVbeMenuItem;
-	public CheckboxMenuItem scopeVbcMenuItem;
-	public CheckboxMenuItem scopeVceMenuItem;
-	public CheckboxMenuItem scopeVIMenuItem;
-	public CheckboxMenuItem scopeXYMenuItem;
-	public CheckboxMenuItem scopeResistMenuItem;
-	public CheckboxMenuItem scopeVceIcMenuItem;
-	public MenuItem scopeSelectYMenuItem;
+	private JPopupMenu elementsPopUp;
+	private JMenuItem elmEditMenuItem;
+	private JMenuItem elmCutMenuItem;
+	private JMenuItem elmCopyMenuItem;
+	private JMenuItem elmDeleteMenuItem;
+	private JMenuItem elmScopeMenuItem;
+	public JPopupMenu scopeMenu;
+	public JPopupMenu transScopeMenu;
+	private JPopupMenu mainMenu;
+	public JCheckBoxMenuItem scopeVMenuItem;
+	public JCheckBoxMenuItem scopeIMenuItem;
+	public JCheckBoxMenuItem scopeMaxMenuItem;
+	public JCheckBoxMenuItem scopeMinMenuItem;
+	public JCheckBoxMenuItem scopeFreqMenuItem;
+	public JCheckBoxMenuItem scopePowerMenuItem;
+	public JCheckBoxMenuItem scopeIbMenuItem;
+	public JCheckBoxMenuItem scopeIcMenuItem;
+	public JCheckBoxMenuItem scopeIeMenuItem;
+	public JCheckBoxMenuItem scopeVbeMenuItem;
+	public JCheckBoxMenuItem scopeVbcMenuItem;
+	public JCheckBoxMenuItem scopeVceMenuItem;
+	public JCheckBoxMenuItem scopeVIMenuItem;
+	public JCheckBoxMenuItem scopeXYMenuItem;
+	public JCheckBoxMenuItem scopeResistMenuItem;
+	public JCheckBoxMenuItem scopeVceIcMenuItem;
+	public JMenuItem scopeSelectYMenuItem;
 	private Class<?> addingClass;
 
 	public JButton playButton;
@@ -266,7 +273,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.circuitPanel.addMouseListener(this.mouseList);
 		this.circuitPanel.addKeyListener(this.keyList);
 
-		Menu circuitsMenu = this.buildMenuBar();
+		JMenu circuitsMenu = this.buildMenuBar();
 
 		this.buildPopUpMainMenu(isMac);
 
@@ -811,7 +818,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void initPopupMenu()
 	{
-		this.elementsPopUp = new PopupMenu();
+		this.elementsPopUp = new JPopupMenu();
 		this.elmEditMenuItem = this.getMenuItem("Edit");
 		this.elementsPopUp.add(this.elmEditMenuItem);
 		this.elementsPopUp.add(this.elmScopeMenuItem = this.getMenuItem("View in Scope"));
@@ -858,14 +865,14 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		// this.toolBar.add(new Label("www.falstad.com"));
 	}
 
-	private Menu buildMenuBar()
+	private JMenu buildMenuBar()
 	{
 		// Artéfacte de la version Falstad.
 
-		MenuBar menubar = null;
+		JMenuBar menubar = null;
 
-		menubar = new MenuBar();
-		Menu menu = new Menu("File");
+		menubar = new JMenuBar();
+		JMenu menu = new JMenu("File");
 
 		menubar.add(menu);
 
@@ -880,40 +887,40 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.exitItem = this.getMenuItem("Exit");
 		menu.add(this.exitItem);
 
-		menu = new Menu("Edit");
+		menu = new JMenu("Edit");
 		
 		this.clipboard.undoItem = this.getMenuItem("Undo");
-		this.clipboard.undoItem.setShortcut(new MenuShortcut(KeyEvent.VK_Z));
+		this.clipboard.undoItem.setAccelerator(KeyStroke.getKeyStroke('Z'));
 		menu.add(this.clipboard.undoItem);
 
 		this.clipboard.redoItem = this.getMenuItem("Redo");
-		this.clipboard.redoItem.setShortcut(new MenuShortcut(KeyEvent.VK_Z, true));
 		menu.add(this.clipboard.redoItem);
 
 		menu.addSeparator();
 		
 		this.cutItem = this.getMenuItem("Cut");
-		this.cutItem.setShortcut(new MenuShortcut(KeyEvent.VK_X));
+
+		this.cutItem.setAccelerator(KeyStroke.getKeyStroke('X'));
 		menu.add(this.cutItem);
 		
 		this.copyItem = this.getMenuItem("Copy");
-		this.copyItem.setShortcut(new MenuShortcut(KeyEvent.VK_C));
+		this.copyItem.setAccelerator(KeyStroke.getKeyStroke('C'));
 		menu.add(this.copyItem);
 
 
 		this.clipboard.pasteItem = this.getMenuItem("Paste");
-		this.clipboard.pasteItem.setShortcut(new MenuShortcut(KeyEvent.VK_V));
+		this.clipboard.pasteItem.setAccelerator(KeyStroke.getKeyStroke('V'));
 		this.clipboard.pasteItem.setEnabled(false);
 		menu.add(this.clipboard.pasteItem);
 
 		this.selectAllItem = this.getMenuItem("Select All");
-		this.selectAllItem.setShortcut(new MenuShortcut(KeyEvent.VK_A));
+		this.selectAllItem.setAccelerator(KeyStroke.getKeyStroke('A'));
 		menu.add(this.selectAllItem);
 
 
 		menubar.add(menu);
 
-		menu = new Menu("Scope");
+		menu = new JMenu("Scope");
 
 		menubar.add(menu);
 
@@ -923,17 +930,17 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		menu = this.menuMan.getOptionMenu();
 		menubar.add(menu);
 
-		Menu circuitsMenu = new Menu("Circuits");
+		JMenu circuitsMenu = new JMenu("Circuits");
 		menubar.add(circuitsMenu);
 
-		this.cirFrame.setMenuBar(menubar);
+		this.cirFrame.setJMenuBar(menubar);
 
 		return circuitsMenu;
 	}
 
 	private void buildPopUpMainMenu(boolean isMac)
 	{
-		this.mainMenu = new PopupMenu();
+		this.mainMenu = new JPopupMenu();
 		this.mainMenu.add(this.getClassCheckItem("Add Wire", "WireElm"));
 		this.mainMenu.add(this.getClassCheckItem("Add Resistor", "ResistorElm"));
 
@@ -947,7 +954,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		this.buildChipMenu();
 
-		Menu otherMenu = new Menu("Other");
+		JMenu otherMenu = new JMenu("Other");
 		this.mainMenu.add(otherMenu);
 		otherMenu.add(this.getClassCheckItem("Add Text", "TextElm"));
 		otherMenu.add(this.getClassCheckItem("Add Scope Probe", "ProbeElm"));
@@ -967,7 +974,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void buildGateMenu()
 	{
-		Menu gateMenu = new Menu("Logic Gates");
+		JMenu gateMenu = new JMenu("Logic Gates");
 		this.mainMenu.add(gateMenu);
 		gateMenu.add(this.getClassCheckItem("Add Inverter", "InverterElm"));
 		gateMenu.add(this.getClassCheckItem("Add NAND Gate", "NandGateElm"));
@@ -977,10 +984,10 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		gateMenu.add(this.getClassCheckItem("Add XOR Gate", "XorGateElm"));
 	}
 
-	private PopupMenu buildScopeMenu(boolean t)
+	private JPopupMenu buildScopeMenu(boolean t)
 	{
-		PopupMenu scopePopUp;
-		scopePopUp = new PopupMenu();
+		JPopupMenu scopePopUp;
+		scopePopUp = new JPopupMenu();
 		scopePopUp.add(this.getMenuItem("Remove", "remove"));
 		scopePopUp.add(this.getMenuItem("Speed 2x", "speed2"));
 		scopePopUp.add(this.getMenuItem("Speed 1/2x", "speed1/2"));
@@ -1019,7 +1026,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void buildIOMenu()
 	{
-		Menu inputMenu = new Menu("Inputs/Outputs");
+		JMenu inputMenu = new JMenu("Inputs/Outputs");
 		this.mainMenu.add(inputMenu);
 		inputMenu.add(this.getClassCheckItem("Add Ground", "GroundElm"));
 		inputMenu.add(this.getClassCheckItem("Add Voltage Source (2-terminal)", "DCVoltageElm"));
@@ -1041,7 +1048,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void buildPassiveCompMenu()
 	{
-		Menu passMenu = new Menu("Passive Components");
+		JMenu passMenu = new JMenu("Passive Components");
 		this.mainMenu.add(passMenu);
 		passMenu.add(this.getClassCheckItem("Add Capacitor", "CapacitorElm"));
 		passMenu.add(this.getClassCheckItem("Add Inductor", "InductorElm"));
@@ -1059,7 +1066,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void buildChipMenu()
 	{
-		Menu chipMenu = new Menu("Chips");
+		JMenu chipMenu = new JMenu("Chips");
 		this.mainMenu.add(chipMenu);
 		chipMenu.add(this.getClassCheckItem("Add D Flip-Flop", "DFlipFlopElm"));
 		chipMenu.add(this.getClassCheckItem("Add JK Flip-Flop", "JKFlipFlopElm"));
@@ -1076,7 +1083,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void buildActiveCompMenu()
 	{
-		Menu activeMenu = new Menu("Active Components");
+		JMenu activeMenu = new JMenu("Active Components");
 		this.mainMenu.add(activeMenu);
 		activeMenu.add(this.getClassCheckItem("Add Diode", "DiodeElm"));
 		activeMenu.add(this.getClassCheckItem("Add Zener Diode", "ZenerElm"));
@@ -1104,24 +1111,24 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		activeMenu.add(this.getClassCheckItem("Add CCII-", "CC2NegElm"));
 	}
 
-	private MenuItem getMenuItem(String s)
+	private JMenuItem getMenuItem(String s)
 	{
-		MenuItem mi = new MenuItem(s);
+		JMenuItem mi = new JMenuItem(s);
 		mi.addActionListener(this);
 		return mi;
 	}
 
-	private MenuItem getMenuItem(String s, String ac)
+	private JMenuItem getMenuItem(String s, String ac)
 	{
-		MenuItem mi = new MenuItem(s);
+		JMenuItem mi = new JMenuItem(s);
 		mi.setActionCommand(ac);
 		mi.addActionListener(this);
 		return mi;
 	}
 
-	private CheckboxMenuItem getCheckItem(String s)
+	private JCheckBoxMenuItem getCheckItem(String s)
 	{
-		CheckboxMenuItem mi = new CheckboxMenuItem(s);
+		JCheckBoxMenuItem mi = new JCheckBoxMenuItem(s);
 		mi.addItemListener(this);
 		mi.setActionCommand("");
 		return mi;
@@ -1135,7 +1142,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	 * 
 	 * @return un item de menu.
 	 */
-	private CheckboxMenuItem getClassCheckItem(String label, String className)
+	private JCheckBoxMenuItem getClassCheckItem(String label, String className)
 	{
 		int dt = 0;
 		Class<?> classPath = null;
@@ -1165,9 +1172,9 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		return this.getCheckItem(label, className);
 	}
 
-	private CheckboxMenuItem getCheckItem(String s, String t)
+	private JCheckBoxMenuItem getCheckItem(String s, String t)
 	{
-		CheckboxMenuItem mi = new CheckboxMenuItem(s);
+		JCheckBoxMenuItem mi = new JCheckBoxMenuItem(s);
 		mi.addItemListener(this);
 		mi.setActionCommand(t);
 		return mi;
@@ -1533,9 +1540,9 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		return dump;
 	}
 
-	private void fetchSetupList(Menu menu, boolean retry)
+	private void fetchSetupList(JMenu menu, boolean retry)
 	{
-		Menu stack[] = new Menu[6];
+		JMenu stack[] = new JMenu[6];
 		int stackptr = 0;
 		stack[stackptr++] = menu;
 		try
@@ -1569,7 +1576,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 				}
 				else if (line.charAt(0) == '+')
 				{
-					Menu n = new Menu(line.substring(1));
+					JMenu n = new JMenu(line.substring(1));
 					menu.add(n);
 					menu = stack[stackptr++] = n;
 				}
@@ -2027,7 +2034,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		if (this.mouseMan.scopeSelected != -1)
 		{
-			PopupMenu m = this.scopeMan.scopes[this.mouseMan.scopeSelected].getMenu();
+			JPopupMenu m = this.scopeMan.scopes[this.mouseMan.scopeSelected].getMenu();
 			this.menuScope = this.mouseMan.scopeSelected;
 			if (m != null)
 			{
@@ -2046,8 +2053,29 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.mainMenu.show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
+	
+	private void doMainMenuChecks(MenuElement m)
+	{
+		MenuElement[]  sub = m.getSubElements();
 
-	private void doMainMenuChecks(Menu m)
+		for (int i = 0; i != sub.length; i++)
+		{
+			MenuElement mc = sub[i];
+			
+			if (mc instanceof JPopupMenu)
+			{
+				this.doMainMenuChecks(mc);
+			}
+			
+			if (mc instanceof JCheckBoxMenuItem)
+			{
+				JCheckBoxMenuItem cmi = (JCheckBoxMenuItem) mc;
+				cmi.setState(this.mouseMan.testMouseMode(cmi.getActionCommand()));
+			}
+		}
+	}
+
+	private void doMainMenuChecks(JMenu m)
 	{
 		if (m == this.menuMan.optionMenu)
 		{
@@ -2056,16 +2084,16 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		for (int i = 0; i != m.getItemCount(); i++)
 		{
-			MenuItem mc = m.getItem(i);
+			JMenuItem mc = m.getItem(i);
 			
-			if (mc instanceof Menu)
+			if (mc instanceof JMenu)
 			{
-				this.doMainMenuChecks((Menu) mc);
+				this.doMainMenuChecks((JMenu) mc);
 			}
 			
-			if (mc instanceof CheckboxMenuItem)
+			if (mc instanceof JCheckBoxMenuItem)
 			{
-				CheckboxMenuItem cmi = (CheckboxMenuItem) mc;
+				JCheckBoxMenuItem cmi = (JCheckBoxMenuItem) mc;
 				cmi.setState(this.mouseMan.testMouseMode(cmi.getActionCommand()));
 			}
 		}

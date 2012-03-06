@@ -13,6 +13,7 @@ import java.awt.image.Raster;
 import java.util.StringTokenizer;
 
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import com.limoilux.circuit.LogicOutputElm;
 import com.limoilux.circuit.MemristorElm;
@@ -744,7 +745,7 @@ public class Scope extends JPanel
 		this.resetGraph();
 	}
 
-	public PopupMenu getMenu()
+	public JPopupMenu getMenu()
 	{
 		if (this.element == null)
 		{
