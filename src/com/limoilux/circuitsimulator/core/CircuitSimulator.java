@@ -854,9 +854,9 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		JMenuBar menubar = null;
 
 		menubar = new JMenuBar();
-		
+
 		JMenu menu = null;
-		
+
 		menu = new JMenu("File");
 		menu.add(new MigrationAction());
 		menu.addSeparator();
@@ -2258,7 +2258,17 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.handleResize();
 		}
 		this.needAnalyze();
+	}
+	
+	private void loadCircuit(String ac, ActionEvent e)
+	{
 
+		if (ac.indexOf("setup ") == 0)
+		{
+			
+			this.pushUndo();
+			this.readSetupFile(ac.substring(6), ((JMenuItem) e.getSource()).getText());
+		}
 	}
 
 	private void exit()
@@ -2287,12 +2297,13 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	{
 		this.handleResize();
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		String ac = e.getActionCommand();
-
+		
+		System.out.println(ac);
 
 		if (e.getSource() == this.clipboard.undoItem)
 		{
@@ -2331,8 +2342,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		{
 			this.circuit.doSelectAll();
 		}
-
-
 
 		if (ac.compareTo("stackAll") == 0)
 		{
@@ -2384,48 +2393,13 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		if (this.menuScope != -1)
 		{
-			if (ac.compareTo("remove") == 0)
-			{
-				this.scopeMan.scopes[this.menuScope].setElement(null);
-			}
-			if (ac.compareTo("speed2") == 0)
-			{
-				this.scopeMan.scopes[this.menuScope].speedUp();
-			}
-			if (ac.compareTo("speed1/2") == 0)
-			{
-				this.scopeMan.scopes[this.menuScope].slowDown();
-			}
-			if (ac.compareTo("scale") == 0)
-			{
-				this.scopeMan.scopes[this.menuScope].adjustScale(.5);
-			}
-			if (ac.compareTo("maxscale") == 0)
-			{
-				this.scopeMan.scopes[this.menuScope].adjustScale(1e-50);
-			}
-			if (ac.compareTo("stack") == 0)
-			{
-				this.stackScope(this.menuScope);
-			}
-			if (ac.compareTo("unstack") == 0)
-			{
-				this.unstackScope(this.menuScope);
-			}
-			if (ac.compareTo("selecty") == 0)
-			{
-				this.scopeMan.scopes[this.menuScope].selectY();
-			}
-			if (ac.compareTo("reset") == 0)
-			{
-				this.scopeMan.scopes[this.menuScope].resetGraph();
-			}
+			this.scopeMan.manageActionCommand(ac, this.menuScope);
 		}
+		
 
 		if (ac.indexOf("setup ") == 0)
 		{
-			this.pushUndo();
-			this.readSetupFile(ac.substring(6), ((JMenuItem) e.getSource()).getLabel());
+			CircuitSimulator.this.loadCircuit(ac, e);
 		}
 	}
 
@@ -2493,7 +2467,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	private void reset()
 	{
 		int nbElements = this.circuit.getElementCount();
-		
+
 		for (int i = 0; i < nbElements; i++)
 		{
 			this.circuit.getElementAt(i).reset();
@@ -2515,7 +2489,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		{
 			super("exit");
 		}
-	
+
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
@@ -2529,13 +2503,13 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		{
 			super("Import/Export");
 		}
-	
+
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
 			CircuitSimulator.this.showMigrationDialog();
 		}
-		
+
 	}
 
 	private class ResetAction extends AbstractAction
