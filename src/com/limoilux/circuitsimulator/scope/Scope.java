@@ -745,8 +745,6 @@ public class Scope extends JPanel
 		this.speed *= 2;
 		this.resetGraph();
 	}
-	
-
 
 	public JPopupMenu getMenu()
 	{
