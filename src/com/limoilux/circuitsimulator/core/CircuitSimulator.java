@@ -2503,6 +2503,25 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		}
 	}
 
+	private void reset()
+	{
+		int nbElements = this.circuit.getElementCount();
+		
+		for (int i = 0; i < nbElements; i++)
+		{
+			this.circuit.getElementAt(i).reset();
+		}
+
+		for (int i = 0; i < CircuitSimulator.this.scopeMan.scopeCount; i++)
+		{
+			this.scopeMan.scopes[i].resetGraph();
+		}
+
+		this.circuit.setNeedAnalysis(true);
+		this.timer.time = 0;
+		this.activityManager.setPlaying(true);
+	}
+
 	private class ResetAction extends AbstractAction
 	{
 		public ResetAction()
@@ -2513,19 +2532,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		@Override
 		public void actionPerformed(ActionEvent arg0)
 		{
-			for (int i = 0; i != CircuitSimulator.this.circuit.getElementCount(); i++)
-			{
-				CircuitSimulator.this.circuit.getElementAt(i).reset();
-			}
-
-			for (int i = 0; i != CircuitSimulator.this.scopeMan.scopeCount; i++)
-			{
-				CircuitSimulator.this.scopeMan.scopes[i].resetGraph();
-			}
-
-			CircuitSimulator.this.circuit.setNeedAnalysis(true);
-			CircuitSimulator.this.timer.time = 0;
-			CircuitSimulator.this.activityManager.setPlaying(true);
+			CircuitSimulator.this.reset();
 		}
 	}
 
