@@ -39,9 +39,8 @@ public class MenuManager
 		
 		// Menu Option
 		menu =  new JMenu("Options");
-		this.dotsCheckItem = this.getCheckItem("Show Current");
-		//this.dotsCheckItem.setState(true);
-		menu.add(this.dotsCheckItem);
+
+
 
 		this.voltsCheckItem = this.getCheckItem("Show Voltage");
 		//this.voltsCheckItem.setState(true);
@@ -54,30 +53,17 @@ public class MenuManager
 		//this.showValuesCheckItem.setState(true);
 		menu.add(this.showValuesCheckItem);
 
-		//conductanceCheckItem = getCheckItem("Show Conductance");
-		// m.add(conductanceCheckItem = getCheckItem("Show Conductance"));
+
 		
 		this.smallGridCheckItem = this.getCheckItem("Small Grid");
 		menu.add(this.smallGridCheckItem);
-		
-		this.euroResistorCheckItem = this.getCheckItem("European Resistors");
-		menu.add(this.euroResistorCheckItem);
 
-		this.printableCheckItem = this.getCheckItem("White Background");
-		menu.add(this.printableCheckItem);
-
-		this.conventionCheckItem = this.getCheckItem("Conventional Current Motion");
-		menu.add(this.conventionCheckItem);
-	
 		this.optionsItem = this.getMenuItem("Other Options...");
 		menu.add(this.optionsItem);
 		this.optionMenu = menu;
 	}
 
-	public boolean showDots()
-	{
-		return this.dotsCheckItem.getState();
-	}
+
 
 	public boolean showVolts()
 	{
@@ -99,26 +85,8 @@ public class MenuManager
 		return this.showValuesCheckItem.getState();
 	}
 
-	public boolean showconductance()
-	{
-		return this.conductanceCheckItem.getState();
-	}
 
-	public boolean isEuroResistor()
-	{
-		return this.euroResistorCheckItem.getState();
-	}
 
-	public boolean isPrintable()
-	{
-		return this.printableCheckItem.getState();
-	}
-
-	public boolean isConventionnal()
-	{
-		return this.conventionCheckItem.getState();
-	}
-	
 	public JMenu getOptionMenu()
 	{
 		return this.optionMenu;

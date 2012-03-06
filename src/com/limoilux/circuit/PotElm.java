@@ -13,6 +13,7 @@ import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
+import com.limoilux.circuitsimulator.core.Configs;
 
 public class PotElm extends CircuitElm implements AdjustmentListener
 {
@@ -149,7 +150,7 @@ public class PotElm extends CircuitElm implements AdjustmentListener
 		int segments = 16;
 		int i;
 		int ox = 0;
-		int hs = CircuitElm.cirSim.menuMan.euroResistorCheckItem.getState() ? 6 : 8;
+		int hs = Configs.EURO_RESISTOR ? 6 : 8;
 		double v1 = this.volts[0];
 		double v2 = this.volts[1];
 		double v3 = this.volts[2];
@@ -158,7 +159,7 @@ public class PotElm extends CircuitElm implements AdjustmentListener
 		this.setPowerColor(g, true);
 		double segf = 1. / segments;
 		int divide = (int) (segments * this.position);
-		if (!CircuitElm.cirSim.menuMan.euroResistorCheckItem.getState())
+		if (!Configs.EURO_RESISTOR)
 		{
 			// draw zigzag
 			for (i = 0; i != segments; i++)

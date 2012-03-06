@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.awt.Polygon;
 
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuitsimulator.core.Configs;
 
 public class DrawUtil
 {
@@ -62,7 +63,7 @@ public class DrawUtil
 
 	public static void drawDots(Graphics g, Point pa, Point pb, double pos)
 	{
-		if (!CircuitElm.cirSim.activityManager.isPlaying() || pos == 0 || !CircuitElm.cirSim.menuMan.showDots())
+		if (!CircuitElm.cirSim.activityManager.isPlaying() || pos == 0 || !Configs.SHOW_DOTS)
 		{
 			return;
 		}
