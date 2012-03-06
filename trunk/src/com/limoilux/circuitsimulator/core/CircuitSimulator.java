@@ -860,8 +860,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		menu = new JMenu("File");
 		menu.add(new MigrationAction());
 		menu.addSeparator();
-		this.exitItem = this.getMenuItem("Exit");
-		menu.add(this.exitItem);
+		menu.add(new ExitAction());
 		menubar.add(menu);
 
 		menu = new JMenu("Edit");
@@ -2262,6 +2261,12 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	}
 
+	private void exit()
+	{
+		System.out.println("Exit at " + System.currentTimeMillis());
+		System.exit(0);
+	}
+
 	@Override
 	public void componentHidden(ComponentEvent e)
 	{
@@ -2283,21 +2288,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.handleResize();
 	}
 	
-	private class MigrationAction extends AbstractAction
-	{
-		public MigrationAction()
-		{
-			super("Import/Export");
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			CircuitSimulator.this.showMigrationDialog();
-		}
-		
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
@@ -2342,11 +2332,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.circuit.doSelectAll();
 		}
 
-		if (e.getSource() == this.exitItem)
-		{
-			this.cirFrame.dispose();
-			return;
-		}
+
 
 		if (ac.compareTo("stackAll") == 0)
 		{
@@ -2521,6 +2507,35 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.circuit.setNeedAnalysis(true);
 		this.timer.time = 0;
 		this.activityManager.setPlaying(true);
+	}
+
+	private class ExitAction extends AbstractAction
+	{
+		public ExitAction()
+		{
+			super("exit");
+		}
+	
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			CircuitSimulator.this.exit();
+		}
+	}
+
+	private class MigrationAction extends AbstractAction
+	{
+		public MigrationAction()
+		{
+			super("Import/Export");
+		}
+	
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			CircuitSimulator.this.showMigrationDialog();
+		}
+		
 	}
 
 	private class ResetAction extends AbstractAction
