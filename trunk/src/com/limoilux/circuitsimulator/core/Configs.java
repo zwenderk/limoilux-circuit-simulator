@@ -4,6 +4,7 @@ package com.limoilux.circuitsimulator.core;
 public class Configs
 {
 	public static final String CIRCUIT_FOLDER = "circuits";
+	public static final String CIRCUITS_PACKAGE = "com.limoilux.circuit.";
 	
 	public static final boolean EURO_RESISTOR = false;
 	public static final boolean SHOW_DOTS = true;
