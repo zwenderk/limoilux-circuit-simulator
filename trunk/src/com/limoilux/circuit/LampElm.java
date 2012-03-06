@@ -182,9 +182,9 @@ public class LampElm extends CircuitElm
 		double capw = cap * this.warmTime / .4;
 		double capc = cap * this.coolTime / .4;
 		// System.out.println(nom_r + " " + (resistance/nom_r));
-		this.temp += this.getPower() * Configs.timeStep / capw;
+		this.temp += this.getPower() * Configs.TIME_STEP / capw;
 		double cr = 2600 / this.nom_pow;
-		this.temp -= Configs.timeStep * (this.temp - this.roomTemp) / (capc * cr);
+		this.temp -= Configs.TIME_STEP * (this.temp - this.roomTemp) / (capc * cr);
 		// System.out.println(capw + " " + capc + " " + temp + " " +resistance);
 	}
 

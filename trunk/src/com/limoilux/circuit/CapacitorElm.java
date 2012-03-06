@@ -112,7 +112,7 @@ public class CapacitorElm extends CircuitElm
 			DrawUtil.drawDots(g, this.point2, this.lead2, -this.curcount);
 		}
 		this.drawPosts(g);
-		if (Configs.showValues)
+		if (Configs.SHOW_VALUES)
 		{
 			String s = CircuitElm.getShortUnitText(this.capacitance, "F");
 			this.drawValues(g, s, hs);
@@ -129,11 +129,11 @@ public class CapacitorElm extends CircuitElm
 		// if RC is small relative to the timestep.
 		if (this.isTrapezoidal())
 		{
-			this.compResistance = Configs.timeStep / (2 * this.capacitance);
+			this.compResistance = Configs.TIME_STEP / (2 * this.capacitance);
 		}
 		else
 		{
-			this.compResistance = Configs.timeStep / this.capacitance;
+			this.compResistance = Configs.TIME_STEP / this.capacitance;
 		}
 		CircuitElm.cirSim.circuit.stampResistor(this.nodes[0], this.nodes[1], this.compResistance);
 		CircuitElm.cirSim.circuit.stampRightSide(this.nodes[0]);

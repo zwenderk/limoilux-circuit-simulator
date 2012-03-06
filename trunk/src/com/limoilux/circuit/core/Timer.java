@@ -39,7 +39,7 @@ public class Timer
 
 	public void doTimeStep()
 	{
-		this.time += Configs.timeStep;
+		this.time += Configs.TIME_STEP;
 	}
 
 	public long getLastFrameTime()

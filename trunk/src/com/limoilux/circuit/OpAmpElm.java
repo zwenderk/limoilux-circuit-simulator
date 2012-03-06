@@ -29,7 +29,7 @@ public class OpAmpElm extends CircuitElm
 		this.maxOut = 15;
 		this.minOut = -15;
 		this.gbw = 1e6;
-		this.setSize(Configs.smallGrid ? 1 : 2);
+		this.setSize(Configs.SMALL_GRID ? 1 : 2);
 		this.setGain();
 	}
 

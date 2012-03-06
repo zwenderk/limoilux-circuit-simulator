@@ -49,12 +49,12 @@ class Inductor
 		this.nodes[1] = n1;
 		if (this.isTrapezoidal())
 		{
-			this.compResistance = 2 * this.inductance / Configs.timeStep;
+			this.compResistance = 2 * this.inductance / Configs.TIME_STEP;
 		}
 		else
 		{
 			// backward euler
-			this.compResistance = this.inductance / Configs.timeStep;
+			this.compResistance = this.inductance / Configs.TIME_STEP;
 		}
 		this.sim.circuit.stampResistor(this.nodes[0], this.nodes[1], this.compResistance);
 		this.sim.circuit.stampRightSide(this.nodes[0]);

@@ -256,7 +256,7 @@ public class VoltageElm extends CircuitElm
 			break;
 		}
 		}
-		if (Configs.showValues)
+		if (Configs.SHOW_VALUES)
 		{
 			String s = CircuitElm.getShortUnitText(this.frequency, "Hz");
 			if (this.dx == 0 || this.dy == 0)
@@ -389,7 +389,7 @@ public class VoltageElm extends CircuitElm
 			// even though the frequency has changed.
 			double oldfreq = this.frequency;
 			this.frequency = ei.value;
-			double maxfreq = 1 / (8 * Configs.timeStep);
+			double maxfreq = 1 / (8 * Configs.TIME_STEP);
 			if (this.frequency > maxfreq)
 			{
 				this.frequency = maxfreq;
