@@ -158,5 +158,10 @@ public class CircuitMouseManager implements MouseMotionListener, MouseListener
 		return tempMouseMode == CircuitMouseManager.MODE_SELECT
 				|| tempMouseMode == CircuitMouseManager.MODE_DRAG_SELECTED;
 	}
+	
+	public boolean testMouseMode(String mouseMode)
+	{
+		return this.mouseModeStr.compareTo(mouseMode) == 0;
+	}
 
 }

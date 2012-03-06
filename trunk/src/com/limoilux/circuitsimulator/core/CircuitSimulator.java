@@ -249,6 +249,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		boolean isMac = CoreUtil.isMac();
 		if (isMac)
 		{
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
 			this.ctrlMetaKey = "\u2318";
 		}
 		else
@@ -295,7 +296,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private void start()
 	{
-	
 		this.cirFrame.setVisible(true);
 	
 		this.scopeMan.setupScopes(this.winSize);
@@ -335,10 +335,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		Thread t = new Thread(new RepaintRun());
 		t.start();
-		
-
-	
-		//CircuitSimulator.this.activityManager.setPlaying(true);
 	}
 
 	private long repaint()
@@ -2061,14 +2057,16 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		for (int i = 0; i != m.getItemCount(); i++)
 		{
 			MenuItem mc = m.getItem(i);
+			
 			if (mc instanceof Menu)
 			{
 				this.doMainMenuChecks((Menu) mc);
 			}
+			
 			if (mc instanceof CheckboxMenuItem)
 			{
 				CheckboxMenuItem cmi = (CheckboxMenuItem) mc;
-				cmi.setState(this.mouseMan.mouseModeStr.compareTo(cmi.getActionCommand()) == 0);
+				cmi.setState(this.mouseMan.testMouseMode(cmi.getActionCommand()));
 			}
 		}
 	}
