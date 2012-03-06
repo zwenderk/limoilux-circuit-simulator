@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.core.Configs;
 
 public class CurrentElm extends CircuitElm
 {
@@ -73,7 +74,7 @@ public class CurrentElm extends CircuitElm
 		g.fillPolygon(this.arrow);
 		this.setBbox(this.point1, this.point2, cr);
 		this.doDots(g);
-		if (CircuitElm.cirSim.menuMan.showValuesCheckItem.getState())
+		if (Configs.showValues)
 		{
 			String s = CircuitElm.getShortUnitText(this.currentValue, "A");
 			if (this.dx == 0 || this.dy == 0)

@@ -106,7 +106,7 @@ public class SweepElm extends CircuitElm
 			ox = xc + i;
 			oy = yy;
 		}
-		if (CircuitElm.cirSim.menuMan.showValuesCheckItem.getState())
+		if (Configs.showValues)
 		{
 			String s = CoreUtil.getShortUnitText(this.frequency, "Hz");
 			if (this.dx == 0 || this.dy == 0)

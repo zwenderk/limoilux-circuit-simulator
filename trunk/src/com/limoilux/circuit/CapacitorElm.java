@@ -112,7 +112,7 @@ public class CapacitorElm extends CircuitElm
 			DrawUtil.drawDots(g, this.point2, this.lead2, -this.curcount);
 		}
 		this.drawPosts(g);
-		if (CircuitElm.cirSim.menuMan.showValuesCheckItem.getState())
+		if (Configs.showValues)
 		{
 			String s = CircuitElm.getShortUnitText(this.capacitance, "F");
 			this.drawValues(g, s, hs);

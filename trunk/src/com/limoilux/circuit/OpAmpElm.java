@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.core.Configs;
 import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public class OpAmpElm extends CircuitElm
@@ -28,7 +29,7 @@ public class OpAmpElm extends CircuitElm
 		this.maxOut = 15;
 		this.minOut = -15;
 		this.gbw = 1e6;
-		this.setSize(CircuitElm.cirSim.menuMan.smallGridCheckItem.getState() ? 1 : 2);
+		this.setSize(Configs.smallGrid ? 1 : 2);
 		this.setGain();
 	}
 
