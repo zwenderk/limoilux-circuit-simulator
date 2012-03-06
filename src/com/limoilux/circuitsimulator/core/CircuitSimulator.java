@@ -4,7 +4,6 @@ package com.limoilux.circuitsimulator.core;
 
 import java.awt.Adjustable;
 import java.awt.BorderLayout;
-import java.awt.CheckboxMenuItem;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -203,6 +202,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	public final ActivityManager activityManager;
 	private final ActivityListener activityListener;
+	private Thread repaintThread = null;
 
 	private RepaintRun repaintRun = null;
 
@@ -319,8 +319,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		}
 
 		this.repaintRun = new RepaintRun();
-		Thread thread = new Thread(repaintRun);
-		thread.start();
+		this.repaintThread = new Thread(repaintRun);
+		this.repaintThread.start();
 	}
 
 	private long repaint()
@@ -2250,14 +2250,41 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.needAnalyze();
 	}
 
-	private void loadCircuit(String command, ActionEvent e)
+	private synchronized void loadCircuit(String command, ActionEvent e)
 	{
 		String setupString = command.substring(6);
 		String menuText = ((JMenuItem) e.getSource()).getText();
 
 		this.pushUndo();
 
+		this.stopRepaint();
+
 		this.readSetupFile(setupString, menuText);
+		
+		this.startDisplay();
+	}
+
+	private void stopRepaint()
+	{
+
+		if (this.repaintRun != null)
+		{
+			try
+			{
+				System.out.println(Thread.currentThread().getName() + " goOn set to false ");
+				this.repaintRun.goOn = false;
+
+				System.out.println(Thread.currentThread().getName() + " waiting ");
+				this.wait();
+
+				this.repaintRun = null;
+			}
+			catch (InterruptedException e1)
+			{
+			}
+
+		}
+
 	}
 
 	private void exit()
@@ -2400,13 +2427,13 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		Object mi = e.getItemSelectable();
 
 		this.enableItems();
-		
+
 		if (this.menuScope != -1)
 		{
 			scope = this.scopeMan.scopes[this.menuScope];
 			scope.handleMenu(e, mi);
 		}
-		
+
 		if (mi instanceof JCheckBoxMenuItem)
 		{
 			mmi = (JMenuItem) mi;
@@ -2942,6 +2969,14 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 				CircuitSimulator.this.timer.nextCycle();
 			}
+
+			// Réveille le thread apres que stopRepaint() ai été apeller.
+			synchronized (CircuitSimulator.this)
+			{
+				System.out.println(Thread.currentThread().getName() + " notify " + CircuitSimulator.this);
+				CircuitSimulator.this.notify();
+			}
+
 		}
 	}
 
