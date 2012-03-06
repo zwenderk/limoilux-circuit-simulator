@@ -2259,16 +2259,15 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		}
 		this.needAnalyze();
 	}
-	
-	private void loadCircuit(String ac, ActionEvent e)
-	{
 
-		if (ac.indexOf("setup ") == 0)
-		{
-			
-			this.pushUndo();
-			this.readSetupFile(ac.substring(6), ((JMenuItem) e.getSource()).getText());
-		}
+	private void loadCircuit(String command, ActionEvent e)
+	{
+		String setupString = command.substring(6);
+		String menuText = ((JMenuItem) e.getSource()).getText();
+
+		this.pushUndo();
+
+		this.readSetupFile(setupString, menuText);
 	}
 
 	private void exit()
@@ -2302,7 +2301,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	public void actionPerformed(ActionEvent e)
 	{
 		String ac = e.getActionCommand();
-		
+
 		System.out.println(ac);
 
 		if (e.getSource() == this.clipboard.undoItem)
@@ -2395,7 +2394,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		{
 			this.scopeMan.manageActionCommand(ac, this.menuScope);
 		}
-		
 
 		if (ac.indexOf("setup ") == 0)
 		{
