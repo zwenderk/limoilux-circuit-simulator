@@ -7,21 +7,25 @@ import java.awt.MenuItem;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+
 public class MenuManager
 {
 	
 	// Menu options
-	Menu optionMenu;
-	public CheckboxMenuItem dotsCheckItem;
-	public CheckboxMenuItem voltsCheckItem;
-	public CheckboxMenuItem powerCheckItem;
-	public CheckboxMenuItem smallGridCheckItem;
-	public CheckboxMenuItem showValuesCheckItem;
-	public CheckboxMenuItem conductanceCheckItem;
-	public CheckboxMenuItem euroResistorCheckItem;
-	public CheckboxMenuItem printableCheckItem;
-	public CheckboxMenuItem conventionCheckItem;
-	public MenuItem optionsItem;
+	JMenu optionMenu;
+	public JCheckBoxMenuItem dotsCheckItem;
+	public JCheckBoxMenuItem voltsCheckItem;
+	public JCheckBoxMenuItem powerCheckItem;
+	public JCheckBoxMenuItem smallGridCheckItem;
+	public JCheckBoxMenuItem showValuesCheckItem;
+	public JCheckBoxMenuItem conductanceCheckItem;
+	public JCheckBoxMenuItem euroResistorCheckItem;
+	public JCheckBoxMenuItem printableCheckItem;
+	public JCheckBoxMenuItem conventionCheckItem;
+	public JMenuItem optionsItem;
 	
 	ItemListener itemList;
 	ActionListener actionList;
@@ -31,23 +35,23 @@ public class MenuManager
 	{
 		this.itemList = itemList;
 		this.actionList = actionList;
-		Menu menu;
+		JMenu menu;
 		
 		// Menu Option
-		menu =  new Menu("Options");
+		menu =  new JMenu("Options");
 		this.dotsCheckItem = this.getCheckItem("Show Current");
-		this.dotsCheckItem.setState(true);
+		//this.dotsCheckItem.setState(true);
 		menu.add(this.dotsCheckItem);
 
 		this.voltsCheckItem = this.getCheckItem("Show Voltage");
-		this.voltsCheckItem.setState(true);
+		//this.voltsCheckItem.setState(true);
 		menu.add(this.voltsCheckItem);
 
 		this.powerCheckItem = this.getCheckItem("Show Power");
 		menu.add(this.powerCheckItem);
 		
 		this.showValuesCheckItem = this.getCheckItem("Show Values");
-		this.showValuesCheckItem.setState(true);
+		//this.showValuesCheckItem.setState(true);
 		menu.add(this.showValuesCheckItem);
 
 		//conductanceCheckItem = getCheckItem("Show Conductance");
@@ -57,15 +61,12 @@ public class MenuManager
 		menu.add(this.smallGridCheckItem);
 		
 		this.euroResistorCheckItem = this.getCheckItem("European Resistors");
-		this.euroResistorCheckItem.setState(false);
 		menu.add(this.euroResistorCheckItem);
 
 		this.printableCheckItem = this.getCheckItem("White Background");
-		this.printableCheckItem.setState(false);
 		menu.add(this.printableCheckItem);
 
 		this.conventionCheckItem = this.getCheckItem("Conventional Current Motion");
-		this.conventionCheckItem.setState(true);
 		menu.add(this.conventionCheckItem);
 	
 		this.optionsItem = this.getMenuItem("Other Options...");
@@ -118,30 +119,30 @@ public class MenuManager
 		return this.conventionCheckItem.getState();
 	}
 	
-	public Menu getOptionMenu()
+	public JMenu getOptionMenu()
 	{
 		return this.optionMenu;
 	}
 	
-	private CheckboxMenuItem getCheckItem(String s, String t)
+	private JCheckBoxMenuItem getCheckItem(String s, String t)
 	{
-		CheckboxMenuItem mi = new CheckboxMenuItem(s);
+		JCheckBoxMenuItem mi = new JCheckBoxMenuItem(s);
 		mi.addItemListener(this.itemList);
 		mi.setActionCommand(t);
 		return mi;
 	}
 	
-	private CheckboxMenuItem getCheckItem(String s)
+	private JCheckBoxMenuItem getCheckItem(String s)
 	{
-		CheckboxMenuItem mi = new CheckboxMenuItem(s);
+		JCheckBoxMenuItem mi = new JCheckBoxMenuItem(s);
 		mi.addItemListener(this.itemList);
 		mi.setActionCommand("");
 		return mi;
 	}
 
-	private MenuItem getMenuItem(String s)
+	private JMenuItem getMenuItem(String s)
 	{
-		MenuItem mi = new MenuItem(s);
+		JMenuItem mi = new JMenuItem(s);
 		mi.addActionListener(this.actionList);
 		return mi;
 	}
