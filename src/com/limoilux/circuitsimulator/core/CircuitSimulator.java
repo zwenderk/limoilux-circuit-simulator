@@ -92,7 +92,6 @@ import com.limoilux.circuitsimulator.scope.ScopeManager;
 public class CircuitSimulator implements ComponentListener, ActionListener, ItemListener
 {
 
-	
 	private static final CircuitSimulator SINGLETON = new CircuitSimulator();
 	@Deprecated
 	private static final double PI = Math.PI;
@@ -222,7 +221,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		this.clipboard = new Clipboard();
 
-
 		// this.mainContainer.setLayout(new BorderLayout());
 		this.circuitPanel = new CircuitPane(this);
 
@@ -297,34 +295,13 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
 		// this.mainContainer.add(this.scopeMan.getScopePane(),
 		// BorderLayout.SOUTH);
-		
-		
 
 	}
 
 	private void start()
 	{
-		this.cirFrame.setVisible(true);
-	
-		this.scopeMan.setupScopes(this.winSize);
-		
-		//Scope[] scopes = this.scopeMan.scopes;
-	//	for (int i = 0; i < scopes.length; i++)
-		//{
-	//		scopes[i] = new Scope(this);
-		//}
-		
-	
-		this.handleResize();
-	
-		Runnable starter = new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				CircuitSimulator.this.cirFrame.requestFocus();
-			}
-		};
+		Runnable starter = new Starter();
+
 
 		try
 		{
@@ -350,13 +327,12 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		if (!(this.winSize == null || this.winSize.width == 0))
 		{
 
-			
 			this.prepareRepaint();
-			
+
 			this.scopeMan.setupScopes(this.winSize);
 
 			this.circuitMan.repaint();
-	
+
 		}
 
 		return this.timer.calculateDelay();
@@ -857,8 +833,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.powerLabel.setEnabled(false);
 		// this.toolBar.add(this.powerLabel);
 
-
-
 		// this.toolBar.add(new Label("www.falstad.com"));
 	}
 
@@ -875,17 +849,17 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		this.importItem = this.getMenuItem("Import");
 		menu.add(this.importItem);
-		
+
 		this.exportItem = this.getMenuItem("Export");
 		menu.add(this.exportItem);
-		
+
 		menu.addSeparator();
-		
+
 		this.exitItem = this.getMenuItem("Exit");
 		menu.add(this.exitItem);
 
 		menu = new JMenu("Edit");
-		
+
 		this.clipboard.undoItem = this.getMenuItem("Undo");
 		this.clipboard.undoItem.setAccelerator(KeyStroke.getKeyStroke('Z'));
 		menu.add(this.clipboard.undoItem);
@@ -894,16 +868,15 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		menu.add(this.clipboard.redoItem);
 
 		menu.addSeparator();
-		
+
 		this.cutItem = this.getMenuItem("Cut");
 
 		this.cutItem.setAccelerator(KeyStroke.getKeyStroke('X'));
 		menu.add(this.cutItem);
-		
+
 		this.copyItem = this.getMenuItem("Copy");
 		this.copyItem.setAccelerator(KeyStroke.getKeyStroke('C'));
 		menu.add(this.copyItem);
-
 
 		this.clipboard.pasteItem = this.getMenuItem("Paste");
 		this.clipboard.pasteItem.setAccelerator(KeyStroke.getKeyStroke('V'));
@@ -914,7 +887,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.selectAllItem.setAccelerator(KeyStroke.getKeyStroke('A'));
 		menu.add(this.selectAllItem);
 
-
 		menubar.add(menu);
 
 		menu = new JMenu("Scope");
@@ -923,8 +895,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		menu.add(this.getMenuItem("Stack All", "stackAll"));
 		menu.add(this.getMenuItem("Unstack All", "unstackAll"));
-		
-
 
 		JMenu circuitsMenu = new JMenu("Circuits");
 		menubar.add(circuitsMenu);
@@ -1663,12 +1633,9 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.circuit.removeAllElements();
 			this.hintType = -1;
 
-
-
 			this.setGrid();
-			
-			this.speedBar.setValue(Configs.DEF_SPEED);
 
+			this.speedBar.setValue(Configs.DEF_SPEED);
 
 			this.scopeMan.scopeCount = 0;
 		}
@@ -1797,28 +1764,24 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	{
 		// Atefact
 		int flags = new Integer(st.nextToken()).intValue();
-		
 
-
-		
 		// Dump pour garder la compatibilité, ancient timeStep.
 		st.nextToken();
-		
-		
+
 		double sp = new Double(st.nextToken()).doubleValue();
 		int sp2 = (int) (Math.log(10 * sp) * 24 + 61.5);
 		// int sp2 = (int) (Math.log(sp)*24+1.5);
 		this.speedBar.setValue(sp2);
-		
+
 		// Dump pour garder la compatibilité, ancient currentBar.
 		st.nextToken();
-		
+
 		// Dump pour garder la compatibilité, ancient voltage.
 		st.nextToken();
-		
+
 		// Dump pour garder la compatibilité, ancient powerBar.
-		//st.nextToken();
-		
+		// st.nextToken();
+
 		this.setGrid();
 	}
 
@@ -2050,20 +2013,20 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.mainMenu.show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
-	
+
 	private void doMainMenuChecks(MenuElement m)
 	{
-		MenuElement[]  sub = m.getSubElements();
+		MenuElement[] sub = m.getSubElements();
 
 		for (int i = 0; i != sub.length; i++)
 		{
 			MenuElement mc = sub[i];
-			
+
 			if (mc instanceof JPopupMenu)
 			{
 				this.doMainMenuChecks(mc);
 			}
-			
+
 			if (mc instanceof JCheckBoxMenuItem)
 			{
 				JCheckBoxMenuItem cmi = (JCheckBoxMenuItem) mc;
@@ -2077,12 +2040,12 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		for (int i = 0; i != m.getItemCount(); i++)
 		{
 			JMenuItem mc = m.getItem(i);
-			
+
 			if (mc instanceof JMenu)
 			{
 				this.doMainMenuChecks((JMenu) mc);
 			}
-			
+
 			if (mc instanceof JCheckBoxMenuItem)
 			{
 				JCheckBoxMenuItem cmi = (JCheckBoxMenuItem) mc;
@@ -2100,7 +2063,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		else
 		{
 
-	
 		}
 		this.clipboard.enableUndoRedo();
 	}
@@ -2158,8 +2120,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		}
 
 	}
-
-
 
 	private void setMenuSelection()
 	{
@@ -2345,8 +2305,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			this.showMigrationDialog();
 		}
 
-
-
 		if (e.getSource() == this.importItem)
 		{
 			this.showMigrationDialog();
@@ -2496,9 +2454,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	{
 		Object mi = e.getItemSelectable();
 
-
-		
-
 		this.enableItems();
 		if (this.menuScope != -1)
 		{
@@ -2552,6 +2507,19 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 				}
 			}
 			this.mouseMan.tempMouseMode = this.mouseMan.mouseMode;
+		}
+	}
+	
+	private class Starter implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			CircuitSimulator.this.cirFrame.setVisible(true);
+			CircuitSimulator.this.scopeMan.setupScopes(CircuitSimulator.this.winSize);
+			CircuitSimulator.this.cirFrame.requestFocus();
+			CircuitSimulator.this.handleResize();
+
 		}
 	}
 
@@ -2944,7 +2912,6 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		public void run()
 		{
 			long delay = 0;
-
 
 			while (true)
 			{
