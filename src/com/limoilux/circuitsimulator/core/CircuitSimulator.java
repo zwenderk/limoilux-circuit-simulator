@@ -85,7 +85,7 @@ import com.limoilux.circuitsimulator.scope.ScopeManager;
  * @author David Bernard
  * 
  */
-public abstract class CircuitSimulator implements ComponentListener, ActionListener, ItemListener
+public abstract class CircuitSimulator extends App implements ComponentListener, ActionListener, ItemListener
 {
 	@Deprecated
 	private static final double PI = Math.PI;
@@ -257,7 +257,8 @@ public abstract class CircuitSimulator implements ComponentListener, ActionListe
 
 		JMenu circuitsMenu = this.buildMenuBar();
 
-		boolean isMac = CoreUtil.isMac();
+		// TODO utiliser configForOs;
+		boolean isMac = App.isMac();
 		this.buildPopUpMainMenu(isMac);
 
 		this.initToolBar();
@@ -281,22 +282,7 @@ public abstract class CircuitSimulator implements ComponentListener, ActionListe
 		// BorderLayout.SOUTH);
 	}
 
-	protected void configForOs()
-	{
-		// Gère les contrôles lier au mac.
 
-		System.out.println(System.getProperty("mrj.version"));
-		boolean isMac = CoreUtil.isMac();
-		if (isMac)
-		{
-
-			// Application app;
-		}
-		else
-		{
-
-		}
-	}
 
 	private void start()
 	{
@@ -3016,7 +3002,7 @@ public abstract class CircuitSimulator implements ComponentListener, ActionListe
 	{
 		CircuitSimulator circuitSimulator = null;
 
-		if (CoreUtil.isMac())
+		if (App.isMac())
 		{
 			System.out.println("Platform is Mac");
 			circuitSimulator = new MacSim();

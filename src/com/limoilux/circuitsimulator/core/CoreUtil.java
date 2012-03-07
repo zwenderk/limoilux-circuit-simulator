@@ -298,9 +298,5 @@ public class CoreUtil
 		return out;
 	}
 
-	public static boolean isMac()
-	{
-		return System.getProperty("mrj.version") != null;
 
-	}
 }
