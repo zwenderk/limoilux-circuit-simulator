@@ -144,7 +144,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private int menuScope = -1;
 	private int hintType = -1, hintItem1, hintItem2;
 	private String stopMessage;
-	
+
 	private JMenuItem cutItem, copyItem, selectAllItem;
 
 	private JScrollBar speedBar;
@@ -1063,7 +1063,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 		try
 		{
-			classPath = Class.forName("com.limoilux.circuit." + className);
+			classPath = Class.forName(Configs.CIRCUITS_PACKAGE + className);
 		}
 		catch (ClassNotFoundException e)
 		{
@@ -1455,12 +1455,13 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 	private void fetchSetupList(JMenu menu, boolean retry)
 	{
+		App.printDebugMsg("fetchSetupList...");
 		JMenu stack[] = new JMenu[6];
 		int stackptr = 0;
 		stack[stackptr++] = menu;
 		try
 		{
-			URL url = new URL(CoreUtil.getCodeBase() + "setuplist.txt");
+			URL url = new URL(CoreUtil.getCodeBase() + Configs.SETUP_LIST);
 			ByteArrayOutputStream ba = CoreUtil.readUrlData(url);
 			byte b[] = ba.toByteArray();
 			int len = ba.size();
@@ -1526,6 +1527,8 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 			this.stop("Can't read setuplist.txt!", null);
 		}
+		
+		App.printDebugMsg("fetchSetupList DONE");
 	}
 
 	public void readSetup(String text)
@@ -1541,7 +1544,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private void readSetupFile(String fileName, String title)
 	{
 		ByteArrayOutputStream bytes = null;
-		System.out.println(fileName + " " + title);
+		App.printDebugMsg("Loading " + fileName);
 		this.timer.time = 0;
 
 		URL url;
@@ -1551,7 +1554,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 			bytes = CoreUtil.readUrlData(url);
 
 			this.readSetup(bytes.toByteArray(), bytes.size(), false);
-			System.out.println("CirSim, file loaded: " + fileName);
+			App.printDebugMsg("Loaded " + fileName);
 		}
 		catch (MalformedURLException e)
 		{
@@ -1711,7 +1714,9 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private void readOptions(StringTokenizer st)
 	{
 		// Atefact
-		int flags = new Integer(st.nextToken()).intValue();
+
+		// Dump pour garder la compatibilité, ancient flag.
+		st.nextToken();
 
 		// Dump pour garder la compatibilité, ancient timeStep.
 		st.nextToken();
@@ -2292,7 +2297,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		}
 
 		this.startRepaint();
-		
+
 		App.printDebugMsg("start app done");
 	}
 
@@ -2996,7 +3001,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 		}
 	}
-	
+
 	private class MyWindowLister implements WindowListener
 	{
 		@Override
