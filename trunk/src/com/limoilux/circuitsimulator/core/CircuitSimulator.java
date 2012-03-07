@@ -2269,7 +2269,8 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		}
 	}
 
-	private void exit()
+	@Override
+	protected void exit()
 	{
 		this.stopRepaint();
 
