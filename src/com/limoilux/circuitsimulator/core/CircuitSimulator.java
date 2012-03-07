@@ -1462,19 +1462,24 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		try
 		{
 			URL url = new URL(CoreUtil.getCodeBase() + Configs.SETUP_LIST);
+			
 			ByteArrayOutputStream ba = CoreUtil.readUrlData(url);
+			
 			byte b[] = ba.toByteArray();
 			int len = ba.size();
 			int p;
+			
 			if (len == 0 || b[0] != '#')
 			{
 				// got a redirect, try again
 				this.fetchSetupList(menu, true);
 				return;
 			}
+			
 			for (p = 0; p < len;)
 			{
 				int l;
+				
 				for (l = 0; l != len - p; l++)
 				{
 					if (b[l + p] == '\n')
@@ -1483,6 +1488,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 						break;
 					}
 				}
+				
 				String line = new String(b, p, l - 1);
 				if (line.charAt(0) == '#')
 				{
@@ -1505,12 +1511,15 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 					{
 						String title = line.substring(i + 1);
 						boolean first = false;
+						
 						if (line.charAt(0) == '>')
 						{
 							first = true;
 						}
+						
 						String file = line.substring(first ? 1 : 0, i);
 						menu.add(this.getMenuItem(title, "setup " + file));
+						
 						if (first && this.startCircuit == null)
 						{
 							this.startCircuit = file;
