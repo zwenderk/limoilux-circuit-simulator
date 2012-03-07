@@ -12,6 +12,7 @@ import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
 import com.limoilux.circuitsimulator.core.Configs;
+import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public class TransLineElm extends CircuitElm
 {
@@ -111,14 +112,14 @@ public class TransLineElm extends CircuitElm
 	public void setPoints()
 	{
 		super.setPoints();
-		int ds = this.dy == 0 ? CircuitElm.sign(this.dx) : -CircuitElm.sign(this.dy);
-		Point p3 = CircuitElm.interpPoint(this.point1, this.point2, 0, -this.width * ds);
-		Point p4 = CircuitElm.interpPoint(this.point1, this.point2, 1, -this.width * ds);
+		int ds = this.dy == 0 ? CoreUtil.sign(this.dx) : -CoreUtil.sign(this.dy);
+		Point p3 = CoreUtil.interpPoint(this.point1, this.point2, 0, -this.width * ds);
+		Point p4 = CoreUtil.interpPoint(this.point1, this.point2, 1, -this.width * ds);
 		int sep = CircuitElm.cirSim.gridSize / 2;
-		Point p5 = CircuitElm.interpPoint(this.point1, this.point2, 0, -(this.width / 2 - sep) * ds);
-		Point p6 = CircuitElm.interpPoint(this.point1, this.point2, 1, -(this.width / 2 - sep) * ds);
-		Point p7 = CircuitElm.interpPoint(this.point1, this.point2, 0, -(this.width / 2 + sep) * ds);
-		Point p8 = CircuitElm.interpPoint(this.point1, this.point2, 1, -(this.width / 2 + sep) * ds);
+		Point p5 = CoreUtil.interpPoint(this.point1, this.point2, 0, -(this.width / 2 - sep) * ds);
+		Point p6 = CoreUtil.interpPoint(this.point1, this.point2, 1, -(this.width / 2 - sep) * ds);
+		Point p7 = CoreUtil.interpPoint(this.point1, this.point2, 0, -(this.width / 2 + sep) * ds);
+		Point p8 = CoreUtil.interpPoint(this.point1, this.point2, 1, -(this.width / 2 + sep) * ds);
 
 		// we number the posts like this because we want the lower-numbered
 		// points to be on the bottom, so that if some of them are unconnected
@@ -144,7 +145,7 @@ public class TransLineElm extends CircuitElm
 		for (i = 0; i != 4; i++)
 		{
 			this.setVoltageColor(g, this.volts[i]);
-			CircuitElm.drawThickLine(g, this.posts[i], this.inner[i]);
+			DrawUtil.drawThickLine(g, this.posts[i], this.inner[i]);
 		}
 		if (this.voltageL != null)
 		{
@@ -154,19 +155,19 @@ public class TransLineElm extends CircuitElm
 				int ix2 = (ix0 - this.lenSteps * (segments - 1 - i) / segments) % this.lenSteps;
 				double v = (this.voltageL[ix1] + this.voltageR[ix2]) / 2;
 				this.setVoltageColor(g, v);
-				CircuitElm.interpPoint(this.inner[0], this.inner[1], CircuitElm.ps1, i * segf);
-				CircuitElm.interpPoint(this.inner[2], this.inner[3], CircuitElm.ps2, i * segf);
+				CoreUtil.interpPoint(this.inner[0], this.inner[1], CircuitElm.ps1, i * segf);
+				CoreUtil.interpPoint(this.inner[2], this.inner[3], CircuitElm.ps2, i * segf);
 				g.drawLine(CircuitElm.ps1.x, CircuitElm.ps1.y, CircuitElm.ps2.x, CircuitElm.ps2.y);
-				CircuitElm.interpPoint(this.inner[2], this.inner[3], CircuitElm.ps1, (i + 1) * segf);
-				CircuitElm.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
+				CoreUtil.interpPoint(this.inner[2], this.inner[3], CircuitElm.ps1, (i + 1) * segf);
+				DrawUtil.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 			}
 		}
 		this.setVoltageColor(g, this.volts[0]);
 		DrawUtil.drawThickLine(g, this.inner[0], this.inner[1]);
 		this.drawPosts(g);
 
-		this.curCount1 = CircuitElm.updateDotCount(-this.current1, this.curCount1);
-		this.curCount2 = CircuitElm.updateDotCount(this.current2, this.curCount2);
+		this.curCount1 = CoreUtil.updateDotCount(-this.current1, this.curCount1,CircuitElm.cirSim.currentMultiplier);
+		this.curCount2 = CoreUtil.updateDotCount(this.current2, this.curCount2,CircuitElm.cirSim.currentMultiplier);
 		if (CircuitElm.cirSim.mouseMan.dragElm != this)
 		{
 			DrawUtil.drawDots(g, this.posts[0], this.inner[0], this.curCount1);
@@ -218,7 +219,6 @@ public class TransLineElm extends CircuitElm
 	public void startIteration() throws CircuitAnalysisException
 	{
 		// calculate voltages, currents sent over wire
-
 		if (this.voltageL == null)
 		{
 			throw new CircuitAnalysisException("Transmission line delay too large!", this);
@@ -239,10 +239,15 @@ public class TransLineElm extends CircuitElm
 	@Override
 	public void doStep() throws CircuitAnalysisException
 	{
+		
 		if (this.voltageL == null)
 		{
 			throw new CircuitAnalysisException("Transmission line delay too large!", this);
 		}
+		
+		
+		
+		
 		CircuitElm.cirSim.circuit.updateVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1,
 				-this.voltageR[this.ptr]);
 		CircuitElm.cirSim.circuit.updateVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2,
@@ -288,9 +293,9 @@ public class TransLineElm extends CircuitElm
 	public void getInfo(String arr[])
 	{
 		arr[0] = "transmission line";
-		arr[1] = CircuitElm.getUnitText(this.imped, CircuitSimulator.ohmString);
-		arr[2] = "length = " + CircuitElm.getUnitText(2.9979e8 * this.delay, "m");
-		arr[3] = "delay = " + CircuitElm.getUnitText(this.delay, "s");
+		arr[1] = CoreUtil.getUnitText(this.imped, CircuitSimulator.ohmString);
+		arr[2] = "length = " + CoreUtil.getUnitText(2.9979e8 * this.delay, "m");
+		arr[3] = "delay = " + CoreUtil.getUnitText(this.delay, "s");
 	}
 
 	@Override
