@@ -2273,6 +2273,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	@Override
 	protected void start()
 	{
+		App.printDebugMsg("start app");
 		Runnable starter = new Starter();
 
 		this.initStartCircuitText();
@@ -2291,6 +2292,8 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		}
 
 		this.startRepaint();
+		
+		App.printDebugMsg("start app done");
 	}
 
 	@Override
