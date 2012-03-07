@@ -203,7 +203,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	public final ActivityManager activityManager;
 	private final ActivityListener activityListener;
 
-	private RepaintRun repaintRun = null;
+	public RepaintRun repaintRun = null;
 
 	public CircuitSimulator()
 	{
@@ -1072,17 +1072,14 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 		element = CircuitUtil.constructElement(classPath, 0, 0);
 
-		App.printDebugMsg("Registering");
 		this.register(classPath, element);
 
 		if (element.needsShortcut() && element.getDumpClass() == classPath)
 		{
-			App.printDebugMsg("elment id");
 			dt = element.getElementId();
 			label += " (" + (char) dt + ")";
 		}
 
-		App.printDebugMsg("adding elment");
 		element.delete();
 
 		return this.getCheckItem(label, className);
@@ -1465,24 +1462,26 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		try
 		{
 			URL url = new URL(CoreUtil.getCodeBase() + Configs.SETUP_LIST);
-			
+
 			ByteArrayOutputStream ba = CoreUtil.readUrlData(url);
-			
+
 			byte b[] = ba.toByteArray();
+			App.printDebugMsg("fetchSetupList " + String.valueOf(b));
+
 			int len = ba.size();
 			int p;
-			
+
 			if (len == 0 || b[0] != '#')
 			{
 				// got a redirect, try again
 				this.fetchSetupList(menu, true);
 				return;
 			}
-			
+
 			for (p = 0; p < len;)
 			{
 				int l;
-				
+
 				for (l = 0; l != len - p; l++)
 				{
 					if (b[l + p] == '\n')
@@ -1491,7 +1490,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 						break;
 					}
 				}
-				
+
 				String line = new String(b, p, l - 1);
 				if (line.charAt(0) == '#')
 				{
@@ -1514,15 +1513,15 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 					{
 						String title = line.substring(i + 1);
 						boolean first = false;
-						
+
 						if (line.charAt(0) == '>')
 						{
 							first = true;
 						}
-						
+
 						String file = line.substring(first ? 1 : 0, i);
 						menu.add(this.getMenuItem(title, "setup " + file));
-						
+
 						if (first && this.startCircuit == null)
 						{
 							this.startCircuit = file;
@@ -1539,7 +1538,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 			this.stop("Can't read setuplist.txt!", null);
 		}
-		
+
 		App.printDebugMsg("fetchSetupList DONE");
 	}
 
@@ -1584,7 +1583,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 	private void readSetup(byte b[], int len, boolean retain)
 	{
-
+		App.printDebugMsg("read setup... ");
 		if (!retain)
 		{
 			for (int i = 0; i != this.circuit.getElementCount(); i++)
@@ -1620,11 +1619,17 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 					break;
 				}
 			}
+
 			String line = new String(b, p, linelen);
 			StringTokenizer st = new StringTokenizer(line);
+			App.printDebugMsg("Tokenizing " + line);
+
 			while (st.hasMoreTokens())
 			{
 				String type = st.nextToken();
+
+				App.printDebugMsg("type " + type);
+
 				int tint = type.charAt(0);
 				try
 				{
@@ -1671,11 +1676,20 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 						System.out.println("unrecognized dump type: " + type);
 						break;
 					}
+
+					App.printDebugMsg("class is " + cls.getName());
+
 					// find element class
 					Class<?> carr[] = new Class[6];
 					// carr[0] = getClass();
-					carr[0] = carr[1] = carr[2] = carr[3] = carr[4] = int.class;
+					
+					carr[0] = int.class;
+					carr[1] = int.class;
+					carr[2] = int.class;
+					carr[3] = int.class;
+					carr[4] = int.class;
 					carr[5] = StringTokenizer.class;
+
 					Constructor<?> cstr = null;
 					cstr = cls.getConstructor(carr);
 
@@ -1688,6 +1702,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 					oarr[3] = new Integer(y2);
 					oarr[4] = new Integer(f);
 					oarr[5] = st;
+
 					ce = (CircuitElm) cstr.newInstance(oarr);
 					ce.setPoints();
 					this.circuit.addElement(ce);
@@ -2268,7 +2283,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		}
 	}
 
-	protected void stopRepaint()
+	public void stopRepaint()
 	{
 
 		if (this.repaintRun != null)
@@ -2971,6 +2986,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 			}
 			catch (InterruptedException e)
 			{
+				
 			}
 
 			App.printDebugMsg("RepaintRun stop confirmed");
@@ -2985,9 +3001,15 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 			while (this.goOn)
 			{
-
-				delay = CircuitSimulator.this.repaint();
-
+				try
+				{
+					delay = CircuitSimulator.this.repaint();
+				}
+				catch (Exception e)
+				{
+					this.goOn = false;
+				}
+	
 				if (delay > 0)
 				{
 					try

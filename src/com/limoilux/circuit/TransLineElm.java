@@ -27,24 +27,36 @@ public class TransLineElm extends CircuitElm
 		this.delay = 1000 * Configs.TIME_STEP;
 		this.imped = 75;
 		this.noDiagonal = true;
-		
+
 		this.reset();
 	}
 
 	public TransLineElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
-		
-		this.delay = 1000 * Configs.TIME_STEP;
-		this.delay = new Double(st.nextToken()).doubleValue();
-		
-		this.imped = 75;
-		this.imped = new Double(st.nextToken()).doubleValue();
-		
-		
-		this.width = new Integer(st.nextToken()).intValue();
+
+		String token;
+		int tempInt;
+		double temp;
+
+		token = st.nextToken();
+		App.printDebugMsg("TransLine init: delay is " + token);
+		temp = new Double(token).doubleValue();
+		this.delay = temp;
+
+		token = st.nextToken();
+		App.printDebugMsg("TransLine init: imped is " + token);
+		temp = new Double(token).doubleValue();
+		this.imped = temp;
+
+		token = st.nextToken();
+		App.printDebugMsg("TransLine init: width is " + token);
+		tempInt = new Integer(token).intValue();
+		this.width = tempInt;
+
 		// next slot is for resistance (losses), which is not implemented
-		st.nextToken();
+		token = st.nextToken();
+
 		this.noDiagonal = true;
 		this.reset();
 	}
@@ -78,8 +90,8 @@ public class TransLineElm extends CircuitElm
 	{
 		xx = CircuitElm.cirSim.snapGrid(xx);
 		yy = CircuitElm.cirSim.snapGrid(yy);
-		int w1 = CircuitElm.max(CircuitElm.cirSim.gridSize, CircuitElm.abs(yy - this.y));
-		int w2 = CircuitElm.max(CircuitElm.cirSim.gridSize, CircuitElm.abs(xx - this.x));
+		int w1 = Math.max(CircuitElm.cirSim.gridSize, Math.abs(yy - this.y));
+		int w2 = Math.max(CircuitElm.cirSim.gridSize, Math.abs(xx - this.x));
 		if (w1 > w2)
 		{
 			xx = this.x;
@@ -102,17 +114,19 @@ public class TransLineElm extends CircuitElm
 	{
 
 		this.lenSteps = (int) (this.delay / Configs.TIME_STEP);
-		
+
 		App.printDebugMsg("TransLine " + this.lenSteps + " steps " + this.delay + " delay");
 		if (this.lenSteps > 100000)
 		{
-			this.voltageL = this.voltageR = null;
+			this.voltageL = null;
+			this.voltageR = null;
 		}
 		else
 		{
 			this.voltageL = new double[this.lenSteps];
 			this.voltageR = new double[this.lenSteps];
 		}
+		
 		this.ptr = 0;
 		super.reset();
 	}
@@ -151,18 +165,18 @@ public class TransLineElm extends CircuitElm
 		g.setColor(Color.darkGray);
 		g.fillRect(this.inner[2].x, this.inner[2].y, this.inner[1].x - this.inner[2].x + 2, this.inner[1].y
 				- this.inner[2].y + 2);
-		
+
 		for (int i = 0; i != 4; i++)
 		{
 			this.setVoltageColor(g, this.volts[i]);
 			DrawUtil.drawThickLine(g, this.posts[i], this.inner[i]);
 		}
-		
+
 		if (this.voltageL != null)
 		{
 			for (int i = 0; i < segments; i++)
 			{
-				System.out.println(segments + " " + this.lenSteps);
+				// System.out.println(segments + " " + this.lenSteps);
 				int ix1 = (ix0 - this.lenSteps * i / segments) % this.lenSteps;
 				int ix2 = (ix0 - this.lenSteps * (segments - 1 - i) / segments) % this.lenSteps;
 				double v = (this.voltageL[ix1] + this.voltageR[ix2]) / 2;
@@ -178,8 +192,8 @@ public class TransLineElm extends CircuitElm
 		DrawUtil.drawThickLine(g, this.inner[0], this.inner[1]);
 		this.drawPosts(g);
 
-		this.curCount1 = CoreUtil.updateDotCount(-this.current1, this.curCount1,CircuitElm.cirSim.currentMultiplier);
-		this.curCount2 = CoreUtil.updateDotCount(this.current2, this.curCount2,CircuitElm.cirSim.currentMultiplier);
+		this.curCount1 = CoreUtil.updateDotCount(-this.current1, this.curCount1, CircuitElm.cirSim.currentMultiplier);
+		this.curCount2 = CoreUtil.updateDotCount(this.current2, this.curCount2, CircuitElm.cirSim.currentMultiplier);
 		if (CircuitElm.cirSim.mouseMan.dragElm != this)
 		{
 			DrawUtil.drawDots(g, this.posts[0], this.inner[0], this.curCount1);
@@ -251,15 +265,12 @@ public class TransLineElm extends CircuitElm
 	@Override
 	public void doStep() throws CircuitAnalysisException
 	{
-		
+
 		if (this.voltageL == null)
 		{
 			throw new CircuitAnalysisException("Transmission line delay too large!", this);
 		}
-		
-		
-		
-		
+
 		CircuitElm.cirSim.circuit.updateVoltageSource(this.nodes[4], this.nodes[0], this.voltSource1,
 				-this.voltageR[this.ptr]);
 		CircuitElm.cirSim.circuit.updateVoltageSource(this.nodes[5], this.nodes[1], this.voltSource2,
