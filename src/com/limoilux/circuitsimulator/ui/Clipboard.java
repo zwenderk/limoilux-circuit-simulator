@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.core;
+package com.limoilux.circuitsimulator.ui;
 
 import java.awt.MenuItem;
 import java.util.Vector;

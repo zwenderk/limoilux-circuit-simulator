@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.techno;
+package com.limoilux.circuitsimulator.circuit;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -13,12 +13,12 @@ import java.text.NumberFormat;
 import com.limoilux.circuit.RailElm;
 import com.limoilux.circuit.SweepElm;
 import com.limoilux.circuit.VoltageElm;
-import com.limoilux.circuit.core.Editable;
-import com.limoilux.circuit.ui.DrawUtil;
-import com.limoilux.circuit.ui.EditInfo;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
 import com.limoilux.circuitsimulator.core.Configs;
 import com.limoilux.circuitsimulator.core.CoreUtil;
+import com.limoilux.circuitsimulator.ui.DrawUtil;
+import com.limoilux.circuitsimulator.ui.EditInfo;
+import com.limoilux.circuitsimulator.ui.Editable;
 
 public abstract class CircuitElm implements Editable
 {

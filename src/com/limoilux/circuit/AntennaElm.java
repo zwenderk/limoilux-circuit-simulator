@@ -3,8 +3,8 @@ package com.limoilux.circuit;
 
 import java.util.StringTokenizer;
 
-import com.limoilux.circuit.techno.CircuitAnalysisException;
-import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuitsimulator.circuit.CircuitAnalysisException;
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
 import com.limoilux.circuitsimulator.core.Configs;
 
 public class AntennaElm extends RailElm

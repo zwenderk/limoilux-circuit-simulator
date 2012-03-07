@@ -4,7 +4,7 @@ package com.limoilux.circuit;
 import java.awt.Graphics;
 import java.util.StringTokenizer;
 
-import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
 import com.limoilux.circuitsimulator.core.CoreUtil;
 
 public class CC2Elm extends ChipElm

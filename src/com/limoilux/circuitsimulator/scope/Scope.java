@@ -20,7 +20,7 @@ import com.limoilux.circuit.MemristorElm;
 import com.limoilux.circuit.OutputElm;
 import com.limoilux.circuit.ProbeElm;
 import com.limoilux.circuit.TransistorElm;
-import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
 import com.limoilux.circuitsimulator.core.Configs;
 import com.limoilux.circuitsimulator.core.CoreUtil;

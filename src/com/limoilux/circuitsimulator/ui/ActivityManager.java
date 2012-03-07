@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.ui;
+package com.limoilux.circuitsimulator.ui;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;

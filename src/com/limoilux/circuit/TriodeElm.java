@@ -6,10 +6,10 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.StringTokenizer;
 
-import com.limoilux.circuit.techno.CircuitAnalysisException;
-import com.limoilux.circuit.techno.CircuitElm;
-import com.limoilux.circuit.ui.DrawUtil;
+import com.limoilux.circuitsimulator.circuit.CircuitAnalysisException;
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
 import com.limoilux.circuitsimulator.core.CoreUtil;
+import com.limoilux.circuitsimulator.ui.DrawUtil;
 
 public class TriodeElm extends CircuitElm
 {

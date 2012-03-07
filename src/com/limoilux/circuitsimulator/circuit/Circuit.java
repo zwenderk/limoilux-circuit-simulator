@@ -12,15 +12,10 @@ import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.RailElm;
 import com.limoilux.circuit.VoltageElm;
 import com.limoilux.circuit.WireElm;
-import com.limoilux.circuit.techno.CircuitAnalysisException;
-import com.limoilux.circuit.techno.CircuitElm;
-import com.limoilux.circuit.techno.CircuitNode;
-import com.limoilux.circuit.techno.CircuitNodeLink;
-import com.limoilux.circuit.techno.PathInfoFinder;
 
-import com.limoilux.circuit.techno.matrix.MatrixManager;
-import com.limoilux.circuit.techno.matrix.MatrixRowInfo;
 import com.limoilux.circuitsimulator.core.App;
+import com.limoilux.circuitsimulator.matrix.MatrixManager;
+import com.limoilux.circuitsimulator.matrix.MatrixRowInfo;
 
 public class Circuit
 {

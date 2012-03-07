@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
 public class CircuitMouseManager implements MouseMotionListener, MouseListener

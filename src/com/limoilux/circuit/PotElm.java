@@ -9,11 +9,11 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.util.StringTokenizer;
 
-import com.limoilux.circuit.techno.CircuitElm;
-import com.limoilux.circuit.ui.DrawUtil;
-import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
 import com.limoilux.circuitsimulator.core.Configs;
+import com.limoilux.circuitsimulator.ui.DrawUtil;
+import com.limoilux.circuitsimulator.ui.EditInfo;
 
 public class PotElm extends CircuitElm implements AdjustmentListener
 {

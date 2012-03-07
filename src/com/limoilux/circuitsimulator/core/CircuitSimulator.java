@@ -55,27 +55,26 @@ import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.ResistorElm;
 import com.limoilux.circuit.SwitchElm;
 import com.limoilux.circuit.TextElm;
-import com.limoilux.circuit.core.Clipboard;
-import com.limoilux.circuit.core.Editable;
 
-import com.limoilux.circuit.core.Timer;
-import com.limoilux.circuit.techno.CircuitAnalysisException;
-import com.limoilux.circuit.techno.CircuitElm;
-import com.limoilux.circuit.techno.CircuitNode;
-import com.limoilux.circuit.techno.CircuitNodeLink;
-import com.limoilux.circuit.techno.matrix.MatrixRowInfo;
-import com.limoilux.circuit.ui.ActivityListener;
-import com.limoilux.circuit.ui.ActivityManager;
-import com.limoilux.circuit.ui.DrawUtil;
-import com.limoilux.circuit.ui.EditDialog;
-import com.limoilux.circuit.ui.io.MigrationWizard;
 import com.limoilux.circuitsimulator.circuit.Circuit;
+import com.limoilux.circuitsimulator.circuit.CircuitAnalysisException;
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
 import com.limoilux.circuitsimulator.circuit.CircuitManager;
+import com.limoilux.circuitsimulator.circuit.CircuitNode;
+import com.limoilux.circuitsimulator.circuit.CircuitNodeLink;
 import com.limoilux.circuitsimulator.circuit.CircuitPane;
 import com.limoilux.circuitsimulator.circuit.CircuitUtil;
 import com.limoilux.circuitsimulator.circuit.CircuitMouseManager;
+import com.limoilux.circuitsimulator.io.MigrationWizard;
+import com.limoilux.circuitsimulator.matrix.MatrixRowInfo;
 import com.limoilux.circuitsimulator.scope.Scope;
 import com.limoilux.circuitsimulator.scope.ScopeManager;
+import com.limoilux.circuitsimulator.ui.ActivityListener;
+import com.limoilux.circuitsimulator.ui.ActivityManager;
+import com.limoilux.circuitsimulator.ui.Clipboard;
+import com.limoilux.circuitsimulator.ui.DrawUtil;
+import com.limoilux.circuitsimulator.ui.EditDialog;
+import com.limoilux.circuitsimulator.ui.Editable;
 
 /**
  * For information about the theory behind this, see Electronic Circuit & System

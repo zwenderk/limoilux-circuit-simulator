@@ -1,5 +1,5 @@
 
-package com.limoilux.circuitsimulator.circuit;
+package com.limoilux.circuitsimulator.io;
 
 import com.limoilux.circuitsimulator.scope.Scope;
 

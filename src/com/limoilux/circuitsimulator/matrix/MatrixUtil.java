@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.techno.matrix;
+package com.limoilux.circuitsimulator.matrix;
 
 public class MatrixUtil
 {

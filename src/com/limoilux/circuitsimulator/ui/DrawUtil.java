@@ -1,12 +1,12 @@
 
-package com.limoilux.circuit.ui;
+package com.limoilux.circuitsimulator.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
 
-import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
 import com.limoilux.circuitsimulator.core.Configs;
 
 public class DrawUtil

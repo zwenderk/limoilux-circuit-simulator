@@ -1,8 +1,7 @@
 
-package com.limoilux.circuit.ui;
+package com.limoilux.circuitsimulator.ui;
 
-import com.limoilux.circuit.core.Editable;
-import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
 import com.limoilux.circuitsimulator.core.Configs;
 

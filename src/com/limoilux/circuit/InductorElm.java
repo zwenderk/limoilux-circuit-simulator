@@ -5,10 +5,10 @@ import java.awt.Checkbox;
 import java.awt.Graphics;
 import java.util.StringTokenizer;
 
-import com.limoilux.circuit.techno.CircuitAnalysisException;
-import com.limoilux.circuit.techno.CircuitElm;
-import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.circuit.CircuitAnalysisException;
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
 import com.limoilux.circuitsimulator.core.Configs;
+import com.limoilux.circuitsimulator.ui.EditInfo;
 
 public class InductorElm extends CircuitElm
 {

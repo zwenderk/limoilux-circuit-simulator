@@ -1,7 +1,6 @@
 
-package com.limoilux.circuit.core;
+package com.limoilux.circuitsimulator.ui;
 
-import com.limoilux.circuit.ui.EditInfo;
 
 public interface Editable
 {

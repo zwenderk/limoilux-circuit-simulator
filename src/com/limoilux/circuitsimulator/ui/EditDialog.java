@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.ui;
+package com.limoilux.circuitsimulator.ui;
 
 import java.awt.Button;
 import java.awt.Dialog;
@@ -17,7 +17,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.NumberFormat;
 
-import com.limoilux.circuit.core.Editable;
 import com.limoilux.circuit.ui.layout.EditDialogLayout;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
 

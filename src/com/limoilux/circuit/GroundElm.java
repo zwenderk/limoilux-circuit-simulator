@@ -4,9 +4,9 @@ package com.limoilux.circuit;
 import java.awt.Graphics;
 import java.util.StringTokenizer;
 
-import com.limoilux.circuit.techno.CircuitElm;
-import com.limoilux.circuit.ui.DrawUtil;
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
 import com.limoilux.circuitsimulator.core.CoreUtil;
+import com.limoilux.circuitsimulator.ui.DrawUtil;
 
 public class GroundElm extends CircuitElm
 {
