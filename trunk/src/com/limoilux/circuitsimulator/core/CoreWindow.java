@@ -13,7 +13,7 @@ public class CoreWindow extends JFrame
 	{
 		super();
 
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setLayout(new BorderLayout());
 
 		this.setSize(860, 640);
