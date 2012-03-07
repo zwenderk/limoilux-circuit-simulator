@@ -23,8 +23,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -229,7 +227,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		this.activityManager.addActivityListener(this.activityListener);
 
 		this.cirFrame = new CoreWindow();
-		this.cirFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
 
 		this.mainContainer = new JPanel();
 		this.mainContainer.setBackground(Color.BLACK);
