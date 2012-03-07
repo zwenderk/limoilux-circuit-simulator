@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuitsimulator.core.App;
 
 public class CircuitUtil
 {
@@ -30,7 +31,7 @@ public class CircuitUtil
 
 		try
 		{
-			System.out.println("CirSim construct:" + classType.toString());
+			App.printDebugMsg("constructing " + classType.toString());
 			constructor = classType.getConstructor(carr);
 
 			// invoke constructor with starting coordinates
