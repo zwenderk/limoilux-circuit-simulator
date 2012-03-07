@@ -23,6 +23,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -34,6 +36,7 @@ import java.util.StringTokenizer;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -82,10 +85,8 @@ import com.limoilux.circuitsimulator.scope.ScopeManager;
  * @author David Bernard
  * 
  */
-public class CircuitSimulator implements ComponentListener, ActionListener, ItemListener
+public abstract class CircuitSimulator implements ComponentListener, ActionListener, ItemListener
 {
-
-	private static final CircuitSimulator SINGLETON = new CircuitSimulator();
 	@Deprecated
 	private static final double PI = Math.PI;
 
@@ -137,7 +138,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	public boolean analyzeFlag;
 
 	public boolean useBufferedImage;
-	private String ctrlMetaKey;
+	protected String ctrlMetaKey;
 
 	public int scopeSelected = -1;
 	private int menuScope = -1;
@@ -206,7 +207,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 	private RepaintRun repaintRun = null;
 
-	private CircuitSimulator()
+	public CircuitSimulator()
 	{
 		super();
 
@@ -228,6 +229,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.activityManager.addActivityListener(this.activityListener);
 
 		this.cirFrame = new CoreWindow();
+		this.cirFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		this.mainContainer = new JPanel();
 		this.mainContainer.setBackground(Color.BLACK);
@@ -242,17 +244,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		CircuitElm.initClass(this);
 
-		// Gère les contrôles lier au mac.
-		boolean isMac = CoreUtil.isMac();
-		if (isMac)
-		{
-			System.setProperty("apple.laf.useScreenMenuBar", "true");
-			this.ctrlMetaKey = "\u2318";
-		}
-		else
-		{
-			this.ctrlMetaKey = "Ctrl";
-		}
+		this.configForOs();
 
 		this.manageJavaVersion();
 
@@ -265,6 +257,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		JMenu circuitsMenu = this.buildMenuBar();
 
+		boolean isMac = CoreUtil.isMac();
 		this.buildPopUpMainMenu(isMac);
 
 		this.initToolBar();
@@ -286,7 +279,23 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
 		// this.mainContainer.add(this.scopeMan.getScopePane(),
 		// BorderLayout.SOUTH);
+	}
 
+	protected void configForOs()
+	{
+		// Gère les contrôles lier au mac.
+
+		System.out.println(System.getProperty("mrj.version"));
+		boolean isMac = CoreUtil.isMac();
+		if (isMac)
+		{
+
+			// Application app;
+		}
+		else
+		{
+
+		}
 	}
 
 	private void start()
@@ -308,10 +317,10 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			e.printStackTrace();
 		}
 
-		this.startDisplay();
+		this.startRepaint();
 	}
 
-	private void startDisplay()
+	private void startRepaint()
 	{
 		if (this.repaintRun != null)
 		{
@@ -2250,7 +2259,7 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.needAnalyze();
 	}
 
-	private synchronized void loadCircuit(String command, ActionEvent e)
+	private void loadCircuit(String command, ActionEvent e)
 	{
 		String setupString = command.substring(6);
 		String menuText = ((JMenuItem) e.getSource()).getText();
@@ -2260,8 +2269,8 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 		this.stopRepaint();
 
 		this.readSetupFile(setupString, menuText);
-		
-		this.startDisplay();
+
+		this.startRepaint();
 	}
 
 	private void stopRepaint()
@@ -2269,26 +2278,15 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 
 		if (this.repaintRun != null)
 		{
-			try
-			{
-				System.out.println(Thread.currentThread().getName() + " goOn set to false ");
-				this.repaintRun.goOn = false;
-
-				System.out.println(Thread.currentThread().getName() + " waiting ");
-				this.wait();
-
-				this.repaintRun = null;
-			}
-			catch (InterruptedException e1)
-			{
-			}
-
+			this.repaintRun.stop();
+			this.repaintRun = null;
 		}
-
 	}
 
 	private void exit()
 	{
+		this.stopRepaint();
+
 		System.out.println("Exit at " + System.currentTimeMillis());
 		System.exit(0);
 	}
@@ -2938,6 +2936,13 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 			if (isPlaying)
 			{
 				CircuitSimulator.this.circuit.setNeedAnalysis(true);
+
+				CircuitSimulator.this.startRepaint();
+			}
+			else
+			{
+
+				CircuitSimulator.this.stopRepaint();
 			}
 		}
 	}
@@ -2945,11 +2950,35 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 	private class RepaintRun implements Runnable
 	{
 		boolean goOn = true;
+		boolean dead = false;
+
+		public synchronized void stop()
+		{
+
+			try
+			{
+				this.goOn = false;
+
+				do
+				{
+					System.out.println(Thread.currentThread().getName() + " waiting for notify");
+					this.wait(100);
+				}
+				while (!this.dead);
+			}
+			catch (InterruptedException e)
+			{
+			}
+
+			System.out.println("RepaintRun stop confirmed at " + System.currentTimeMillis());
+		}
 
 		@Override
 		public void run()
 		{
 			long delay = 0;
+
+			System.out.println("RepaintRun start at " + System.currentTimeMillis());
 
 			while (this.goOn)
 			{
@@ -2970,25 +2999,34 @@ public class CircuitSimulator implements ComponentListener, ActionListener, Item
 				CircuitSimulator.this.timer.nextCycle();
 			}
 
+			this.dead = true;
+
 			// Réveille le thread apres que stopRepaint() ai été apeller.
-			synchronized (CircuitSimulator.this)
+			synchronized (this)
 			{
-				System.out.println(Thread.currentThread().getName() + " notify " + CircuitSimulator.this);
-				CircuitSimulator.this.notify();
+				System.out.println(Thread.currentThread().getName() + " RepaintRun end at "
+						+ System.currentTimeMillis());
+				this.notify();
 			}
 
 		}
 	}
 
-	public static CircuitSimulator getInstance()
-	{
-		return CircuitSimulator.SINGLETON;
-	}
-
 	public static void main(String args[])
 	{
-		CircuitSimulator c = CircuitSimulator.getInstance();
+		CircuitSimulator circuitSimulator = null;
 
-		c.start();
+		if (CoreUtil.isMac())
+		{
+			System.out.println("Platform is Mac");
+			circuitSimulator = new MacSim();
+		}
+		else
+		{
+			System.out.println("Platform is Windows");
+			circuitSimulator = new WindowsSim();
+		}
+
+		circuitSimulator.start();
 	}
 }
