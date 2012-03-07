@@ -36,7 +36,7 @@ public abstract class CircuitElm implements Editable
 	public static final Point ps2 = new Point();
 
 	// va devenir un singleton
-	public static CircuitSimulator cirSim = CircuitSimulator.getInstance();
+	public static CircuitSimulator cirSim;
 
 	public static NumberFormat showFormat;
 	public static NumberFormat shortFormat;
