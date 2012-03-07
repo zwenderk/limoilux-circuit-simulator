@@ -8,7 +8,6 @@ import java.awt.Image;
 
 import javax.swing.JPanel;
 
-import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
 public class CircuitPane extends JPanel

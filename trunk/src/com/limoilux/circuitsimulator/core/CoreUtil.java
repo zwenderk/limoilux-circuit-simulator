@@ -11,7 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Random;
 
-import com.limoilux.circuit.techno.CircuitElm;
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
 
 public class CoreUtil
 {

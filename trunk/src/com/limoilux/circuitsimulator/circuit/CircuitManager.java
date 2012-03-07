@@ -4,8 +4,7 @@ package com.limoilux.circuitsimulator.circuit;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import com.limoilux.circuit.techno.CircuitNode;
-import com.limoilux.circuit.techno.CircuitNodeLink;
+import com.limoilux.circuitsimulator.io.DumpManager;
 
 
 public class CircuitManager

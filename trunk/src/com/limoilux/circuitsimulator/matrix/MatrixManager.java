@@ -1,7 +1,7 @@
 
-package com.limoilux.circuit.techno.matrix;
+package com.limoilux.circuitsimulator.matrix;
 
-import com.limoilux.circuit.techno.CircuitAnalysisException;
+import com.limoilux.circuitsimulator.circuit.CircuitAnalysisException;
 
 public class MatrixManager
 {

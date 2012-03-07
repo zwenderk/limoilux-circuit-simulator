@@ -5,8 +5,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuitsimulator.circuit.Circuit;
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
 public class ScopeManager

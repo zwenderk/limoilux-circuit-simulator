@@ -1,5 +1,6 @@
 
-package com.limoilux.circuit.techno;
+package com.limoilux.circuitsimulator.circuit;
+
 
 public class CircuitNodeLink
 {

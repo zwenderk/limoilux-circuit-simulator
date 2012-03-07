@@ -4,7 +4,7 @@ package com.limoilux.circuit;
 import java.awt.Checkbox;
 import java.util.StringTokenizer;
 
-import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.ui.EditInfo;
 
 public class DFlipFlopElm extends ChipElm
 {

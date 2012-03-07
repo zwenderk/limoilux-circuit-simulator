@@ -1,7 +1,6 @@
 
-package com.limoilux.circuit.core;
+package com.limoilux.circuitsimulator.core;
 
-import com.limoilux.circuitsimulator.core.Configs;
 
 public class Timer
 {

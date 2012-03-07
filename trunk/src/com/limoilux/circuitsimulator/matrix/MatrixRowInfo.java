@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.techno.matrix;
+package com.limoilux.circuitsimulator.matrix;
 
 /**
  * info about each row/column of the matrix for simplification purposes
