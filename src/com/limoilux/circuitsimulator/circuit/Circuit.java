@@ -20,6 +20,7 @@ import com.limoilux.circuit.techno.PathInfoFinder;
 
 import com.limoilux.circuit.techno.matrix.MatrixManager;
 import com.limoilux.circuit.techno.matrix.MatrixRowInfo;
+import com.limoilux.circuitsimulator.core.App;
 
 public class Circuit
 {
@@ -732,7 +733,7 @@ public class Circuit
 
 	public void analyzeCircuit() throws CircuitAnalysisException
 	{
-		System.out.println("Analysing");
+		App.printDebugMsg("Analysing circuit : start");
 
 		int vscount = 0;
 
@@ -784,6 +785,8 @@ public class Circuit
 				throw new CircuitAnalysisException("Singular matrix!");
 			}
 		}
+		
+		App.printDebugMsg("Analysing circuit : end");
 	}
 
 	@Deprecated

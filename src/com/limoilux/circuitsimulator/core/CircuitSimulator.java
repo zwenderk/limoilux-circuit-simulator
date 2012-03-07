@@ -2213,6 +2213,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 		this.stopRepaint();
 
+		App.printDebugMsg("Run garbage collector");
 		System.gc();
 
 		this.readSetupFile(setupString, menuText);
@@ -2265,7 +2266,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	{
 		this.stopRepaint();
 
-		System.out.println("Exit at " + System.currentTimeMillis());
+		App.printDebugMsg("exit");
 		System.exit(0);
 	}
 
@@ -2318,7 +2319,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	{
 		String ac = e.getActionCommand();
 
-		System.out.println(ac);
+		App.printDebugMsg("command " + ac);
 
 		if (e.getSource() == this.clipboard.undoItem)
 		{
@@ -2943,7 +2944,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 				do
 				{
-					System.out.println(Thread.currentThread().getName() + " waiting for notify");
+					App.printDebugMsg("waiting for notify");
 					this.wait(100);
 				}
 				while (!this.dead);
@@ -2952,7 +2953,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 			{
 			}
 
-			System.out.println("RepaintRun stop confirmed at " + System.currentTimeMillis());
+			App.printDebugMsg("RepaintRun stop confirmed");
 		}
 
 		@Override
@@ -2960,7 +2961,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		{
 			long delay = 0;
 
-			System.out.println("RepaintRun start at " + System.currentTimeMillis());
+			App.printDebugMsg("RepaintRun start");
 
 			while (this.goOn)
 			{
@@ -2986,8 +2987,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 			// Réveille le thread apres que stopRepaint() ai été apeller.
 			synchronized (this)
 			{
-				System.out.println(Thread.currentThread().getName() + " RepaintRun end at "
-						+ System.currentTimeMillis());
+				App.printDebugMsg("RepaintRun end");
 				this.notify();
 			}
 
@@ -3005,13 +3005,12 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		@Override
 		public void windowClosed(WindowEvent e)
 		{
-			System.out.println("closed");
 		}
 
 		@Override
 		public void windowClosing(WindowEvent e)
 		{
-			System.out.println("closing");
+			CircuitSimulator.this.exit();
 		}
 
 		@Override
