@@ -10,6 +10,7 @@ import com.limoilux.circuit.techno.CircuitAnalysisException;
 import com.limoilux.circuit.techno.CircuitElm;
 import com.limoilux.circuit.ui.DrawUtil;
 import com.limoilux.circuit.ui.EditInfo;
+import com.limoilux.circuitsimulator.core.App;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
 import com.limoilux.circuitsimulator.core.Configs;
 import com.limoilux.circuitsimulator.core.CoreUtil;
@@ -94,7 +95,8 @@ public class TransLineElm extends CircuitElm
 	{
 
 		this.lenSteps = (int) (this.delay / Configs.TIME_STEP);
-		System.out.println(this.lenSteps + " steps");
+		
+		App.printDebugMsg("TransLine " + this.lenSteps + " steps");
 		if (this.lenSteps > 100000)
 		{
 			this.voltageL = this.voltageR = null;
