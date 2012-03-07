@@ -258,8 +258,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		JMenu circuitsMenu = this.buildMenuBar();
 
 		// TODO utiliser configForOs;
-		boolean isMac = App.isMac();
-		this.buildPopUpMainMenu(isMac);
+		this.buildPopUpMainMenu();
 
 		this.initToolBar();
 
@@ -280,30 +279,6 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
 		// this.mainContainer.add(this.scopeMan.getScopePane(),
 		// BorderLayout.SOUTH);
-	}
-
-
-
-	private void start()
-	{
-		Runnable starter = new Starter();
-
-		this.initStartCircuitText();
-
-		try
-		{
-			SwingUtilities.invokeAndWait(starter);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
-		catch (InvocationTargetException e)
-		{
-			e.printStackTrace();
-		}
-
-		this.startRepaint();
 	}
 
 	private void startRepaint()
@@ -757,12 +732,9 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 	private void manageJavaVersion()
 	{
-		String jv = System.getProperty("java.class.version");
-		double jvf = new Double(jv).doubleValue();
 
-		if (jvf >= 48)
+		if (this.JAVA_VERSION >= 48)
 		{
-			System.out.println(jv);
 			CircuitSimulator.muString = "\u03bc";
 			CircuitSimulator.ohmString = "\u03a9";
 			this.useBufferedImage = true;
@@ -892,7 +864,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		return circuitsMenu;
 	}
 
-	private void buildPopUpMainMenu(boolean isMac)
+	private void buildPopUpMainMenu()
 	{
 		this.mainMenu = new JPopupMenu();
 		this.mainMenu.add(this.getClassCheckItem("Add Wire", "WireElm"));
@@ -914,9 +886,10 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		otherMenu.add(this.getClassCheckItem("Add Scope Probe", "ProbeElm"));
 		otherMenu.add(this.getCheckItem("Drag All (Alt-drag)", "DragAll"));
 
-		otherMenu.add(this.getCheckItem(isMac ? "Drag Row (Alt-S-drag, S-right)" : "Drag Row (S-right)", "DragRow"));
-		otherMenu.add(this.getCheckItem(
-				isMac ? "Drag Column (Alt-\u2318-drag, \u2318-right)" : "Drag Column (C-right)", "DragColumn"));
+		otherMenu.add(this
+				.getCheckItem(App.OS_MAC ? "Drag Row (Alt-S-drag, S-right)" : "Drag Row (S-right)", "DragRow"));
+		otherMenu.add(this.getCheckItem(App.OS_MAC ? "Drag Column (Alt-\u2318-drag, \u2318-right)"
+				: "Drag Column (C-right)", "DragColumn"));
 
 		otherMenu.add(this.getCheckItem("Drag Selected", "DragSelected"));
 		otherMenu.add(this.getCheckItem("Drag Post (" + this.ctrlMetaKey + "-drag)", "DragPost"));
@@ -2242,7 +2215,8 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 			// center circuit
 			this.handleResize();
 		}
-		this.needAnalyze();
+
+		this.circuit.setNeedAnalysis(true);
 	}
 
 	private void loadCircuit(String command, ActionEvent e)
@@ -2253,6 +2227,8 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		this.pushUndo();
 
 		this.stopRepaint();
+
+		System.gc();
 
 		this.readSetupFile(setupString, menuText);
 
@@ -2269,6 +2245,25 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		}
 	}
 
+	private void reset()
+	{
+		int nbElements = this.circuit.getElementCount();
+
+		for (int i = 0; i < nbElements; i++)
+		{
+			this.circuit.getElementAt(i).reset();
+		}
+
+		for (int i = 0; i < CircuitSimulator.this.scopeMan.scopeCount; i++)
+		{
+			this.scopeMan.scopes[i].resetGraph();
+		}
+
+		this.circuit.setNeedAnalysis(true);
+		this.timer.time = 0;
+		this.activityManager.setPlaying(true);
+	}
+
 	@Override
 	protected void exit()
 	{
@@ -2276,6 +2271,29 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 		System.out.println("Exit at " + System.currentTimeMillis());
 		System.exit(0);
+	}
+
+	@Override
+	protected void start()
+	{
+		Runnable starter = new Starter();
+
+		this.initStartCircuitText();
+
+		try
+		{
+			SwingUtilities.invokeAndWait(starter);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		catch (InvocationTargetException e)
+		{
+			e.printStackTrace();
+		}
+
+		this.startRepaint();
 	}
 
 	@Override
@@ -2467,25 +2485,6 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 			}
 			this.mouseMan.tempMouseMode = this.mouseMan.mouseMode;
 		}
-	}
-
-	private void reset()
-	{
-		int nbElements = this.circuit.getElementCount();
-
-		for (int i = 0; i < nbElements; i++)
-		{
-			this.circuit.getElementAt(i).reset();
-		}
-
-		for (int i = 0; i < CircuitSimulator.this.scopeMan.scopeCount; i++)
-		{
-			this.scopeMan.scopes[i].resetGraph();
-		}
-
-		this.circuit.setNeedAnalysis(true);
-		this.timer.time = 0;
-		this.activityManager.setPlaying(true);
 	}
 
 	private class ExitAction extends AbstractAction
@@ -3003,7 +3002,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	{
 		CircuitSimulator circuitSimulator = null;
 
-		if (App.isMac())
+		if (App.OS_MAC)
 		{
 			System.out.println("Platform is Mac");
 			circuitSimulator = new MacSim();
