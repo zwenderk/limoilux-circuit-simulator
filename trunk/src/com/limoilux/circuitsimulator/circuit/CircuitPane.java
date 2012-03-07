@@ -53,6 +53,11 @@ public class CircuitPane extends JPanel
 		{
 			e.printStackTrace();
 			this.cirSim.circuit.setNeedAnalysis(true);
+			
+			if (this.cirSim.repaintRun != null)
+			{
+				this.cirSim.stopRepaint();
+			}
 
 		}
 
