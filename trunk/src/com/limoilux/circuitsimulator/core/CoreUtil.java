@@ -300,8 +300,7 @@ public class CoreUtil
 
 	public static boolean isMac()
 	{
-		String os = System.getProperty("os.name");
-		return os.indexOf("Mac ") == 0;
+		return System.getProperty("mrj.version") != null;
 
 	}
 }
