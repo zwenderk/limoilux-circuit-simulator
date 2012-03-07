@@ -1,7 +1,8 @@
 package com.limoilux.circuitsimulator.core;
 
+import com.apple.eawt.AppEvent.AppHiddenEvent;
 import com.apple.eawt.AppEvent.QuitEvent;
-import com.apple.eawt.AppEventListener;
+import com.apple.eawt.AppHiddenListener;
 import com.apple.eawt.Application;
 import com.apple.eawt.QuitHandler;
 import com.apple.eawt.QuitResponse;
@@ -14,6 +15,9 @@ public class MacSim extends CircuitSimulator
 		Application app = Application.getApplication();
 		
 		app.setQuitHandler(new MyQuitHandler());
+		
+		app.addAppEventListener(new MyAppHiddenListener());
+		app.setDefaultMenuBar(this.cirFrame.getJMenuBar());
 		
 
 	}
@@ -29,12 +33,22 @@ public class MacSim extends CircuitSimulator
 		@Override
 		public void handleQuitRequestWith(QuitEvent e, QuitResponse r)
 		{
-			System.out.println(e);
-			System.out.println(r);
-
-			r.performQuit();
+			MacSim.this.exit();
 		}
-		
 	}
 	
+	private class MyAppHiddenListener implements AppHiddenListener
+	{
+		@Override
+		public void appHidden(AppHiddenEvent e)
+		{
+			MacSim.this.stopRepaint();
+		}
+
+		@Override
+		public void appUnhidden(AppHiddenEvent e)
+		{
+			MacSim.this.startRepaint();
+		}
+	}
 }

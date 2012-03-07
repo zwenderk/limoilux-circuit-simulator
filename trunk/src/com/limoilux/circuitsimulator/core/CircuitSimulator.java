@@ -23,6 +23,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -142,8 +144,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private int menuScope = -1;
 	private int hintType = -1, hintItem1, hintItem2;
 	private String stopMessage;
-
-	private Label titleLabel;
+	
 	private JMenuItem cutItem, copyItem, selectAllItem;
 
 	private JScrollBar speedBar;
@@ -201,7 +202,6 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 	public final ActivityManager activityManager;
 	private final ActivityListener activityListener;
-	private Thread repaintThread = null;
 
 	private RepaintRun repaintRun = null;
 
@@ -227,7 +227,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		this.activityManager.addActivityListener(this.activityListener);
 
 		this.cirFrame = new CoreWindow();
-
+		this.cirFrame.addWindowListener(new MyWindowLister());
 
 		this.mainContainer = new JPanel();
 		this.mainContainer.setBackground(Color.BLACK);
@@ -277,18 +277,6 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		this.mainContainer.add(this.circuitPanel, BorderLayout.CENTER);
 		// this.mainContainer.add(this.scopeMan.getScopePane(),
 		// BorderLayout.SOUTH);
-	}
-
-	private void startRepaint()
-	{
-		if (this.repaintRun != null)
-		{
-			this.repaintRun.goOn = false;
-		}
-
-		this.repaintRun = new RepaintRun();
-		this.repaintThread = new Thread(repaintRun);
-		this.repaintThread.start();
 	}
 
 	private long repaint()
@@ -1548,7 +1536,6 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private void readSetup(String text, boolean retain)
 	{
 		this.readSetup(text.getBytes(), text.length(), retain);
-		this.titleLabel.setText("untitled");
 	}
 
 	private void readSetupFile(String fileName, String title)
@@ -2233,16 +2220,6 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		this.startRepaint();
 	}
 
-	private void stopRepaint()
-	{
-
-		if (this.repaintRun != null)
-		{
-			this.repaintRun.stop();
-			this.repaintRun = null;
-		}
-	}
-
 	private void reset()
 	{
 		int nbElements = this.circuit.getElementCount();
@@ -2260,6 +2237,27 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		this.circuit.setNeedAnalysis(true);
 		this.timer.time = 0;
 		this.activityManager.setPlaying(true);
+	}
+
+	protected void startRepaint()
+	{
+		Thread t;
+		if (this.repaintRun == null || this.repaintRun.dead)
+		{
+			this.repaintRun = new RepaintRun();
+			t = new Thread(this.repaintRun);
+			t.start();
+		}
+	}
+
+	protected void stopRepaint()
+	{
+
+		if (this.repaintRun != null)
+		{
+			this.repaintRun.stop();
+			this.repaintRun = null;
+		}
 	}
 
 	@Override
@@ -2992,6 +2990,48 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 						+ System.currentTimeMillis());
 				this.notify();
 			}
+
+		}
+	}
+	
+	private class MyWindowLister implements WindowListener
+	{
+		@Override
+		public void windowActivated(WindowEvent e)
+		{
+
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e)
+		{
+			System.out.println("closed");
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e)
+		{
+			System.out.println("closing");
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowOpened(WindowEvent arg0)
+		{
 
 		}
 	}
