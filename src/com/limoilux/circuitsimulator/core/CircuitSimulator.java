@@ -1072,14 +1072,17 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 		element = CircuitUtil.constructElement(classPath, 0, 0);
 
+		App.printDebugMsg("Registering");
 		this.register(classPath, element);
 
 		if (element.needsShortcut() && element.getDumpClass() == classPath)
 		{
+			App.printDebugMsg("elment id");
 			dt = element.getElementId();
 			label += " (" + (char) dt + ")";
 		}
 
+		App.printDebugMsg("adding elment");
 		element.delete();
 
 		return this.getCheckItem(label, className);

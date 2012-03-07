@@ -27,14 +27,21 @@ public class TransLineElm extends CircuitElm
 		this.delay = 1000 * Configs.TIME_STEP;
 		this.imped = 75;
 		this.noDiagonal = true;
+		
 		this.reset();
 	}
 
 	public TransLineElm(int xa, int ya, int xb, int yb, int f, StringTokenizer st)
 	{
 		super(xa, ya, xb, yb, f);
+		
+		this.delay = 1000 * Configs.TIME_STEP;
 		this.delay = new Double(st.nextToken()).doubleValue();
+		
+		this.imped = 75;
 		this.imped = new Double(st.nextToken()).doubleValue();
+		
+		
 		this.width = new Integer(st.nextToken()).intValue();
 		// next slot is for resistance (losses), which is not implemented
 		st.nextToken();
@@ -96,7 +103,7 @@ public class TransLineElm extends CircuitElm
 
 		this.lenSteps = (int) (this.delay / Configs.TIME_STEP);
 		
-		App.printDebugMsg("TransLine " + this.lenSteps + " steps");
+		App.printDebugMsg("TransLine " + this.lenSteps + " steps " + this.delay + " delay");
 		if (this.lenSteps > 100000)
 		{
 			this.voltageL = this.voltageR = null;
@@ -140,19 +147,22 @@ public class TransLineElm extends CircuitElm
 		int segments = (int) (this.dn / 2);
 		int ix0 = this.ptr - 1 + this.lenSteps;
 		double segf = 1. / segments;
-		int i;
+
 		g.setColor(Color.darkGray);
 		g.fillRect(this.inner[2].x, this.inner[2].y, this.inner[1].x - this.inner[2].x + 2, this.inner[1].y
 				- this.inner[2].y + 2);
-		for (i = 0; i != 4; i++)
+		
+		for (int i = 0; i != 4; i++)
 		{
 			this.setVoltageColor(g, this.volts[i]);
 			DrawUtil.drawThickLine(g, this.posts[i], this.inner[i]);
 		}
+		
 		if (this.voltageL != null)
 		{
-			for (i = 0; i != segments; i++)
+			for (int i = 0; i < segments; i++)
 			{
+				System.out.println(segments + " " + this.lenSteps);
 				int ix1 = (ix0 - this.lenSteps * i / segments) % this.lenSteps;
 				int ix2 = (ix0 - this.lenSteps * (segments - 1 - i) / segments) % this.lenSteps;
 				double v = (this.voltageL[ix1] + this.voltageR[ix2]) / 2;
