@@ -94,7 +94,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private static final int MODE_DRAG_POST = 5;
 	public static final int MODE_SELECT = 6;
 
-	public double currentMultiplier;
+
 
 	private static final int HINT_LC = 1;
 	private static final int HINT_RC = 2;
@@ -129,7 +129,9 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 	private Rectangle selectedArea;
 
-	public int gridSize, gridMask, gridRound;
+	public int gridSize; 
+	public int gridMask;
+	public int gridRound;
 
 	public boolean analyzeFlag;
 
@@ -138,10 +140,15 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 	public int scopeSelected = -1;
 	private int menuScope = -1;
-	private int hintType = -1, hintItem1, hintItem2;
+	private int hintType = -1;
+	private int hintItem1;
+	private int hintItem2;
+	
 	private String stopMessage;
 
-	private JMenuItem cutItem, copyItem, selectAllItem;
+	private JMenuItem cutItem;
+	private JMenuItem copyItem;
+	private JMenuItem selectAllItem;
 
 	private JScrollBar speedBar;
 	private Label powerLabel;
@@ -151,9 +158,11 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private JMenuItem elmCopyMenuItem;
 	private JMenuItem elmDeleteMenuItem;
 	private JMenuItem elmScopeMenuItem;
+	
 	public JPopupMenu scopeMenu;
 	public JPopupMenu transScopeMenu;
 	private JPopupMenu mainMenu;
+	
 	public JCheckBoxMenuItem scopeVMenuItem;
 	public JCheckBoxMenuItem scopeIMenuItem;
 	public JCheckBoxMenuItem scopeMaxMenuItem;
@@ -175,6 +184,8 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 	public JButton playButton;
 	public JButton stopButton;
+	
+	public double currentMultiplier;
 
 	private final MouseMotionListener mouseMotionList;
 	private final MouseListener mouseList;
@@ -1738,7 +1749,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	{
 		String token;
 		double timeStep;
-		double speedBar;
+		double speed;
 		// Atefact
 
 		// Dump pour garder la compatibilité, ancient flag.
@@ -1751,8 +1762,8 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 		// SpeedBar
 		token = st.nextToken();
-		speedBar = Double.parseDouble(token);
-		int sp2 = (int) (Math.log(10 * speedBar) * 24 + 61.5);
+		speed = Double.parseDouble(token);
+		int sp2 = (int) (Math.log(10 * speed) * 24 + 61.5);
 		// int sp2 = (int) (Math.log(sp)*24+1.5);
 		this.speedBar.setValue(sp2);
 
