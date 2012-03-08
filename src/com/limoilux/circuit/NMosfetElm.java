@@ -1,6 +1,8 @@
 
 package com.limoilux.circuit;
 
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
+
 public class NMosfetElm extends MosfetElm
 {
 	public NMosfetElm(int xx, int yy)
@@ -9,7 +11,7 @@ public class NMosfetElm extends MosfetElm
 	}
 
 	@Override
-	public Class getDumpClass()
+	public Class<? extends CircuitElm> getDumpClass()
 	{
 		return MosfetElm.class;
 	}

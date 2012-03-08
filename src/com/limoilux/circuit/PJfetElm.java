@@ -1,6 +1,8 @@
 
 package com.limoilux.circuit;
 
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
+
 public class PJfetElm extends JfetElm
 {
 	public PJfetElm(int xx, int yy)
@@ -9,7 +11,7 @@ public class PJfetElm extends JfetElm
 	}
 
 	@Override
-	public Class getDumpClass()
+	public Class<? extends CircuitElm> getDumpClass()
 	{
 		return JfetElm.class;
 	}
