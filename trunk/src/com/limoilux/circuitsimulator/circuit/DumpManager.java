@@ -26,7 +26,7 @@ public class DumpManager
 
 	public void register(CircuitElm element)
 	{
-		Class<?> dumpClass = null;
+		Class<? extends CircuitElm> dumpClass = null;
 		int elementId = element.getElementId();
 
 		if (elementId == 0)
