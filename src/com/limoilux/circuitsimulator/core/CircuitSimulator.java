@@ -2242,6 +2242,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		this.pushUndo();
 
 		this.stopRepaint();
+		this.activityManager.setPlaying(false);
 
 		App.printDebugMsg("Run garbage collector");
 		System.gc();
@@ -2250,7 +2251,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 		App.printDebugMsg("Loading done");
 
-		this.startRepaint();
+		//this.startRepaint();
 	}
 
 	private void reset()
@@ -2309,7 +2310,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	@Override
 	protected void start()
 	{
-		App.printDebugMsg("start app");
+		App.printDebugMsg("starting App");
 		Runnable starter = new Starter();
 
 		this.initStartCircuitText();
@@ -2329,7 +2330,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 		this.startRepaint();
 
-		App.printDebugMsg("start app done");
+		App.printDebugMsg("App Started");
 	}
 
 	@Override
