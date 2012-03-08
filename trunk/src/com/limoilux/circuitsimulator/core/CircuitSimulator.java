@@ -85,8 +85,6 @@ import com.limoilux.util.App;
  */
 public abstract class CircuitSimulator extends App implements ComponentListener, ActionListener, ItemListener
 {
-	@Deprecated
-	private static final double PI = Math.PI;
 
 	private static final int subiterCount = 5000;
 	private static final int MODE_ADD_ELM = 0;
@@ -1164,7 +1162,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 			InductorElm ie = (InductorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
 			return "res.f = "
-					+ CoreUtil.getUnitText(1 / (2 * CircuitSimulator.PI * Math.sqrt(ie.inductance * ce.capacitance)),
+					+ CoreUtil.getUnitText(1 / (2 * Math.PI * Math.sqrt(ie.inductance * ce.capacitance)),
 							"Hz");
 		}
 		if (this.hintType == CircuitSimulator.HINT_RC)
@@ -1194,7 +1192,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 			ResistorElm re = (ResistorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
 			return "f.3db = "
-					+ CoreUtil.getUnitText(1 / (2 * CircuitSimulator.PI * re.resistance * ce.capacitance), "Hz");
+					+ CoreUtil.getUnitText(1 / (2 * Math.PI * re.resistance * ce.capacitance), "Hz");
 		}
 		if (this.hintType == CircuitSimulator.HINT_3DB_L)
 		{
@@ -1208,7 +1206,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 			}
 			ResistorElm re = (ResistorElm) c1;
 			InductorElm ie = (InductorElm) c2;
-			return "f.3db = " + CoreUtil.getUnitText(re.resistance / (2 * CircuitSimulator.PI * ie.inductance), "Hz");
+			return "f.3db = " + CoreUtil.getUnitText(re.resistance / (2 * Math.PI * ie.inductance), "Hz");
 		}
 		if (this.hintType == CircuitSimulator.HINT_TWINT)
 		{
@@ -1222,7 +1220,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 			}
 			ResistorElm re = (ResistorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
-			return "fc = " + CoreUtil.getUnitText(1 / (2 * CircuitSimulator.PI * re.resistance * ce.capacitance), "Hz");
+			return "fc = " + CoreUtil.getUnitText(1 / (2 * Math.PI * re.resistance * ce.capacitance), "Hz");
 		}
 		return null;
 	}
