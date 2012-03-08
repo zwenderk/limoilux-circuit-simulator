@@ -300,7 +300,9 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 			{
 				this.stopMessage = null;
 				this.stopElm = null;
+
 				this.circuit.analyzeCircuit();
+
 			}
 			catch (CircuitAnalysisException e)
 			{
@@ -1162,8 +1164,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 			InductorElm ie = (InductorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
 			return "res.f = "
-					+ CoreUtil.getUnitText(1 / (2 * Math.PI * Math.sqrt(ie.inductance * ce.capacitance)),
-							"Hz");
+					+ CoreUtil.getUnitText(1 / (2 * Math.PI * Math.sqrt(ie.inductance * ce.capacitance)), "Hz");
 		}
 		if (this.hintType == CircuitSimulator.HINT_RC)
 		{
@@ -1191,8 +1192,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 			}
 			ResistorElm re = (ResistorElm) c1;
 			CapacitorElm ce = (CapacitorElm) c2;
-			return "f.3db = "
-					+ CoreUtil.getUnitText(1 / (2 * Math.PI * re.resistance * ce.capacitance), "Hz");
+			return "f.3db = " + CoreUtil.getUnitText(1 / (2 * Math.PI * re.resistance * ce.capacitance), "Hz");
 		}
 		if (this.hintType == CircuitSimulator.HINT_3DB_L)
 		{
@@ -2245,7 +2245,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		System.gc();
 
 		this.readSetupFile(setupString, menuText);
-		
+
 		App.printDebugMsg("Loading done");
 
 		this.startRepaint();
@@ -2972,10 +2972,11 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 			try
 			{
-				this.goOn = false;
 
 				do
 				{
+					this.goOn = false;
+
 					App.printDebugMsg("waiting for notify");
 					this.wait(100);
 				}
