@@ -1102,30 +1102,10 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		return mi;
 	}
 
+	@Deprecated
 	private void register(Class<?> c, CircuitElm elm)
 	{
-		Class<?> dumpClass = null;
-		int elementId = elm.getElementId();
-
-		if (elementId == 0)
-		{
-			System.out.println("no dump type: " + c);
-			return;
-		}
-
-		dumpClass = elm.getDumpClass();
-		if (this.circuitMan.dumpMan.dumpTypes[elementId] == dumpClass)
-		{
-			return;
-		}
-
-		if (this.circuitMan.dumpMan.dumpTypes[elementId] != null)
-		{
-			System.out.println("dump type conflict: " + c + " " + this.circuitMan.dumpMan.dumpTypes[elementId]);
-			return;
-		}
-
-		this.circuitMan.dumpMan.dumpTypes[elementId] = dumpClass;
+		this.circuitMan.dumpMan.register(c, elm);
 	}
 
 	public String getAppletInfo()
