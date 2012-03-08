@@ -19,6 +19,7 @@ import com.limoilux.circuitsimulator.core.CoreUtil;
 import com.limoilux.circuitsimulator.ui.DrawUtil;
 import com.limoilux.circuitsimulator.ui.EditInfo;
 import com.limoilux.circuitsimulator.ui.Editable;
+import com.limoilux.util.MathUtil;
 
 public abstract class CircuitElm implements Editable
 {
@@ -46,8 +47,8 @@ public abstract class CircuitElm implements Editable
 
 	static Color[] colorScale;
 
-	public Point point1;
-	public Point point2;
+	public final Point point1;
+	public final Point point2;
 	public Point lead1;
 	public Point lead2;
 
@@ -76,6 +77,9 @@ public abstract class CircuitElm implements Editable
 
 	public CircuitElm(int xx, int yy)
 	{
+		this.point1 = new Point();
+		this.point2 = new Point();
+		
 		this.x = this.x2 = xx;
 		this.y = this.y2 = yy;
 		this.flags = this.getDefaultFlags();
@@ -85,6 +89,9 @@ public abstract class CircuitElm implements Editable
 
 	public CircuitElm(int xa, int ya, int xb, int yb, int f)
 	{
+		this.point1 = new Point();
+		this.point2 = new Point();
+		
 		this.x = xa;
 		this.y = ya;
 		this.x2 = xb;
@@ -193,15 +200,15 @@ public abstract class CircuitElm implements Editable
 
 		if (this.longueurY == 0)
 		{
-			this.dsign = CoreUtil.sign(this.longueurX);
+			this.dsign = MathUtil.signum(this.longueurX);
 		}
 		else
 		{
-			this.dsign = CoreUtil.sign(this.longueurY);
+			this.dsign = MathUtil.signum(this.longueurY);
 		}
 		
-		this.point1 = new Point(this.x, this.y);
-		this.point2 = new Point(this.x2, this.y2);
+		this.point1.setLocation(this.x, this.y);
+		this.point2.setLocation(this.x2, this.y2);
 	}
 
 	public void calcLeads(int len)

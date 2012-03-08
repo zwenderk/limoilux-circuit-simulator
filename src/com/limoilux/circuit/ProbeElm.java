@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuitsimulator.circuit.CircuitElm;
+import com.limoilux.circuitsimulator.core.CoreUtil;
 import com.limoilux.circuitsimulator.ui.EditInfo;
 
 public class ProbeElm extends CircuitElm
@@ -36,14 +37,21 @@ public class ProbeElm extends CircuitElm
 	public void setPoints()
 	{
 		super.setPoints();
+		
+		int x;
+		int y;
+		
 		// swap points so that we subtract higher from lower
 		if (this.point2.y < this.point1.y)
 		{
-			Point x = this.point1;
-			this.point1 = this.point2;
-			this.point2 = x;
+			x = this.point1.x;
+			y = this.point1.y;
+			
+			this.point1.setLocation(this.point2);
+			this.point2.setLocation(x, y);
 		}
-		this.center = CircuitElm.interpPoint(this.point1, this.point2, .5);
+		
+		this.center = CoreUtil.interpPoint(this.point1, this.point2, .5);
 	}
 
 	@Override
