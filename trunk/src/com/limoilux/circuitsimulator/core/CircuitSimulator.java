@@ -2938,7 +2938,6 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 				}
 			}
-
 		}
 	}
 
