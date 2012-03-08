@@ -3082,12 +3082,12 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 		if (App.OS_MAC)
 		{
-			System.out.println("Platform is Mac");
+			App.printDebugMsg("Platform is Mac");
 			circuitSimulator = new MacSim();
 		}
 		else
 		{
-			System.out.println("Platform is Windows");
+			App.printDebugMsg("Platform is Windows");
 			circuitSimulator = new WindowsSim();
 		}
 

@@ -1,5 +1,8 @@
 package com.limoilux.circuitsimulator.core;
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import com.apple.eawt.AppEvent.AppHiddenEvent;
 import com.apple.eawt.AppEvent.QuitEvent;
 import com.apple.eawt.AppHiddenListener;
@@ -11,6 +14,46 @@ public class MacSim extends CircuitSimulator
 	public MacSim()
 	{
 		super();
+
+		
+
+	}
+	@Override
+	protected void configForOs()
+	{
+		String name = null;
+		
+		System.setProperty("apple.laf.useScreenMenuBar", "true");
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name","CircuitSimulator");
+		this.ctrlMetaKey = "\u2318";
+		
+		try
+		{
+			name = UIManager.getSystemLookAndFeelClassName();
+			App.printDebugMsg("Look and feel name is " + name);
+			UIManager.setLookAndFeel(name);
+		}
+		catch (ClassNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (InstantiationException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IllegalAccessException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (UnsupportedLookAndFeelException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 		Application app = Application.getApplication();
 		
@@ -18,14 +61,6 @@ public class MacSim extends CircuitSimulator
 		
 		app.addAppEventListener(new MyAppHiddenListener());
 		app.setDefaultMenuBar(this.cirFrame.getJMenuBar());
-		
-
-	}
-	@Override
-	protected void configForOs()
-	{
-		System.setProperty("apple.laf.useScreenMenuBar", "true");
-		this.ctrlMetaKey = "\u2318";
 	}
 	
 	private class MyQuitHandler implements QuitHandler

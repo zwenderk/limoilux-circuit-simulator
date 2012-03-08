@@ -17,8 +17,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.NumberFormat;
 
-import com.limoilux.circuit.ui.layout.EditDialogLayout;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
+import com.limoilux.circuitsimulator.ui.layout.EditDialogLayout;
 
 public class EditDialog extends Dialog implements AdjustmentListener, ActionListener, ItemListener
 {

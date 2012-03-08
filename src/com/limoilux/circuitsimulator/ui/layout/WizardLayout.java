@@ -1,5 +1,5 @@
 
-package com.limoilux.circuit.ui.layout;
+package com.limoilux.circuitsimulator.ui.layout;
 
 import java.awt.Component;
 import java.awt.Container;
