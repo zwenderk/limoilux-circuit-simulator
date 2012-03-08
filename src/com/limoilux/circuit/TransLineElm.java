@@ -159,6 +159,7 @@ public class TransLineElm extends CircuitElm
 	{
 		int ix1;
 		int ix2;
+		double v;
 		
 		this.setBbox(this.posts[0], this.posts[3], 0);
 		int segments = (int) (this.longueur / 2);
@@ -175,19 +176,24 @@ public class TransLineElm extends CircuitElm
 			DrawUtil.drawThickLine(g, this.posts[i], this.inner[i]);
 		}
 
-		if (this.voltageL != null)
+		if (this.voltageL != null )
 		{
 			for (int i = 0; i < segments; i++)
 			{
-				// System.out.println(segments + " " + this.lenSteps);
+				//System.out.println(segments + " " + this.lenSteps);
 				ix1 = (ix0 - this.lenSteps * i / segments) % this.lenSteps;
 				ix2 = (ix0 - this.lenSteps * (segments - 1 - i) / segments) % this.lenSteps;
-				double v = (this.voltageL[ix1] + this.voltageR[ix2]) / 2;
+				
+				v = (this.voltageL[ix1] + this.voltageR[ix2]) / 2;
 				this.setVoltageColor(g, v);
+				
 				CoreUtil.interpPoint(this.inner[0], this.inner[1], CircuitElm.ps1, i * segf);
 				CoreUtil.interpPoint(this.inner[2], this.inner[3], CircuitElm.ps2, i * segf);
+				
 				g.drawLine(CircuitElm.ps1.x, CircuitElm.ps1.y, CircuitElm.ps2.x, CircuitElm.ps2.y);
+				
 				CoreUtil.interpPoint(this.inner[2], this.inner[3], CircuitElm.ps1, (i + 1) * segf);
+				
 				DrawUtil.drawThickLine(g, CircuitElm.ps1, CircuitElm.ps2);
 			}
 		}
