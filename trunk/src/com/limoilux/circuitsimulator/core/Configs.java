@@ -6,6 +6,7 @@ public class Configs
 	public static final String CIRCUIT_FOLDER = "circuits";
 	public static final String CIRCUITS_PACKAGE = "com.limoilux.circuit.";
 	public static final String SETUP_LIST = "setuplist.txt";
+	public static final String STD_FONT_TYPE = "courier new";
 
 	public static final boolean EURO_RESISTOR = false;
 	public static final boolean SHOW_DOTS = true;
