@@ -8,12 +8,12 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuitsimulator.circuit.CircuitAnalysisException;
 import com.limoilux.circuitsimulator.circuit.CircuitElm;
-import com.limoilux.circuitsimulator.core.App;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
 import com.limoilux.circuitsimulator.core.Configs;
 import com.limoilux.circuitsimulator.core.CoreUtil;
 import com.limoilux.circuitsimulator.ui.DrawUtil;
 import com.limoilux.circuitsimulator.ui.EditInfo;
+import com.limoilux.util.App;
 
 public class TransLineElm extends CircuitElm
 {

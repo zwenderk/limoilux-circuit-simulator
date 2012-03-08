@@ -1,5 +1,5 @@
 
-package com.limoilux.circuitsimulator.core;
+package com.limoilux.util;
 
 public abstract class App
 {
