@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 
-import com.limoilux.circuit.ui.layout.WizardLayout;
+import com.limoilux.circuitsimulator.ui.layout.WizardLayout;
 
 /**
  * Permet de faire des exportation et des importations.
