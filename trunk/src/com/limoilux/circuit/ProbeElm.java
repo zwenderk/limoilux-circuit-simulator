@@ -9,11 +9,13 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuitsimulator.circuit.CircuitElm;
 import com.limoilux.circuitsimulator.core.CoreUtil;
+import com.limoilux.circuitsimulator.ui.DrawUtil;
 import com.limoilux.circuitsimulator.ui.EditInfo;
 
 public class ProbeElm extends CircuitElm
 {
 	static final int FLAG_SHOWVOLTAGE = 1;
+	private Point center;
 
 	public ProbeElm(int xx, int yy)
 	{
@@ -31,7 +33,7 @@ public class ProbeElm extends CircuitElm
 		return 'p';
 	}
 
-	Point center;
+
 
 	@Override
 	public void setPoints()
@@ -67,13 +69,13 @@ public class ProbeElm extends CircuitElm
 		{
 			g.setColor(CircuitElm.SELECT_COLOR);
 		}
-		CircuitElm.drawThickLine(g, this.point1, this.lead1);
+		DrawUtil.drawThickLine(g, this.point1, this.lead1);
 		this.setVoltageColor(g, this.volts[1]);
 		if (selected)
 		{
 			g.setColor(CircuitElm.SELECT_COLOR);
 		}
-		CircuitElm.drawThickLine(g, this.lead2, this.point2);
+		DrawUtil.drawThickLine(g, this.lead2, this.point2);
 		Font f = new Font("SansSerif", Font.BOLD, 14);
 		g.setFont(f);
 		if (this == CircuitElm.cirSim.mouseMan.plotXElm)
@@ -86,7 +88,7 @@ public class ProbeElm extends CircuitElm
 		}
 		if (this.mustShowVoltage())
 		{
-			String s = CircuitElm.getShortUnitText(this.volts[0], "V");
+			String s = CoreUtil.getShortUnitText(this.volts[0], "V");
 			this.drawValues(g, s, 4);
 		}
 		this.drawPosts(g);
@@ -101,7 +103,7 @@ public class ProbeElm extends CircuitElm
 	public void getInfo(String arr[])
 	{
 		arr[0] = "scope probe";
-		arr[1] = "Vd = " + CircuitElm.getVoltageText(this.getVoltageDiff());
+		arr[1] = "Vd = " + CoreUtil.getVoltageText(this.getVoltageDiff());
 	}
 
 	@Override
