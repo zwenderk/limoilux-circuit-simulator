@@ -105,7 +105,7 @@ public class CapacitorElm extends CircuitElm
 		DrawUtil.drawThickLine(g, this.plate2[0], this.plate2[1]);
 
 		this.updateDotCount();
-		
+
 		if (CircuitElm.cirSim.mouseMan.dragElm != this)
 		{
 			DrawUtil.drawDots(g, this.point1, this.lead1, this.curcount);

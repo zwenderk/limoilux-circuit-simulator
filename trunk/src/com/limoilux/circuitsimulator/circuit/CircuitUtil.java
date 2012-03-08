@@ -12,7 +12,6 @@ public class CircuitUtil
 	{
 
 	}
-	
 
 	public static CircuitElm constructElement(Class<?> classType, int x0, int y0)
 	{

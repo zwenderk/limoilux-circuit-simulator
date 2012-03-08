@@ -1,7 +1,6 @@
 
 package com.limoilux.circuitsimulator.circuit;
 
-
 public class CircuitNodeLink
 {
 	public final int num;

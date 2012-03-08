@@ -1,7 +1,6 @@
 
 package com.limoilux.circuitsimulator.circuit;
 
-
 /**
  * @author David Bernard
  * 

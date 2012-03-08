@@ -104,7 +104,7 @@ public abstract class ChipElm extends CircuitElm
 			DrawUtil.drawDots(g, b, a, p.curcount);
 			if (p.bubble)
 			{
-				g.setColor( Color.black);
+				g.setColor(Color.black);
 				DrawUtil.drawThickCircle(g, p.bubbleX, p.bubbleY, 1);
 				g.setColor(CircuitElm.LIGHT_GRAY_COLOR);
 				DrawUtil.drawThickCircle(g, p.bubbleX, p.bubbleY, 3);

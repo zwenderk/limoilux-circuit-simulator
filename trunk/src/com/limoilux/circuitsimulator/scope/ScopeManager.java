@@ -22,15 +22,13 @@ public class ScopeManager
 
 	public ScopeManager(Circuit circuit)
 	{
-		
+
 		this.circuit = circuit;
 		this.scopePane = new ScopePane();
 
 		this.scopes = new Scope[20];
-		this.scopeColCount = new int[SIZE];
+		this.scopeColCount = new int[ScopeManager.SIZE];
 		this.scopeCount = 0;
-		
-		
 
 	}
 
@@ -119,7 +117,7 @@ public class ScopeManager
 			this.scopes[s].position--;
 		}
 	}
-	
+
 	public void manageActionCommand(String ac, int menuScope)
 	{
 		if (ac.compareTo("remove") == 0)
@@ -262,12 +260,12 @@ public class ScopeManager
 			}
 		}
 	}
-	
+
 	public String createDump()
 	{
 		String dump = "";
 		String tempDump = "";
-		
+
 		for (int i = 0; i < this.scopeCount; i++)
 		{
 			tempDump = this.scopes[i].dump();
@@ -276,7 +274,7 @@ public class ScopeManager
 				dump += tempDump + "\n";
 			}
 		}
-		
+
 		return dump;
 	}
 

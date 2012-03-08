@@ -42,7 +42,7 @@ public class TransLineElm extends CircuitElm
 		token = st.nextToken();
 		App.printDebugMsg("TransLine init: delay is " + token);
 		temp = new Double(token).doubleValue();
-		this.delay = temp ;
+		this.delay = temp;
 
 		token = st.nextToken();
 		App.printDebugMsg("TransLine init: imped is " + token);
@@ -126,7 +126,7 @@ public class TransLineElm extends CircuitElm
 			this.voltageL = new double[this.lenSteps];
 			this.voltageR = new double[this.lenSteps];
 		}
-		
+
 		this.ptr = 0;
 		super.reset();
 	}
