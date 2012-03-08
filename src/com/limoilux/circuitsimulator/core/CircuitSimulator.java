@@ -1103,9 +1103,9 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	}
 
 	@Deprecated
-	private void register(Class<?> c, CircuitElm elm)
+	private void register(Class<?> c, CircuitElm element)
 	{
-		this.circuitMan.dumpMan.register(c, elm);
+		this.circuitMan.dumpMan.register(element);
 	}
 
 	public String getAppletInfo()

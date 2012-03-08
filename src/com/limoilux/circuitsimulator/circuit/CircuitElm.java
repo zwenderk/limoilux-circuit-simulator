@@ -101,10 +101,7 @@ public abstract class CircuitElm implements Editable
 		this.initBoundingBox();
 	}
 
-	public int getElementId()
-	{
-		return 0;
-	}
+	public abstract int getElementId();
 
 	public Class getDumpClass()
 	{
