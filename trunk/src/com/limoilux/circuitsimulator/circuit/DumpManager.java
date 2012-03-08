@@ -24,18 +24,18 @@ public class DumpManager
 	}
 	
 
-	public void register(Class<?> c, CircuitElm elm)
+	public void register(CircuitElm element)
 	{
 		Class<?> dumpClass = null;
-		int elementId = elm.getElementId();
+		int elementId = element.getElementId();
 
 		if (elementId == 0)
 		{
-			System.out.println("no dump type: " + c);
+			System.out.println("no dump type: ");
 			return;
 		}
 
-		dumpClass = elm.getDumpClass();
+		dumpClass = element.getDumpClass();
 		if (this.dumpTypes[elementId] == dumpClass)
 		{
 			return;
@@ -43,7 +43,7 @@ public class DumpManager
 
 		if (this.dumpTypes[elementId] != null)
 		{
-			System.out.println("dump type conflict: " + c + " " + this.dumpTypes[elementId]);
+			System.out.println("dump type conflict: " + this.dumpTypes[elementId]);
 			return;
 		}
 
