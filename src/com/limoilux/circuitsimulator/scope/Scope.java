@@ -459,12 +459,12 @@ public class Scope extends JPanel
 		}
 
 		gridStep = 1e-15;
-		double ts = Configs.TIME_STEP * this.speed;
+		double ts = Configs.timeStep * this.speed;
 		while (gridStep < ts * 5)
 		{
 			gridStep *= 10;
 		}
-		double tstart = this.sim.timer.time - Configs.TIME_STEP * this.speed * this.rect.width;
+		double tstart = this.sim.timer.time - Configs.timeStep * this.speed * this.rect.width;
 		double tx = this.sim.timer.time - this.sim.timer.time % gridStep;
 
 		for (ll = 0;; ll++)
@@ -664,7 +664,7 @@ public class Scope extends JPanel
 			avperiod /= periodct;
 			avperiod2 /= periodct;
 			double periodstd = Math.sqrt(avperiod2 - avperiod * avperiod);
-			freq = 1 / (avperiod * Configs.TIME_STEP * this.speed);
+			freq = 1 / (avperiod * Configs.timeStep * this.speed);
 			// don't show freq if standard deviation is too great
 			if (periodct < 1 || periodstd > 2)
 			{

@@ -16,9 +16,11 @@ public class Configs
 	public static final boolean SHOW_VALUES = true;
 	public static final boolean SMALL_GRID = false;
 
-	public static final double TIME_STEP = 5e-6;
-
 	public static final int DEF_SPEED = 117;
 	public static final int CURRENT_SPEED = 50;
 	public static final int POWER_SPEED = 50;
+	
+	public static final double DEFAULT_TIME_STEP = 5e-6;
+
+	public static double timeStep = 5e-6;
 }

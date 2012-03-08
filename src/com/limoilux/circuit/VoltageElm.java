@@ -390,7 +390,7 @@ public class VoltageElm extends CircuitElm
 			// even though the frequency has changed.
 			double oldfreq = this.frequency;
 			this.frequency = ei.value;
-			double maxfreq = 1 / (8 * Configs.TIME_STEP);
+			double maxfreq = 1 / (8 * Configs.timeStep);
 			if (this.frequency > maxfreq)
 			{
 				this.frequency = maxfreq;
