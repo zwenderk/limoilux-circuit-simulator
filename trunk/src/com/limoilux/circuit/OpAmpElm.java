@@ -118,14 +118,14 @@ public class OpAmpElm extends CircuitElm
 	public void setPoints()
 	{
 		super.setPoints();
-		if (this.dn > 150 && this == CircuitElm.cirSim.mouseMan.dragElm)
+		if (this.longueur > 150 && this == CircuitElm.cirSim.mouseMan.dragElm)
 		{
 			this.setSize(2);
 		}
 		int ww = this.opwidth;
-		if (ww > this.dn / 2)
+		if (ww > this.longueur / 2)
 		{
-			ww = (int) (this.dn / 2);
+			ww = (int) (this.longueur / 2);
 		}
 		this.calcLeads(ww * 2);
 		int hs = this.opheight * this.dsign;

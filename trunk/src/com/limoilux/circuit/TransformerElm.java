@@ -131,8 +131,8 @@ public class TransformerElm extends CircuitElm
 		this.ptEnds[1] = this.point2;
 		CoreUtil.interpPoint(this.point1, this.point2, this.ptEnds[2], 0, -this.dsign * this.width);
 		CoreUtil.interpPoint(this.point1, this.point2, this.ptEnds[3], 1, -this.dsign * this.width);
-		double ce = .5 - 12 / this.dn;
-		double cd = .5 - 2 / this.dn;
+		double ce = .5 - 12 / this.longueur;
+		double cd = .5 - 2 / this.longueur;
 		int i;
 		for (i = 0; i != 4; i += 2)
 		{

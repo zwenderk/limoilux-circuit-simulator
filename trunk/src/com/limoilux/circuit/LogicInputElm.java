@@ -74,7 +74,7 @@ public class LogicInputElm extends SwitchElm
 	public void setPoints()
 	{
 		super.setPoints();
-		this.lead1 = CircuitElm.interpPoint(this.point1, this.point2, 1 - 12 / this.dn);
+		this.lead1 = CircuitElm.interpPoint(this.point1, this.point2, 1 - 12 / this.longueur);
 	}
 
 	@Override

@@ -64,7 +64,7 @@ public class SweepElm extends CircuitElm
 	public void setPoints()
 	{
 		super.setPoints();
-		this.lead1 = CircuitElm.interpPoint(this.point1, this.point2, 1 - this.circleSize / this.dn);
+		this.lead1 = CircuitElm.interpPoint(this.point1, this.point2, 1 - this.circleSize / this.longueur);
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class SweepElm extends CircuitElm
 		if (Configs.SHOW_VALUES)
 		{
 			String s = CoreUtil.getShortUnitText(this.frequency, "Hz");
-			if (this.dx == 0 || this.dy == 0)
+			if (this.longueurX == 0 || this.longueurY == 0)
 			{
 				this.drawValues(g, s, this.circleSize);
 			}

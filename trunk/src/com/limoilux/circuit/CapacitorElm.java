@@ -71,7 +71,7 @@ public class CapacitorElm extends CircuitElm
 	public void setPoints()
 	{
 		super.setPoints();
-		double f = (this.dn / 2 - 4) / this.dn;
+		double f = (this.longueur / 2 - 4) / this.longueur;
 		// calc leads
 		this.lead1 = CoreUtil.interpPoint(this.point1, this.point2, f);
 		this.lead2 = CoreUtil.interpPoint(this.point1, this.point2, 1 - f);

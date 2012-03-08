@@ -43,7 +43,7 @@ public class OrGateElm extends GateElm
 			double b = 1 - a * a;
 			CircuitElm.interpPoint2(this.lead1, this.lead2, triPoints[i], triPoints[32 - i], .5 + a / 2, b * this.hs2);
 		}
-		double ww2 = this.ww == 0 ? this.dn * 2 : this.ww * 2;
+		double ww2 = this.ww == 0 ? this.longueur * 2 : this.ww * 2;
 		for (i = 0; i != 5; i++)
 		{
 			double a = (i - 2) / 2.;
@@ -57,8 +57,8 @@ public class OrGateElm extends GateElm
 		triPoints[16] = new Point(this.lead2);
 		if (this.isInverting())
 		{
-			this.pcircle = CircuitElm.interpPoint(this.point1, this.point2, .5 + (this.ww + 4) / this.dn);
-			this.lead2 = CircuitElm.interpPoint(this.point1, this.point2, .5 + (this.ww + 8) / this.dn);
+			this.pcircle = CircuitElm.interpPoint(this.point1, this.point2, .5 + (this.ww + 4) / this.longueur);
+			this.lead2 = CircuitElm.interpPoint(this.point1, this.point2, .5 + (this.ww + 8) / this.longueur);
 		}
 		this.gatePoly = CircuitElm.createPolygon(triPoints);
 	}

@@ -67,17 +67,17 @@ public class JfetElm extends MosfetElm
 		this.drn = CoreUtil.newPointArray(3);
 		CoreUtil.interpPoint2(this.point1, this.point2, this.src[0], this.drn[0], 1, hs2);
 		CoreUtil.interpPoint2(this.point1, this.point2, this.src[1], this.drn[1], 1, hs2 / 2);
-		CoreUtil.interpPoint2(this.point1, this.point2, this.src[2], this.drn[2], 1 - 10 / this.dn, hs2 / 2);
+		CoreUtil.interpPoint2(this.point1, this.point2, this.src[2], this.drn[2], 1 - 10 / this.longueur, hs2 / 2);
 
-		this.gatePt = CoreUtil.interpPoint(this.point1, this.point2, 1 - 14 / this.dn);
+		this.gatePt = CoreUtil.interpPoint(this.point1, this.point2, 1 - 14 / this.longueur);
 
 		Point ra[] = CoreUtil.newPointArray(4);
-		CoreUtil.interpPoint2(this.point1, this.point2, ra[0], ra[1], 1 - 13 / this.dn, this.hs);
-		CoreUtil.interpPoint2(this.point1, this.point2, ra[2], ra[3], 1 - 10 / this.dn, this.hs);
+		CoreUtil.interpPoint2(this.point1, this.point2, ra[0], ra[1], 1 - 13 / this.longueur, this.hs);
+		CoreUtil.interpPoint2(this.point1, this.point2, ra[2], ra[3], 1 - 10 / this.longueur, this.hs);
 		this.gatePoly = CircuitElm.createPolygon(ra[0], ra[1], ra[3], ra[2]);
 		if (this.pnp == -1)
 		{
-			Point x = CoreUtil.interpPoint(this.gatePt, this.point1, 18 / this.dn);
+			Point x = CoreUtil.interpPoint(this.gatePt, this.point1, 18 / this.longueur);
 			this.arrowPoly = CircuitElm.calcArrow(this.gatePt, x, 8, 3);
 		}
 		else

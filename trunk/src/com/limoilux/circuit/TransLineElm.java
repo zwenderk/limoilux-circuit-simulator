@@ -135,7 +135,7 @@ public class TransLineElm extends CircuitElm
 	public void setPoints()
 	{
 		super.setPoints();
-		int ds = this.dy == 0 ? CoreUtil.sign(this.dx) : -CoreUtil.sign(this.dy);
+		int ds = this.longueurY == 0 ? CoreUtil.sign(this.longueurX) : -CoreUtil.sign(this.longueurY);
 		Point p3 = CoreUtil.interpPoint(this.point1, this.point2, 0, -this.width * ds);
 		Point p4 = CoreUtil.interpPoint(this.point1, this.point2, 1, -this.width * ds);
 		int sep = CircuitElm.cirSim.gridSize / 2;
@@ -161,7 +161,7 @@ public class TransLineElm extends CircuitElm
 		int ix2;
 		
 		this.setBbox(this.posts[0], this.posts[3], 0);
-		int segments = (int) (this.dn / 2);
+		int segments = (int) (this.longueur / 2);
 		int ix0 = this.ptr - 1 + this.lenSteps;
 		double segf = 1. / segments;
 

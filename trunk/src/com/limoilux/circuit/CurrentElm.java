@@ -77,7 +77,7 @@ public class CurrentElm extends CircuitElm
 		if (Configs.SHOW_VALUES)
 		{
 			String s = CircuitElm.getShortUnitText(this.currentValue, "A");
-			if (this.dx == 0 || this.dy == 0)
+			if (this.longueurX == 0 || this.longueurY == 0)
 			{
 				this.drawValues(g, s, cr);
 			}

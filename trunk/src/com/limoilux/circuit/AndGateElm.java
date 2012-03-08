@@ -38,8 +38,8 @@ public class AndGateElm extends GateElm
 		triPoints[11] = new Point(this.lead2);
 		if (this.isInverting())
 		{
-			this.pcircle = CircuitElm.interpPoint(this.point1, this.point2, .5 + (this.ww + 4) / this.dn);
-			this.lead2 = CircuitElm.interpPoint(this.point1, this.point2, .5 + (this.ww + 8) / this.dn);
+			this.pcircle = CircuitElm.interpPoint(this.point1, this.point2, .5 + (this.ww + 4) / this.longueur);
+			this.lead2 = CircuitElm.interpPoint(this.point1, this.point2, .5 + (this.ww + 8) / this.longueur);
 		}
 		this.gatePoly = CircuitElm.createPolygon(triPoints);
 	}

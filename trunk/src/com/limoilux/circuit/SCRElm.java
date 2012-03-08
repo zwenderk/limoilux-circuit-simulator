@@ -107,14 +107,14 @@ public class SCRElm extends CircuitElm
 	{
 		super.setPoints();
 		int dir = 0;
-		if (CircuitElm.abs(this.dx) > CircuitElm.abs(this.dy))
+		if (CircuitElm.abs(this.longueurX) > CircuitElm.abs(this.longueurY))
 		{
-			dir = -CircuitElm.sign(this.dx) * CircuitElm.sign(this.dy);
+			dir = -CircuitElm.sign(this.longueurX) * CircuitElm.sign(this.longueurY);
 			this.point2.y = this.point1.y;
 		}
 		else
 		{
-			dir = CircuitElm.sign(this.dy) * CircuitElm.sign(this.dx);
+			dir = CircuitElm.sign(this.longueurY) * CircuitElm.sign(this.longueurX);
 			this.point2.x = this.point1.x;
 		}
 		if (dir == 0)
@@ -129,7 +129,7 @@ public class SCRElm extends CircuitElm
 		this.poly = CircuitElm.createPolygon(pa[0], pa[1], this.lead2);
 
 		this.gate = CircuitElm.newPointArray(2);
-		double leadlen = (this.dn - 16) / 2;
+		double leadlen = (this.longueur - 16) / 2;
 		int gatelen = CircuitElm.cirSim.gridSize;
 		gatelen += leadlen % CircuitElm.cirSim.gridSize;
 		if (leadlen < gatelen)

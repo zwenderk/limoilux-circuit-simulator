@@ -71,16 +71,16 @@ public class InverterElm extends CircuitElm
 		super.setPoints();
 		int hs = 16;
 		int ww = 16;
-		if (ww > this.dn / 2)
+		if (ww > this.longueur / 2)
 		{
-			ww = (int) (this.dn / 2);
+			ww = (int) (this.longueur / 2);
 		}
-		this.lead1 = CoreUtil.interpPoint(this.point1, this.point2, .5 - ww / this.dn);
-		this.lead2 = CoreUtil.interpPoint(this.point1, this.point2, .5 + (ww + 2) / this.dn);
-		this.pcircle = CoreUtil.interpPoint(this.point1, this.point2, .5 + (ww - 2) / this.dn);
+		this.lead1 = CoreUtil.interpPoint(this.point1, this.point2, .5 - ww / this.longueur);
+		this.lead2 = CoreUtil.interpPoint(this.point1, this.point2, .5 + (ww + 2) / this.longueur);
+		this.pcircle = CoreUtil.interpPoint(this.point1, this.point2, .5 + (ww - 2) / this.longueur);
 		Point triPoints[] = CoreUtil.newPointArray(3);
 		CoreUtil.interpPoint2(this.lead1, this.lead2, triPoints[0], triPoints[1], 0, hs);
-		triPoints[2] = CoreUtil.interpPoint(this.point1, this.point2, .5 + (ww - 5) / this.dn);
+		triPoints[2] = CoreUtil.interpPoint(this.point1, this.point2, .5 + (ww - 5) / this.longueur);
 		this.gatePoly = CoreUtil.createPolygon(triPoints);
 		this.setBbox(this.point1, this.point2, hs);
 	}
