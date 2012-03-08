@@ -12,8 +12,10 @@ import java.util.StringTokenizer;
 import com.limoilux.circuitsimulator.circuit.CircuitElm;
 import com.limoilux.circuitsimulator.core.CircuitSimulator;
 import com.limoilux.circuitsimulator.core.Configs;
+import com.limoilux.circuitsimulator.core.CoreUtil;
 import com.limoilux.circuitsimulator.ui.DrawUtil;
 import com.limoilux.circuitsimulator.ui.EditInfo;
+import com.limoilux.util.MathUtil;
 
 public class PotElm extends CircuitElm implements AdjustmentListener
 {
@@ -125,21 +127,21 @@ public class PotElm extends CircuitElm implements AdjustmentListener
 		{
 			offset = CircuitElm.cirSim.gridSize;
 		}
-		this.longueur = CircuitElm.distance(this.point1, this.point2);
+		this.longueur = CoreUtil.distance(this.point1, this.point2);
 		int bodyLen = 32;
 		this.calcLeads(bodyLen);
 		this.position = this.slider.getValue() * .0099 + .005;
 		int soff = (int) ((this.position - .5) * bodyLen);
 		// int offset2 = offset - sign(offset)*4;
-		this.post3 = CircuitElm.interpPoint(this.point1, this.point2, .5, offset);
-		this.corner2 = CircuitElm.interpPoint(this.point1, this.point2, soff / this.longueur + .5, offset);
-		this.arrowPoint = CircuitElm.interpPoint(this.point1, this.point2, soff / this.longueur + .5,
-				8 * CircuitElm.sign(offset));
-		this.midpoint = CircuitElm.interpPoint(this.point1, this.point2, soff / this.longueur + .5);
+		this.post3 = CoreUtil.interpPoint(this.point1, this.point2, .5, offset);
+		this.corner2 = CoreUtil.interpPoint(this.point1, this.point2, soff / this.longueur + .5, offset);
+		this.arrowPoint = CoreUtil.interpPoint(this.point1, this.point2, soff / this.longueur + .5,
+				8 * MathUtil.signum(offset));
+		this.midpoint = CoreUtil.interpPoint(this.point1, this.point2, soff / this.longueur + .5);
 		this.arrow1 = new Point();
 		this.arrow2 = new Point();
-		double clen = CircuitElm.abs(offset) - 8;
-		CircuitElm.interpPoint2(this.corner2, this.arrowPoint, this.arrow1, this.arrow2, (clen - 8) / clen, 8);
+		double clen = Math.abs(offset) - 8;
+		CoreUtil.interpPoint2(this.corner2, this.arrowPoint, this.arrow1, this.arrow2, (clen - 8) / clen, 8);
 		this.ps3 = new Point();
 		this.ps4 = new Point();
 	}

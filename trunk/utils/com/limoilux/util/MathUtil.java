@@ -9,7 +9,7 @@ public class MathUtil
 	}
 
 
-	public static int sign(int nb)
+	public static int signum(int nb)
 	{
 		if (nb < 0)
 		{

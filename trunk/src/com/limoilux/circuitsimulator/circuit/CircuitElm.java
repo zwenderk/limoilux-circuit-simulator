@@ -575,11 +575,11 @@ public abstract class CircuitElm implements Editable
 		 * if (conductanceCheckItem.getState()) { setConductanceColor(g,
 		 * current/getVoltageDiff()); return; }
 		 */
-		if (!Configs.SHOW_POWER)
+		if (Configs.SHOW_POWER)
 		{
-			return;
+			DrawUtil.setPowerColor(g, this.getPower());
 		}
-		DrawUtil.setPowerColor(g, this.getPower());
+
 	}
 
 	public double getPower()

@@ -8,6 +8,8 @@ import java.util.StringTokenizer;
 
 import com.limoilux.circuitsimulator.circuit.CircuitAnalysisException;
 import com.limoilux.circuitsimulator.circuit.CircuitElm;
+import com.limoilux.circuitsimulator.core.CoreUtil;
+import com.limoilux.circuitsimulator.ui.DrawUtil;
 import com.limoilux.circuitsimulator.ui.EditInfo;
 
 public class AnalogSwitchElm extends CircuitElm
@@ -76,10 +78,10 @@ public class AnalogSwitchElm extends CircuitElm
 
 		g.setColor(CircuitElm.LIGHT_GRAY_COLOR);
 		CircuitElm.interpPoint(this.lead1, this.lead2, this.ps, 1, hs);
-		CircuitElm.drawThickLine(g, this.lead1, this.ps);
+		DrawUtil.drawThickLine(g, this.lead1, this.ps);
 
 		this.setVoltageColor(g, this.volts[2]);
-		CircuitElm.drawThickLine(g, this.point3, this.lead3);
+		DrawUtil.drawThickLine(g, this.point3, this.lead3);
 
 		if (!this.open)
 		{
@@ -161,9 +163,9 @@ public class AnalogSwitchElm extends CircuitElm
 	{
 		arr[0] = "analog switch";
 		arr[1] = this.open ? "open" : "closed";
-		arr[2] = "Vd = " + CircuitElm.getVoltageDText(this.getVoltageDiff());
-		arr[3] = "I = " + CircuitElm.getCurrentDText(this.getCurrent());
-		arr[4] = "Vc = " + CircuitElm.getVoltageText(this.volts[2]);
+		arr[2] = "Vd = " + CoreUtil.getVoltageDText(this.getVoltageDiff());
+		arr[3] = "I = " + CoreUtil.getCurrentDText(this.getCurrent());
+		arr[4] = "Vc = " + CoreUtil.getVoltageText(this.volts[2]);
 	}
 
 	// we have to just assume current will flow either way, even though that
