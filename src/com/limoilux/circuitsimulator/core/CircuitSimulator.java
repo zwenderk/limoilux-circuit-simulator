@@ -2245,6 +2245,8 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		System.gc();
 
 		this.readSetupFile(setupString, menuText);
+		
+		App.printDebugMsg("Loading done");
 
 		this.startRepaint();
 	}
