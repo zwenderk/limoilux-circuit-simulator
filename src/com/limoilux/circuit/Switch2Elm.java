@@ -7,6 +7,8 @@ import java.awt.Point;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuitsimulator.circuit.CircuitElm;
+import com.limoilux.circuitsimulator.core.CoreUtil;
+import com.limoilux.circuitsimulator.ui.DrawUtil;
 import com.limoilux.circuitsimulator.ui.EditInfo;
 
 public class Switch2Elm extends SwitchElm
@@ -53,11 +55,11 @@ public class Switch2Elm extends SwitchElm
 	{
 		super.setPoints();
 		this.calcLeads(32);
-		this.swposts = CircuitElm.newPointArray(2);
-		this.swpoles = CircuitElm.newPointArray(3);
-		CircuitElm.interpPoint2(this.lead1, this.lead2, this.swpoles[0], this.swpoles[1], 1, this.openhs);
+		this.swposts = CoreUtil.newPointArray(2);
+		this.swpoles = CoreUtil.newPointArray(3);
+		CoreUtil.interpPoint2(this.lead1, this.lead2, this.swpoles[0], this.swpoles[1], 1, this.openhs);
 		this.swpoles[2] = this.lead2;
-		CircuitElm.interpPoint2(this.point1, this.point2, this.swposts[0], this.swposts[1], 1, this.openhs);
+		CoreUtil.interpPoint2(this.point1, this.point2, this.swposts[0], this.swposts[1], 1, this.openhs);
 		this.posCount = this.hasCenterOff() ? 3 : 2;
 	}
 
@@ -68,28 +70,28 @@ public class Switch2Elm extends SwitchElm
 
 		// draw first lead
 		this.setVoltageColor(g, this.volts[0]);
-		CircuitElm.drawThickLine(g, this.point1, this.lead1);
+		DrawUtil.drawThickLine(g, this.point1, this.lead1);
 
 		// draw second lead
 		this.setVoltageColor(g, this.volts[1]);
-		CircuitElm.drawThickLine(g, this.swpoles[0], this.swposts[0]);
+		DrawUtil.drawThickLine(g, this.swpoles[0], this.swposts[0]);
 
 		// draw third lead
 		this.setVoltageColor(g, this.volts[2]);
-		CircuitElm.drawThickLine(g, this.swpoles[1], this.swposts[1]);
+		DrawUtil.drawThickLine(g, this.swpoles[1], this.swposts[1]);
 
 		// draw switch
 		if (!this.needsHighlight())
 		{
 			g.setColor(CircuitElm.WHITE_COLOR);
 		}
-		CircuitElm.drawThickLine(g, this.lead1, this.swpoles[this.position]);
+		DrawUtil.drawThickLine(g, this.lead1, this.swpoles[this.position]);
 
 		this.updateDotCount();
-		CircuitElm.drawDots(g, this.point1, this.lead1, this.curcount);
+		DrawUtil.drawDots(g, this.point1, this.lead1, this.curcount);
 		if (this.position != 2)
 		{
-			CircuitElm.drawDots(g, this.swpoles[this.position], this.swposts[this.position], this.curcount);
+			DrawUtil.drawDots(g, this.swpoles[this.position], this.swposts[this.position], this.curcount);
 		}
 		this.drawPosts(g);
 	}
