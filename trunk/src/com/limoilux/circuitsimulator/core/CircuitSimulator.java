@@ -1425,7 +1425,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		dump = "$ ";
 
 		dump += f + " ";
-		dump += Configs.TIME_STEP + " ";
+		dump += Configs.timeStep + " ";
 		dump += this.getIterCount() + " ";
 		dump += Configs.CURRENT_SPEED + " ";
 		dump += CircuitElm.voltageRange + " ";
@@ -1736,16 +1736,23 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 	private void readOptions(StringTokenizer st)
 	{
+		String token;
+		double timeStep;
+		double speedBar;
 		// Atefact
 
 		// Dump pour garder la compatibilité, ancient flag.
 		st.nextToken();
 
-		// Dump pour garder la compatibilité, ancient timeStep.
-		st.nextToken();
+		// timeStep.
+		token = st.nextToken();
+		timeStep = Double.parseDouble(token);
+		Configs.timeStep = timeStep;
 
-		double sp = new Double(st.nextToken()).doubleValue();
-		int sp2 = (int) (Math.log(10 * sp) * 24 + 61.5);
+		// SpeedBar
+		token = st.nextToken();
+		speedBar = Double.parseDouble(token);
+		int sp2 = (int) (Math.log(10 * speedBar) * 24 + 61.5);
 		// int sp2 = (int) (Math.log(sp)*24+1.5);
 		this.speedBar.setValue(sp2);
 
@@ -1993,7 +2000,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private void doMainMenuChecks(MenuElement m)
 	{
 		MenuElement[] sub = m.getSubElements();
-		
+
 		App.printDebugMsg(m.toString());
 
 		for (int i = 0; i != sub.length; i++)
@@ -2251,7 +2258,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 		App.printDebugMsg("Loading done");
 
-		//this.startRepaint();
+		// this.startRepaint();
 		this.repaint();
 	}
 
@@ -2299,8 +2306,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	protected void exit()
 	{
 		this.stopRepaint();
-		
-		
+
 		this.cirFrame.setVisible(false);
 		this.cirFrame.dispose();
 

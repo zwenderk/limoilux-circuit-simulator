@@ -24,7 +24,7 @@ public class TransLineElm extends CircuitElm
 	public TransLineElm(int xx, int yy)
 	{
 		super(xx, yy);
-		this.delay = 1000 * Configs.TIME_STEP;
+		this.delay = 1000 * Configs.timeStep;
 		this.imped = 75;
 		this.noDiagonal = true;
 
@@ -113,7 +113,7 @@ public class TransLineElm extends CircuitElm
 	public void reset()
 	{
 
-		this.lenSteps = (int) (this.delay / Configs.TIME_STEP);
+		this.lenSteps = (int) (this.delay / Configs.timeStep);
 
 		App.printDebugMsg("TransLine " + this.lenSteps + " steps " + this.delay + " delay");
 		if (this.lenSteps > 100000)

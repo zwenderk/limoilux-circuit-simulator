@@ -198,7 +198,7 @@ public class TappedTransformerElm extends CircuitElm
 		int i;
 		for (i = 0; i != 9; i++)
 		{
-			this.a[i] *= Configs.TIME_STEP / 2;
+			this.a[i] *= Configs.timeStep / 2;
 		}
 		CircuitElm.cirSim.circuit.stampConductance(this.nodes[0], this.nodes[1], this.a[0]);
 		CircuitElm.cirSim.circuit.stampVCCurrentSource(this.nodes[0], this.nodes[1], this.nodes[2], this.nodes[3],
