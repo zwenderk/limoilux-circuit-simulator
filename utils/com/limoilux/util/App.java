@@ -2,7 +2,7 @@
 package com.limoilux.util;
 
 /**
- * En une class de structure abstrate pour une application.
+ * Sert a définir la structure du noyau d'un application.
  * 
  * @author David Bernard
  *
