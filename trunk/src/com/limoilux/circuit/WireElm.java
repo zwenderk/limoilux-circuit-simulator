@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.util.StringTokenizer;
 
 import com.limoilux.circuitsimulator.circuit.CircuitElm;
+import com.limoilux.circuitsimulator.core.CoreUtil;
+import com.limoilux.circuitsimulator.ui.DrawUtil;
 import com.limoilux.circuitsimulator.ui.EditInfo;
 
 public class WireElm extends CircuitElm
@@ -27,17 +29,17 @@ public class WireElm extends CircuitElm
 	public void draw(Graphics g)
 	{
 		this.setVoltageColor(g, this.volts[0]);
-		CircuitElm.drawThickLine(g, this.point1, this.point2);
+		DrawUtil.drawThickLine(g, this.point1, this.point2);
 		this.doDots(g);
 		this.setBbox(this.point1, this.point2, 3);
 		if (this.mustShowCurrent())
 		{
-			String s = CircuitElm.getShortUnitText(Math.abs(this.getCurrent()), "A");
+			String s = CoreUtil.getShortUnitText(Math.abs(this.getCurrent()), "A");
 			this.drawValues(g, s, 4);
 		}
 		else if (this.mustShowVoltage())
 		{
-			String s = CircuitElm.getShortUnitText(this.volts[0], "V");
+			String s = CoreUtil.getShortUnitText(this.volts[0], "V");
 			this.drawValues(g, s, 4);
 		}
 		this.drawPosts(g);
