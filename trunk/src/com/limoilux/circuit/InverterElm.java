@@ -75,13 +75,13 @@ public class InverterElm extends CircuitElm
 		{
 			ww = (int) (this.dn / 2);
 		}
-		this.lead1 = CircuitElm.interpPoint(this.point1, this.point2, .5 - ww / this.dn);
-		this.lead2 = CircuitElm.interpPoint(this.point1, this.point2, .5 + (ww + 2) / this.dn);
-		this.pcircle = CircuitElm.interpPoint(this.point1, this.point2, .5 + (ww - 2) / this.dn);
-		Point triPoints[] = CircuitElm.newPointArray(3);
-		CircuitElm.interpPoint2(this.lead1, this.lead2, triPoints[0], triPoints[1], 0, hs);
-		triPoints[2] = CircuitElm.interpPoint(this.point1, this.point2, .5 + (ww - 5) / this.dn);
-		this.gatePoly = CircuitElm.createPolygon(triPoints);
+		this.lead1 = CoreUtil.interpPoint(this.point1, this.point2, .5 - ww / this.dn);
+		this.lead2 = CoreUtil.interpPoint(this.point1, this.point2, .5 + (ww + 2) / this.dn);
+		this.pcircle = CoreUtil.interpPoint(this.point1, this.point2, .5 + (ww - 2) / this.dn);
+		Point triPoints[] = CoreUtil.newPointArray(3);
+		CoreUtil.interpPoint2(this.lead1, this.lead2, triPoints[0], triPoints[1], 0, hs);
+		triPoints[2] = CoreUtil.interpPoint(this.point1, this.point2, .5 + (ww - 5) / this.dn);
+		this.gatePoly = CoreUtil.createPolygon(triPoints);
 		this.setBbox(this.point1, this.point2, hs);
 	}
 

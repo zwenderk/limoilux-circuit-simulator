@@ -157,6 +157,9 @@ public class TransLineElm extends CircuitElm
 	@Override
 	public void draw(Graphics g)
 	{
+		int ix1;
+		int ix2;
+		
 		this.setBbox(this.posts[0], this.posts[3], 0);
 		int segments = (int) (this.dn / 2);
 		int ix0 = this.ptr - 1 + this.lenSteps;
@@ -177,8 +180,8 @@ public class TransLineElm extends CircuitElm
 			for (int i = 0; i < segments; i++)
 			{
 				// System.out.println(segments + " " + this.lenSteps);
-				int ix1 = (ix0 - this.lenSteps * i / segments) % this.lenSteps;
-				int ix2 = (ix0 - this.lenSteps * (segments - 1 - i) / segments) % this.lenSteps;
+				ix1 = (ix0 - this.lenSteps * i / segments) % this.lenSteps;
+				ix2 = (ix0 - this.lenSteps * (segments - 1 - i) / segments) % this.lenSteps;
 				double v = (this.voltageL[ix1] + this.voltageR[ix2]) / 2;
 				this.setVoltageColor(g, v);
 				CoreUtil.interpPoint(this.inner[0], this.inner[1], CircuitElm.ps1, i * segf);
