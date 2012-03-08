@@ -12,9 +12,9 @@ import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.RailElm;
 import com.limoilux.circuit.VoltageElm;
 import com.limoilux.circuit.WireElm;
-import com.limoilux.circuitsimulator.core.App;
 import com.limoilux.circuitsimulator.matrix.MatrixManager;
 import com.limoilux.circuitsimulator.matrix.MatrixRowInfo;
+import com.limoilux.util.App;
 
 public class Circuit
 {

@@ -73,6 +73,7 @@ import com.limoilux.circuitsimulator.ui.Clipboard;
 import com.limoilux.circuitsimulator.ui.DrawUtil;
 import com.limoilux.circuitsimulator.ui.EditDialog;
 import com.limoilux.circuitsimulator.ui.Editable;
+import com.limoilux.util.App;
 
 /**
  * For information about the theory behind this, see Electronic Circuit & System

@@ -10,6 +10,7 @@ import com.apple.eawt.AppHiddenListener;
 import com.apple.eawt.Application;
 import com.apple.eawt.QuitHandler;
 import com.apple.eawt.QuitResponse;
+import com.limoilux.util.App;
 
 public class MacSim extends CircuitSimulator
 {

@@ -4,7 +4,7 @@ package com.limoilux.circuitsimulator.circuit;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import com.limoilux.circuitsimulator.core.App;
+import com.limoilux.util.App;
 
 public class CircuitUtil
 {
