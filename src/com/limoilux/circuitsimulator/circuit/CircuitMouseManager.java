@@ -135,11 +135,11 @@ public class CircuitMouseManager implements MouseMotionListener, MouseListener
 		// right mouse
 		if ((modifierEx & InputEvent.SHIFT_DOWN_MASK) != 0)
 		{
-			tempMouseMode = CircuitSimulator.MODE_DRAG_ROW;
+			this.tempMouseMode = CircuitSimulator.MODE_DRAG_ROW;
 		}
 		else if ((modifierEx & (InputEvent.CTRL_DOWN_MASK | InputEvent.META_DOWN_MASK)) != 0)
 		{
-			tempMouseMode = CircuitSimulator.MODE_DRAG_COLUMN;
+			this.tempMouseMode = CircuitSimulator.MODE_DRAG_COLUMN;
 		}
 		else
 		{
@@ -154,10 +154,10 @@ public class CircuitMouseManager implements MouseMotionListener, MouseListener
 
 	public boolean isModeSelected()
 	{
-		return tempMouseMode == CircuitMouseManager.MODE_SELECT
-				|| tempMouseMode == CircuitMouseManager.MODE_DRAG_SELECTED;
+		return this.tempMouseMode == CircuitMouseManager.MODE_SELECT
+				|| this.tempMouseMode == CircuitMouseManager.MODE_DRAG_SELECTED;
 	}
-	
+
 	public boolean testMouseMode(String mouseMode)
 	{
 		return this.mouseModeStr.compareTo(mouseMode) == 0;

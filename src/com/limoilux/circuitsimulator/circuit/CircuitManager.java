@@ -6,7 +6,6 @@ import java.awt.Graphics;
 
 import com.limoilux.circuitsimulator.io.DumpManager;
 
-
 public class CircuitManager
 {
 	public final Circuit circuit;
@@ -14,16 +13,15 @@ public class CircuitManager
 	public final DumpManager dumpMan;
 	public final CircuitMouseManager mouseMan;
 
-
-	public CircuitManager( CircuitPane circuitPanel)
+	public CircuitManager(CircuitPane circuitPanel)
 	{
-	
+
 		this.circuit = new Circuit();
-		
+
 		this.mouseMan = new CircuitMouseManager(this.circuit);
 		this.circuitPanel = circuitPanel;
 		this.dumpMan = new DumpManager();
-		
+
 		this.circuitPanel.addMouseMotionListener(this.mouseMan);
 		this.circuitPanel.addMouseListener(this.mouseMan);
 	}
@@ -37,7 +35,7 @@ public class CircuitManager
 	{
 		return this.circuit;
 	}
-	
+
 	public int findAndDrawBadNode(Graphics g)
 	{
 		int badnodes = 0;
@@ -59,7 +57,7 @@ public class CircuitManager
 						bb++;
 					}
 				}
-				
+
 				if (bb > 0)
 				{
 					g.setColor(Color.red);

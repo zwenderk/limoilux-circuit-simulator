@@ -2,7 +2,6 @@
 package com.limoilux.circuitsimulator.scope;
 
 import java.awt.Graphics;
-import java.awt.PopupMenu;
 import java.awt.Rectangle;
 import java.awt.event.ItemEvent;
 import java.awt.image.BufferedImage;

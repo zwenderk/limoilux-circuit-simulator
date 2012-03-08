@@ -4,6 +4,7 @@ package com.limoilux.circuitsimulator.core;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 public class CoreWindow extends JFrame
 {
@@ -13,7 +14,7 @@ public class CoreWindow extends JFrame
 	{
 		super();
 
-		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		this.setLayout(new BorderLayout());
 
 		this.setSize(860, 640);

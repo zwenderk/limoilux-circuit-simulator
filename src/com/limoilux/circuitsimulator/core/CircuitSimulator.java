@@ -36,7 +36,6 @@ import java.util.StringTokenizer;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -55,16 +54,15 @@ import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.ResistorElm;
 import com.limoilux.circuit.SwitchElm;
 import com.limoilux.circuit.TextElm;
-
 import com.limoilux.circuitsimulator.circuit.Circuit;
 import com.limoilux.circuitsimulator.circuit.CircuitAnalysisException;
 import com.limoilux.circuitsimulator.circuit.CircuitElm;
 import com.limoilux.circuitsimulator.circuit.CircuitManager;
+import com.limoilux.circuitsimulator.circuit.CircuitMouseManager;
 import com.limoilux.circuitsimulator.circuit.CircuitNode;
 import com.limoilux.circuitsimulator.circuit.CircuitNodeLink;
 import com.limoilux.circuitsimulator.circuit.CircuitPane;
 import com.limoilux.circuitsimulator.circuit.CircuitUtil;
-import com.limoilux.circuitsimulator.circuit.CircuitMouseManager;
 import com.limoilux.circuitsimulator.io.MigrationWizard;
 import com.limoilux.circuitsimulator.matrix.MatrixRowInfo;
 import com.limoilux.circuitsimulator.scope.Scope;
@@ -718,7 +716,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private void manageJavaVersion()
 	{
 
-		if (this.JAVA_VERSION >= 48)
+		if (App.JAVA_VERSION >= 48)
 		{
 			CircuitSimulator.muString = "\u03bc";
 			CircuitSimulator.ohmString = "\u03a9";
@@ -1681,7 +1679,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 					// find element class
 					Class<?> carr[] = new Class[6];
 					// carr[0] = getClass();
-					
+
 					carr[0] = int.class;
 					carr[1] = int.class;
 					carr[2] = int.class;
@@ -2985,7 +2983,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 			}
 			catch (InterruptedException e)
 			{
-				
+
 			}
 
 			App.printDebugMsg("RepaintRun stop confirmed");
@@ -3008,7 +3006,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 				{
 					this.goOn = false;
 				}
-	
+
 				if (delay > 0)
 				{
 					try

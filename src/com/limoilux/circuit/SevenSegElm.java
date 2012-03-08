@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.StringTokenizer;
 
-import com.limoilux.circuitsimulator.circuit.CircuitElm;
 import com.limoilux.circuitsimulator.ui.DrawUtil;
 
 public class SevenSegElm extends ChipElm

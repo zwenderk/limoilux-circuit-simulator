@@ -1,15 +1,12 @@
 
 package com.limoilux.circuitsimulator.core;
 
-
 public class Timer
 {
 	private static final int MAX_FPS = 50;
 	public double time;
 
 	public long lastTime = 0;
-
-
 
 	private long lastFrameTime;
 	public long lastIterTime;

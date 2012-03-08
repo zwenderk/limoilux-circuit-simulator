@@ -298,5 +298,4 @@ public class CoreUtil
 		return out;
 	}
 
-
 }

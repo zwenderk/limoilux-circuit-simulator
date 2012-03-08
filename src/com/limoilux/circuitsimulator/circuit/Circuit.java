@@ -12,7 +12,6 @@ import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.RailElm;
 import com.limoilux.circuit.VoltageElm;
 import com.limoilux.circuit.WireElm;
-
 import com.limoilux.circuitsimulator.core.App;
 import com.limoilux.circuitsimulator.matrix.MatrixManager;
 import com.limoilux.circuitsimulator.matrix.MatrixRowInfo;
@@ -780,7 +779,7 @@ public class Circuit
 				throw new CircuitAnalysisException("Singular matrix!");
 			}
 		}
-		
+
 		App.printDebugMsg("Analysing circuit : end");
 	}
 
