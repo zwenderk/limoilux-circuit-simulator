@@ -185,7 +185,9 @@ public abstract class CircuitElm implements Editable
 	{
 		this.longueurX = this.x2 - this.x;
 		this.longueurY = this.y2 - this.y;
+		
 		this.longueur = Math.sqrt(this.longueurX * this.longueurX + this.longueurY * this.longueurY);
+		
 		this.dpx1 = this.longueurY / this.longueur;
 		this.dpy1 = -this.longueurX / this.longueur;
 
