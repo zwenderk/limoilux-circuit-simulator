@@ -2252,6 +2252,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		App.printDebugMsg("Loading done");
 
 		//this.startRepaint();
+		this.repaint();
 	}
 
 	private void reset()

@@ -23,7 +23,7 @@ import com.limoilux.circuitsimulator.ui.Editable;
 public abstract class CircuitElm implements Editable
 {
 	private static final int COLOR_SCALE_COUNT = 32;
-	public static final Font UNIT_FONT = new Font("courier", 0, 12);
+	public static final Font UNIT_FONT = new Font(Configs.STD_FONT_TYPE, 1, 12);
 	public static final Color SELECT_COLOR = Color.cyan;
 	public static final Color WHITE_COLOR = Color.white;
 	public static final Color LIGHT_GRAY_COLOR = Color.lightGray;
