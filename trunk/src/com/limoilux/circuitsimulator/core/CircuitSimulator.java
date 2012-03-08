@@ -1993,6 +1993,8 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private void doMainMenuChecks(MenuElement m)
 	{
 		MenuElement[] sub = m.getSubElements();
+		
+		App.printDebugMsg(m.toString());
 
 		for (int i = 0; i != sub.length; i++)
 		{
