@@ -2297,6 +2297,10 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	protected void exit()
 	{
 		this.stopRepaint();
+		
+		
+		this.cirFrame.setVisible(false);
+		this.cirFrame.dispose();
 
 		App.printDebugMsg("exit");
 		System.exit(0);
