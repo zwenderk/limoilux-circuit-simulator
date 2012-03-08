@@ -120,11 +120,11 @@ public class TransistorElm extends CircuitElm
 		this.setPowerColor(g, true);
 		g.fillPolygon(this.rectPoly);
 
-		if ((this.needsHighlight() || CircuitElm.cirSim.mouseMan.dragElm == this) && this.dy == 0)
+		if ((this.needsHighlight() || CircuitElm.cirSim.mouseMan.dragElm == this) && this.longueurY == 0)
 		{
 			g.setColor(Color.white);
 			g.setFont(CircuitElm.UNIT_FONT);
-			int ds = CircuitElm.sign(this.dx);
+			int ds = CircuitElm.sign(this.longueurX);
 			g.drawString("B", this.base.x - 10 * ds, this.base.y - 5);
 			g.drawString("C", this.coll[0].x - 3 + 9 * ds, this.coll[0].y + 4); // x+6
 			// if
@@ -172,14 +172,14 @@ public class TransistorElm extends CircuitElm
 		CircuitElm.interpPoint2(this.point1, this.point2, this.coll[0], this.emit[0], 1, hs2);
 		// calc rectangle edges
 		this.rect = CircuitElm.newPointArray(4);
-		CircuitElm.interpPoint2(this.point1, this.point2, this.rect[0], this.rect[1], 1 - 16 / this.dn, hs);
-		CircuitElm.interpPoint2(this.point1, this.point2, this.rect[2], this.rect[3], 1 - 13 / this.dn, hs);
+		CircuitElm.interpPoint2(this.point1, this.point2, this.rect[0], this.rect[1], 1 - 16 / this.longueur, hs);
+		CircuitElm.interpPoint2(this.point1, this.point2, this.rect[2], this.rect[3], 1 - 13 / this.longueur, hs);
 		// calc points where collector/emitter leads contact rectangle
-		CircuitElm.interpPoint2(this.point1, this.point2, this.coll[1], this.emit[1], 1 - 13 / this.dn, 6 * this.dsign
+		CircuitElm.interpPoint2(this.point1, this.point2, this.coll[1], this.emit[1], 1 - 13 / this.longueur, 6 * this.dsign
 				* this.pnp);
 		// calc point where base lead contacts rectangle
 		this.base = new Point();
-		CircuitElm.interpPoint(this.point1, this.point2, this.base, 1 - 16 / this.dn);
+		CircuitElm.interpPoint(this.point1, this.point2, this.base, 1 - 16 / this.longueur);
 
 		// rectangle
 		this.rectPoly = CircuitElm.createPolygon(this.rect[0], this.rect[2], this.rect[3], this.rect[1]);
@@ -191,7 +191,7 @@ public class TransistorElm extends CircuitElm
 		}
 		else
 		{
-			Point pt = CircuitElm.interpPoint(this.point1, this.point2, 1 - 11 / this.dn, -5 * this.dsign * this.pnp);
+			Point pt = CircuitElm.interpPoint(this.point1, this.point2, 1 - 11 / this.longueur, -5 * this.dsign * this.pnp);
 			this.arrowPoly = CircuitElm.calcArrow(this.emit[0], pt, 8, 4);
 		}
 	}

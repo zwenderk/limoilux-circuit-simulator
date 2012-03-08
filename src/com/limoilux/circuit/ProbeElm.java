@@ -52,7 +52,7 @@ public class ProbeElm extends CircuitElm
 		int hs = 8;
 		this.setBbox(this.point1, this.point2, hs);
 		boolean selected = this.needsHighlight() || CircuitElm.cirSim.plotYElm == this;
-		double len = selected || CircuitElm.cirSim.mouseMan.dragElm == this ? 16 : this.dn - 32;
+		double len = selected || CircuitElm.cirSim.mouseMan.dragElm == this ? 16 : this.longueur - 32;
 		this.calcLeads((int) len);
 		this.setVoltageColor(g, this.volts[0]);
 		if (selected)

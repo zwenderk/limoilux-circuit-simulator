@@ -44,7 +44,7 @@ public class RailElm extends VoltageElm
 	public void setPoints()
 	{
 		super.setPoints();
-		this.lead1 = CircuitElm.interpPoint(this.point1, this.point2, 1 - this.circleSize / this.dn);
+		this.lead1 = CircuitElm.interpPoint(this.point1, this.point2, 1 - this.circleSize / this.longueur);
 	}
 
 	@Override

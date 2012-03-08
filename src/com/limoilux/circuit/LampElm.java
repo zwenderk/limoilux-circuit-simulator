@@ -138,7 +138,7 @@ public class LampElm extends CircuitElm
 		if (CircuitElm.cirSim.mouseMan.dragElm != this)
 		{
 			DrawUtil.drawDots(g, this.point1, this.lead1, this.curcount);
-			double cc = this.curcount + (this.dn - 16) / 2;
+			double cc = this.curcount + (this.longueur - 16) / 2;
 			DrawUtil.drawDots(g, this.lead1, this.filament[0], cc);
 			cc += this.filament_len;
 			DrawUtil.drawDots(g, this.filament[0], this.filament[1], cc);

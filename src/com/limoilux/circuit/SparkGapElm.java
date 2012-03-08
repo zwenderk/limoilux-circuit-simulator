@@ -64,9 +64,9 @@ public class SparkGapElm extends CircuitElm
 		int dist = 16;
 		int alen = 8;
 		this.calcLeads(dist + alen);
-		Point p1 = CoreUtil.interpPoint(this.point1, this.point2, (this.dn - alen) / (2 * this.dn));
+		Point p1 = CoreUtil.interpPoint(this.point1, this.point2, (this.longueur - alen) / (2 * this.longueur));
 		this.arrow1 = CircuitElm.calcArrow(this.point1, p1, alen, alen);
-		p1 = CoreUtil.interpPoint(this.point1, this.point2, (this.dn + alen) / (2 * this.dn));
+		p1 = CoreUtil.interpPoint(this.point1, this.point2, (this.longueur + alen) / (2 * this.longueur));
 		this.arrow2 = CircuitElm.calcArrow(this.point2, p1, alen, alen);
 	}
 

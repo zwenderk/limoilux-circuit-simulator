@@ -107,35 +107,35 @@ public class PotElm extends CircuitElm implements AdjustmentListener
 	{
 		super.setPoints();
 		int offset = 0;
-		if (Math.abs(this.dx) > Math.abs(this.dy))
+		if (Math.abs(this.longueurX) > Math.abs(this.longueurY))
 		{
-			this.dx = CircuitElm.cirSim.snapGrid(this.dx / 2) * 2;
-			this.point2.x = this.x2 = this.point1.x + this.dx;
-			offset = this.dx < 0 ? this.dy : -this.dy;
+			this.longueurX = CircuitElm.cirSim.snapGrid(this.longueurX / 2) * 2;
+			this.point2.x = this.x2 = this.point1.x + this.longueurX;
+			offset = this.longueurX < 0 ? this.longueurY : -this.longueurY;
 			this.point2.y = this.point1.y;
 		}
 		else
 		{
-			this.dy = CircuitElm.cirSim.snapGrid(this.dy / 2) * 2;
-			this.point2.y = this.y2 = this.point1.y + this.dy;
-			offset = this.dy > 0 ? this.dx : -this.dx;
+			this.longueurY = CircuitElm.cirSim.snapGrid(this.longueurY / 2) * 2;
+			this.point2.y = this.y2 = this.point1.y + this.longueurY;
+			offset = this.longueurY > 0 ? this.longueurX : -this.longueurX;
 			this.point2.x = this.point1.x;
 		}
 		if (offset == 0)
 		{
 			offset = CircuitElm.cirSim.gridSize;
 		}
-		this.dn = CircuitElm.distance(this.point1, this.point2);
+		this.longueur = CircuitElm.distance(this.point1, this.point2);
 		int bodyLen = 32;
 		this.calcLeads(bodyLen);
 		this.position = this.slider.getValue() * .0099 + .005;
 		int soff = (int) ((this.position - .5) * bodyLen);
 		// int offset2 = offset - sign(offset)*4;
 		this.post3 = CircuitElm.interpPoint(this.point1, this.point2, .5, offset);
-		this.corner2 = CircuitElm.interpPoint(this.point1, this.point2, soff / this.dn + .5, offset);
-		this.arrowPoint = CircuitElm.interpPoint(this.point1, this.point2, soff / this.dn + .5,
+		this.corner2 = CircuitElm.interpPoint(this.point1, this.point2, soff / this.longueur + .5, offset);
+		this.arrowPoint = CircuitElm.interpPoint(this.point1, this.point2, soff / this.longueur + .5,
 				8 * CircuitElm.sign(offset));
-		this.midpoint = CircuitElm.interpPoint(this.point1, this.point2, soff / this.dn + .5);
+		this.midpoint = CircuitElm.interpPoint(this.point1, this.point2, soff / this.longueur + .5);
 		this.arrow1 = new Point();
 		this.arrow2 = new Point();
 		double clen = CircuitElm.abs(offset) - 8;

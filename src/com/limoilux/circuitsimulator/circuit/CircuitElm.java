@@ -57,11 +57,11 @@ public abstract class CircuitElm implements Editable
 	public int y2;
 	public int flags;
 	public int voltSource;
-	public int dx;
-	public int dy;
+	public int longueurX;
+	public int longueurY;
 	public int dsign;
 
-	public double dn;
+	public double longueur;
 	public double dpx1;
 	public double dpy1;
 	public double current;
@@ -183,26 +183,35 @@ public abstract class CircuitElm implements Editable
 
 	public void setPoints()
 	{
-		this.dx = this.x2 - this.x;
-		this.dy = this.y2 - this.y;
-		this.dn = Math.sqrt(this.dx * this.dx + this.dy * this.dy);
-		this.dpx1 = this.dy / this.dn;
-		this.dpy1 = -this.dx / this.dn;
-		this.dsign = this.dy == 0 ? CoreUtil.sign(this.dx) : CoreUtil.sign(this.dy);
+		this.longueurX = this.x2 - this.x;
+		this.longueurY = this.y2 - this.y;
+		this.longueur = Math.sqrt(this.longueurX * this.longueurX + this.longueurY * this.longueurY);
+		this.dpx1 = this.longueurY / this.longueur;
+		this.dpy1 = -this.longueurX / this.longueur;
+
+		if (this.longueurY == 0)
+		{
+			this.dsign = CoreUtil.sign(this.longueurX);
+		}
+		else
+		{
+			this.dsign = CoreUtil.sign(this.longueurY);
+		}
+		
 		this.point1 = new Point(this.x, this.y);
 		this.point2 = new Point(this.x2, this.y2);
 	}
 
 	public void calcLeads(int len)
 	{
-		if (this.dn < len || len == 0)
+		if (this.longueur < len || len == 0)
 		{
 			this.lead1 = this.point1;
 			this.lead2 = this.point2;
 			return;
 		}
-		this.lead1 = CoreUtil.interpPoint(this.point1, this.point2, (this.dn - len) / (2 * this.dn));
-		this.lead2 = CoreUtil.interpPoint(this.point1, this.point2, (this.dn + len) / (2 * this.dn));
+		this.lead1 = CoreUtil.interpPoint(this.point1, this.point2, (this.longueur - len) / (2 * this.longueur));
+		this.lead2 = CoreUtil.interpPoint(this.point1, this.point2, (this.longueur + len) / (2 * this.longueur));
 	}
 
 	public void draw2Leads(Graphics g)

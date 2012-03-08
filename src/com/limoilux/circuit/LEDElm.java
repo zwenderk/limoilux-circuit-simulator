@@ -55,8 +55,8 @@ public class LEDElm extends DiodeElm
 	{
 		super.setPoints();
 		int cr = 12;
-		this.ledLead1 = CircuitElm.interpPoint(this.point1, this.point2, .5 - cr / this.dn);
-		this.ledLead2 = CircuitElm.interpPoint(this.point1, this.point2, .5 + cr / this.dn);
+		this.ledLead1 = CircuitElm.interpPoint(this.point1, this.point2, .5 - cr / this.longueur);
+		this.ledLead2 = CircuitElm.interpPoint(this.point1, this.point2, .5 + cr / this.longueur);
 		this.ledCenter = CircuitElm.interpPoint(this.point1, this.point2, .5);
 	}
 

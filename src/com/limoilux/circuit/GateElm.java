@@ -72,20 +72,20 @@ public abstract class GateElm extends CircuitElm
 	public void setPoints()
 	{
 		super.setPoints();
-		if (this.dn > 150 && this == CircuitElm.cirSim.mouseMan.dragElm)
+		if (this.longueur > 150 && this == CircuitElm.cirSim.mouseMan.dragElm)
 		{
 			this.setSize(2);
 		}
 		int hs = this.gheight;
 		int i;
 		this.ww = this.gwidth2; // was 24
-		if (this.ww > this.dn / 2)
+		if (this.ww > this.longueur / 2)
 		{
-			this.ww = (int) (this.dn / 2);
+			this.ww = (int) (this.longueur / 2);
 		}
-		if (this.isInverting() && this.ww + 8 > this.dn / 2)
+		if (this.isInverting() && this.ww + 8 > this.longueur / 2)
 		{
-			this.ww = (int) (this.dn / 2 - 8);
+			this.ww = (int) (this.longueur / 2 - 8);
 		}
 		this.calcLeads(this.ww * 2);
 		this.inPosts = new Point[this.inputCount];

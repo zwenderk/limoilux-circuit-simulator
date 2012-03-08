@@ -118,8 +118,8 @@ public class TappedTransformerElm extends CircuitElm
 		CircuitElm.interpPoint(this.point1, this.point2, this.ptEnds[1], 0, -hs * 2);
 		CircuitElm.interpPoint(this.point1, this.point2, this.ptEnds[3], 1, -hs);
 		CircuitElm.interpPoint(this.point1, this.point2, this.ptEnds[4], 1, -hs * 2);
-		double ce = .5 - 12 / this.dn;
-		double cd = .5 - 2 / this.dn;
+		double ce = .5 - 12 / this.longueur;
+		double cd = .5 - 2 / this.longueur;
 		int i;
 		CircuitElm.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[0], ce);
 		CircuitElm.interpPoint(this.ptEnds[0], this.ptEnds[2], this.ptCoil[1], ce, -hs * 2);

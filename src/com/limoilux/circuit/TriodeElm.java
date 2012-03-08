@@ -83,7 +83,7 @@ public class TriodeElm extends CircuitElm
 		CoreUtil.interpPoint2(this.point2, this.plate[1], this.plate[2], this.plate[3], 1, platew);
 
 		this.circler = 24;
-		CoreUtil.interpPoint(this.point1, this.point2, this.grid[1], (this.dn - this.circler) / this.dn, 0);
+		CoreUtil.interpPoint(this.point1, this.point2, this.grid[1], (this.longueur - this.circler) / this.longueur, 0);
 		int i;
 		for (i = 0; i != 3; i++)
 		{

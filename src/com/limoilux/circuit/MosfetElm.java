@@ -134,11 +134,11 @@ public class MosfetElm extends CircuitElm
 			g.setFont(CircuitElm.UNIT_FONT);
 			this.drawCenteredText(g, s, this.x2 + 2, this.y2, false);
 		}
-		if ((this.needsHighlight() || CircuitElm.cirSim.mouseMan.dragElm == this) && this.dy == 0)
+		if ((this.needsHighlight() || CircuitElm.cirSim.mouseMan.dragElm == this) && this.longueurY == 0)
 		{
 			g.setColor(Color.white);
 			g.setFont(CircuitElm.UNIT_FONT);
-			int ds = CircuitElm.sign(this.dx);
+			int ds = CircuitElm.sign(this.longueurX);
 			g.drawString("G", this.gate[1].x - 10 * ds, this.gate[1].y - 5);
 			g.drawString(this.pnp == -1 ? "D" : "S", this.src[0].x - 3 + 9 * ds, this.src[0].y + 4); // x+6
 			// if
@@ -194,11 +194,11 @@ public class MosfetElm extends CircuitElm
 		this.src = CircuitElm.newPointArray(3);
 		this.drn = CircuitElm.newPointArray(3);
 		CircuitElm.interpPoint2(this.point1, this.point2, this.src[0], this.drn[0], 1, -hs2);
-		CircuitElm.interpPoint2(this.point1, this.point2, this.src[1], this.drn[1], 1 - 22 / this.dn, -hs2);
-		CircuitElm.interpPoint2(this.point1, this.point2, this.src[2], this.drn[2], 1 - 22 / this.dn, -hs2 * 4 / 3);
+		CircuitElm.interpPoint2(this.point1, this.point2, this.src[1], this.drn[1], 1 - 22 / this.longueur, -hs2);
+		CircuitElm.interpPoint2(this.point1, this.point2, this.src[2], this.drn[2], 1 - 22 / this.longueur, -hs2 * 4 / 3);
 
 		this.gate = CircuitElm.newPointArray(3);
-		CircuitElm.interpPoint2(this.point1, this.point2, this.gate[0], this.gate[2], 1 - 28 / this.dn, hs2 / 2); // was
+		CircuitElm.interpPoint2(this.point1, this.point2, this.gate[0], this.gate[2], 1 - 28 / this.longueur, hs2 / 2); // was
 		// 1-20/dn
 		CircuitElm.interpPoint(this.gate[0], this.gate[2], this.gate[1], .5);
 
@@ -215,9 +215,9 @@ public class MosfetElm extends CircuitElm
 		}
 		else if (this.pnp == -1)
 		{
-			CircuitElm.interpPoint(this.point1, this.point2, this.gate[1], 1 - 36 / this.dn);
+			CircuitElm.interpPoint(this.point1, this.point2, this.gate[1], 1 - 36 / this.longueur);
 			int dist = this.dsign < 0 ? 32 : 31;
-			this.pcircle = CircuitElm.interpPoint(this.point1, this.point2, 1 - dist / this.dn);
+			this.pcircle = CircuitElm.interpPoint(this.point1, this.point2, 1 - dist / this.longueur);
 			this.pcircler = 3;
 		}
 	}
