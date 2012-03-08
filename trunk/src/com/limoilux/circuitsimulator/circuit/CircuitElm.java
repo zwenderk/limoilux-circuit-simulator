@@ -103,7 +103,7 @@ public abstract class CircuitElm implements Editable
 
 	public abstract int getElementId();
 
-	public Class getDumpClass()
+	public Class<? extends CircuitElm> getDumpClass()
 	{
 		return this.getClass();
 	}

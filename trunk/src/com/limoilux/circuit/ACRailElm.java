@@ -1,6 +1,8 @@
 
 package com.limoilux.circuit;
 
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
+
 public class ACRailElm extends RailElm
 {
 	public ACRailElm(int xx, int yy)
@@ -9,7 +11,7 @@ public class ACRailElm extends RailElm
 	}
 
 	@Override
-	public Class<RailElm> getDumpClass()
+	public Class<? extends CircuitElm> getDumpClass()
 	{
 		return RailElm.class;
 	}

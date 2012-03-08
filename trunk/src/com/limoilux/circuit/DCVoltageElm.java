@@ -1,6 +1,8 @@
 
 package com.limoilux.circuit;
 
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
+
 public class DCVoltageElm extends VoltageElm
 {
 	public DCVoltageElm(int xx, int yy)
@@ -9,7 +11,7 @@ public class DCVoltageElm extends VoltageElm
 	}
 
 	@Override
-	public Class getDumpClass()
+	public Class<? extends CircuitElm> getDumpClass()
 	{
 
 		return VoltageElm.class;

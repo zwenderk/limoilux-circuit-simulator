@@ -1,6 +1,8 @@
 
 package com.limoilux.circuit;
 
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
+
 public class NTransistorElm extends TransistorElm
 {
 	public NTransistorElm(int xx, int yy)
@@ -9,7 +11,7 @@ public class NTransistorElm extends TransistorElm
 	}
 
 	@Override
-	public Class getDumpClass()
+	public Class<? extends CircuitElm> getDumpClass()
 	{
 		return TransistorElm.class;
 	}

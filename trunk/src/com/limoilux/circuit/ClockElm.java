@@ -1,6 +1,8 @@
 
 package com.limoilux.circuit;
 
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
+
 public class ClockElm extends RailElm
 {
 	public ClockElm(int xx, int yy)
@@ -13,7 +15,7 @@ public class ClockElm extends RailElm
 	}
 
 	@Override
-	public Class getDumpClass()
+	public Class<? extends CircuitElm> getDumpClass()
 	{
 		return RailElm.class;
 	}

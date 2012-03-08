@@ -1,6 +1,8 @@
 
 package com.limoilux.circuit;
 
+import com.limoilux.circuitsimulator.circuit.CircuitElm;
+
 public class CC2NegElm extends CC2Elm
 {
 	public CC2NegElm(int xx, int yy)
@@ -9,7 +11,7 @@ public class CC2NegElm extends CC2Elm
 	}
 
 	@Override
-	public Class getDumpClass()
+	public Class<? extends CircuitElm> getDumpClass()
 	{
 		return CC2Elm.class;
 	}
