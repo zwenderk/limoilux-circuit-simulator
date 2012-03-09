@@ -34,6 +34,7 @@ public class MatrixUtil
 			double tot = b[row];
 
 			b[row] = b[i];
+			
 			// forward substitution using the lower triangular matrix
 			for (j = bi; j < i; j++)
 			{
