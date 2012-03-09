@@ -63,6 +63,7 @@ import com.limoilux.circuitsimulator.circuit.CircuitNode;
 import com.limoilux.circuitsimulator.circuit.CircuitNodeLink;
 import com.limoilux.circuitsimulator.circuit.CircuitPane;
 import com.limoilux.circuitsimulator.circuit.CircuitUtil;
+import com.limoilux.circuitsimulator.io.IOManager;
 import com.limoilux.circuitsimulator.io.MigrationWizard;
 import com.limoilux.circuitsimulator.matrix.MatrixRowInfo;
 import com.limoilux.circuitsimulator.scope.Scope;
@@ -93,8 +94,6 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private static final int MODE_DRAG_SELECTED = 4;
 	private static final int MODE_DRAG_POST = 5;
 	public static final int MODE_SELECT = 6;
-
-
 
 	private static final int HINT_LC = 1;
 	private static final int HINT_RC = 2;
@@ -129,7 +128,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 	private Rectangle selectedArea;
 
-	public int gridSize; 
+	public int gridSize;
 	public int gridMask;
 	public int gridRound;
 
@@ -143,7 +142,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private int hintType = -1;
 	private int hintItem1;
 	private int hintItem2;
-	
+
 	private String stopMessage;
 
 	private JMenuItem cutItem;
@@ -157,11 +156,11 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private JMenuItem elmCopyMenuItem;
 	private JMenuItem elmDeleteMenuItem;
 	private JMenuItem elmScopeMenuItem;
-	
+
 	public JPopupMenu scopeMenu;
 	public JPopupMenu transScopeMenu;
 	private JPopupMenu mainMenu;
-	
+
 	public JCheckBoxMenuItem scopeVMenuItem;
 	public JCheckBoxMenuItem scopeIMenuItem;
 	public JCheckBoxMenuItem scopeMaxMenuItem;
@@ -183,7 +182,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 	public JButton playButton;
 	public JButton stopButton;
-	
+
 	public double currentMultiplier;
 
 	private final MouseMotionListener mouseMotionList;
@@ -197,6 +196,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	public final CircuitMouseManager mouseMan;
 	public final ScopeManager scopeMan;
 	public final CircuitManager circuitMan;
+	public final IOManager ioMan;
 
 	public final CircuitPane circuitPanel;
 
@@ -216,6 +216,8 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		super();
 
 		this.clipboard = new Clipboard();
+
+		this.ioMan = new IOManager();
 
 		// this.mainContainer.setLayout(new BorderLayout());
 		this.circuitPanel = new CircuitPane(this);
@@ -2514,6 +2516,48 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 				}
 			}
 			this.mouseMan.tempMouseMode = this.mouseMan.mouseMode;
+		}
+	}
+
+	private class SaveAction extends AbstractAction
+	{
+		private SaveAction()
+		{
+			super("Save");
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			CircuitSimulator.this.exit();
+		}
+	}
+
+	private class LoadAction extends AbstractAction
+	{
+		private LoadAction()
+		{
+			super("Load...");
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			CircuitSimulator.this.exit();
+		}
+	}
+
+	private class SaveAsAction extends AbstractAction
+	{
+		private SaveAsAction()
+		{
+			super("Save as...");
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			CircuitSimulator.this.exit();
 		}
 	}
 
