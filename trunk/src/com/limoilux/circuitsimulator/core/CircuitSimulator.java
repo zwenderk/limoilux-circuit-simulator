@@ -217,14 +217,14 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 		this.clipboard = new Clipboard();
 
-		this.ioMan = new IOManager();
-
 		// this.mainContainer.setLayout(new BorderLayout());
 		this.circuitPanel = new CircuitPane(this);
 
 		this.circuitMan = new CircuitManager(this.circuitPanel);
 		this.circuit = this.circuitMan.getCircuit();
 		this.mouseMan = this.circuitMan.mouseMan;
+
+		this.ioMan = new IOManager(this.circuitMan);
 
 		this.scopeMan = new ScopeManager(this.circuitMan.getCircuit());
 
@@ -805,8 +805,14 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		JMenu menu = null;
 
 		menu = new JMenu("File");
+		menu.add(this.ioMan.getSaveAction());
+		menu.add(this.ioMan.getSaveAsAction());
+		menu.add(this.ioMan.getLoadAction());
+		menu.addSeparator();
+
 		menu.add(new MigrationAction());
 		menu.addSeparator();
+		
 		menu.add(new ExitAction());
 		menubar.add(menu);
 
@@ -2519,47 +2525,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		}
 	}
 
-	private class SaveAction extends AbstractAction
-	{
-		private SaveAction()
-		{
-			super("Save");
-		}
 
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			CircuitSimulator.this.exit();
-		}
-	}
-
-	private class LoadAction extends AbstractAction
-	{
-		private LoadAction()
-		{
-			super("Load...");
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			CircuitSimulator.this.exit();
-		}
-	}
-
-	private class SaveAsAction extends AbstractAction
-	{
-		private SaveAsAction()
-		{
-			super("Save as...");
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			CircuitSimulator.this.exit();
-		}
-	}
 
 	private class ExitAction extends AbstractAction
 	{
