@@ -151,7 +151,6 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private JMenuItem selectAllItem;
 
 	private JScrollBar speedBar;
-	private Label powerLabel;
 	private JPopupMenu elementsPopUp;
 	private JMenuItem elmEditMenuItem;
 	private JMenuItem elmCutMenuItem;
@@ -789,10 +788,6 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		// this.toolBar.add(new JLabel("Current Speed", JLabel.CENTER));
 		// this.currentBar.addAdjustmentListener(this);
 		// this.toolBar.add(this.currentBar);
-
-		this.powerLabel = new Label("Power Brightness", Label.CENTER);
-		this.powerLabel.setEnabled(false);
-		// this.toolBar.add(this.powerLabel);
 
 		// this.toolBar.add(new Label("www.falstad.com"));
 	}
