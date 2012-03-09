@@ -67,6 +67,7 @@ public class DrawUtil
 		{
 			return;
 		}
+		
 		int dx = pb.x - pa.x;
 		int dy = pb.y - pa.y;
 		double dn = Math.sqrt(dx * dx + dy * dy);
@@ -125,6 +126,7 @@ public class DrawUtil
 		{
 			w = 1;
 		}
+		
 		int rg = (int) (w * 255);
 		g.setColor(new Color(rg, rg, rg));
 	}
