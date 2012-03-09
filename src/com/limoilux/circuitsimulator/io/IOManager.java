@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 import com.limoilux.circuitsimulator.circuit.CircuitManager;
+import com.limoilux.util.App;
 
 public class IOManager
 {
@@ -21,6 +22,10 @@ public class IOManager
 		this.saveAct = new SaveAction();
 		this.saveAsAct = new SaveAsAction();
 		this.loadAct = new LoadAction();
+		
+		this.saveAct.setEnabled(false);
+		this.saveAsAct.setEnabled(false);
+		this.loadAct.setEnabled(false);
 	}
 
 	public AbstractAction getSaveAction()
@@ -40,12 +45,12 @@ public class IOManager
 
 	public void load()
 	{
-
+		App.printDebugMsg("");
 	}
 
 	public void save()
 	{
-
+		
 	}
 
 	public void saveAs()
