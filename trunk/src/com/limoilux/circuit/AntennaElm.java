@@ -9,6 +9,8 @@ import com.limoilux.circuitsimulator.core.Configs;
 
 public class AntennaElm extends RailElm
 {
+	private double fmphase;
+
 	public AntennaElm(int xx, int yy)
 	{
 		super(xx, yy, VoltageElm.WF_DC);
@@ -20,7 +22,6 @@ public class AntennaElm extends RailElm
 		this.waveform = VoltageElm.WF_DC;
 	}
 
-	double fmphase;
 
 	@Override
 	public void stamp()
@@ -37,16 +38,21 @@ public class AntennaElm extends RailElm
 	@Override
 	double getVoltage()
 	{
-		this.fmphase += 2 * Math.PI * (2200 + Math.sin(2 * Math.PI * CircuitElm.cirSim.timer.time * 13) * 100)
-				* Configs.timeStep;
+		double time = CircuitElm.cirSim.timer.time;
+
+		this.fmphase += 2 * Math.PI * (2200 + Math.sin(2 * Math.PI * time * 13) * 100) * Configs.timeStep;
+
 		double fm = 3 * Math.sin(this.fmphase);
 
-		return Math.sin(2 * Math.PI * CircuitElm.cirSim.timer.time * 3000)
-				* (1.3 + Math.sin(2 * Math.PI * CircuitElm.cirSim.timer.time * 12)) * 3
-				+ Math.sin(2 * Math.PI * CircuitElm.cirSim.timer.time * 2710)
-				* (1.3 + Math.sin(2 * Math.PI * CircuitElm.cirSim.timer.time * 13)) * 3
-				+ Math.sin(2 * Math.PI * CircuitElm.cirSim.timer.time * 2433)
-				* (1.3 + Math.sin(2 * Math.PI * CircuitElm.cirSim.timer.time * 14)) * 3 + fm;
+		double voltage = 0;
+
+		voltage = 0;
+		voltage += Math.sin(2 * Math.PI * time * 3000) * (1.3 + Math.sin(2 * Math.PI * time * 12)) * 3;
+		voltage += Math.sin(2 * Math.PI * time * 2710) * (1.3 + Math.sin(2 * Math.PI * time * 13)) * 3;
+		voltage += Math.sin(2 * Math.PI * time * 2433) * (1.3 + Math.sin(2 * Math.PI * time * 14)) * 3;
+		voltage += fm;
+
+		return voltage;
 	}
 
 	@Override
