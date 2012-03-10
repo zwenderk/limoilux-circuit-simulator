@@ -4,6 +4,7 @@ package com.limoilux.circuitsimulator.circuit;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import com.limoilux.circuitsimulator.core.CircuitSimulator;
 
 public class CircuitManager
 {
@@ -11,6 +12,9 @@ public class CircuitManager
 	public final CircuitPane circuitPanel;
 	public final DumpManager dumpMan;
 	public final CircuitMouseManager mouseMan;
+
+	public String stopMessage;
+	public CircuitElm stopElm;
 
 	public CircuitManager(CircuitPane circuitPanel)
 	{
@@ -28,6 +32,39 @@ public class CircuitManager
 	public void repaint()
 	{
 		this.circuitPanel.repaint();
+	}
+
+	public void prepareRepaint() throws CircuitAnalysisException
+	{
+		// Analyser le circuit si nessaire.
+		if (this.circuit.needAnalysis())
+		{
+			try
+			{
+				this.stopMessage = null;
+				this.stopElm = null;
+
+				this.circuit.analyzeCircuit();
+			}
+			catch (CircuitAnalysisException e)
+			{
+				throw e;
+			}
+			finally
+			{
+				this.circuit.setNeedAnalysis(false);
+			}
+		}
+		
+		if (CircuitSimulator.editDialog != null && CircuitSimulator.editDialog.elm instanceof CircuitElm)
+		{
+			this.mouseMan.mouseElm = (CircuitElm) CircuitSimulator.editDialog.elm;
+		}
+
+		if (this.mouseMan.mouseElm == null)
+		{
+			this.mouseMan.mouseElm = this.stopElm;
+		}
 	}
 
 	public Circuit getCircuit()
