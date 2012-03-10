@@ -116,7 +116,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 	public int subIterations;
 
-	public Dimension winSize;
+	public final Dimension winSize;
 	public CircuitElm dragElm;
 	public CircuitElm menuElm;
 	public CircuitElm stopElm;
@@ -213,6 +213,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	{
 		super();
 
+		this.winSize = new Dimension();
 		this.clipboard = new Clipboard();
 
 		// this.mainContainer.setLayout(new BorderLayout());
@@ -1091,7 +1092,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private void handleResize()
 	{
 		Dimension dim = this.circuitPanel.getSize();
-		this.winSize = dim;
+		this.winSize.setSize(dim);
 
 		if (dim.width != 0)
 		{
