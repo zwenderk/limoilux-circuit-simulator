@@ -143,8 +143,6 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private int hintItem1;
 	private int hintItem2;
 
-	private String stopMessage;
-
 	private JMenuItem cutItem;
 	private JMenuItem copyItem;
 	private JMenuItem selectAllItem;
@@ -292,7 +290,14 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		if (!(this.winSize == null || this.winSize.width == 0))
 		{
 
-			this.prepareRepaint();
+			try
+			{
+				this.circuitMan.prepareRepaint();
+			}
+			catch (CircuitAnalysisException e)
+			{
+				this.handleAnalysisException(e);
+			}
 
 			this.scopeMan.setupScopes(this.winSize);
 
@@ -301,39 +306,6 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		}
 
 		return this.timer.calculateDelay();
-	}
-
-	private void prepareRepaint()
-	{
-		// Analyser le circuit si nessaire.
-		if (this.circuit.needAnalysis())
-		{
-			try
-			{
-				this.stopMessage = null;
-				this.stopElm = null;
-
-				this.circuit.analyzeCircuit();
-
-			}
-			catch (CircuitAnalysisException e)
-			{
-				this.handleAnalysisException(e);
-			}
-
-			this.circuit.setNeedAnalysis(false);
-		}
-
-		if (CircuitSimulator.editDialog != null && CircuitSimulator.editDialog.elm instanceof CircuitElm)
-		{
-			this.mouseMan.mouseElm = (CircuitElm) CircuitSimulator.editDialog.elm;
-		}
-
-		if (this.mouseMan.mouseElm == null)
-		{
-			this.mouseMan.mouseElm = this.stopElm;
-		}
-
 	}
 
 	private void drawCurrent()
@@ -444,7 +416,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		this.drawDrag(g);
 
 		// Dessinage des scopes
-		if (this.stopMessage == null)
+		if (this.circuitMan.stopMessage == null)
 		{
 			this.scopeMan.drawScope(g);
 		}
@@ -457,9 +429,9 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	private void drawStrings(Graphics g, int badnodes)
 	{
 		g.setColor(CircuitElm.WHITE_COLOR);
-		if (this.stopMessage != null)
+		if (this.circuitMan.stopMessage != null)
 		{
-			g.drawString(this.stopMessage, 10, this.circuit.circuitArea.height);
+			g.drawString(this.circuitMan.stopMessage, 10, this.circuit.circuitArea.height);
 		}
 		else
 		{
@@ -510,7 +482,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 			int ct = this.scopeMan.scopeCount;
 
-			if (this.stopMessage != null)
+			if (this.circuitMan.stopMessage != null)
 			{
 				ct = 0;
 			}
@@ -626,7 +598,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 					}
 				}
 
-				if (this.stopMessage != null)
+				if (this.circuitMan.stopMessage != null)
 				{
 					return;
 				}
@@ -751,7 +723,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		{
 			this.readSetup(this.startCircuitText);
 		}
-		else if (this.stopMessage == null && this.startCircuit != null)
+		else if (this.circuitMan.stopMessage == null && this.startCircuit != null)
 		{
 			this.readSetupFile(this.startCircuit, this.startLabel);
 		}
@@ -812,7 +784,7 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 
 		menu.add(new MigrationAction());
 		menu.addSeparator();
-		
+
 		menu.add(new ExitAction());
 		menubar.add(menu);
 
@@ -1269,8 +1241,8 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 	{
 		this.circuit.matrix.clear();
 
-		this.stopMessage = e.getTechnicalMessage();
-		this.stopElm = e.getCauseElement();
+		this.circuitMan.stopMessage = e.getTechnicalMessage();
+		this.circuitMan.stopElm = e.getCauseElement();
 
 		this.activityManager.setPlaying(false);
 
@@ -2524,8 +2496,6 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 			this.mouseMan.tempMouseMode = this.mouseMan.mouseMode;
 		}
 	}
-
-
 
 	private class ExitAction extends AbstractAction
 	{
