@@ -72,6 +72,7 @@ public class MacSim extends CircuitSimulator
 		}
 	}
 
+
 	private class MyAppHiddenListener implements AppHiddenListener
 	{
 		@Override
@@ -85,5 +86,17 @@ public class MacSim extends CircuitSimulator
 		{
 			MacSim.this.startRepaint();
 		}
+	}
+	
+	public static void main(String args[])
+	{
+		CircuitSimulator circuitSimulator = null;
+
+
+			App.printDebugMsg("Platform is Mac");
+			circuitSimulator = new MacSim();
+
+
+		circuitSimulator.start();
 	}
 }

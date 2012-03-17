@@ -49,6 +49,9 @@ import javax.swing.MenuElement;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import org.jdom.Document;
+import org.jdom.Element;
+
 import com.limoilux.circuit.CapacitorElm;
 import com.limoilux.circuit.InductorElm;
 import com.limoilux.circuit.ResistorElm;
@@ -3054,23 +3057,5 @@ public abstract class CircuitSimulator extends App implements ComponentListener,
 		{
 
 		}
-	}
-
-	public static void main(String args[])
-	{
-		CircuitSimulator circuitSimulator = null;
-
-		if (App.OS_MAC)
-		{
-			App.printDebugMsg("Platform is Mac");
-			circuitSimulator = new MacSim();
-		}
-		else
-		{
-			App.printDebugMsg("Platform is Windows");
-			circuitSimulator = new WindowsSim();
-		}
-
-		circuitSimulator.start();
 	}
 }
