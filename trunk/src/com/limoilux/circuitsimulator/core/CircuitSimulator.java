@@ -49,8 +49,6 @@ import javax.swing.MenuElement;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import org.jdom.Document;
-import org.jdom.Element;
 
 import com.limoilux.circuit.CapacitorElm;
 import com.limoilux.circuit.InductorElm;
